@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="cvsplugin" library="libcvsplugin" version="1">
+<MenuBar>
+ <Menu name="file"><Text>&amp;File</Text>
+  <Action name="file_add"/>
+ </Menu>
+</MenuBar>
+</kpartplugin>
