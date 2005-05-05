@@ -1,1 +1,1 @@
-SUBDIRS = cvsplugin
+SUBDIRS = cvsplugin svnplugin

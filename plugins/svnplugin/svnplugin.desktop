@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+X-KDE-Library=svnplugin
+X-KDE-PluginInfo-EnabledByDefault=true
+Name=Subversion plugin
+Comment=Subversion plugin
+X-KDE-ParentApp=cervisia

@@ -3,13 +3,19 @@
  *                          bernd@mail.berlios.de
  *  Copyright (c) 2002-2005 Christian Loose <christian.loose@kdemail.net>
  *
- * This program may be distributed under the terms of the Q Public
- * License as defined by Trolltech AS of Norway and appearing in the
- * file LICENSE.QPL included in the packaging of this file.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #include <qlabel.h>
@@ -49,6 +55,7 @@
 #include "mergedlg.h"
 #include "historydlg.h"
 #include "updateview.h"
+#include "updateview_items.h"
 #include "protocolview.h"
 #include "repositorydlg.h"
 #include "settingsdlg.h"
@@ -62,6 +69,7 @@
 #include "patchoptiondlg.h"
 #include "editwithmenu.h"
 #include "pluginmanager.h"
+#include "pluginbase.h"
 
 #include "cervisiapart.h"
 #include "version.h"
@@ -222,7 +230,7 @@ void CervisiaPart::setupActions()
     //
     // File Menu
     //
-    action = new KAction( i18n("O&pen Sandbox..."), "fileopen", 0,
+    action = new KAction( i18n("O&pen Sandbox..."), "fileopen", CTRL+Key_O,
                           this, SLOT( slotOpenSandbox() ),
                           actionCollection(), "file_open" );
     hint = i18n("Opens a CVS working folder in the main window");
@@ -610,45 +618,65 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
+    //
+    // Folder context menu
+    //
+    toggaction = new KToggleAction( i18n("Unfold Folder"), 0,
+                                    this, SLOT( slotUnfoldFolder() ),
+                                    actionCollection(), "unfold_folder" );
+    toggaction->setCheckedState(i18n("Fold Folder"));
+
     //action = KStdAction::aboutApp( this, SLOT(aboutCervisia()),
     //               actionCollection(), "help_about_cervisia" );
 }
 
 
-void CervisiaPart::popupRequested(KListView*, QListViewItem*, const QPoint& p)
+void CervisiaPart::popupRequested(KListView*, QListViewItem* item, const QPoint& p)
 {
-    if (QPopupMenu* popup = static_cast<QPopupMenu*>(hostContainer("context_popup")))
+    QString xmlName = "context_popup";
+
+    if( isDirItem(item) && update->fileSelection().isEmpty() )
     {
-        // remove old 'Edit with...' menu
-        if( m_editWithId && popup->findItem(m_editWithId) != 0 )
+        xmlName = "folder_context_popup";
+        KToggleAction* action = static_cast<KToggleAction*>(actionCollection()->action("unfold_folder"));
+        action->setChecked(item->isOpen());
+    }
+
+    if( QPopupMenu* popup = static_cast<QPopupMenu*>(hostContainer(xmlName)) )
+    {
+        if( isFileItem(item) )
         {
-            popup->removeItem(m_editWithId);
-            delete m_currentEditMenu; 
+            // remove old 'Edit with...' menu
+            if( m_editWithId && popup->findItem(m_editWithId) != 0 )
+            {
+                popup->removeItem(m_editWithId);
+                delete m_currentEditMenu; 
 
-            m_editWithId      = 0;
-            m_currentEditMenu = 0;
-        }
+                m_editWithId      = 0;
+                m_currentEditMenu = 0;
+            }
 
-        // get name of selected file
-        QString selectedFile;
-        update->getSingleSelection(&selectedFile);
+            // get name of selected file
+            QString selectedFile;
+            update->getSingleSelection(&selectedFile);
 
-        if( !selectedFile.isEmpty() )
-        {
-            KURL u;
-            u.setPath(sandbox + "/" + selectedFile);
+            if( !selectedFile.isEmpty() )
+            {
+                KURL u;
+                u.setPath(sandbox + "/" + selectedFile);
 
-            m_currentEditMenu = new Cervisia::EditWithMenu(u, popup);
+                m_currentEditMenu = new Cervisia::EditWithMenu(u, popup);
 
-            if( m_currentEditMenu->menu() )
-                m_editWithId = popup->insertItem(i18n("Edit With"), 
-                                          m_currentEditMenu->menu(), -1, 1);
+                if( m_currentEditMenu->menu() )
+                    m_editWithId = popup->insertItem(i18n("Edit With"), 
+                                              m_currentEditMenu->menu(), -1, 1);
+            }
         }
 
         popup->exec(p);
     }
     else
-        kdDebug(8050) << "CervisiaPart: can't get XML definition for context_popup, factory()=" << factory() << endl;
+        kdDebug(8050) << "CervisiaPart: can't get XML definition for " << xmlName << ", factory()=" << factory() << endl;
 }
 
 void CervisiaPart::updateActions()
@@ -659,6 +687,10 @@ void CervisiaPart::updateActions()
     bool single = update->hasSingleSelection();
     stateChanged("has_single_selection", single ? StateNoReverse
                                                 : StateReverse);
+
+    bool singleFolder = (update->multipleSelection().count() == 1);
+    stateChanged("has_single_folder", singleFolder ? StateNoReverse
+                                                   : StateReverse);
 
     m_browserExt->setPropertiesActionEnabled(single);
 
@@ -682,12 +714,14 @@ void CervisiaPart::aboutCervisia()
                           "Copyright (c) 1999-2002\n"
                           "Bernd Gehrmann <bernd@mail.berlios.de>\n"
                           "\n"
-                          "This program may be distributed under the terms of the Q Public\n"
-                          "License as defined by Trolltech AS of Norway and appearing in the\n"
-                          "file LICENSE.QPL included in the packaging of this file.\n\n"
+                          "This program is free software; you can redistribute it and/or modify\n"
+                          "it under the terms of the GNU General Public License as published by\n"
+                          "the Free Software Foundation; either version 2 of the License, or\n"
+                          "(at your option) any later version.\n"
                           "This program is distributed in the hope that it will be useful,\n"
                           "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-                          "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+                          "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+                          "GNU General Public License for more details.\n"
                           "See the ChangeLog file for a list of contributors."));
     QMessageBox::about(0, i18n("About Cervisia"),
                        aboutstr.arg(CERVISIA_VERSION).arg(KDE_VERSION_STRING));
@@ -699,7 +733,7 @@ KAboutData* CervisiaPart::createAboutData()
     KAboutData* about = new KAboutData(
                             "cervisiapart", I18N_NOOP("Cervisia Part"),
                             CERVISIA_VERSION, I18N_NOOP("A CVS frontend"),
-                            KAboutData::License_QPL,
+                            KAboutData::License_GPL,
                             I18N_NOOP("Copyright (c) 1999-2002 Bernd Gehrmann"), 0,
                             "http://www.kde.org/apps/cervisia");
 
@@ -822,6 +856,7 @@ void CervisiaPart::slotUpdate()
 
 void CervisiaPart::slotStatus()
 {
+    kdDebug(8050) << "CervisiaPart::slotStatus()" << endl;
     QStringList list = update->multipleSelection();
     if (list.isEmpty())
         return;
@@ -837,8 +872,10 @@ void CervisiaPart::slotStatus()
     if( reply.isValid() )
         reply.get<QString>(cmdline);
 
+    kdDebug(8050) << "CervisiaPart::slotStatus(): cmdline = " << cmdline << endl;
     if( protocol->startJob(true) )
     {
+        kdDebug(8050) << "CervisiaPart::slotStatus(): job started" << endl;
         showJobStart(cmdline);
         connect( protocol, SIGNAL(receivedLine(QString)), update, SLOT(processUpdateLine(QString)) );
         connect( protocol, SIGNAL(jobFinished(bool, int)), update, SLOT(finishJob(bool, int)) );
@@ -1535,6 +1572,14 @@ void CervisiaPart::slotUnfoldTree()
     setFilter();
 }
 
+
+void CervisiaPart::slotUnfoldFolder()
+{
+    update->unfoldSelectedFolders();
+    setFilter();
+}
+
+
 void CervisiaPart::slotCreateDirs()
 {
     opt_createDirs = !opt_createDirs;
@@ -1644,12 +1689,19 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     if( !cvsService )
         return false;
 
-    Repository_stub cvsRepository(cvsService->app(), "CvsRepository");
+    kdDebug(8050) << "openSandbox(): dirname = " << dirname << endl;
 
-    // change the working copy directory for the cvs DCOP service
-    bool opened = cvsRepository.setWorkingCopy(dirname);
+    KURL url;
+    url.setPath(dirname);
+    m_vcsPlugin = Cervisia::PluginManager::self()->pluginForUrl(url);
 
-    if( !cvsRepository.ok() || !opened )
+//     Repository_stub cvsRepository(cvsService->app(), "CvsRepository");
+
+//     // change the working copy directory for the cvs DCOP service
+//     bool opened = cvsRepository.setWorkingCopy(dirname);
+
+//     if( !cvsRepository.ok() || !opened )
+    if( !m_vcsPlugin )
     {
         KMessageBox::sorry(widget(),
                            i18n("This is not a CVS folder.\n"
@@ -1665,29 +1717,38 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     }
 
     changelogstr = "";
-    sandbox      = "";
-    repository   = "";
+//    sandbox      = "";
+//    repository   = "";
+
+    //FIXME: temporarily get cvsservice reference from plugin
+    delete cvsService;
+    cvsService = new CvsService_stub(m_vcsPlugin->service());
+    protocol->connectToJob(cvsService->app());
 
     // get path of sandbox for recent sandbox menu
-    sandbox = cvsRepository.workingCopy();
-    recent->addURL( KURL::fromPathOrURL(sandbox) );
+    KURL wc = m_vcsPlugin->workingCopy();
+    sandbox = wc.path();
+    recent->addURL(wc);
+//     sandbox = cvsRepository.workingCopy();
+//     recent->addURL( KURL::fromPathOrURL(sandbox) );
 
     // get repository for the caption of the window
-    repository = cvsRepository.location();
+    repository = m_vcsPlugin->repository();
+//     repository = cvsRepository.location();
     emit setWindowCaption(sandbox + "(" + repository + ")");
 
     // set m_url member for tabbed window modus of Konqueror
     m_url = KURL::fromPathOrURL(sandbox);
 
-    // *NOTICE*
-    // The order is important here. We have to set the m_url member before
-    // calling this function because the progress dialog uses the enter_loop()/
-    // exit_loop() methods. Those methods result in a call to queryExit() in
-    // cervisiashell.cpp which then uses the m_url member to save the last used
-    // directory.
-    if( cvsRepository.retrieveCvsignoreFile() )
-        Cervisia::GlobalIgnoreList().retrieveServerIgnoreList(cvsService,
-                                                              repository);
+//     // *NOTICE*
+//     // The order is important here. We have to set the m_url member before
+//     // calling this function because the progress dialog uses the enter_loop()/
+//     // exit_loop() methods. Those methods result in a call to queryExit() in
+//     // cervisiashell.cpp which then uses the m_url member to save the last used
+//     // directory.
+//     if( cvsRepository.retrieveCvsignoreFile() )
+//         Cervisia::GlobalIgnoreList().retrieveServerIgnoreList(cvsService,
+//                                                               repository);
 
     QDir::setCurrent(sandbox);
     update->openDirectory(sandbox);

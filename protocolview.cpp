@@ -73,6 +73,21 @@ ProtocolView::~ProtocolView()
 }
 
 
+void ProtocolView::connectToJob(const QCString& appId)
+{
+    // create a DCOP stub for the non-concurrent cvs job
+    job = new CvsJob_stub(appId, "NonConcurrentJob");
+
+    // establish connections to the signals of the cvs job
+    connectDCOPSignal(job->app(), job->obj(), "jobExited(bool, int)",
+                      "slotJobExited(bool, int)", true);
+    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(QString)",
+                      "slotReceivedOutput(QString)", true);
+    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(QString)",
+                      "slotReceivedOutput(QString)", true);
+}
+
+
 bool ProtocolView::startJob(bool isUpdateJob)
 {
     m_isUpdateJob = isUpdateJob;

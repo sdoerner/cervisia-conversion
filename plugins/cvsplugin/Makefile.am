@@ -11,7 +11,7 @@ libcvsplugin_la_LIBADD  = $(LIB_KPARTS) $(LIB_KUTILS) $(top_builddir)/cervisia/l
 libcvsplugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 
 pluginsdir = $(kde_datadir)/cervisiapart/kpartplugins
-plugins_DATA = cvsplugin.desktop
+plugins_DATA = cvsplugin.desktop cvsplugin.rc
 
 # NEEDED!
 #messages: rc.cpp

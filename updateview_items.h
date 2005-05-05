@@ -29,7 +29,6 @@
 #include "entry.h"
 #include "updateview.h"
 
-
 class UpdateDirItem;
 class UpdateFileItem;
 class Visitor;
@@ -67,8 +66,10 @@ protected:
 };
 
 
-class UpdateDirItem : public UpdateItem
+class UpdateDirItem : public QObject, public UpdateItem
 {
+    Q_OBJECT
+
 public:
 
     enum { Name };
@@ -93,6 +94,9 @@ public:
     virtual void accept(Visitor&);
 
     enum { RTTI = 10000 };
+
+private slots:
+    void updateItem(const Cervisia::Entry& entry);
 
 private:
 

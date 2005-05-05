@@ -22,6 +22,7 @@
 #include <pluginbase.h>
 
 class CvsService_stub;
+class Repository_stub;
 
 
 namespace Cervisia
@@ -29,20 +30,28 @@ namespace Cervisia
 
 class CvsPlugin : public PluginBase
 {
+    Q_OBJECT
+
 public:
     CvsPlugin(QObject* parent, const char* name, const QStringList&);
     ~CvsPlugin();
 
-    virtual bool canHandle(const KURL& workingCopy);
     virtual QString type() const;
     virtual DCOPRef service() const;
 
-    virtual void syncWithEntries(const QString& path);
+    virtual bool canHandle(const KURL& workingCopy);
+    virtual void setWorkingCopy(const KURL& workingCopy);
+    virtual KURL workingCopy() const;
+
+    virtual QString repository() const;
+
+    virtual void syncWithEntries(const QString& filePath);
 
 private:
     void startService();
 
     CvsService_stub* m_cvsService;
+    Repository_stub* m_cvsRepository;
 };
 
 

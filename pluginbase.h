@@ -37,9 +37,14 @@ public:
     PluginBase(QObject* parent, const char* name);
     ~PluginBase();
 
-    virtual bool canHandle(const KURL& workingCopy) = 0;
     virtual QString type() const = 0;
     virtual DCOPRef service() const = 0;
+
+    virtual bool canHandle(const KURL& workingCopy) = 0;
+    virtual void setWorkingCopy(const KURL& workingCopy) = 0;
+    virtual KURL workingCopy() const = 0;
+
+    virtual QString repository() const = 0;
 
     virtual void syncWithEntries(const QString& path) = 0;
 

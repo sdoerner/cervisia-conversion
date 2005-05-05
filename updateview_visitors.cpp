@@ -54,7 +54,7 @@ void ApplyFilterVisitor::postVisit(UpdateDirItem* item)
     const bool visible(!m_invisibleDirItems.count(item)
                        || !item->wasScanned()
                        || !(m_filter & UpdateView::NoEmptyDirectories)
-                       || !item->parent());
+                       || !item->UpdateItem::parent());
 
     // only set invisible as QListViewItem::setVisible() is recursive
     // and so maybe overrides the state applied by the filter

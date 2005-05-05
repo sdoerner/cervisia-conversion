@@ -39,6 +39,7 @@ public:
     explicit ProtocolView(const QCString& appId, QWidget *parent=0, const char *name=0);
     ~ProtocolView();
 
+    void connectToJob(const QCString& appId);
     bool startJob(bool isUpdateJob = false);
 
 protected:

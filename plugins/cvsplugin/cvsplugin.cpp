@@ -19,6 +19,7 @@
 #include "cvsplugin.h"
 using Cervisia::CvsPlugin;
 
+#include <qdir.h>
 #include <qfileinfo.h>
 
 #include <dcopref.h>
@@ -29,6 +30,7 @@ using Cervisia::CvsPlugin;
 #include <kurl.h>
 
 #include <cvsservice_stub.h>
+#include <repository_stub.h>
 
 #include <kdebug.h>
 
@@ -40,6 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( libcvsplugin, CvsPluginFactory( "cvsplugin" ) )
 CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
     , m_cvsService(0)
+    , m_cvsRepository(0)
 {
     kdDebug() << "CvsPlugin::CvsPlugin()" << endl;
 
@@ -56,6 +59,18 @@ CvsPlugin::~CvsPlugin()
         m_cvsService->quit();
 
     delete m_cvsService;
+}
+
+
+QString CvsPlugin::type() const
+{
+    return "CVS";
+}
+
+
+DCOPRef CvsPlugin::service() const
+{
+    return DCOPRef(m_cvsService->app(), m_cvsService->obj());
 }
 
 
@@ -76,20 +91,94 @@ bool CvsPlugin::canHandle(const KURL& workingCopy)
 }
 
 
-QString CvsPlugin::type() const
+void CvsPlugin::setWorkingCopy(const KURL& workingCopy)
 {
-    return "CVS";
+    bool opened = m_cvsRepository->setWorkingCopy(workingCopy.path());
 }
 
 
-DCOPRef CvsPlugin::service() const
+KURL CvsPlugin::workingCopy() const
 {
-    return DCOPRef(m_cvsService->app(), m_cvsService->obj());
+    return KURL::fromPathOrURL(m_cvsRepository->workingCopy());
 }
 
 
-void CvsPlugin::syncWithEntries(const QString& path)
+QString CvsPlugin::repository() const
 {
+    return m_cvsRepository->location();
+}
+
+
+void CvsPlugin::syncWithEntries(const QString& filePath)
+{
+    kdDebug() << "CvsPlugin::syncWithEntries(): path = " << filePath << endl;
+    const QString path = filePath + QDir::separator();
+
+    QFile f(path + "CVS/Entries");
+    if( f.open(IO_ReadOnly) )
+    {
+        QTextStream stream(&f);
+        while( !stream.eof() )
+        {
+            QString line = stream.readLine();
+
+            Cervisia::Entry entry;
+
+            const bool isDir(line[0] == 'D');
+
+            if( isDir )
+                line.remove(0, 1);
+
+            if( line[0] != '/' )
+                continue;
+
+            entry.m_type = isDir ? Entry::Dir : Entry::File;
+            entry.m_name = line.section('/', 1, 1);
+
+            if (isDir)
+            {
+//                updateEntriesItem(entry, false);
+                emit updateItem(entry);
+            }
+            else
+            {
+                QString rev(line.section('/', 2, 2));
+                const QString timestamp(line.section('/', 3, 3));
+                const QString options(line.section('/', 4, 4));
+                entry.m_tag = line.section('/', 5, 5);
+
+//                const bool isBinary(options.find("-kb") >= 0);
+
+                // file date in local time
+                entry.m_dateTime = QFileInfo(path + entry.m_name).lastModified();
+
+                if( rev == "0" )
+                    entry.m_status = Cervisia::LocallyAdded;
+                else if( rev.length() > 2 && rev[0] == '-' )
+                {
+                    entry.m_status = Cervisia::LocallyRemoved;
+                    rev.remove(0, 1);
+                }
+                else if (timestamp.find('+') >= 0)
+                {
+                    entry.m_status = Cervisia::Conflict;
+                }
+                else
+                {
+                    const QDateTime date(QDateTime::fromString(timestamp)); // UTC Time
+                    QDateTime fileDateUTC;
+                    fileDateUTC.setTime_t(entry.m_dateTime.toTime_t(), Qt::UTC);
+                    if (date != fileDateUTC)
+                        entry.m_status = Cervisia::LocallyModified;
+                }
+
+                entry.m_revision = rev;
+
+//                updateEntriesItem(entry, isBinary);
+                emit updateItem(entry);
+            }
+        }
+    }
 }
 
 
@@ -105,6 +194,12 @@ void CvsPlugin::startService()
                 error, "Cervisia");
     }
     else
+    {
         // create a reference to the service
         m_cvsService = new CvsService_stub(appId, "CvsService");
+        m_cvsRepository = new Repository_stub(appId, "CvsRepository");
+    }
 }
+
+#include "cvsplugin.moc"
+

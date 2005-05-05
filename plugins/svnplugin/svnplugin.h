@@ -16,38 +16,40 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef CERVISIA_PLUGINMANAGER_H
-#define CERVISIA_PLUGINMANAGER_H
+#ifndef CERVISIA_SVNPLUGIN_H
+#define CERVISIA_SVNPLUGIN_H
 
-#include <kparts/part.h>
-#include <kparts/plugin.h>
+#include <pluginbase.h>
+
+class SvnService_stub;
+class SvnRepository_stub;
 
 
 namespace Cervisia
 {
 
-class PluginBase;
-
-
-class PluginManager
+class SvnPlugin : public PluginBase
 {
 public:
-    static PluginManager* self();
-    ~PluginManager();
+    SvnPlugin(QObject* parent, const char* name, const QStringList&);
+    ~SvnPlugin();
 
-    void setPart(KParts::Part* part);
+    virtual QString type() const;
+    virtual DCOPRef service() const;
 
-    PluginBase* pluginForUrl(const KURL& url);
+    virtual bool canHandle(const KURL& workingCopy);
+    virtual void setWorkingCopy(const KURL& workingCopy);
+    virtual KURL workingCopy() const;
 
-    PluginBase* currentPlugin() const;
+    virtual QString repository() const;
+
+    virtual void syncWithEntries(const QString& path);
 
 private:
-    PluginManager();
+    void startService();
 
-    KParts::Part*            m_part;
-    PluginBase*              m_currentPlugin;
-    QPtrList<KParts::Plugin> m_pluginList;
-    static PluginManager*    m_self;
+    SvnService_stub*    m_svnService;
+    SvnRepository_stub* m_svnRepository;
 };
 
 

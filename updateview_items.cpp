@@ -33,11 +33,14 @@
 #include "cvsdir.h"
 #include "entry.h"
 #include "misc.h"
+#include "pluginbase.h"
+#include "pluginmanager.h"
 #include "updateview_visitors.h"
 
 
 using Cervisia::Entry;
 using Cervisia::EntryStatus;
+using Cervisia::PluginManager;
 
 
 // ------------------------------------------------------------------------------
@@ -79,7 +82,8 @@ QString UpdateItem::filePath() const
 
 UpdateDirItem::UpdateDirItem(UpdateDirItem* parent,
                              const Entry& entry)
-    : UpdateItem(parent, entry),
+    : QObject(parent),
+      UpdateItem(parent, entry),
       m_opened(false)
 {
     setExpandable(true);
@@ -153,6 +157,38 @@ void UpdateDirItem::updateEntriesItem(const Entry& entry,
             fileItem->setRevTag(entry.m_revision, entry.m_tag);
             fileItem->setDate(entry.m_dateTime);
             fileItem->setPixmap(0, isBinary ? SmallIcon("binary") : QPixmap());
+        }
+        return;
+    }
+
+    // Not found, make new entry
+    if (entry.m_type == Entry::Dir)
+        createDirItem(entry)->maybeScanDir(true);
+    else
+        createFileItem(entry);
+}
+
+
+void UpdateDirItem::updateItem(const Entry& entry)
+{
+    kdDebug() << "UpdateDirItem::updateItem(): name = " << entry.m_name << endl;
+    if (UpdateItem* item = findItem(entry.m_name))
+    {
+        if (isFileItem(item))
+        {
+            UpdateFileItem* fileItem = static_cast<UpdateFileItem*>(item);
+            if (fileItem->entry().m_status == Cervisia::NotInCVS ||
+                fileItem->entry().m_status == Cervisia::LocallyRemoved ||
+                entry.m_status == Cervisia::LocallyAdded ||
+                entry.m_status == Cervisia::LocallyRemoved ||
+                entry.m_status == Cervisia::Conflict)
+            {
+                fileItem->setStatus(entry.m_status);
+            }
+            fileItem->setRevTag(entry.m_revision, entry.m_tag);
+            fileItem->setDate(entry.m_dateTime);
+//            fileItem->setPixmap(0, isBinary ? SmallIcon("binary") : QPixmap());
+            fileItem->setPixmap(0, QPixmap());
         }
         return;
     }
@@ -248,74 +284,18 @@ UpdateItem* UpdateDirItem::findItem(const QString& name) const
 
 // Format of the CVS/Entries file:
 //   /NAME/REVISION/[CONFLICT+]TIMESTAMP/OPTIONS/TAGDATE
-
 void UpdateDirItem::syncWithEntries()
 {
-    const QString path(filePath() + QDir::separator());
-
-    QFile f(path + "CVS/Entries");
-    if( f.open(IO_ReadOnly) )
+    kdDebug() << "UpdateDirItem::syncWithEntries(): filePath = " << filePath() << endl;
+    Cervisia::PluginBase* currentPlugin = PluginManager::self()->currentPlugin();
+    if( currentPlugin  )
     {
-        QTextStream stream(&f);
-        while( !stream.eof() )
-        {
-            QString line = stream.readLine();
-
-            Cervisia::Entry entry;
-
-            const bool isDir(line[0] == 'D');
-
-            if( isDir )
-                line.remove(0, 1);
-
-            if( line[0] != '/' )
-                continue;
-
-            entry.m_type = isDir ? Entry::Dir : Entry::File;
-            entry.m_name = line.section('/', 1, 1);
-
-            if (isDir)
-            {
-                updateEntriesItem(entry, false);
-            }
-            else
-            {
-                QString rev(line.section('/', 2, 2));
-                const QString timestamp(line.section('/', 3, 3));
-                const QString options(line.section('/', 4, 4));
-                entry.m_tag = line.section('/', 5, 5);
-
-                const bool isBinary(options.find("-kb") >= 0);
-
-                // file date in local time
-                entry.m_dateTime = QFileInfo(path + entry.m_name).lastModified();
-
-                if( rev == "0" )
-                    entry.m_status = Cervisia::LocallyAdded;
-                else if( rev.length() > 2 && rev[0] == '-' )
-                {
-                    entry.m_status = Cervisia::LocallyRemoved;
-                    rev.remove(0, 1);
-                }
-                else if (timestamp.find('+') >= 0)
-                {
-                    entry.m_status = Cervisia::Conflict;
-                }
-                else
-                {
-                    const QDateTime date(QDateTime::fromString(timestamp)); // UTC Time
-                    QDateTime fileDateUTC;
-                    fileDateUTC.setTime_t(entry.m_dateTime.toTime_t(), Qt::UTC);
-                    if (date != fileDateUTC)
-                        entry.m_status = Cervisia::LocallyModified;
-                }
-
-                entry.m_revision = rev;
-
-                updateEntriesItem(entry, isBinary);
-            }
-        }
+        disconnect( currentPlugin, SIGNAL(updateItem(const Cervisia::Entry&)), 0, 0 );
+        connect(currentPlugin, SIGNAL(updateItem(const Cervisia::Entry&)),
+                this,     SLOT(updateItem(const Cervisia::Entry&)));
     }
+
+    currentPlugin->syncWithEntries(filePath());
 }
 
 
@@ -757,3 +737,5 @@ UpdateDirItem* findOrCreateDirItem(const QString& dirPath,
 
     return dirItem;
 }
+
+#include "updateview_items.moc"

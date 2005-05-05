@@ -75,34 +75,34 @@ void PluginManager::setPart(KParts::Part* part)
 }
 
 
-bool PluginManager::activatePluginForUrl(const KURL& url)
+Cervisia::PluginBase* PluginManager::pluginForUrl(const KURL& url)
 {
-    kdDebug() << "PluginManager::activatePluginForUrl(): url = " << url.prettyURL() << endl;
-
-    bool activated = false;
+    PluginBase* result = 0;
 
     Cervisia::PluginBase* plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.first());
     for( ; plugin; plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.next()) )
     {
-        kdDebug() << "PluginManager::activatePluginForUrl(): type = " << plugin->type() << endl;
+        kdDebug() << "PluginManager::pluginForUrl(): type = " << plugin->type() << ", url = " << url.prettyURL() << endl;
         if( plugin->canHandle(url) )
         {
-            activated = true;
-
             // is the plugin already active? --> no need to change the menu
             if( m_currentPlugin && m_currentPlugin->type() == plugin->type() )
-                break;
+            {
+                plugin->setWorkingCopy(url);
+                return m_currentPlugin;
+            }
 
             if( m_currentPlugin )
                 m_part->factory()->removeClient(m_currentPlugin);
 
             m_part->factory()->addClient(plugin);
-            m_currentPlugin = plugin;
+            plugin->setWorkingCopy(url);
+            m_currentPlugin = result = plugin;
             break;
         }
     }
 
-    return activated;
+    return result;
 }
 
 
