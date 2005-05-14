@@ -144,7 +144,7 @@ CervisiaPart::CervisiaPart( QWidget *parentWidget, const char *widgetName,
         connect( update, SIGNAL(fileOpened(QString)),
                  this, SLOT(openFile(QString)) );
 
-        protocol = new ProtocolView(appId, splitter);
+        protocol = new ProtocolView(splitter);
         protocol->setFocusPolicy( QWidget::StrongFocus );
 
         setWidget(splitter);
@@ -1723,7 +1723,15 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     //FIXME: temporarily get cvsservice reference from plugin
     delete cvsService;
     cvsService = new CvsService_stub(m_vcsPlugin->service());
-    protocol->connectToJob(cvsService->app());
+    protocol->updatePlugin();
+
+    m_vcsPlugin->setFileView(update);
+    connect(m_vcsPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
+            update, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+//    connect(m_vcsPlugin, SIGNAL(jobExited(bool, int)),
+//            update, SLOT(finishJob(bool, int)));
+//    connect(m_vcsPlugin, SIGNAL(jobExited(bool, int)),
+//            this, SLOT(slotJobFinished()));
 
     // get path of sandbox for recent sandbox menu
     KURL wc = m_vcsPlugin->workingCopy();

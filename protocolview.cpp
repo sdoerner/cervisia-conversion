@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 1999-2002 Bernd Gehrmann
  *                          bernd@physik.hu-berlin.de
- *  Copyright (c) 2003-2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (c) 2003-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,11 +30,14 @@
 
 #include "cervisiapart.h"
 #include "cvsjob_stub.h"
+#include "pluginbase.h"
+#include "pluginjobbase.h"
+#include "pluginmanager.h"
+using namespace Cervisia;
 
 
-ProtocolView::ProtocolView(const QCString& appId, QWidget *parent, const char *name)
+ProtocolView::ProtocolView(QWidget *parent, const char *name)
     : QTextEdit(parent, name)
-    , job(0)
     , m_isUpdateJob(false)
 {
     setReadOnly(true);
@@ -53,56 +56,40 @@ ProtocolView::ProtocolView(const QCString& appId, QWidget *parent, const char *n
     localChangeColor=config->readColorEntry("LocalChange",&defaultColor);
     defaultColor=QColor(70, 210, 70);
     remoteChangeColor=config->readColorEntry("RemoteChange",&defaultColor);
-
-    // create a DCOP stub for the non-concurrent cvs job
-    job = new CvsJob_stub(appId, "NonConcurrentJob");
-
-    // establish connections to the signals of the cvs job
-    connectDCOPSignal(job->app(), job->obj(), "jobExited(bool, int)",
-                      "slotJobExited(bool, int)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
 }
 
 
 ProtocolView::~ProtocolView()
 {
-    delete job;
 }
 
 
-void ProtocolView::connectToJob(const QCString& appId)
+void ProtocolView::updatePlugin()
 {
-    // create a DCOP stub for the non-concurrent cvs job
-    job = new CvsJob_stub(appId, "NonConcurrentJob");
-
-    // establish connections to the signals of the cvs job
-    connectDCOPSignal(job->app(), job->obj(), "jobExited(bool, int)",
-                      "slotJobExited(bool, int)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
+    PluginBase* currentPlugin = PluginManager::self()->currentPlugin();
+    if( currentPlugin )
+    {
+        connect(currentPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
+                this, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+    }
 }
 
 
 bool ProtocolView::startJob(bool isUpdateJob)
 {
-    m_isUpdateJob = isUpdateJob;
-
-    // get command line and add it to output buffer
-    QString cmdLine = job->cvsCommand();
-    buf += cmdLine;
-    buf += '\n';
-    processOutput();
-
-    // disconnect 3rd party slots from our signals
-    disconnect( SIGNAL(receivedLine(QString)) );
-    disconnect( SIGNAL(jobFinished(bool, int)) );
-
-    return job->execute();
+//     m_isUpdateJob = isUpdateJob;
+//
+//     // get command line and add it to output buffer
+//     QString cmdLine = job->cvsCommand();
+//     buf += cmdLine;
+//     buf += '\n';
+//     processOutput();
+//
+//     // disconnect 3rd party slots from our signals
+//     disconnect( SIGNAL(receivedLine(QString)) );
+//     disconnect( SIGNAL(jobFinished(bool, int)) );
+//
+//     return job->execute();
 }
 
 
@@ -121,18 +108,40 @@ QPopupMenu* ProtocolView::createPopupMenu(const QPoint &pos)
 
 void ProtocolView::cancelJob()
 {
-    job->cancel();
+    //FIXME
+//     job->cancel();
 }
 
 
-void ProtocolView::slotReceivedOutput(QString buffer)
+void ProtocolView::receivedOutput(const QString& buffer)
 {
-    buf += buffer;
-    processOutput();
+//    buf += buffer;
+//    processOutput();
 }
 
 
-void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
+void ProtocolView::prepareJob(Cervisia::PluginJobBase* job)
+{
+    kdDebug(8050) << "ProtocolView::prepareJob()" << endl;
+
+    m_isUpdateJob = ((job->action() == Cervisia::PluginJobBase::Update) ||
+                     (job->action() == Cervisia::PluginJobBase::SimulateUpdate));
+
+    // get command line and add it to output buffer
+    appendLine(job->commandString());
+
+    // disconnect 3rd party slots from our signals
+    disconnect( SIGNAL(receivedLine(QString)) );
+    disconnect( SIGNAL(jobFinished(bool, int)) );
+
+    connect(job, SIGNAL(jobExited(bool, int)),
+            this, SLOT(jobExited(bool, int)));
+    connect(job, SIGNAL(receivedLine(const QString&)),
+            this, SLOT(appendLine(const QString&)));
+}
+
+
+void ProtocolView::jobExited(bool normalExit, int exitStatus)
 {
     QString msg;
 
@@ -146,27 +155,9 @@ void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
     else
         msg = i18n("[Aborted]\n");
 
-    buf += '\n';
-    buf += msg;
-    processOutput();
+    appendLine(msg);
 
     emit jobFinished(normalExit, exitStatus);
-}
-
-
-void ProtocolView::processOutput()
-{
-    int pos;
-    while ( (pos = buf.find('\n')) != -1)
-	{
-	    QString line = buf.left(pos);
-	    if (!line.isEmpty())
-                {
-		    appendLine(line);
-                    emit receivedLine(line);
-                }
-	    buf = buf.right(buf.length()-pos-1);
-	}
 }
 
 

@@ -16,47 +16,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef CERVISIA_CVSPLUGIN_H
-#define CERVISIA_CVSPLUGIN_H
-
-#include <pluginbase.h>
-
-class CvsService_stub;
-class Repository_stub;
+#ifndef CERVISIA_SELECTIONINTF_H
+#define CERVISIA_SELECTIONINTF_H
 
 
 namespace Cervisia
 {
 
-class CvsPlugin : public PluginBase
+
+class SelectionIntf
 {
-    Q_OBJECT
-
 public:
-    CvsPlugin(QObject* parent, const char* name, const QStringList&);
-    ~CvsPlugin();
-
-    virtual QString type() const;
-    virtual DCOPRef service() const;
-
-    virtual bool canHandle(const KURL& workingCopy);
-    virtual void setWorkingCopy(const KURL& workingCopy);
-    virtual KURL workingCopy() const;
-
-    virtual QString repository() const;
-
-    virtual void syncWithEntries(const QString& filePath);
-
-private slots:
-    void add();
-    void simulateUpdate();
-
-private:
-    void setupMenuActions();
-    void startService();
-
-    CvsService_stub* m_cvsService;
-    Repository_stub* m_cvsRepository;
+    virtual QStringList multipleSelection() const = 0;
 };
 
 

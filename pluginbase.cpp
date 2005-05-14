@@ -19,6 +19,10 @@
 #include "pluginbase.h"
 using Cervisia::PluginBase;
 
+#include <kdebug.h>
+
+#include "selectionintf.h"
+
 
 PluginBase::PluginBase(QObject* parent, const char* name)
     : Plugin(parent, name)
@@ -28,6 +32,12 @@ PluginBase::PluginBase(QObject* parent, const char* name)
 
 PluginBase::~PluginBase()
 {
+}
+
+
+void PluginBase::setFileView(Cervisia::SelectionIntf* fileView)
+{
+    m_fileView = fileView;
 }
 
 #include "pluginbase.moc"

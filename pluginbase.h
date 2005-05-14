@@ -19,14 +19,18 @@
 #ifndef CERVISIA_PLUGINBASE_H
 #define CERVISIA_PLUGINBASE_H
 
-#include <dcopref.h>
 #include <kparts/plugin.h>
 
 #include "entry.h"
 
+class DCOPRef;
+
 
 namespace Cervisia
 {
+
+class PluginJobBase;
+class SelectionIntf;
 
 
 class PluginBase : public KParts::Plugin
@@ -36,6 +40,8 @@ class PluginBase : public KParts::Plugin
 public:
     PluginBase(QObject* parent, const char* name);
     ~PluginBase();
+
+    void setFileView(SelectionIntf* fileView);
 
     virtual QString type() const = 0;
     virtual DCOPRef service() const = 0;
@@ -50,6 +56,11 @@ public:
 
 signals:
     void updateItem(const Cervisia::Entry& entry);
+    void jobPrepared(Cervisia::PluginJobBase* job);
+
+protected:
+    SelectionIntf* m_fileView;
+    PluginJobBase* m_currentJob;
 };
 
 

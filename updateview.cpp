@@ -32,6 +32,8 @@
 #include "entry.h"
 #include "updateview_items.h"
 #include "updateview_visitors.h"
+#include "pluginjobbase.h"
+#include "pluginmanager.h"
 
 
 using Cervisia::Entry;
@@ -373,6 +375,30 @@ void UpdateView::prepareJob(bool recursive, Action action)
 }
 
 
+void UpdateView::prepareJob(Cervisia::PluginJobBase* job)
+{
+    act = (UpdateView::Action)job->action(); //FIXME
+
+    //FIXME: temporary HACK
+    if( act == UpdateNoAct )
+    {
+        connect(job, SIGNAL(receivedLine(const QString&)),
+                this, SLOT(processUpdateLine(const QString&)));
+    }
+
+    connect(job, SIGNAL(jobExited(bool, int)),
+            this, SLOT(finishJob(bool, int)));
+
+//     // Scan recursively all entries - there's no way around this here
+//    if (recursive)
+//        static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
+
+//     rememberSelection(recursive);
+    if (act != Add)
+        markUpdated(false, false);
+}
+
+
 /**
  * Finishes a job. What we do depends a bit on
  * whether the command was successful or not.
@@ -388,6 +414,12 @@ void UpdateView::finishJob(bool normalExit, int exitStatus)
     // maybe some new items were created or
     // visibility of items changed so check the whole tree
     setFilter(filter());
+
+    //FIXME: temporary HACK
+    if( act == UpdateNoAct )
+    {
+        disconnect(this, SLOT(processUpdateLine(const QString&)));
+    }
 }
 
 
@@ -541,8 +573,9 @@ void UpdateView::updateColors()
  * is true, it is assumed that the output is from a command
  * 'cvs update -n', i.e. cvs actually changes no files.
  */
-void UpdateView::processUpdateLine(QString str)
+void UpdateView::processUpdateLine(const QString& str)
 {
+    kdDebug(8050) << "UpdateView::processUpdateLine(): str = " << str << endl;
     if (str.length() > 2 && str[1] == ' ')
     {
         EntryStatus status(Cervisia::Unknown);
@@ -595,6 +628,10 @@ void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool is
         return;
 
     const QFileInfo fileInfo(filePath);
+
+    kdDebug(8050) << "UpdateView::updateItem(): dirPath = " << fileInfo.dirPath()
+                  << ", filename = " << fileInfo.fileName()
+                  << ", status = " << status << endl;
 
     UpdateDirItem* rootItem = static_cast<UpdateDirItem*>(firstChild());
     UpdateDirItem* dirItem = findOrCreateDirItem(fileInfo.dirPath(), rootItem);

@@ -8,13 +8,13 @@
     <Action name="insert_changelog_entry"/>
     <Separator/>
     <Action name="file_update"/>
-    <Action name="file_status"/>
+<!--    <Action name="file_status"/> -->
     <Separator/>
     <Action name="file_edit"/>
     <Action name="file_resolve"/>
     <Separator/>
     <Action name="file_commit"/>
-    <Action name="file_add"/>
+<!--    <Action name="file_add"/> -->
     <Action name="file_add_binary"/>
     <Action name="file_remove"/>
     <Action name="file_revert_local_changes"/>

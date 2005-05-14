@@ -23,16 +23,17 @@
 
 
 #include <klistview.h>
+#include "selectionintf.h"
 
 #include <qptrlist.h>
 
 #include "entry.h"
 
-
+namespace Cervisia { class PluginJobBase; }
 class KConfig;
 
 
-class UpdateView : public KListView
+class UpdateView : public KListView, public Cervisia::SelectionIntf
 {
     Q_OBJECT
     
@@ -76,8 +77,10 @@ public slots:
     void unfoldSelectedFolders();
     void unfoldTree();
     void foldTree();
+//    void prepareJob(bool recursive, ActionKind action);
+    void prepareJob(Cervisia::PluginJobBase* job);
     void finishJob(bool normalExit, int exitStatus);
-    void processUpdateLine(QString line);
+    void processUpdateLine(const QString& line);
 
 private slots:
     void itemExecuted(QListViewItem *item);

@@ -29,6 +29,9 @@ using Cervisia::SvnPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
+#include <addremovedlg.h>
+#include <selectionintf.h>
+#include <svnjob_stub.h>
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
@@ -44,15 +47,16 @@ SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
     , m_svnService(0)
     , m_svnRepository(0)
 {
-    kdDebug() << "SvnPlugin::SvnPlugin()" << endl;
+    kdDebug(8050) << "SvnPlugin::SvnPlugin()" << endl;
 
     startService();
+    setupMenuActions();
 }
 
 
 SvnPlugin::~SvnPlugin()
 {
-    kdDebug() << "SvnPlugin::~SvnPlugin()" << endl;
+    kdDebug(8050) << "SvnPlugin::~SvnPlugin()" << endl;
 
     // stop the cvs DCOP service and delete reference
     if( m_svnService )
@@ -76,6 +80,8 @@ DCOPRef SvnPlugin::service() const
 
 bool SvnPlugin::canHandle(const KURL& workingCopy)
 {
+    kdDebug(8050) << "SvnPlugin::canHandle(): url = " << workingCopy << endl;
+
     const QFileInfo fi(workingCopy.path());
 
     QString path = fi.absFilePath() + "/.svn";
@@ -109,7 +115,7 @@ QString SvnPlugin::repository() const
 
 void SvnPlugin::syncWithEntries(const QString& path)
 {
-    kdDebug() << "SvnPlugin::syncWithEntries(): path = " << path << endl;
+    kdDebug(8050) << "SvnPlugin::syncWithEntries(): path = " << path << endl;
     const QString fileName = path + QDir::separator() + ".svn/entries";
 
     QFile f(fileName);
@@ -162,6 +168,45 @@ void SvnPlugin::syncWithEntries(const QString& path)
 }
 
 
+void SvnPlugin::add()
+{
+    kdDebug(8050) << "SvnPlugin::add()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(AddRemoveDialog::Add);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        kdDebug(8050) << "SvnPlugin::add(): add files " << selectionList << endl;
+
+        DCOPRef jobRef = m_svnService->add(selectionList);
+        SvnJob_stub svnJob(jobRef);
+    }
+}
+
+
+void SvnPlugin::setupMenuActions()
+{
+    KAction* action;
+    QString  hint;
+
+    //
+    // File Menu
+    //
+    action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
+                          this, SLOT( add() ),
+                          actionCollection(), "file_add" );
+    hint = i18n("Adds the selected files to the repository (svn add)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+}
+
+
 void SvnPlugin::startService()
 {
     // start the cvs DCOP service
@@ -180,3 +225,5 @@ void SvnPlugin::startService()
         m_svnRepository = new SvnRepository_stub(appId, "SvnRepository");
     }
 }
+
+#include "svnplugin.moc"

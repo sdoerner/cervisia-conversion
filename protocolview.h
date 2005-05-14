@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 1999-2002 Bernd Gehrmann
  *                          bernd@mail.berlios.de
- *  Copyright (c) 2003-2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (c) 2003-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,50 +23,42 @@
 #define PROTOCOLVIEW_H
 
 #include <qtextedit.h>
-#include <dcopobject.h>
 
+namespace Cervisia { class PluginJobBase; }
 class QPoint;
 class QPopupMenu;
 class CvsJob_stub;
 
 
-class ProtocolView : public QTextEdit, public DCOPObject
+class ProtocolView : public QTextEdit
 {
-    K_DCOP
     Q_OBJECT
 
 public:
-    explicit ProtocolView(const QCString& appId, QWidget *parent=0, const char *name=0);
+    explicit ProtocolView(QWidget *parent=0, const char *name=0);
     ~ProtocolView();
 
-    void connectToJob(const QCString& appId);
+    void updatePlugin();                            //TODO: use signal/slot instead?
     bool startJob(bool isUpdateJob = false);
 
 protected:
     virtual QPopupMenu* createPopupMenu(const QPoint &pos);
 
-k_dcop:
-    void slotReceivedOutput(QString buffer);
-    void slotJobExited(bool normalExit, int exitStatus);
-
-signals:
+signals:                                            //TODO: remove later
     void receivedLine(QString line);
     void jobFinished(bool normalExit, int exitStatus);
 
 private slots:
+    void receivedOutput(const QString& buffer);     //TODO: remove later
+    void appendLine(const QString &line);
+    void prepareJob(Cervisia::PluginJobBase* job);
+    void jobExited(bool normalExit, int exitStatus);
     void cancelJob();
 
 private:
-    void processOutput();
-    void appendLine(const QString &line);
-
-    QString buf;
-
     QColor conflictColor;
     QColor localChangeColor;
     QColor remoteChangeColor;
-
-    CvsJob_stub* job;
 
     bool   m_isUpdateJob;
 };

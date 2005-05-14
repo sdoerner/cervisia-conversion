@@ -30,6 +30,8 @@ namespace Cervisia
 
 class SvnPlugin : public PluginBase
 {
+    Q_OBJECT
+
 public:
     SvnPlugin(QObject* parent, const char* name, const QStringList&);
     ~SvnPlugin();
@@ -45,7 +47,11 @@ public:
 
     virtual void syncWithEntries(const QString& path);
 
+private slots:
+    void add();
+
 private:
+    void setupMenuActions();
     void startService();
 
     SvnService_stub*    m_svnService;

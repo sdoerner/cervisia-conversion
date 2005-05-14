@@ -4,7 +4,7 @@ METASOURCES = AUTO
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = libsvnplugin.la
 
-libsvnplugin_la_SOURCES = svnplugin.cpp
+libsvnplugin_la_SOURCES = svnplugin.cpp svnjob.cpp
 #libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(top_builddir)/cervisia/libcervisia.la
 # libcvsservice.la is HACK for progressdialog.cpp
 libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(LIB_KUTILS) $(top_builddir)/cervisia/libcervisia.la \

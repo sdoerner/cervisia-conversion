@@ -29,8 +29,12 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
+#include <addremovedlg.h>
+#include <cvsjob.h>
+#include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 #include <repository_stub.h>
+#include <selectionintf.h>
 
 #include <kdebug.h>
 
@@ -44,15 +48,16 @@ CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
     , m_cvsService(0)
     , m_cvsRepository(0)
 {
-    kdDebug() << "CvsPlugin::CvsPlugin()" << endl;
+    kdDebug(8050) << "CvsPlugin::CvsPlugin()" << endl;
 
     startService();
+    setupMenuActions();
 }
 
 
 CvsPlugin::~CvsPlugin()
 {
-    kdDebug() << "CvsPlugin::~CvsPlugin()" << endl;
+    kdDebug(8050) << "CvsPlugin::~CvsPlugin()" << endl;
 
     // stop the cvs DCOP service and delete reference
     if( m_cvsService )
@@ -76,6 +81,7 @@ DCOPRef CvsPlugin::service() const
 
 bool CvsPlugin::canHandle(const KURL& workingCopy)
 {
+    kdDebug(8050) << "CvsPlugin::canHandle(): url = " << workingCopy << endl;
     const QFileInfo fi(workingCopy.path());
 
     QString path = fi.absFilePath() + "/CVS";
@@ -111,7 +117,7 @@ QString CvsPlugin::repository() const
 
 void CvsPlugin::syncWithEntries(const QString& filePath)
 {
-    kdDebug() << "CvsPlugin::syncWithEntries(): path = " << filePath << endl;
+    kdDebug(8050) << "CvsPlugin::syncWithEntries(): path = " << filePath << endl;
     const QString path = filePath + QDir::separator();
 
     QFile f(path + "CVS/Entries");
@@ -182,6 +188,87 @@ void CvsPlugin::syncWithEntries(const QString& filePath)
 }
 
 
+void CvsPlugin::add()
+{
+    kdDebug(8050) << "CvsPlugin::add()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(AddRemoveDialog::Add);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        kdDebug(8050) << "CvsPlugin::add(): add files " << selectionList << endl;
+
+//        emit prepareJob(false, Add);    //FIXME
+
+        DCOPRef jobRef = m_cvsService->add(selectionList, false);
+        CvsJob_stub cvsJob(jobRef);
+
+//        m_currentJob = new CvsJob(jobRef);
+//        emit startJob(m_currentJob);
+        m_currentJob = new CvsJob(jobRef, CvsJob::Add);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "CvsPlugin::add(): execute cvs job" << endl;
+        cvsJob.execute();
+    }
+}
+
+
+void CvsPlugin::simulateUpdate()
+{
+    kdDebug(8050) << "CvsPlugin::simulateUpdate()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    kdDebug(8050) << "CvsPlugin::simulateUpdate(): add files " << selectionList << endl;
+
+//    emit prepareJob(false, SimulateUpdate);
+
+    DCOPRef jobRef = m_cvsService->simulateUpdate(selectionList, false, false, true);
+    CvsJob_stub cvsJob(jobRef);
+
+//    m_currentJob = new CvsJob(jobRef);
+//    emit startJob(m_currentJob);
+    m_currentJob = new CvsJob(jobRef, CvsJob::SimulateUpdate);
+    emit jobPrepared(m_currentJob);
+
+    kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
+    cvsJob.execute();
+}
+
+
+void CvsPlugin::setupMenuActions()
+{
+    KAction* action;
+    QString  hint;
+
+    //
+    // File Menu
+    //
+    action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
+                          this, SLOT( simulateUpdate() ),
+                          actionCollection(), "file_status" );
+    hint = i18n("Updates the status of the selected files and folders (cvs -n update)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
+                          this, SLOT( add() ),
+                          actionCollection(), "file_add" );
+    hint = i18n("Adds the selected files to the repository (cvs add)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+}
+
+
 void CvsPlugin::startService()
 {
     // start the cvs DCOP service
@@ -202,4 +289,3 @@ void CvsPlugin::startService()
 }
 
 #include "cvsplugin.moc"
-
