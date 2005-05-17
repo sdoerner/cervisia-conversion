@@ -35,6 +35,8 @@ using Cervisia::SvnPlugin;
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
+#include "svnjob.h"
+
 #include <kdebug.h>
 
 
@@ -186,6 +188,13 @@ void SvnPlugin::add()
 
         DCOPRef jobRef = m_svnService->add(selectionList);
         SvnJob_stub svnJob(jobRef);
+
+        m_currentJob = new SvnJob(jobRef, SvnJob::Add);
+        m_currentJob->setRecursive(false);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "SvnPlugin::add(): execute svn job" << endl;
+        svnJob.execute();
     }
 }
 
