@@ -43,6 +43,9 @@ public:
     virtual QString commandString() const = 0;
     ActionKind action() const { return m_action; }
 
+    bool isRecursive() const { return m_recursive; }
+    void setRecursive(bool recursive) { m_recursive = recursive; }
+
 k_dcop:
     void dcopJobExited(bool normalExit, int exitStatus);
     void dcopReceivedStdout(QString buffer);
@@ -58,7 +61,8 @@ private:
     void processOutput(const QString& buffer);
 
     ActionKind m_action;
-    QString m_lineBuffer;
+    bool       m_recursive;
+    QString    m_lineBuffer;
 };
 
 

@@ -27,6 +27,7 @@ PluginJobBase::PluginJobBase(const DCOPRef& jobRef, const ActionKind& action)
     : DCOPObject(jobRef.obj())
     , QObject(0, jobRef.obj())
     , m_action(action)
+    , m_recursive(false)
 {
     // establish connections to the signals of the job
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "jobExited(bool, int)",
