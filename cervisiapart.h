@@ -86,10 +86,8 @@ public slots:
 
     void slotOpen();
     void slotResolve();
-    void slotStatus();
     void slotUpdate();
     void slotChangeLog();
-    void slotCommit();
     void slotAdd();
     void slotAddBinary();
 

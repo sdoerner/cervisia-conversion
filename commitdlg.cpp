@@ -31,16 +31,18 @@
 #include <kconfig.h>
 #include <klocale.h>
 
-#include "cvsservice_stub.h"
+// #include "cvsservice_stub.h"
 #include "diffdlg.h"
 
 
-CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service, 
-                           QWidget *parent, const char *name)
+// CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
+//                            QWidget *parent, const char *name)
+CommitDialog::CommitDialog(QWidget* parent, const char* name)
     : KDialogBase(parent, name, true, i18n("CVS Commit"),
                   Ok | Cancel | Help | User1, Ok, true)
-    , partConfig(cfg)
-    , cvsService(service)
+    , m_partConfig(0)
+//     , partConfig(cfg)
+//     , cvsService(service)
 {
     QFrame* mainWidget = makeMainWidget();
 
@@ -88,17 +90,21 @@ CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
 
     setHelp("commitingfiles");
 
-    QSize size = configDialogSize(partConfig, "CommitDialog");
+    m_partConfig = new KConfig("cervisiapartrc");
+    QSize size = configDialogSize(*m_partConfig, "CommitDialog");
     resize(size);
 }
 
 
 CommitDialog::~CommitDialog()
 {
-    saveDialogSize(partConfig, "CommitDialog");
+    saveDialogSize(*m_partConfig, "CommitDialog");
 
-    KConfigGroupSaver cs(&partConfig, "CommitDialog");
-    partConfig.writeEntry("UseTemplate", m_useTemplateChk->isChecked());
+//    KConfigGroupSaver cs(m_partConfig, "CommitDialog");
+    m_partConfig->setGroup("CommitDialog");
+    m_partConfig->writeEntry("UseTemplate", m_useTemplateChk->isChecked());
+
+    delete m_partConfig;
 }
 
 
@@ -204,18 +210,18 @@ void CommitDialog::diffClicked()
 
 void CommitDialog::showDiffDialog(const QString& fileName)
 {
-    DiffDialog *l = new DiffDialog(partConfig, this, "diffdialog");
-    
-    // disable diff button so user doesn't open the same diff several times (#83018)
-    enableButton(User1, false);
-    
-    if (l->parseCvsDiff(cvsService, fileName, "", ""))
-        l->show();
-    else
-        delete l;
-    
-    // re-enable diff button
-    enableButton(User1, true);
+//     DiffDialog *l = new DiffDialog(partConfig, this, "diffdialog");
+//     
+//     // disable diff button so user doesn't open the same diff several times (#83018)
+//     enableButton(User1, false);
+//     
+//     if (l->parseCvsDiff(cvsService, fileName, "", ""))
+//         l->show();
+//     else
+//         delete l;
+//     
+//     // re-enable diff button
+//     enableButton(User1, true);
 }
 
 
@@ -245,8 +251,8 @@ void CommitDialog::checkForTemplateFile()
             f.close();
 
             m_useTemplateChk->setEnabled(true);
-            KConfigGroupSaver cs(&partConfig, "CommitDialog");
-            bool check = partConfig.readBoolEntry("UseTemplate", true);
+            KConfigGroupSaver cs(m_partConfig, "CommitDialog");
+            bool check = m_partConfig->readBoolEntry("UseTemplate", true);
             m_useTemplateChk->setChecked(check);
 
             addTemplateText();

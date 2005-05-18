@@ -49,6 +49,8 @@ public:
 
 private slots:
     void add();
+    void addBinary();
+    void commit();
     void simulateUpdate();
 
 private:

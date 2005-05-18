@@ -255,13 +255,6 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
-                          this, SLOT( slotStatus() ),
-                          actionCollection(), "file_status" );
-    hint = i18n("Updates the status (cvs -n update) of the selected files and folders");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
     action = new KAction( i18n("&Edit"), 0,
                           this, SLOT( slotOpen() ),
                           actionCollection(), "file_edit" );
@@ -273,27 +266,6 @@ void CervisiaPart::setupActions()
                           this, SLOT( slotResolve() ),
                           actionCollection(), "file_resolve" );
     hint = i18n("Opens the resolve dialog with the selected file");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("&Commit..."), "vcs_commit", Key_NumberSign,
-                          this, SLOT( slotCommit() ),
-                          actionCollection(), "file_commit" );
-    hint = i18n("Commits the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
-                          this, SLOT( slotAdd() ),
-                          actionCollection(), "file_add" );
-    hint = i18n("Adds (cvs add) the selected files to the repository");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("Add &Binary..."), 0,
-                          this, SLOT( slotAddBinary() ),
-                          actionCollection(), "file_add_binary" );
-    hint = i18n("Adds (cvs -kb add) the selected files as binaries to the repository");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
@@ -854,36 +826,6 @@ void CervisiaPart::slotUpdate()
 }
 
 
-void CervisiaPart::slotStatus()
-{
-    kdDebug(8050) << "CervisiaPart::slotStatus()" << endl;
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    update->prepareJob(opt_updateRecursive, UpdateView::UpdateNoAct);
-
-    DCOPRef cvsJob = cvsService->simulateUpdate(list, opt_updateRecursive,
-                                                opt_createDirs, opt_pruneDirs);
-
-    // get command line from cvs job
-    QString cmdline;
-    DCOPReply reply = cvsJob.call("cvsCommand()");
-    if( reply.isValid() )
-        reply.get<QString>(cmdline);
-
-    kdDebug(8050) << "CervisiaPart::slotStatus(): cmdline = " << cmdline << endl;
-    if( protocol->startJob(true) )
-    {
-        kdDebug(8050) << "CervisiaPart::slotStatus(): job started" << endl;
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(receivedLine(QString)), update, SLOT(processUpdateLine(QString)) );
-        connect( protocol, SIGNAL(jobFinished(bool, int)), update, SLOT(finishJob(bool, int)) );
-        connect( protocol, SIGNAL(jobFinished(bool, int)), this, SLOT(slotJobFinished()) );
-    }
-}
-
-
 void CervisiaPart::slotUpdateToTag()
 {
     UpdateDialog *l = new UpdateDialog(cvsService, widget() );
@@ -941,51 +883,6 @@ void CervisiaPart::slotMerge()
         }
         tagopt += " ";
         updateSandbox(tagopt);
-    }
-}
-
-
-void CervisiaPart::slotCommit()
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    // modal dialog
-    CommitDialog dlg(*config(), cvsService, widget());
-    dlg.setLogMessage(changelogstr);
-    dlg.setLogHistory(recentCommits);
-    dlg.setFileList(list);
-
-    if (dlg.exec())
-    {
-        QString msg = dlg.logMessage();
-        if( !recentCommits.contains( msg ) )
-        {
-            recentCommits.prepend( msg );
-            while (recentCommits.count() > 50)
-                recentCommits.remove( recentCommits.last() );
-
-            KConfig* conf = config();
-            conf->setGroup( "CommitLogs" );
-            conf->writeEntry( sandbox, recentCommits, COMMIT_SPLIT_CHAR );
-        }
-
-        update->prepareJob(opt_commitRecursive, UpdateView::Commit);
-
-        DCOPRef cvsJob = cvsService->commit(list, dlg.logMessage(),
-                                            opt_commitRecursive);
-
-        // get command line from cvs job
-        QString cmdline = cvsJob.call("cvsCommand()");
-
-        if( protocol->startJob() )
-        {
-            m_jobType = Commit;
-            showJobStart(cmdline);
-            connect( protocol, SIGNAL(jobFinished(bool, int)), update, SLOT(finishJob(bool, int)) );
-            connect( protocol, SIGNAL(jobFinished(bool, int)), this, SLOT(slotJobFinished()) );
-        }
     }
 }
 

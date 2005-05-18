@@ -4,7 +4,9 @@
     <Menu name="file"><Text>&amp;File</Text>
         <Action name="file_status"/>
         <Separator/>
+        <Action name="file_commit"/>
         <Action name="file_add"/>
+        <Action name="file_add_binary"/>
     </Menu>
 </MenuBar>
 </kpartplugin>

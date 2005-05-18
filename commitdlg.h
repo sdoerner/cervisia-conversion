@@ -30,7 +30,7 @@ class QCheckBox;
 class QListBox;
 class KTextEdit;
 class KConfig;
-class CvsService_stub;
+// class CvsService_stub;
 
 
 class CommitDialog : public KDialogBase
@@ -38,9 +38,9 @@ class CommitDialog : public KDialogBase
     Q_OBJECT
 
 public:   
-    CommitDialog( KConfig& cfg, CvsService_stub* service, QWidget *parent=0, 
-                  const char *name=0 );
-
+//     CommitDialog( KConfig& cfg, CvsService_stub* service, QWidget *parent=0,
+//                   const char *name=0 );
+    CommitDialog(QWidget *parent=0, const char *name=0);
     virtual ~CommitDialog();
 
     void setFileList(const QStringList &list);
@@ -71,9 +71,9 @@ private:
 
     QCheckBox* m_useTemplateChk;
     QString    m_templateText;
-    
-    KConfig&            partConfig;
-    CvsService_stub*    cvsService;     // for diff dialog
+
+    KConfig*   m_partConfig;
+//     CvsService_stub*    cvsService;     // for diff dialog
 };
 
 #endif

@@ -30,11 +30,13 @@ using Cervisia::CvsPlugin;
 #include <kurl.h>
 
 #include <addremovedlg.h>
-#include <cvsjob.h>
+#include <commitdlg.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 #include <repository_stub.h>
 #include <selectionintf.h>
+
+#include "cvsjob.h"
 
 #include <kdebug.h>
 
@@ -204,18 +206,86 @@ void CvsPlugin::add()
     {
         kdDebug(8050) << "CvsPlugin::add(): add files " << selectionList << endl;
 
-//        emit prepareJob(false, Add);    //FIXME
-
         DCOPRef jobRef = m_cvsService->add(selectionList, false);
         CvsJob_stub cvsJob(jobRef);
 
-//        m_currentJob = new CvsJob(jobRef);
-//        emit startJob(m_currentJob);
         m_currentJob = new CvsJob(jobRef, CvsJob::Add);
+        m_currentJob->setRecursive(false);
         emit jobPrepared(m_currentJob);
 
         kdDebug(8050) << "CvsPlugin::add(): execute cvs job" << endl;
         cvsJob.execute();
+    }
+}
+
+
+void CvsPlugin::addBinary()
+{
+    kdDebug(8050) << "CvsPlugin::addBinary()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(AddRemoveDialog::AddBinary);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        kdDebug(8050) << "CvsPlugin::addBinary(): add files " << selectionList << endl;
+
+        DCOPRef jobRef = m_cvsService->add(selectionList, true);
+        CvsJob_stub cvsJob(jobRef);
+
+        m_currentJob = new CvsJob(jobRef, CvsJob::Add);
+        m_currentJob->setRecursive(false);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "CvsPlugin::addBinary(): execute cvs job" << endl;
+        cvsJob.execute();
+    }
+}
+
+// TODO: feature commit finished notification
+void CvsPlugin::commit()
+{
+    kdDebug(8050) << "CvsPlugin::commit()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    CommitDialog dlg;
+//     dlg.setLogMessage(changelogstr);
+//     dlg.setLogHistory(recentCommits);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        QString msg = dlg.logMessage();
+//         if( !recentCommits.contains(msg) )
+//         {
+//             recentCommits.prepend(msg);
+//             while( recentCommits.count() > 50 )
+//                 recentCommits.remove(recentCommits.last());
+// 
+//             KConfig* conf = config();
+//             conf->setGroup("CommitLogs");
+//             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
+//         }
+
+//         DCOPRef jobRef = m_cvsService->commit(selectionList, msg, opt_commitRecursive);
+        DCOPRef jobRef = m_cvsService->commit(selectionList, msg, false);
+        CvsJob_stub cvsJob(jobRef);
+
+        m_currentJob = new CvsJob(jobRef, CvsJob::Commit);
+//         m_currentJob->setRecursive(opt_commitRecursive);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "CvsPlugin::commit(): execute cvs job" << endl;
+//         cvsJob.execute();
     }
 }
 
@@ -230,14 +300,14 @@ void CvsPlugin::simulateUpdate()
 
     kdDebug(8050) << "CvsPlugin::simulateUpdate(): add files " << selectionList << endl;
 
-//    emit prepareJob(false, SimulateUpdate);
+//     DCOPRef cvsJob = cvsService->simulateUpdate(list, opt_updateRecursive,
+//             opt_createDirs, opt_pruneDirs);
 
     DCOPRef jobRef = m_cvsService->simulateUpdate(selectionList, false, false, true);
     CvsJob_stub cvsJob(jobRef);
 
-//    m_currentJob = new CvsJob(jobRef);
-//    emit startJob(m_currentJob);
     m_currentJob = new CvsJob(jobRef, CvsJob::SimulateUpdate);
+//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
     emit jobPrepared(m_currentJob);
 
     kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
@@ -250,6 +320,8 @@ void CvsPlugin::setupMenuActions()
     KAction* action;
     QString  hint;
 
+    actionCollection()->setHighlightingEnabled(true);
+
     //
     // File Menu
     //
@@ -260,12 +332,26 @@ void CvsPlugin::setupMenuActions()
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 
+    action = new KAction( i18n("&Commit..."), "vcs_commit", Key_NumberSign,
+                          this, SLOT( commit() ),
+                          actionCollection(), "file_commit" );
+    hint = i18n("Commits the selected files (cvs commit)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
     action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
                           this, SLOT( add() ),
                           actionCollection(), "file_add" );
     hint = i18n("Adds the selected files to the repository (cvs add)");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
+
+    action = new KAction( i18n("Add &Binary..."), 0,
+                          this, SLOT( addBinary() ),
+                          actionCollection(), "file_add_binary" );
+    hint = i18n("Adds the selected files as binaries to the repository (cvs -kb add)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
 }
 
 
