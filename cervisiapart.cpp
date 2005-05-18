@@ -1665,11 +1665,11 @@ bool CervisiaPart::openSandbox(const QString &dirname)
                                         "StatusForRemoteRepos" :
                                         "StatusForLocalRepos",
                                         false);
-    if (dostatus)
-    {
-        update->setSelected(update->firstChild(), true);
-        slotStatus();
-    }
+//     if (dostatus)
+//     {
+//         update->setSelected(update->firstChild(), true);
+//         slotStatus();
+//     }
 
     //load the recentCommits for this app from the KConfig app
     conf->setGroup( "CommitLogs" );
