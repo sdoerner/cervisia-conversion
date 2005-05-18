@@ -8,20 +8,23 @@ cvs -d /tmp/cvs_repository init
 mkdir -p /tmp/import
 echo "Line 1" > /tmp/import/a.txt
 cd /tmp/import
-cvs -d /tmp/cvs_repository import -m "Initial import" wc TEST START
+cvs -d /tmp/cvs_repository import -m "Initial import" wc_cvs TEST START
 
 # checkout working copy
-rm -rf /tmp/wc
+rm -rf /tmp/wc_cvs
 cd ..
-cvs -d /tmp/cvs_repository checkout wc
+cvs -d /tmp/cvs_repository checkout wc_cvs
 rm -rf /tmp/import
-cd wc
+cd wc_cvs
 
-# changed file
+# file b.txt
 echo "Line 1" > b.txt
 cvs -d /tmp/cvs_repository add b.txt
 cvs -d /tmp/cvs_repository commit -m '' b.txt
-echo "Line 2" >> b.txt
 
 # new file
 echo "Line 1" > c.txt
+
+# change b.txt
+echo "Line 2" > b.txt
+touch b.txt

@@ -377,10 +377,9 @@ void UpdateView::prepareJob(bool recursive, Action action)
 
 void UpdateView::prepareJob(Cervisia::PluginJobBase* job)
 {
-    act = (UpdateView::Action)job->action(); //FIXME
+    act = (UpdateView::Action)job->action();    //FIXME: don't cast
 
-    //FIXME: temporary HACK
-    if( act == UpdateNoAct )
+    if( act == UpdateNoAct )                    //FIXME: see cervisiapart.cpp when to connect
     {
         connect(job, SIGNAL(receivedLine(const QString&)),
                 this, SLOT(processUpdateLine(const QString&)));
@@ -389,11 +388,11 @@ void UpdateView::prepareJob(Cervisia::PluginJobBase* job)
     connect(job, SIGNAL(jobExited(bool, int)),
             this, SLOT(finishJob(bool, int)));
 
-//     // Scan recursively all entries - there's no way around this here
-//    if (recursive)
-//        static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
+    // Scan recursively all entries - there's no way around this here
+    if( job->isRecursive() )
+       static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
 
-//     rememberSelection(recursive);
+    rememberSelection(job->isRecursive());
     if (act != Add)
         markUpdated(false, false);
 }
