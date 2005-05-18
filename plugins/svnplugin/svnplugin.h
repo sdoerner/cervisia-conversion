@@ -49,6 +49,8 @@ public:
 
 private slots:
     void add();
+    void commit();
+    void simulateUpdate();
 
 private:
     void setupMenuActions();

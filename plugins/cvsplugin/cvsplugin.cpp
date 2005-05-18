@@ -285,7 +285,7 @@ void CvsPlugin::commit()
         emit jobPrepared(m_currentJob);
 
         kdDebug(8050) << "CvsPlugin::commit(): execute cvs job" << endl;
-//         cvsJob.execute();
+        cvsJob.execute();
     }
 }
 

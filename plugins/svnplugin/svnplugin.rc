@@ -1,8 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="svnplugin" library="libsvnplugin" version="1">
+<kpartplugin name="svnplugin" library="libsvnplugin" version="2">
 <MenuBar>
- <Menu name="file"><Text>&amp;File</Text>
-  <Action name="file_add"/>
- </Menu>
+    <Menu name="file"><Text>&amp;File</Text>
+        <Action name="file_status"/>
+        <Separator/>
+        <Action name="file_commit"/>
+        <Action name="file_add"/>
+    </Menu>
 </MenuBar>
 </kpartplugin>

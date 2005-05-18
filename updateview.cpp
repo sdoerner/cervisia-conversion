@@ -604,7 +604,8 @@ void UpdateView::processUpdateLine(const QString& str)
         default:
             return;
         }
-        updateItem(str.mid(2), status, false);
+//        updateItem(str.mid(2), status, false);
+        updateItem(str.mid(2).stripWhiteSpace(), status, false);
     }
 
     const QString removedFileStart(QString::fromLatin1("cvs server: "));

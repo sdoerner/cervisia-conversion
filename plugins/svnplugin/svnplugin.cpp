@@ -30,6 +30,7 @@ using Cervisia::SvnPlugin;
 #include <kurl.h>
 
 #include <addremovedlg.h>
+#include <commitdlg.h>
 #include <selectionintf.h>
 #include <svnjob_stub.h>
 #include <svnservice_stub.h>
@@ -199,6 +200,73 @@ void SvnPlugin::add()
 }
 
 
+// TODO: feature commit finished notification
+void SvnPlugin::commit()
+{
+    kdDebug(8050) << "SvnPlugin::commit()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    CommitDialog dlg;
+//     dlg.setLogMessage(changelogstr);
+//     dlg.setLogHistory(recentCommits);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        QString msg = dlg.logMessage();
+//         if( !recentCommits.contains(msg) )
+//         {
+//             recentCommits.prepend(msg);
+//             while( recentCommits.count() > 50 )
+//                 recentCommits.remove(recentCommits.last());
+        //
+//             KConfig* conf = config();
+//             conf->setGroup("CommitLogs");
+//             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
+//         }
+
+//         DCOPRef jobRef = m_svnService->commit(selectionList, msg, opt_commitRecursive);
+        DCOPRef jobRef = m_svnService->commit(selectionList, msg, false);
+        SvnJob_stub svnJob(jobRef);
+
+        m_currentJob = new SvnJob(jobRef, SvnJob::Commit);
+//         m_currentJob->setRecursive(opt_commitRecursive);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "SvnPlugin::commit(): execute svn job" << endl;
+        svnJob.execute();
+    }
+}
+
+
+void SvnPlugin::simulateUpdate()
+{
+    kdDebug(8050) << "SvnPlugin::simulateUpdate()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    kdDebug(8050) << "SvnPlugin::simulateUpdate(): add files " << selectionList << endl;
+
+//     DCOPRef cvsJob = cvsService->simulateUpdate(list, opt_updateRecursive);
+
+    DCOPRef jobRef = m_svnService->simulateUpdate(selectionList, false);
+    SvnJob_stub svnJob(jobRef);
+
+    m_currentJob = new SvnJob(jobRef, SvnJob::SimulateUpdate);
+//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
+    emit jobPrepared(m_currentJob);
+
+    kdDebug(8050) << "SvnPlugin::simulateUpdate(): execute svn job" << endl;
+    svnJob.execute();
+}
+
+
 void SvnPlugin::setupMenuActions()
 {
     KAction* action;
@@ -207,6 +275,20 @@ void SvnPlugin::setupMenuActions()
     //
     // File Menu
     //
+    action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
+                          this, SLOT( simulateUpdate() ),
+                          actionCollection(), "file_status" );
+    hint = i18n("Updates the status of the selected files and folders (svn status)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Commit..."), "vcs_commit", Key_NumberSign,
+                          this, SLOT( commit() ),
+                          actionCollection(), "file_commit" );
+    hint = i18n("Commits the selected files (svn commit)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
     action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
                           this, SLOT( add() ),
                           actionCollection(), "file_add" );

@@ -51,6 +51,10 @@ k_dcop:
     DCOPRef remove(const QStringList& files);
 
     /**
+     */
+    DCOPRef simulateUpdate(const QStringList& files, bool recursive);
+
+    /**
      * Quits the DCOP service.
      */
     void quit();
