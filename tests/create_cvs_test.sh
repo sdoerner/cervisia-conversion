@@ -28,3 +28,7 @@ echo "Line 1" > c.txt
 # change b.txt
 echo "Line 2" > b.txt
 touch b.txt
+
+# ignored file
+echo "Makefile.in" > .cvsignore
+touch Makefile.in

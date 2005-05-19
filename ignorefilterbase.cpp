@@ -24,6 +24,19 @@ using namespace Cervisia;
 #include <qtextstream.h>
 
 
+IgnoreFilterBase::IgnoreFilterBase(IgnoreFilterBase* nextFilter)
+    : m_nextFilter(nextFilter)
+{
+}
+
+
+IgnoreFilterBase::~IgnoreFilterBase()
+{
+    delete m_nextFilter;
+    m_nextFilter = 0;
+}
+
+
 void IgnoreFilterBase::addEntriesFromString(const QString& str)
 {
     QStringList entries = QStringList::split(' ', str);

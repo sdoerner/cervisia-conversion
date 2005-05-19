@@ -48,7 +48,7 @@ public:
 
     virtual void syncWithEntries(const QString& path);
 
-    virtual IgnoreFilterBase* SvnPlugin::filter() const;
+    virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
 
 private slots:
     void add();

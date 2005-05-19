@@ -16,32 +16,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "dirignorelist.h"
-using namespace Cervisia;
+#ifndef CERVISIA_DIRIGNORELIST_H
+#define CERVISIA_DIRIGNORELIST_H
 
-#include <qfileinfo.h>
+#include "ignorefilterbase.h"
+#include "stringmatcher.h"
+
+class QFileInfo;
 
 
-DirIgnoreList::DirIgnoreList(const QString& path)
+namespace Cervisia
 {
-    addEntriesFromFile(path + "/.cvsignore");
-}
 
 
-void DirIgnoreList::addEntry(const QString& entry)
+/* Encapsulates the .cvsignore file inside a CVS-controlled directory. */
+class DirIgnoreList : public IgnoreFilterBase
 {
-    if (entry != QChar('!'))
-    {
-        m_stringMatcher.add(entry);
-    }
-    else
-    {
-        m_stringMatcher.clear();
-    }
+public:
+    explicit DirIgnoreList(const QString& path);
+
+    virtual bool matches(const QString& fileName) const;
+
+private:
+    virtual void addEntry(const QString& entry);
+
+    StringMatcher m_stringMatcher;
+};
+
+
 }
 
 
-bool DirIgnoreList::matches(const QFileInfo* fi) const
-{  
-    return m_stringMatcher.match(fi->fileName());
-}
+#endif

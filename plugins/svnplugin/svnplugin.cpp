@@ -31,6 +31,7 @@ using Cervisia::SvnPlugin;
 
 #include <addremovedlg.h>
 #include <commitdlg.h>
+#include <nullfilter.h>
 #include <selectionintf.h>
 #include <svnjob_stub.h>
 #include <svnservice_stub.h>
@@ -192,9 +193,9 @@ void SvnPlugin::syncWithEntries(const QString& path)
 }
 
 
-Cervisia::IgnoreFilterBase* SvnPlugin::filter() const
+Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& path) const
 {
-    return 0;
+    return new NullFilter;
 }
 
 

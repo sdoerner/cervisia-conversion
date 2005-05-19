@@ -30,13 +30,16 @@ namespace Cervisia
 class IgnoreFilterBase
 {
 public:
-    virtual ~IgnoreFilterBase() {}
-    
-    virtual bool matches(const QFileInfo* fi) const = 0;
+    IgnoreFilterBase(IgnoreFilterBase* nextFilter=0);
+    virtual ~IgnoreFilterBase();
+
+    virtual bool matches(const QString& fileName) const = 0;
 
 protected:
     void addEntriesFromString(const QString& str);
     void addEntriesFromFile(const QString& name);
+
+    IgnoreFilterBase* m_nextFilter;
 
 private:
     virtual void addEntry(const QString& entry) = 0;

@@ -65,7 +65,7 @@
 #include "misc.h"
 #include "cvsservice_stub.h"
 #include "repository_stub.h"
-#include "globalignorelist.h"
+//#include "globalignorelist.h"
 #include "patchoptiondlg.h"
 #include "editwithmenu.h"
 #include "pluginmanager.h"

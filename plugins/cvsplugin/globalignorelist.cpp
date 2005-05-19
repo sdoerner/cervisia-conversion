@@ -39,9 +39,9 @@ GlobalIgnoreList::GlobalIgnoreList()
 }
 
 
-bool GlobalIgnoreList::matches(const QFileInfo* fi) const
+bool GlobalIgnoreList::matches(const QString& fileName) const
 {
-    return m_stringMatcher.match(fi->fileName());
+    return m_stringMatcher.match(fileName);
 }
 
 

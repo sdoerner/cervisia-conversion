@@ -37,6 +37,7 @@ using Cervisia::CvsPlugin;
 #include <selectionintf.h>
 
 #include "cvsjob.h"
+#include "dirignorelist.h"
 
 #include <kdebug.h>
 
@@ -190,9 +191,9 @@ void CvsPlugin::syncWithEntries(const QString& filePath)
 }
 
 
-Cervisia::IgnoreFilterBase* CvsPlugin::filter() const
+Cervisia::IgnoreFilterBase* CvsPlugin::filter(const QString& path) const
 {
-    return 0;
+    return new DirIgnoreList(path);
 }
 
 

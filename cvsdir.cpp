@@ -20,8 +20,12 @@
 
 #include "cvsdir.h"
 
-#include "dirignorelist.h"
-#include "globalignorelist.h"
+//#include "dirignorelist.h"
+//#include "globalignorelist.h"
+
+#include "pluginbase.h"
+#include "pluginmanager.h"
+#include "ignorefilterbase.h"
 using namespace Cervisia;
 
 
@@ -33,17 +37,20 @@ CvsDir::CvsDir(const QString &path)
 
 const QFileInfoList *CvsDir::entryInfoList() const
 {
-    DirIgnoreList ignorelist(absPath());
+    IgnoreFilterBase* ignoreFilter = PluginManager::self()->currentPlugin()->filter(absPath());
+
+//    DirIgnoreList ignorelist(absPath());
     const QFileInfoList *fulllist = QDir::entryInfoList();
     if (!fulllist)
         return 0;
-    
+
     entrylist.clear();
 
     QFileInfoListIterator it(*fulllist);
     for (; it.current(); ++it)
         {
-            if (!ignorelist.matches(it.current()) && !GlobalIgnoreList().matches(it.current()))
+//            if (!ignorelist.matches(it.current()) && !GlobalIgnoreList().matches(it.current()))
+            if( !ignoreFilter->matches(it.current()->fileName()) )
                 entrylist.append(it.current());
         }
 
