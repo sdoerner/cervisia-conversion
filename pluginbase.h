@@ -29,6 +29,7 @@ class DCOPRef;
 namespace Cervisia
 {
 
+class IgnoreFilterBase;
 class PluginJobBase;
 class SelectionIntf;
 
@@ -53,6 +54,8 @@ public:
     virtual QString repository() const = 0;
 
     virtual void syncWithEntries(const QString& path) = 0;
+
+    virtual IgnoreFilterBase* filter() const = 0;
 
 signals:
     void updateItem(const Cervisia::Entry& entry);

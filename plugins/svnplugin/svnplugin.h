@@ -28,6 +28,7 @@ class SvnRepository_stub;
 namespace Cervisia
 {
 
+
 class SvnPlugin : public PluginBase
 {
     Q_OBJECT
@@ -46,6 +47,8 @@ public:
     virtual QString repository() const;
 
     virtual void syncWithEntries(const QString& path);
+
+    virtual IgnoreFilterBase* SvnPlugin::filter() const;
 
 private slots:
     void add();

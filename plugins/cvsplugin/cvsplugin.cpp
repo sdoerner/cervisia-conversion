@@ -190,6 +190,12 @@ void CvsPlugin::syncWithEntries(const QString& filePath)
 }
 
 
+Cervisia::IgnoreFilterBase* CvsPlugin::filter() const
+{
+    return 0;
+}
+
+
 void CvsPlugin::add()
 {
     kdDebug(8050) << "CvsPlugin::add()" << endl;

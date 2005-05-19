@@ -19,7 +19,7 @@
 #ifndef CERVISIA_GLOBALIGNORELIST_H
 #define CERVISIA_GLOBALIGNORELIST_H
 
-#include "ignorelistbase.h"
+#include "ignorefilterbase.h"
 #include "stringmatcher.h"
 
 class QFileInfo;
@@ -30,7 +30,7 @@ namespace Cervisia
 {
 
 
-class GlobalIgnoreList : public IgnoreListBase
+class GlobalIgnoreList : public IgnoreFilterBase
 {
 public:
     GlobalIgnoreList();

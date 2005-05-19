@@ -47,6 +47,8 @@ public:
 
     virtual void syncWithEntries(const QString& filePath);
 
+    virtual IgnoreFilterBase* filter() const;
+
 private slots:
     void add();
     void addBinary();

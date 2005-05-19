@@ -13,7 +13,7 @@ libcervisia_la_SOURCES = annotatedlg.cpp diffdlg.cpp patchoptiondlg.cpp logdlg.c
 		   progressdlg.cpp progressdlg.skel resolvedlg.cpp resolvedlg_p.cpp annotateview.cpp \
 		   diffview.cpp loglist.cpp logplainview.cpp logtree.cpp annotatectl.cpp   \
 		   loginfo.cpp misc.cpp qttableview.cpp tooltip.cpp cervisiasettings.kcfgc \
-		   settingsdlg.cpp settingsdlg_advanced.ui pluginbase.cpp entry.cpp \
+		   settingsdlg.cpp settingsdlg_advanced.ui pluginbase.cpp entry.cpp ignorefilterbase.cpp \
 		   addremovedlg.cpp pluginjobbase.cpp pluginjobbase.skel commitdlg.cpp
 libcervisia_la_COMPILE_FIRST = cvsservice/cvsservice_stub.h cervisiasettings.h
 
@@ -24,7 +24,7 @@ libcervisiapart_la_SOURCES = updateview.cpp protocolview.cpp \
 		   tagdlg.cpp mergedlg.cpp cvsdir.cpp repositories.cpp cervisiapart.cpp \
 		   addrepositorydlg.cpp watchersdlg.cpp \
 		   updateview_items.cpp updateview_visitors.cpp \
-		   entry_status.cpp stringmatcher.cpp cvsinitdlg.cpp ignorelistbase.cpp dirignorelist.cpp \
+		   entry_status.cpp stringmatcher.cpp cvsinitdlg.cpp dirignorelist.cpp \
 		   globalignorelist.cpp editwithmenu.cpp pluginmanager.cpp
 libcervisiapart_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 libcervisiapart_la_LIBADD = $(LIB_KFILE) $(LIB_KPARTS) $(LIB_KUTILS) \

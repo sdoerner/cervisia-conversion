@@ -1,5 +1,5 @@
 /* 
- *  Copyright (C) 2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (C) 2004-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "ignorelistbase.h"
+#include "ignorefilterbase.h"
 using namespace Cervisia;
 
 #include <qfile.h>
@@ -24,7 +24,7 @@ using namespace Cervisia;
 #include <qtextstream.h>
 
 
-void IgnoreListBase::addEntriesFromString(const QString& str)
+void IgnoreFilterBase::addEntriesFromString(const QString& str)
 {
     QStringList entries = QStringList::split(' ', str);
     for( QStringList::iterator it = entries.begin(); it != entries.end(); ++it )
@@ -34,7 +34,7 @@ void IgnoreListBase::addEntriesFromString(const QString& str)
 }
 
 
-void IgnoreListBase::addEntriesFromFile(const QString& name)
+void IgnoreFilterBase::addEntriesFromFile(const QString& name)
 {
     QFile file(name);
 

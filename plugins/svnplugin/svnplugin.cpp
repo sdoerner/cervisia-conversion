@@ -167,9 +167,13 @@ void SvnPlugin::syncWithEntries(const QString& path)
                     // retrieve last modified date from file (local time)
                     entry.m_dateTime = QFileInfo(path + QDir::separator() + entry.m_name).lastModified();
 
-                    QString schedule    = e.attribute("schedule");
-                    QString conflictWrk = e.attribute("conflict-wrk");
-                    QString textTime    = e.attribute("text-time");
+                    const QString schedule       = e.attribute("schedule");
+                    const QString conflictWrk    = e.attribute("conflict-wrk");
+                    const QString textTimeAttr   = e.attribute("text-time");
+                    const QDateTime textDateTime = QDateTime::fromString(textTimeAttr, Qt::ISODate);
+
+                    QDateTime fileDateUTC;
+                    fileDateUTC.setTime_t(entry.m_dateTime.toTime_t(), Qt::UTC);
 
                     if( schedule == "add" )
                         entry.m_status = Cervisia::LocallyAdded;
@@ -177,12 +181,20 @@ void SvnPlugin::syncWithEntries(const QString& path)
                         entry.m_status = Cervisia::LocallyRemoved;
                     else if( !conflictWrk.isEmpty() )
                         entry.m_status = Cervisia::Conflict;
+                    else if( textDateTime != fileDateUTC )
+                        entry.m_status = Cervisia::LocallyModified;
 
                     emit updateItem(entry);
                 }
             }
         }
     }
+}
+
+
+Cervisia::IgnoreFilterBase* SvnPlugin::filter() const
+{
+    return 0;
 }
 
 

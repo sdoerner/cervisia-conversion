@@ -19,7 +19,7 @@
 #ifndef CERVISIA_DIRIGNORELIST_H
 #define CERVISIA_DIRIGNORELIST_H
 
-#include "ignorelistbase.h"
+#include "ignorefilterbase.h"
 #include "stringmatcher.h"
 
 class QFileInfo;
@@ -30,7 +30,7 @@ namespace Cervisia
 
 
 /* Encapsulates the .cvsignore file inside a CVS-controlled directory. */
-class DirIgnoreList : public IgnoreListBase
+class DirIgnoreList : public IgnoreFilterBase
 {
 public:
     explicit DirIgnoreList(const QString& path);

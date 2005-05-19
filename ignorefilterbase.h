@@ -1,5 +1,5 @@
 /* 
- *  Copyright (C) 2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (C) 2004-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef CERVISIA_IGNORELISTBASE_H
-#define CERVISIA_IGNORELISTBASE_H
+#ifndef CERVISIA_IGNOREFILTERBASE_H
+#define CERVISIA_IGNOREFILTERBASE_H
 
 class QFileInfo;
 class QString;
@@ -27,10 +27,10 @@ namespace Cervisia
 {
 
 
-class IgnoreListBase
+class IgnoreFilterBase
 {
 public:
-    virtual ~IgnoreListBase() {}
+    virtual ~IgnoreFilterBase() {}
     
     virtual bool matches(const QFileInfo* fi) const = 0;
 
