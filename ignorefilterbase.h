@@ -33,16 +33,17 @@ public:
     IgnoreFilterBase(IgnoreFilterBase* nextFilter=0);
     virtual ~IgnoreFilterBase();
 
-    virtual bool matches(const QString& fileName) const = 0;
+    bool matches(const QString& fileName) const;
 
 protected:
     void addEntriesFromString(const QString& str);
     void addEntriesFromFile(const QString& name);
 
-    IgnoreFilterBase* m_nextFilter;
-
 private:
     virtual void addEntry(const QString& entry) = 0;
+    virtual bool doMatches(const QString& fileName) const = 0;
+
+    IgnoreFilterBase* m_nextFilter;
 };
 
 

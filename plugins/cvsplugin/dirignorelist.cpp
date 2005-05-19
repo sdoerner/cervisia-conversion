@@ -22,9 +22,16 @@ using namespace Cervisia;
 #include <qfileinfo.h>
 
 
-DirIgnoreList::DirIgnoreList(const QString& path)
+DirIgnoreList::DirIgnoreList(const QString& path, IgnoreFilterBase* nextFilter)
+    : IgnoreFilterBase(nextFilter)
 {
     addEntriesFromFile(path + "/.cvsignore");
+}
+
+
+bool DirIgnoreList::doMatches(const QString& fileName) const
+{
+    return m_stringMatcher.match(fileName);
 }
 
 
@@ -38,10 +45,4 @@ void DirIgnoreList::addEntry(const QString& entry)
     {
         m_stringMatcher.clear();
     }
-}
-
-
-bool DirIgnoreList::matches(const QString& fileName) const
-{  
-    return m_stringMatcher.match(fileName);
 }

@@ -39,7 +39,6 @@ const QFileInfoList *CvsDir::entryInfoList() const
 {
     IgnoreFilterBase* ignoreFilter = PluginManager::self()->currentPlugin()->filter(absPath());
 
-//    DirIgnoreList ignorelist(absPath());
     const QFileInfoList *fulllist = QDir::entryInfoList();
     if (!fulllist)
         return 0;
@@ -49,10 +48,11 @@ const QFileInfoList *CvsDir::entryInfoList() const
     QFileInfoListIterator it(*fulllist);
     for (; it.current(); ++it)
         {
-//            if (!ignorelist.matches(it.current()) && !GlobalIgnoreList().matches(it.current()))
             if( !ignoreFilter->matches(it.current()->fileName()) )
                 entrylist.append(it.current());
         }
+
+    delete ignoreFilter;
 
     return &entrylist;
 }

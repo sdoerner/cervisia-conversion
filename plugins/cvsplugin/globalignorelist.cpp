@@ -28,43 +28,50 @@ using namespace Cervisia;
 #include "progressdlg.h"
 
 
-StringMatcher GlobalIgnoreList::m_stringMatcher;
-bool          GlobalIgnoreList::m_isInitialized = false;
-
-
-GlobalIgnoreList::GlobalIgnoreList()
+struct Data
 {
-    if( !m_isInitialized )
+    static StringMatcher m_stringMatcher;
+    static bool          m_isInitialized;
+};
+
+StringMatcher Data::m_stringMatcher;
+bool          Data::m_isInitialized = false;
+
+
+GlobalIgnoreList::GlobalIgnoreList(IgnoreFilterBase* nextFilter)
+    : IgnoreFilterBase(nextFilter)
+{
+    if( !Data().m_isInitialized )
         setup();
 }
 
-
-bool GlobalIgnoreList::matches(const QString& fileName) const
-{
-    return m_stringMatcher.match(fileName);
-}
-
-
+//TODO: restore functionality
 void GlobalIgnoreList::retrieveServerIgnoreList(CvsService_stub* cvsService,
                                                 const QString& repository)
 {
-    KTempFile tmpFile;
-    tmpFile.setAutoDelete(true);
-       
-    // clear old ignore list
-    m_stringMatcher.clear();
-    
-    // now set it up again
-    setup();
-    
-    DCOPRef ref = cvsService->downloadCvsIgnoreFile(repository, 
-                                                    tmpFile.name());
-      
-    ProgressDialog dlg(0, "Edit", ref, "checkout", "CVS Edit");
-    if( !dlg.execute() )
-        return;
-    
-    addEntriesFromFile(tmpFile.name());
+//     KTempFile tmpFile;
+//     tmpFile.setAutoDelete(true);
+//        
+//     // clear old ignore list
+//     m_stringMatcher.clear();
+//     
+//     // now set it up again
+//     setup();
+//     
+//     DCOPRef ref = cvsService->downloadCvsIgnoreFile(repository, 
+//                                                     tmpFile.name());
+//       
+//     ProgressDialog dlg(0, "Edit", ref, "checkout", "CVS Edit");
+//     if( !dlg.execute() )
+//         return;
+//     
+//     addEntriesFromFile(tmpFile.name());
+}
+
+
+bool GlobalIgnoreList::doMatches(const QString& fileName) const
+{
+    return Data().m_stringMatcher.match(fileName);
 }
 
 
@@ -72,11 +79,11 @@ void GlobalIgnoreList::addEntry(const QString& entry)
 {
     if (entry != QChar('!'))
     {
-        m_stringMatcher.add(entry);
+        Data().m_stringMatcher.add(entry);
     }
     else
     {
-        m_stringMatcher.clear();
+        Data().m_stringMatcher.clear();
 
         // Bug #89215:
         // Make sure '.' and '..' are always in the ignore list, so
@@ -96,5 +103,5 @@ void GlobalIgnoreList::setup()
     addEntriesFromString(QString::fromLocal8Bit(::getenv("CVSIGNORE")));
     addEntriesFromFile(QDir::homeDirPath() + "/.cvsignore");  
     
-    m_isInitialized = true;
+    Data().m_isInitialized = true;
 }

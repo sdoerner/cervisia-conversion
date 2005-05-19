@@ -1,5 +1,5 @@
 /* 
- *  Copyright (C) 2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (C) 2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#ifndef CERVISIA_GLOBALIGNORELIST_H
-#define CERVISIA_GLOBALIGNORELIST_H
+#ifndef CERVISIA_NULLFILTER_H
+#define CERVISIA_NULLFILTER_H
 
 #include "ignorefilterbase.h"
-#include "stringmatcher.h"
-
-class QFileInfo;
-class CvsService_stub;
 
 
 namespace Cervisia
 {
 
 
-class GlobalIgnoreList : public IgnoreFilterBase
+class NullFilter : public IgnoreFilterBase
 {
 public:
-    GlobalIgnoreList(IgnoreFilterBase* nextFilter=0);
-
-    void retrieveServerIgnoreList(CvsService_stub* cvsService,
-                                  const QString& repository);
+    NullFilter() {}
 
 private:
-    void setup();
-    virtual bool doMatches(const QString& fileName) const;
-    virtual void addEntry(const QString& entry);
+    virtual void addEntry(const QString& entry) {} //FIXME
+    virtual bool doMatches(const QString& fileName) const { return false; }
 };
 
 

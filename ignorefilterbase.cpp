@@ -37,6 +37,17 @@ IgnoreFilterBase::~IgnoreFilterBase()
 }
 
 
+bool IgnoreFilterBase::matches(const QString& fileName) const
+{
+    bool result = false;
+
+    if( m_nextFilter )
+        result = m_nextFilter->matches(fileName);
+
+    return doMatches(fileName) || result;
+}
+
+
 void IgnoreFilterBase::addEntriesFromString(const QString& str)
 {
     QStringList entries = QStringList::split(' ', str);
