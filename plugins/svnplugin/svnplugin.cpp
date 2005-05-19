@@ -163,6 +163,21 @@ void SvnPlugin::syncWithEntries(const QString& path)
                 else
                 {
                     entry.m_revision = e.attribute("committed-rev");
+
+                    // retrieve last modified date from file (local time)
+                    entry.m_dateTime = QFileInfo(path + QDir::separator() + entry.m_name).lastModified();
+
+                    QString schedule    = e.attribute("schedule");
+                    QString conflictWrk = e.attribute("conflict-wrk");
+                    QString textTime    = e.attribute("text-time");
+
+                    if( schedule == "add" )
+                        entry.m_status = Cervisia::LocallyAdded;
+                    else if( schedule == "delete" )
+                        entry.m_status = Cervisia::LocallyRemoved;
+                    else if( !conflictWrk.isEmpty() )
+                        entry.m_status = Cervisia::Conflict;
+
                     emit updateItem(entry);
                 }
             }
