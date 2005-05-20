@@ -298,6 +298,58 @@ void CvsPlugin::commit()
 }
 
 
+void CvsPlugin::remove()
+{
+    kdDebug(8050) << "CvsPlugin::remove()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(AddRemoveDialog::Remove);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        kdDebug(8050) << "CvsPlugin::remove(): remove files " << selectionList << endl;
+
+//         cvsJob = cvsService->remove(list, opt_commitRecursive);
+        DCOPRef jobRef = m_cvsService->remove(selectionList, false);
+        CvsJob_stub cvsJob(jobRef);
+
+        m_currentJob = new CvsJob(jobRef, CvsJob::Remove);
+//        m_currentJob->setRecursive(opt_commitRecursive);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "CvsPlugin::remove(): execute cvs job" << endl;
+        cvsJob.execute();
+    }
+}
+
+
+void CvsPlugin::revert()
+{
+    kdDebug(8050) << "CvsPlugin::revert()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+//    DCOPRef cvsJob = cvsService->update(list, opt_updateRecursive,
+//                                        opt_createDirs, opt_pruneDirs, extraopt);
+    DCOPRef jobRef = m_cvsService->update(selectionList, false, false, false, "-C");
+    CvsJob_stub cvsJob(jobRef);
+
+    m_currentJob = new CvsJob(jobRef, CvsJob::Update);
+//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
+    emit jobPrepared(m_currentJob);
+
+    kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
+    cvsJob.execute();
+}
+
+
 void CvsPlugin::simulateUpdate()
 {
     kdDebug(8050) << "CvsPlugin::simulateUpdate()" << endl;
@@ -358,6 +410,20 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( addBinary() ),
                           actionCollection(), "file_add_binary" );
     hint = i18n("Adds the selected files as binaries to the repository (cvs -kb add)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
+    action = new KAction( i18n("&Remove From Repository..."), "vcs_remove", Key_Delete,
+                          this, SLOT( remove() ),
+                          actionCollection(), "file_remove" );
+    hint = i18n("Removes (cvs remove) the selected files from the repository");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
+    action = new KAction( i18n("Rever&t"), 0,
+                          this, SLOT( revert() ),
+                          actionCollection(), "file_revert_local_changes" );
+    hint = i18n("Reverts (cvs update -C) the selected files (only cvs 1.11)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 }

@@ -7,6 +7,9 @@
         <Action name="file_commit"/>
         <Action name="file_add"/>
         <Action name="file_add_binary"/>
+        <Action name="file_remove"/>
+        <Action name="file_revert_local_changes"/>
+        <Separator/>
     </Menu>
 </MenuBar>
 </kpartplugin>

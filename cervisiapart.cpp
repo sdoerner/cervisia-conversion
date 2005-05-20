@@ -269,20 +269,6 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Remove From Repository..."), "vcs_remove", Key_Delete,
-                          this, SLOT( slotRemove() ),
-                          actionCollection(), "file_remove" );
-    hint = i18n("Removes (cvs remove) the selected files from the repository");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("Rever&t"), 0,
-                          this, SLOT( slotRevert() ),
-                          actionCollection(), "file_revert_local_changes" );
-    hint = i18n("Reverts (cvs update -C) the selected files (only cvs 1.11)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
     // context menu only
     action = new KAction( i18n("&Properties"), 0,
                           this, SLOT( slotFileProperties() ),

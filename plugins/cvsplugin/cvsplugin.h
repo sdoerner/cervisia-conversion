@@ -53,6 +53,8 @@ private slots:
     void add();
     void addBinary();
     void commit();
+    void remove();
+    void revert();
     void simulateUpdate();
 
 private:
