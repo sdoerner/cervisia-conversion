@@ -53,6 +53,7 @@ public:
 private slots:
     void add();
     void commit();
+    void remove();
     void simulateUpdate();
 
 private:

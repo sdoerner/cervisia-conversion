@@ -29,7 +29,7 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#include <addremovedlg.h>
+//#include <addremovedlg.h>
 #include <commitdlg.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
@@ -201,58 +201,14 @@ Cervisia::IgnoreFilterBase* CvsPlugin::filter(const QString& path) const
 void CvsPlugin::add()
 {
     kdDebug(8050) << "CvsPlugin::add()" << endl;
-
-    QStringList selectionList = m_fileView->multipleSelection();
-    if( selectionList.isEmpty() )
-        return;
-
-    // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::Add);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        kdDebug(8050) << "CvsPlugin::add(): add files " << selectionList << endl;
-
-        DCOPRef jobRef = m_cvsService->add(selectionList, false);
-        CvsJob_stub cvsJob(jobRef);
-
-        m_currentJob = new CvsJob(jobRef, CvsJob::Add);
-        m_currentJob->setRecursive(false);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "CvsPlugin::add(): execute cvs job" << endl;
-        cvsJob.execute();
-    }
+    executeAddOrRemove(AddRemoveDialog::Add);
 }
 
 
 void CvsPlugin::addBinary()
 {
     kdDebug(8050) << "CvsPlugin::addBinary()" << endl;
-
-    QStringList selectionList = m_fileView->multipleSelection();
-    if( selectionList.isEmpty() )
-        return;
-
-    // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::AddBinary);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        kdDebug(8050) << "CvsPlugin::addBinary(): add files " << selectionList << endl;
-
-        DCOPRef jobRef = m_cvsService->add(selectionList, true);
-        CvsJob_stub cvsJob(jobRef);
-
-        m_currentJob = new CvsJob(jobRef, CvsJob::Add);
-        m_currentJob->setRecursive(false);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "CvsPlugin::addBinary(): execute cvs job" << endl;
-        cvsJob.execute();
-    }
+    executeAddOrRemove(AddRemoveDialog::AddBinary);
 }
 
 // TODO: feature commit finished notification
@@ -301,30 +257,7 @@ void CvsPlugin::commit()
 void CvsPlugin::remove()
 {
     kdDebug(8050) << "CvsPlugin::remove()" << endl;
-
-    QStringList selectionList = m_fileView->multipleSelection();
-    if( selectionList.isEmpty() )
-        return;
-
-    // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::Remove);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        kdDebug(8050) << "CvsPlugin::remove(): remove files " << selectionList << endl;
-
-//         cvsJob = cvsService->remove(list, opt_commitRecursive);
-        DCOPRef jobRef = m_cvsService->remove(selectionList, false);
-        CvsJob_stub cvsJob(jobRef);
-
-        m_currentJob = new CvsJob(jobRef, CvsJob::Remove);
-//        m_currentJob->setRecursive(opt_commitRecursive);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "CvsPlugin::remove(): execute cvs job" << endl;
-        cvsJob.execute();
-    }
+    executeAddOrRemove(AddRemoveDialog::Remove);
 }
 
 
@@ -375,6 +308,50 @@ void CvsPlugin::simulateUpdate()
 }
 
 
+void CvsPlugin::executeAddOrRemove(const AddRemoveDialog::ActionType& dialogType)
+{
+    kdDebug(8050) << "CvsPlugin::executeAddOrRemove()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(dialogType);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        DCOPRef jobRef;
+        CvsJob::ActionKind action;
+        bool recursive = false;
+
+        switch( dialogType )
+        {
+            case AddRemoveDialog::Add:
+                action = CvsJob::Add;
+                jobRef = m_cvsService->add(selectionList, false);
+            case AddRemoveDialog::AddBinary:
+                action = CvsJob::Add;
+                jobRef = m_cvsService->add(selectionList, true);
+            case AddRemoveDialog::Remove:
+                action = CvsJob::Remove;
+//                 recursive = opt_commitRecursive;
+                jobRef = m_cvsService->remove(selectionList, recursive);
+        }
+
+        CvsJob_stub cvsJob(jobRef);
+
+        m_currentJob = new CvsJob(jobRef, action);
+        m_currentJob->setRecursive(recursive);
+        emit jobPrepared(m_currentJob);
+
+        kdDebug(8050) << "CvsPlugin::executeAddOrRemove(): execute cvs job" << endl;
+        cvsJob.execute();
+    }
+}
+
+
 void CvsPlugin::setupMenuActions()
 {
     KAction* action;
@@ -416,14 +393,14 @@ void CvsPlugin::setupMenuActions()
     action = new KAction( i18n("&Remove From Repository..."), "vcs_remove", Key_Delete,
                           this, SLOT( remove() ),
                           actionCollection(), "file_remove" );
-    hint = i18n("Removes (cvs remove) the selected files from the repository");
+    hint = i18n("Removes the selected files from the repository (cvs remove)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
     action = new KAction( i18n("Rever&t"), 0,
                           this, SLOT( revert() ),
                           actionCollection(), "file_revert_local_changes" );
-    hint = i18n("Reverts (cvs update -C) the selected files (only cvs 1.11)");
+    hint = i18n("Reverts the selected files (cvs update -C / only cvs 1.11)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 }

@@ -271,6 +271,32 @@ void SvnPlugin::commit()
 }
 
 
+void SvnPlugin::remove()
+{
+    kdDebug(8050) << "SvnPlugin::remove()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    // modal dialog
+    AddRemoveDialog dlg(AddRemoveDialog::Remove);
+    dlg.setFileList(selectionList);
+
+    if( dlg.exec() )
+    {
+        DCOPRef jobRef = m_svnService->remove(selectionList);
+        SvnJob_stub svnJob(jobRef);
+
+        m_currentJob = new SvnJob(jobRef, SvnJob::Remove);
+        m_currentJob->setRecursive(false);
+        emit jobPrepared(m_currentJob);
+
+        svnJob.execute();
+    }
+}
+
+
 void SvnPlugin::simulateUpdate()
 {
     kdDebug(8050) << "SvnPlugin::simulateUpdate()" << endl;
@@ -300,6 +326,8 @@ void SvnPlugin::setupMenuActions()
     KAction* action;
     QString  hint;
 
+    actionCollection()->setHighlightingEnabled(true);
+
     //
     // File Menu
     //
@@ -323,6 +351,13 @@ void SvnPlugin::setupMenuActions()
     hint = i18n("Adds the selected files to the repository (svn add)");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Remove From Repository..."), "vcs_remove", Key_Delete,
+                          this, SLOT( remove() ),
+                          actionCollection(), "file_remove" );
+    hint = i18n("Removes the selected files from the repository (svn delete)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
 }
 
 
