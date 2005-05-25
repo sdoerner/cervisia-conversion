@@ -52,6 +52,10 @@ k_dcop:
 
     /**
      */
+    DCOPRef revert(const QStringList& files, bool recursive);
+
+    /**
+     */
     DCOPRef simulateUpdate(const QStringList& files, bool recursive);
 
     /**

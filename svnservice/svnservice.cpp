@@ -161,6 +161,25 @@ DCOPRef SvnService::remove(const QStringList& files)
 }
 
 
+DCOPRef SvnService::revert(const QStringList& files, bool recursive)
+{
+    if( !d->hasWorkingCopy() || d->hasRunningJob() )
+        return DCOPRef();
+
+    // assemble the command line
+    // svn revert [-R] [FILES]
+    d->singleSvnJob->clearCommand();
+
+    *d->singleSvnJob << d->repository->svnClient() << "revert";
+
+    if( recursive )
+        *d->singleSvnJob << "-R";
+
+    *d->singleSvnJob << JoinFileList(files) << REDIRECT_STDERR;
+
+    return d->setupNonConcurrentJob();
+}
+
 
 DCOPRef SvnService::simulateUpdate(const QStringList& files, bool recursive)
 {
