@@ -24,8 +24,8 @@ using Cervisia::PluginJobBase;
 
 
 PluginJobBase::PluginJobBase(const DCOPRef& jobRef, const ActionKind& action)
-    : DCOPObject(jobRef.obj())
-    , QObject(0, jobRef.obj())
+    : QObject(0, jobRef.obj())
+    , DCOPObject(jobRef.obj())
     , m_action(action)
     , m_recursive(false)
 {
