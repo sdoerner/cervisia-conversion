@@ -1,4 +1,4 @@
-INCLUDES    = -I$(top_srcdir)/cervisia $(all_includes)
+INCLUDES    = -I$(top_srcdir)/cervisia -I../../svnservice $(all_includes)
 METASOURCES = AUTO
 
 # Install this plugin in the KDE modules directory
