@@ -26,6 +26,7 @@ using namespace Cervisia;
 
 #include "cvsservice_stub.h"
 #include "progressdlg.h"
+#include "stringmatcher.h"
 
 
 struct Data

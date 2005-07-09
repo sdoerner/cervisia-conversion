@@ -19,8 +19,6 @@
 #include "dirignorelist.h"
 using namespace Cervisia;
 
-#include <qfileinfo.h>
-
 
 DirIgnoreList::DirIgnoreList(const QString& path, IgnoreFilterBase* nextFilter)
     : IgnoreFilterBase(nextFilter)

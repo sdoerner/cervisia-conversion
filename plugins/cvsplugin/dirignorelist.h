@@ -22,8 +22,6 @@
 #include "ignorefilterbase.h"
 #include "stringmatcher.h"
 
-class QFileInfo;
-
 
 namespace Cervisia
 {

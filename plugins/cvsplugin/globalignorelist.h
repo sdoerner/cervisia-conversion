@@ -20,9 +20,8 @@
 #define CERVISIA_GLOBALIGNORELIST_H
 
 #include "ignorefilterbase.h"
-#include "stringmatcher.h"
 
-class QFileInfo;
+
 class CvsService_stub;
 
 
@@ -33,7 +32,7 @@ namespace Cervisia
 class GlobalIgnoreList : public IgnoreFilterBase
 {
 public:
-    GlobalIgnoreList(IgnoreFilterBase* nextFilter=0);
+    explicit GlobalIgnoreList(IgnoreFilterBase* nextFilter=0);
 
     void retrieveServerIgnoreList(CvsService_stub* cvsService,
                                   const QString& repository);
