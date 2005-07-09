@@ -31,12 +31,12 @@ using Cervisia::SvnPlugin;
 
 #include <addremovedlg.h>
 #include <commitdlg.h>
-#include <nullfilter.h>
 #include <selectionintf.h>
 #include <svnjob_stub.h>
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
+#include "globalignorelist.h"
 #include "svnjob.h"
 
 #include <kdebug.h>
@@ -195,7 +195,7 @@ void SvnPlugin::syncWithEntries(const QString& path)
 
 Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& path) const
 {
-    return new NullFilter;
+    return new GlobalIgnoreList;
 }
 
 
