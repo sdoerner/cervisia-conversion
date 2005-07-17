@@ -65,6 +65,13 @@ void SvnLogParser::parseComment(const QString& line)
     }
     else
     {
+        if (m_logInfo.m_comment.startsWith("\n\n"))
+            m_logInfo.m_comment.remove(0, 2);
+        else if (m_logInfo.m_comment.startsWith("\n"))
+            m_logInfo.m_comment.remove(0, 1);
+        if (m_logInfo.m_comment.endsWith("\n"))
+            m_logInfo.m_comment.truncate(m_logInfo.m_comment.length() - 1);
+
         push_back(m_logInfo);
 
         // reset for next entry
@@ -75,7 +82,8 @@ void SvnLogParser::parseComment(const QString& line)
 
 void SvnLogParser::parseInfos(const QString& line)
 {
-    const QStringList strlist(QStringList::split(" | ", line));
+    // allow empty entries as the author column can be empty
+    const QStringList strlist(QStringList::split(" | ", line, true));
 
     m_logInfo.m_revision = strlist[0].mid(1);
 
