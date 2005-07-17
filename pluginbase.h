@@ -42,6 +42,11 @@ public:
     PluginBase(QObject* parent, const char* name);
     ~PluginBase();
 
+    /**
+     * @return The KConfig object for the instance.
+     */
+    KConfig* config() const;
+
     void setFileView(SelectionIntf* fileView);
 
     virtual QString type() const = 0;

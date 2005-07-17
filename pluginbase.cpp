@@ -35,6 +35,15 @@ PluginBase::~PluginBase()
 }
 
 
+KConfig* PluginBase::config() const
+{
+    if (const KInstance* kinstance = instance())
+        return kinstance->config();
+
+    return 0;
+}
+
+
 void PluginBase::setFileView(Cervisia::SelectionIntf* fileView)
 {
     m_fileView = fileView;
