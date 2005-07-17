@@ -30,7 +30,7 @@ void OutputParser::parseOutput(const QString& output)
 
     int lastPos(0);
     int pos;
-    while ((pos = text.find('\n')) >= 0)
+    while ((pos = text.find('\n', lastPos)) >= 0)
     {
         const QString line(text.mid(lastPos, pos - lastPos));
 
