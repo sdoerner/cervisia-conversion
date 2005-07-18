@@ -23,12 +23,13 @@
 
 #include "entry.h"
 
-class DCOPRef;
+class DCOPRef;      // needed for service()
 
 
 namespace Cervisia
 {
 
+class CommandBase;
 class IgnoreFilterBase;
 class PluginJobBase;
 class SelectionIntf;
@@ -50,7 +51,7 @@ public:
     void setFileView(SelectionIntf* fileView);
 
     virtual QString type() const = 0;
-    virtual DCOPRef service() const = 0;
+    virtual DCOPRef service() const = 0;    // FIXME: only temporary. remove me later!
 
     virtual bool canHandle(const KURL& workingCopy) = 0;
     virtual void setWorkingCopy(const KURL& workingCopy) = 0;
@@ -65,10 +66,10 @@ public:
 signals:
     void updateItem(const Cervisia::Entry& entry);
     void jobPrepared(Cervisia::PluginJobBase* job);
+    void commandPrepared(Cervisia::CommandBase* cmd);
 
 protected:
     SelectionIntf* m_fileView;
-    PluginJobBase* m_currentJob;
 };
 
 

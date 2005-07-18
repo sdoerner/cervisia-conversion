@@ -19,8 +19,6 @@
 #include "pluginbase.h"
 using Cervisia::PluginBase;
 
-#include <kdebug.h>
-
 #include "selectionintf.h"
 
 
