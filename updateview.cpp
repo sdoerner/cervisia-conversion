@@ -124,6 +124,21 @@ void UpdateView::getSingleSelection(QString *filename, QString *revision) const
 }
 
 
+QString UpdateView::singleSelection() const
+{
+    const QPtrList<QListViewItem>& listSelectedItems(selectedItems());
+
+    QString fileName;
+    if( (listSelectedItems.count() == 1) && isFileItem(listSelectedItems.getFirst()) )
+    {
+        UpdateFileItem* fileItem = static_cast<UpdateFileItem*>(listSelectedItems.getFirst());
+        fileName = fileItem->filePath();
+    }
+
+    return fileName;
+}
+
+
 QStringList UpdateView::multipleSelection() const
 {
     QStringList res;

@@ -52,6 +52,7 @@ public:
 
     bool hasSingleSelection() const;
     void getSingleSelection(QString *filename, QString *revision=0) const;
+    QString singleSelection() const;
     /* Returns a list of all marked files and directories */
     QStringList multipleSelection() const;
     /* Returns a list of all marked files, excluding directories*/

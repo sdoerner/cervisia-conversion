@@ -13,28 +13,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CERVISIA_SELECTIONINTF_H
-#define CERVISIA_SELECTIONINTF_H
+#include "commandbase.h"
+using Cervisia::CommandBase;
 
 
-namespace Cervisia
+CommandBase::CommandBase(const ActionKind& action)
+    : m_action(action)
+    , m_recursive(false)
 {
-
-
-class SelectionIntf
-{
-public:
-    virtual void getSingleSelection(QString *filename, QString *revision=0) const = 0;
-
-    virtual QString singleSelection() const = 0;
-    virtual QStringList multipleSelection() const = 0;
-};
-
-
 }
 
 
-#endif
+CommandBase::~CommandBase()
+{
+}
+
+#include "commandbase.moc"
