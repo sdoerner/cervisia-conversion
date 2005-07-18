@@ -30,6 +30,9 @@ class Repository_stub;
 namespace Cervisia
 {
 
+class CvsCommandBase;
+
+
 class CvsPlugin : public PluginBase
 {
     Q_OBJECT
@@ -51,6 +54,8 @@ public:
 
     virtual IgnoreFilterBase* filter(const QString& path) const;
 
+    static CvsService_stub* cvsService() { return m_cvsService; }
+
 private slots:
     void add();
     void addBinary();
@@ -60,13 +65,14 @@ private slots:
     void simulateUpdate();
 
 private:
+    void executeCommand(CvsCommandBase* cmd);
     void executeAddOrRemove(const AddRemoveDialog::ActionType& dialogType);
 
     void setupMenuActions();
     void startService();
 
-    CvsService_stub* m_cvsService;
     Repository_stub* m_cvsRepository;
+    static CvsService_stub* m_cvsService;
 };
 
 

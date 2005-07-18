@@ -29,7 +29,7 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
-//#include <addremovedlg.h>
+#include <addremovedlg.h>
 #include <commitdlg.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
@@ -37,6 +37,7 @@ using Cervisia::CvsPlugin;
 #include <selectionintf.h>
 
 #include "cvsjob.h"
+#include "addcommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -47,9 +48,12 @@ typedef KGenericFactory<CvsPlugin> CvsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libcvsplugin, CvsPluginFactory( "cvsplugin" ) )
 
 
+CvsService_stub* CvsPlugin::m_cvsService = 0;
+
+
 CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
-    , m_cvsService(0)
+//     , m_cvsService(0)
     , m_cvsRepository(0)
 {
     kdDebug(8050) << "CvsPlugin::CvsPlugin()" << endl;
@@ -201,14 +205,24 @@ Cervisia::IgnoreFilterBase* CvsPlugin::filter(const QString& path) const
 void CvsPlugin::add()
 {
     kdDebug(8050) << "CvsPlugin::add()" << endl;
-    executeAddOrRemove(AddRemoveDialog::Add);
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new AddCommand(selectionList, false));
 }
 
 
 void CvsPlugin::addBinary()
 {
     kdDebug(8050) << "CvsPlugin::addBinary()" << endl;
-    executeAddOrRemove(AddRemoveDialog::AddBinary);
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new AddCommand(selectionList, true));
 }
 
 // TODO: feature commit finished notification
@@ -305,6 +319,16 @@ void CvsPlugin::simulateUpdate()
 
     kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
     cvsJob.execute();
+}
+
+
+void CvsPlugin::executeCommand(CvsCommandBase* cmd)
+{
+    if( cmd->prepare() )
+    {
+        emit commandPrepared(cmd);
+        cmd->execute();
+    }
 }
 
 
