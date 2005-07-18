@@ -5,7 +5,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = libcvsplugin.la
 
 libcvsplugin_la_SOURCES = cvsplugin.cpp cvsjob.cpp dirignorelist.cpp globalignorelist.cpp \
-                          cvs_log_parser.cpp
+                          cvscommandbase.cpp cvscommandbase.skel addcommand.cpp cvs_log_parser.cpp
 #libcvsplugin_la_LIBADD  = $(LIB_KPARTS) $(top_builddir)/cervisia/libcervisia.la
 libcvsplugin_la_LIBADD  = $(LIB_KPARTS) $(LIB_KUTILS) $(top_builddir)/cervisia/libcervisia.la \
                           $(top_builddir)/cervisia/cvsservice/libcvsservice.la
