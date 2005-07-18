@@ -70,6 +70,7 @@ signals:
 
 protected:
     SelectionIntf* m_fileView;
+    PluginJobBase* m_currentJob;
 };
 
 
