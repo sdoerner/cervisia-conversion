@@ -48,6 +48,10 @@ k_dcop:
 
     /**
      */
+    DCOPRef log(const QString& fileName);
+
+    /**
+     */
     DCOPRef remove(const QStringList& files);
 
     /**

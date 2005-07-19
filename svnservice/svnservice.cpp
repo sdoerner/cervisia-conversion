@@ -145,6 +145,23 @@ DCOPRef SvnService::commit(const QStringList& files, const QString& commitMessag
 }
 
 
+DCOPRef SvnService::log(const QString& fileName)
+{
+    if( !d->hasWorkingCopy() )
+        return DCOPRef();
+
+    // create a cvs job
+    SvnJob* job = d->createSvnJob();
+
+    // assemble the command line
+    // svn log [FILE]
+    *job << d->repository->svnClient() << "log" << KProcess::quote(fileName);
+
+    // return a DCOP reference to the svn job
+    return DCOPRef(d->appId, job->objId());
+}
+
+
 DCOPRef SvnService::remove(const QStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
