@@ -29,7 +29,6 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#include <addremovedlg.h>
 #include <commitdlg.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
@@ -38,6 +37,7 @@ using Cervisia::CvsPlugin;
 
 #include "cvsjob.h"
 #include "addcommand.h"
+#include "removecommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -271,7 +271,13 @@ void CvsPlugin::commit()
 void CvsPlugin::remove()
 {
     kdDebug(8050) << "CvsPlugin::remove()" << endl;
-    executeAddOrRemove(AddRemoveDialog::Remove);
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    //TODO retrieve 'recursive' from configuration
+    executeCommand(new RemoveCommand(selectionList, false/*recursive*/));
 }
 
 
@@ -328,50 +334,6 @@ void CvsPlugin::executeCommand(CvsCommandBase* cmd)
     {
         emit commandPrepared(cmd);
         cmd->execute();
-    }
-}
-
-
-void CvsPlugin::executeAddOrRemove(const AddRemoveDialog::ActionType& dialogType)
-{
-    kdDebug(8050) << "CvsPlugin::executeAddOrRemove()" << endl;
-
-    QStringList selectionList = m_fileView->multipleSelection();
-    if( selectionList.isEmpty() )
-        return;
-
-    // modal dialog
-    AddRemoveDialog dlg(dialogType);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        DCOPRef jobRef;
-        CvsJob::ActionKind action;
-        bool recursive = false;
-
-        switch( dialogType )
-        {
-            case AddRemoveDialog::Add:
-                action = CvsJob::Add;
-                jobRef = m_cvsService->add(selectionList, false);
-            case AddRemoveDialog::AddBinary:
-                action = CvsJob::Add;
-                jobRef = m_cvsService->add(selectionList, true);
-            case AddRemoveDialog::Remove:
-                action = CvsJob::Remove;
-//                 recursive = opt_commitRecursive;
-                jobRef = m_cvsService->remove(selectionList, recursive);
-        }
-
-        CvsJob_stub cvsJob(jobRef);
-
-        m_currentJob = new CvsJob(jobRef, action);
-        m_currentJob->setRecursive(recursive);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "CvsPlugin::executeAddOrRemove(): execute cvs job" << endl;
-        cvsJob.execute();
     }
 }
 

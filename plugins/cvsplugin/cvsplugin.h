@@ -21,8 +21,6 @@
 
 #include <pluginbase.h>
 
-#include <addremovedlg.h>
-
 class CvsService_stub;
 class Repository_stub;
 
@@ -66,7 +64,6 @@ private slots:
 
 private:
     void executeCommand(CvsCommandBase* cmd);
-    void executeAddOrRemove(const AddRemoveDialog::ActionType& dialogType);
 
     void setupMenuActions();
     void startService();
