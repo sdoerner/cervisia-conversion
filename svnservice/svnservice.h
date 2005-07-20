@@ -47,6 +47,12 @@ k_dcop:
                    bool recursive);
 
     /**
+     * Shows log messages for a file.
+     *
+     * @param fileName the name of the file to show log messages for
+     *
+     * @return A DCOP reference to the cvs job or in case of failure a
+     *         null reference.
      */
     DCOPRef log(const QString& fileName);
 
