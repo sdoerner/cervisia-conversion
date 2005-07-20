@@ -51,7 +51,7 @@ k_dcop:
      *
      * @param fileName the name of the file to show log messages for
      *
-     * @return A DCOP reference to the cvs job or in case of failure a
+     * @return A DCOP reference to the svn job or in case of failure a
      *         null reference.
      */
     DCOPRef log(const QString& fileName);
