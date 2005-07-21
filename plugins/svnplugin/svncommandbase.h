@@ -48,6 +48,8 @@ public:
     virtual bool prepare() = 0;
     virtual void execute();
 
+    virtual bool isErrorMessage(const QString& line) const { return false; }
+
 k_dcop:
     void dcopJobExited(bool normalExit, int exitStatus);
     void dcopReceivedStdout(QString buffer);
