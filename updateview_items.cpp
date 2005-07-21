@@ -171,7 +171,7 @@ void UpdateDirItem::updateEntriesItem(const Entry& entry,
 
 void UpdateDirItem::updateItem(const Entry& entry)
 {
-    kdDebug() << "UpdateDirItem::updateItem(): name = " << entry.m_name << endl;
+//     kdDebug() << "UpdateDirItem::updateItem(): name = " << entry.m_name << endl;
     if (UpdateItem* item = findItem(entry.m_name))
     {
         if (isFileItem(item))
@@ -286,7 +286,7 @@ UpdateItem* UpdateDirItem::findItem(const QString& name) const
 //   /NAME/REVISION/[CONFLICT+]TIMESTAMP/OPTIONS/TAGDATE
 void UpdateDirItem::syncWithEntries()
 {
-    kdDebug() << "UpdateDirItem::syncWithEntries(): filePath = " << filePath() << endl;
+//     kdDebug() << "UpdateDirItem::syncWithEntries(): filePath = " << filePath() << endl;
     Cervisia::PluginBase* currentPlugin = PluginManager::self()->currentPlugin();
     if( currentPlugin  )
     {
