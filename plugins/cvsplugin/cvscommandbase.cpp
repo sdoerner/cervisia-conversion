@@ -28,6 +28,7 @@ using Cervisia::CvsCommandBase;
 CvsCommandBase::CvsCommandBase(const ActionKind& action)
     : CommandBase(action)
     , m_cvsJob(0)
+    , m_errorOccurred(false)
 {
     kdDebug(8050) << "CvsCommandBase::CvsCommandBase()" << endl;
 }
@@ -53,6 +54,7 @@ bool CvsCommandBase::isRunning() const
 
 void CvsCommandBase::cancel()
 {
+    kdDebug() << "CvsCommandBase::cancel()" << endl;
     m_cvsJob->cancel();
 }
 
@@ -61,6 +63,14 @@ void CvsCommandBase::execute()
 {
     kdDebug(8050) << "CvsCommandBase::execute()" << endl;
     m_cvsJob->execute();
+}
+
+
+bool CvsCommandBase::isErrorMessage(const QString& line) const
+{
+    return ( line.startsWith(m_errorId1) ||
+             line.startsWith(m_errorId2) ||
+             line.startsWith("cvs [server aborted]:") );
 }
 
 
@@ -120,7 +130,13 @@ void CvsCommandBase::processOutput(const QString& buffer)
     {
         QString line = m_lineBuffer.left(pos);
         if( !line.isEmpty() )
+        {
+            // check for error messages
+            if( isErrorMessage(line) )
+                m_errorOccurred = true;
+
             emit receivedLine(line);
+        }
 
         m_lineBuffer = m_lineBuffer.right(m_lineBuffer.length()-pos-1);
     }
