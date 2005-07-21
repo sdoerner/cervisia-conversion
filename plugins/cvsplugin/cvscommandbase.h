@@ -42,6 +42,9 @@ public:
 
     QString commandString() const;
 
+    virtual bool isRunning() const;
+    virtual void cancel();
+
     virtual bool prepare() = 0;
     virtual void execute();
 

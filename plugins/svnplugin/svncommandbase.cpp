@@ -39,9 +39,21 @@ SvnCommandBase::~SvnCommandBase()
 }
 
 
+bool SvnCommandBase::isRunning() const
+{
+    return m_svnJob->isRunning();
+}
+
+
 QString SvnCommandBase::commandString() const
 {
     return m_svnJob->command();
+}
+
+
+void SvnCommandBase::cancel()
+{
+    m_svnJob->cancel();
 }
 
 
@@ -55,6 +67,12 @@ void SvnCommandBase::execute()
 void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 {
     kdDebug(8050) << "SvnCommandBase::dcopJobExited(): normalExit = " << normalExit << endl;
+
+    // do we have some output left to process
+    if( !m_lineBuffer.isEmpty() )
+    {
+        processOutput("\n");
+    }
 
     emit jobExited(normalExit, exitStatus);
     deleteLater();  //TODO: Okay?

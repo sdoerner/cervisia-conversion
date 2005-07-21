@@ -45,6 +45,18 @@ QString CvsCommandBase::commandString() const
 }
 
 
+bool CvsCommandBase::isRunning() const
+{
+    return m_cvsJob->isRunning();
+}
+
+
+void CvsCommandBase::cancel()
+{
+    m_cvsJob->cancel();
+}
+
+
 void CvsCommandBase::execute()
 {
     kdDebug(8050) << "CvsCommandBase::execute()" << endl;
@@ -55,6 +67,12 @@ void CvsCommandBase::execute()
 void CvsCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 {
     kdDebug(8050) << "CvsCommandBase::dcopJobExited(): normalExit = " << normalExit << endl;
+
+    // do we have some output left to process
+    if( !m_lineBuffer.isEmpty() )
+    {
+        processOutput("\n");
+    }
 
     emit jobExited(normalExit, exitStatus);
     deleteLater();  //TODO: Okay?

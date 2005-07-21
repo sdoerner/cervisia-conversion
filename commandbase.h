@@ -43,6 +43,13 @@ public:
 
     virtual QString commandString() const = 0;
 
+    virtual bool isRunning() const = 0;
+
+    /**
+     * cancel the current processing.
+     */
+    virtual void cancel() = 0;
+
 signals:
     void jobExited(bool normalExit, int status);    //TODO: rename?
     void receivedStdout(const QString& buffer);
