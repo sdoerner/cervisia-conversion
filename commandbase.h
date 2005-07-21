@@ -50,6 +50,11 @@ public:
      */
     virtual void cancel() = 0;
 
+    /**
+     * checks if the line contains an error message.
+     */
+    virtual bool isErrorMessage(const QString& line) const = 0;
+
 signals:
     void jobExited(bool normalExit, int status);    //TODO: rename?
     void receivedStdout(const QString& buffer);
