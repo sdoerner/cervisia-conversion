@@ -90,15 +90,16 @@ bool AnnotateController::Private::execute(const QString& fileName, const QString
     if( !cvsService->ok() )
         return false;
 
-    progress = new ProgressDialog(dialog, "Annotate", job, "annotate", i18n("CVS Annotate"));
+/*    progress = new ProgressDialog(dialog, "Annotate", job, "annotate", i18n("CVS Annotate"));
 
-    return progress->execute();
+    return progress->execute();*/
+    return false;
 }
 
 
 void AnnotateController::Private::parseCvsLogOutput()
 {
-    QString line, comment, rev;
+/*    QString line, comment, rev;
 
     enum { Begin, Tags, Admin, Revision,
            Author, Branches, Comment, Finished } state;
@@ -155,13 +156,13 @@ void AnnotateController::Private::parseCvsLogOutput()
     // skip header part of cvs annotate output
     bool notEof = true;
     while( notEof && !line.startsWith("*****") )
-        notEof = progress->getLine(line);
+        notEof = progress->getLine(line);*/
 }
 
 
 void AnnotateController::Private::parseCvsAnnotateOutput()
 {
-    LogInfo logInfo;
+/*    LogInfo logInfo;
     QString rev, content, line;
     QString oldRevision = "";
     bool odd = false;
@@ -194,5 +195,5 @@ void AnnotateController::Private::parseCvsAnnotateOutput()
         logInfo.m_revision = rev;
 
         dialog->addLine(logInfo, content, odd);
-    }
+    }*/
 }

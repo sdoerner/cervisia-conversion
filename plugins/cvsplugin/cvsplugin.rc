@@ -11,5 +11,9 @@
         <Action name="file_revert_local_changes"/>
         <Separator/>
     </Menu>
+    <Menu name="view"><text>&amp;View</text>
+        <Separator/>
+        <Action name="view_log"/>
+    </Menu>
 </MenuBar>
 </kpartplugin>

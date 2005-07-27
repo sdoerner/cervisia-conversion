@@ -37,6 +37,7 @@ using Cervisia::CvsPlugin;
 
 #include "cvsjob.h"
 #include "addcommand.h"
+#include "logcommand.h"
 #include "removecommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
@@ -268,6 +269,18 @@ void CvsPlugin::commit()
 }
 
 
+void CvsPlugin::log()
+{
+    kdDebug(8050) << "CvsPlugin::log()" << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new LogCommand(fileName));
+}
+
+
 void CvsPlugin::remove()
 {
     kdDebug(8050) << "CvsPlugin::remove()" << endl;
@@ -387,6 +400,16 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( revert() ),
                           actionCollection(), "file_revert_local_changes" );
     hint = i18n("Reverts the selected files (cvs update -C / only cvs 1.11)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
+    //
+    // View Menu
+    //
+    action = new KAction( i18n("Browse &Log..."), CTRL+Key_L,
+                          this, SLOT( log() ),
+                          actionCollection(), "view_log" );
+    hint = i18n("Shows the revision tree of the selected file (cvs log)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 }

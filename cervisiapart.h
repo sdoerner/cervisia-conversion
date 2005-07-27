@@ -94,7 +94,6 @@ public slots:
     void slotRemove();
     void slotFileProperties();
     void slotRevert();
-    void slotBrowseLog();
     //    void slotBrowseMultiLog();
     void slotAnnotate();
     void slotDiffBase();

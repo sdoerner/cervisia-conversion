@@ -296,7 +296,7 @@ void HistoryDialog::toggled(bool b)
 
 bool HistoryDialog::parseHistory(CvsService_stub* cvsService)
 {
-    setCaption(i18n("CVS History"));
+/*    setCaption(i18n("CVS History"));
 
     DCOPRef job = cvsService->history();
     if( !cvsService->ok() )
@@ -364,7 +364,7 @@ bool HistoryDialog::parseHistory(CvsService_stub* cvsService)
             item->setText(HistoryItem::Path, list[5]);
         }
     }
-
+*/
     return true;
 }
 

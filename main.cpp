@@ -79,34 +79,34 @@ static int ShowResolveDialog(const QString& fileName)
 }
 
 
-static int ShowLogDialog(const QString& fileName)
-{
-    KConfig* config = new KConfig("cervisiapartrc");
-    LogDialog* dlg = new LogDialog(*config);
-    kapp->setMainWidget(dlg);
-
-    // get directory for file
-    const QFileInfo fi(fileName);
-    QString directory = fi.dirPath(true);
-
-    // start the cvs DCOP service
-    CvsService_stub* cvsService = StartDCOPService(directory);
-
-    if( dlg->parseCvsLog(cvsService, fi.fileName()) )
-        dlg->show();
-    else
-        delete dlg;
-
-    int result = kapp->exec();
-
-    // stop the cvs DCOP service
-    cvsService->quit();
-    delete cvsService;
-
-    delete config;
-
-    return result;
-}
+// static int ShowLogDialog(const QString& fileName)
+// {
+//     KConfig* config = new KConfig("cervisiapartrc");
+//     LogDialog* dlg = new LogDialog(*config);
+//     kapp->setMainWidget(dlg);
+// 
+//     // get directory for file
+//     const QFileInfo fi(fileName);
+//     QString directory = fi.dirPath(true);
+// 
+//     // start the cvs DCOP service
+//     CvsService_stub* cvsService = StartDCOPService(directory);
+// 
+//     if( dlg->parseCvsLog(cvsService, fi.fileName()) )
+//         dlg->show();
+//     else
+//         delete dlg;
+// 
+//     int result = kapp->exec();
+// 
+//     // stop the cvs DCOP service
+//     cvsService->quit();
+//     delete cvsService;
+// 
+//     delete config;
+// 
+//     return result;
+// }
 
 
 static int ShowAnnotateDialog(const QString& fileName)
@@ -173,10 +173,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     if (!resolvefile.isEmpty())
         return ShowResolveDialog(resolvefile);
 
-    // is command line option 'show log dialog' specified?
-    QString logFile = KCmdLineArgs::parsedArgs()->getOption("log");
-    if( !logFile.isEmpty() )
-        return ShowLogDialog(logFile);
+//     // is command line option 'show log dialog' specified?
+//     QString logFile = KCmdLineArgs::parsedArgs()->getOption("log");
+//     if( !logFile.isEmpty() )
+//         return ShowLogDialog(logFile);
 
     // is command line option 'show annotation dialog' specified?
     QString annotateFile = KCmdLineArgs::parsedArgs()->getOption("annotate");

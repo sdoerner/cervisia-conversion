@@ -37,6 +37,7 @@ using Cervisia::SvnPlugin;
 #include <svnrepository_stub.h>
 
 #include "globalignorelist.h"
+#include "logcommand.h"
 #include "svnjob.h"
 
 #include <kdebug.h>
@@ -46,9 +47,12 @@ typedef KGenericFactory<SvnPlugin> SvnPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libsvnplugin, SvnPluginFactory( "svnplugin" ) )
 
 
+SvnService_stub* SvnPlugin::m_svnService = 0;
+
+
 SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
-    , m_svnService(0)
+//     , m_svnService(0)
     , m_svnRepository(0)
 {
     kdDebug(8050) << "SvnPlugin::SvnPlugin()" << endl;
@@ -271,6 +275,18 @@ void SvnPlugin::commit()
 }
 
 
+void SvnPlugin::log()
+{
+    kdDebug(8050) << "SvnPlugin::log()" << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new LogCommand(fileName));
+}
+
+
 void SvnPlugin::remove()
 {
     kdDebug(8050) << "SvnPlugin::remove()" << endl;
@@ -321,6 +337,16 @@ void SvnPlugin::simulateUpdate()
 }
 
 
+void SvnPlugin::executeCommand(SvnCommandBase* cmd)
+{
+    if( cmd->prepare() )
+    {
+        emit commandPrepared(cmd);
+        cmd->execute();
+    }
+}
+
+
 void SvnPlugin::setupMenuActions()
 {
     KAction* action;
@@ -356,6 +382,16 @@ void SvnPlugin::setupMenuActions()
                           this, SLOT( remove() ),
                           actionCollection(), "file_remove" );
     hint = i18n("Removes the selected files from the repository (svn delete)");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
+    //
+    // View Menu
+    //
+    action = new KAction( i18n("Browse &Log..."), CTRL+Key_L,
+                          this, SLOT( log() ),
+                          actionCollection(), "view_log" );
+    hint = i18n("Shows the revision tree of the selected file (svn log)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 }

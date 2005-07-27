@@ -28,6 +28,7 @@ using Cervisia::SvnCommandBase;
 SvnCommandBase::SvnCommandBase(const ActionKind& action)
     : CommandBase(action)
     , m_svnJob(0)
+    , m_errorOccurred(false)
 {
     kdDebug(8050) << "SvnCommandBase::SvnCommandBase()" << endl;
 }

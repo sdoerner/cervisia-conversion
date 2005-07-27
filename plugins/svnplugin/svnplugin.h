@@ -28,6 +28,8 @@ class SvnRepository_stub;
 namespace Cervisia
 {
 
+class SvnCommandBase;
+
 
 class SvnPlugin : public PluginBase
 {
@@ -50,18 +52,23 @@ public:
 
     virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
 
+    static SvnService_stub* svnService() { return m_svnService; }
+
 private slots:
     void add();
     void commit();
+    void log();
     void remove();
     void simulateUpdate();
 
 private:
+    void executeCommand(SvnCommandBase* cmd);
+
     void setupMenuActions();
     void startService();
 
-    SvnService_stub*    m_svnService;
     SvnRepository_stub* m_svnRepository;
+    static SvnService_stub* m_svnService;
 };
 
 

@@ -43,7 +43,6 @@
 #include <kglobal.h>
 
 #include "progressdlg.h"
-#include "logdlg.h"
 #include "diffdlg.h"
 #include "resolvedlg.h"
 #include "annotatedlg.h"
@@ -282,14 +281,6 @@ void CervisiaPart::setupActions()
                           actionCollection(), "stop_job" );
     action->setEnabled( false );
     hint = i18n("Stops any running sub-processes");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-
-    action = new KAction( i18n("Browse &Log..."), CTRL+Key_L,
-                          this, SLOT(slotBrowseLog()),
-                          actionCollection(), "view_log" );
-    hint = i18n("Shows the revision tree of the selected file");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
@@ -751,29 +742,29 @@ void CervisiaPart::openFile(QString filename)
 
 void CervisiaPart::openFiles(const QStringList &filenames)
 {
-    // call cvs edit automatically?
-    if( opt_doCVSEdit )
-    {
-        QStringList files;
-
-        // only edit read-only files
-        QStringList::ConstIterator it  = filenames.begin();
-        QStringList::ConstIterator end = filenames.end();
-        for( ; it != end; ++it )
-        {
-            if( !QFileInfo(*it).isWritable() )
-                files << *it;
-        }
-
-        if( files.count() )
-        {
-            DCOPRef job = cvsService->edit(files);
-
-            ProgressDialog dlg(widget(), "Edit", job, "edit", i18n("CVS Edit"));
-            if( !dlg.execute() )
-                return;
-        }
-    }
+//     // call cvs edit automatically?
+//     if( opt_doCVSEdit )
+//     {
+//         QStringList files;
+// 
+//         // only edit read-only files
+//         QStringList::ConstIterator it  = filenames.begin();
+//         QStringList::ConstIterator end = filenames.end();
+//         for( ; it != end; ++it )
+//         {
+//             if( !QFileInfo(*it).isWritable() )
+//                 files << *it;
+//         }
+// 
+//         if( files.count() )
+//         {
+//             DCOPRef job = cvsService->edit(files);
+// 
+//             ProgressDialog dlg(widget(), "Edit", job, "edit", i18n("CVS Edit"));
+//             if( !dlg.execute() )
+//                 return;
+//         }
+//     }
 
     // Now open the files by using KRun
     QDir dir(sandbox);
@@ -985,22 +976,6 @@ void CervisiaPart::addOrRemove(AddRemoveDialog::ActionType action)
     }
 }
 
-void CervisiaPart::slotBrowseLog()
-{
-    QString filename;
-    update->getSingleSelection(&filename);
-    if (filename.isEmpty())
-        return;
-
-    // Non-modal dialog
-    LogDialog *l = new LogDialog(*CervisiaPart::config());
-    if (l->parseCvsLog(cvsService, filename))
-        l->show();
-    else
-        delete l;
-}
-
-
 #if 0
 void CervisiaPart::slotBrowseMultiLog()
 {
@@ -1204,7 +1179,7 @@ void CervisiaPart::slotShowEditors()
 
 void CervisiaPart::slotMakePatch()
 {
-    Cervisia::PatchOptionDialog optionDlg;
+/*    Cervisia::PatchOptionDialog optionDlg;
     if( optionDlg.exec() == KDialogBase::Rejected )
         return;
     
@@ -1240,7 +1215,7 @@ void CervisiaPart::slotMakePatch()
     while( dlg.getLine(line) )
         t << line << '\n';
 
-    f.close();
+    f.close();*/
 }
 
 

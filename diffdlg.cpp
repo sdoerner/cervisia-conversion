@@ -252,7 +252,8 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
     if( !service->ok() )
         return false;
 
-    ProgressDialog dlg(this, "Diff", job, "diff", i18n("CVS Diff"));
+    return false;
+/*    ProgressDialog dlg(this, "Diff", job, "diff", i18n("CVS Diff"));
     if( !dlg.execute() )
         return false;
 
@@ -307,7 +308,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
 
     updateNofN();
 
-    return true;
+    return true;*/
 }
 
 
@@ -391,7 +392,7 @@ void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* servi
         extcmdline += KProcess::quote(QFileInfo(fileName).absFilePath());
     }
 
-    ProgressDialog dlg(this, "Diff", job, "diff");
+/*    ProgressDialog dlg(this, "Diff", job, "diff");
     if( dlg.execute() )
     {
         // call external diff application
@@ -400,7 +401,7 @@ void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* servi
         proc.setUseShell(true, "/bin/sh");
         proc << extcmdline;
         proc.start(KProcess::DontCare);
-    }
+    }*/
 }
 
 

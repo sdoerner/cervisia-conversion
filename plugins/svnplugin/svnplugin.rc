@@ -9,5 +9,9 @@
         <Action name="file_remove"/>
         <Separator/>
     </Menu>
+    <Menu name="view"><text>&amp;View</text>
+        <Separator/>
+        <Action name="view_log"/>
+    </Menu>
 </MenuBar>
 </kpartplugin>

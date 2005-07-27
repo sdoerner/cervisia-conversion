@@ -25,8 +25,6 @@
 
 #include "loginfo.h"
 
-#include <qptrlist.h>
-
 
 class LogListView;
 class LogTreeView;
@@ -40,14 +38,6 @@ class QTabWidget;
 class QTextEdit;
 class CvsService_stub;
 
-class LogDialogTagInfo
-{
-public:
-    QString rev;
-    QString tag;
-    QString branchpoint;
-};
-
 
 class LogDialog : public KDialogBase
 {
@@ -55,10 +45,9 @@ class LogDialog : public KDialogBase
 
 public:
     explicit LogDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
-
     virtual ~LogDialog();
 
-    bool parseCvsLog(CvsService_stub* service, const QString& fileName);
+    void setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos);
 
 protected slots:
     void slotOk();
@@ -74,11 +63,10 @@ private slots:
     void tabChanged(QWidget* w);
 
 private:
-    void tagSelected(LogDialogTagInfo* tag, bool rmb);
+    void tagSelected(const Cervisia::LogInfo& info, bool rmb);
 
     QString filename;
-    QPtrList<Cervisia::LogInfo> items;
-    QPtrList<LogDialogTagInfo> tags;
+    QValueList<Cervisia::LogInfo> m_logInfos;
     QString selectionA;
     QString selectionB;
     LogTreeView *tree;
@@ -94,6 +82,8 @@ private:
 
     CvsService_stub* cvsService;
     KConfig&         partConfig;
+
+    typedef QValueList<Cervisia::LogInfo>::const_iterator LogInfoConstIter;
 };
 
 #endif

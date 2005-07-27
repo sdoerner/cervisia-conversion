@@ -77,45 +77,45 @@ bool WatchersDialog::parseWatchers(CvsService_stub* cvsService,
 {
     setCaption(i18n("CVS Watchers"));
 
-    DCOPRef job = cvsService->watchers(files);
-    if( !cvsService->ok() )
-        return false;
-
-    ProgressDialog dlg(this, "Watchers", job, "watchers", i18n("CVS Watchers"));
-    if( !dlg.execute() )
-        return false;
-
-    QString line;
-    int numRows = 0;
-    while( dlg.getLine(line) )
-    {
-        // parse the output line        
-        QStringList list = splitLine(line);
-
-        // ignore empty lines and unknown files
-        if( list.isEmpty() || list[0] == "?" )
-            continue;
-
-        // add a new row to the table
-        table->setNumRows(numRows + 1);
-
-        table->setText(numRows, 0, list[0]);
-        table->setText(numRows, 1, list[1]);
-
-        QCheckTableItem* item = new QCheckTableItem(table, "");
-        item->setChecked(list.contains("edit"));
-        table->setItem(numRows, 2, item);
-
-        item = new QCheckTableItem(table, "");
-        item->setChecked(list.contains("unedit"));
-        table->setItem(numRows, 3, item);
-
-        item = new QCheckTableItem(table, "");
-        item->setChecked(list.contains("commit"));
-        table->setItem(numRows, 4, item);
-
-        ++numRows;
-    }
+//     DCOPRef job = cvsService->watchers(files);
+//     if( !cvsService->ok() )
+//         return false;
+// 
+//     ProgressDialog dlg(this, "Watchers", job, "watchers", i18n("CVS Watchers"));
+//     if( !dlg.execute() )
+//         return false;
+// 
+//     QString line;
+//     int numRows = 0;
+//     while( dlg.getLine(line) )
+//     {
+//         // parse the output line        
+//         QStringList list = splitLine(line);
+// 
+//         // ignore empty lines and unknown files
+//         if( list.isEmpty() || list[0] == "?" )
+//             continue;
+// 
+//         // add a new row to the table
+//         table->setNumRows(numRows + 1);
+// 
+//         table->setText(numRows, 0, list[0]);
+//         table->setText(numRows, 1, list[1]);
+// 
+//         QCheckTableItem* item = new QCheckTableItem(table, "");
+//         item->setChecked(list.contains("edit"));
+//         table->setItem(numRows, 2, item);
+// 
+//         item = new QCheckTableItem(table, "");
+//         item->setChecked(list.contains("unedit"));
+//         table->setItem(numRows, 3, item);
+// 
+//         item = new QCheckTableItem(table, "");
+//         item->setChecked(list.contains("commit"));
+//         table->setItem(numRows, 4, item);
+// 
+//         ++numRows;
+//     }
 
     return true;
 }

@@ -20,44 +20,37 @@
 #ifndef PROGRESSDLG_H
 #define PROGRESSDLG_H
 
-#include <dcopobject.h>
 #include <kdialogbase.h>
 
-class QString;
-class QWidget;
-class DCOPRef;
+namespace Cervisia { class CommandBase; }
 
 
-class ProgressDialog : public KDialogBase, public DCOPObject
+class ProgressDialog : public KDialogBase
 {
-    K_DCOP
     Q_OBJECT
 
 public:
-    ProgressDialog(QWidget* parent, const QString& heading, const DCOPRef& job,
-                   const QString& errorIndicator, const QString& caption = "");
+    ProgressDialog(QWidget* parent, const QString& heading,
+                   const QString& caption = "");
     ~ProgressDialog();
 
-    bool execute();
-    bool getLine(QString& line);
-    QStringList getOutput() const;
-
-k_dcop:
-    void slotReceivedOutputNonGui(QString buffer);
-    void slotReceivedOutput(QString buffer);
-    void slotJobExited(bool normalExit, int status);
+    void execute(Cervisia::CommandBase* cmd);
 
 protected slots:
+    virtual void slotOk();
     virtual void slotCancel();
 
 private slots:
     void slotTimeoutOccurred();
+    void receivedOutputNonGui(const QString& line);
+    void receivedOutput(const QString& line);
+    void jobExited(bool normalExit, int exitStatus);
 
 private:
     void setupGui(const QString& heading);
     void stopNonGuiPart();
     void startGuiPart();
-    void processOutput();
+    void processOutput(const QString& line);
 
     struct Private;
     Private* d;

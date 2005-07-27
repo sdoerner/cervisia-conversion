@@ -58,6 +58,9 @@ k_dcop:
 protected:
     void connectToJob(const DCOPRef& jobRef);
 
+    QString      m_errorId1, m_errorId2;
+    bool         m_errorOccurred;
+
 private:
     void processOutput(const QString& buffer);
 

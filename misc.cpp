@@ -79,36 +79,36 @@ static const QStringList FetchBranchesAndTags(const QString& searchedType,
 {
     QStringList branchOrTagList;
 
-    DCOPRef job = cvsService->status(QStringList(), true, true);
-    if( !cvsService->ok() )
-        return branchOrTagList;
-
-    ProgressDialog dlg(parent, "Status", job, QString::null, i18n("CVS Status"));
-
-    if( dlg.execute() )
-    {
-        QString line;
-        while( dlg.getLine(line) )
-        {
-            int wsPos, bracketPos, colonPos;
-
-            if( line.isEmpty() || line[0] != '\t' )
-                continue;
-            if( (wsPos = FindWhiteSpace(line, 2)) < 0 )
-                continue;
-            if( (bracketPos = line.find('(', wsPos + 1)) < 0 )
-                continue;
-            if( (colonPos = line.find(':', bracketPos + 1)) < 0 )
-                continue;
-
-            const QString tag  = line.mid(1, wsPos - 1);
-            const QString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
-            if( type == searchedType && !branchOrTagList.contains(tag) )
-                branchOrTagList.push_back(tag);
-        }
-
-        branchOrTagList.sort();
-    }
+//     DCOPRef job = cvsService->status(QStringList(), true, true);
+//     if( !cvsService->ok() )
+//         return branchOrTagList;
+// 
+//     ProgressDialog dlg(parent, "Status", job, QString::null, i18n("CVS Status"));
+// 
+//     if( dlg.execute() )
+//     {
+//         QString line;
+//         while( dlg.getLine(line) )
+//         {
+//             int wsPos, bracketPos, colonPos;
+// 
+//             if( line.isEmpty() || line[0] != '\t' )
+//                 continue;
+//             if( (wsPos = FindWhiteSpace(line, 2)) < 0 )
+//                 continue;
+//             if( (bracketPos = line.find('(', wsPos + 1)) < 0 )
+//                 continue;
+//             if( (colonPos = line.find(':', bracketPos + 1)) < 0 )
+//                 continue;
+// 
+//             const QString tag  = line.mid(1, wsPos - 1);
+//             const QString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
+//             if( type == searchedType && !branchOrTagList.contains(tag) )
+//                 branchOrTagList.push_back(tag);
+//         }
+// 
+//         branchOrTagList.sort();
+//     }
 
     return branchOrTagList;
 }

@@ -19,6 +19,7 @@
 
 #include "progressdlg.h"
 
+#include <qapplication.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qstring.h>
@@ -26,49 +27,37 @@
 #include <qtimer.h>
 #include <qvbox.h>
 
-#include <cvsjob_stub.h>
-#include <dcopref.h>
 #include <kanimwidget.h>
-#include <kapplication.h>
 #include <kconfig.h>
 
 #include "cervisiasettings.h"
+#include "commandbase.h"
 
 
 struct ProgressDialog::Private
 {
-    bool            isCancelled;
-    bool            isShown;
-    bool            hasError;
+    bool                   isCancelled;
+    bool                   isShown;
+    bool                   hasError;
 
-    CvsJob_stub*    cvsJob;
-    QString         buffer;
-    QString         errorId1, errorId2;
-    QStringList     output;
-
-    QTimer*         timer;
-    KAnimWidget*    gear;
-    QListBox*       resultbox;
+    QTimer*                timer;
+    KAnimWidget*           gear;
+    QListBox*              resultbox;
+    Cervisia::CommandBase* cmd;
 };
 
 
 ProgressDialog::ProgressDialog(QWidget* parent, const QString& heading,
-                               const DCOPRef& job, const QString& errorIndicator,
                                const QString& caption)
-    : KDialogBase(parent, 0, true, caption, Cancel, Cancel, true)
-    , DCOPObject()
+    : KDialogBase(parent, 0, true, caption, Ok | Cancel, Cancel, true)
     , d(new Private)
 {
+    setWFlags(Qt::WDestructiveClose | getWFlags());
+
     // initialize private data
     d->isCancelled = false;
     d->isShown     = false;
     d->hasError    = false;
-
-    d->cvsJob      = new CvsJob_stub(job);
-    d->buffer      = "";
-
-    d->errorId1 = "cvs " + errorIndicator + ":";
-    d->errorId2 = "cvs [" + errorIndicator + " aborted]:";
 
     setupGui(heading);
 }
@@ -76,7 +65,6 @@ ProgressDialog::ProgressDialog(QWidget* parent, const QString& heading,
 
 ProgressDialog::~ProgressDialog()
 {
-    delete d->cvsJob;
     delete d;
 }
 
@@ -104,23 +92,24 @@ void ProgressDialog::setupGui(const QString& heading)
     QFontMetrics fm(d->resultbox->fontMetrics());
     d->resultbox->setMinimumSize(fm.width("0")*70, fm.lineSpacing()*8);
 
+    // only show the cancel button
+    showButtonOK(false);
+    showButtonCancel(true);
+
     resize(sizeHint());
 }
 
 
-bool ProgressDialog::execute()
+void ProgressDialog::execute(Cervisia::CommandBase* cmd)
 {
     // get command line and display it
-    QString cmdLine = d->cvsJob->cvsCommand();
-    d->resultbox->insertItem(cmdLine);
+    d->resultbox->insertItem(cmd->commandString());
 
     // establish connections to the signals of the cvs job
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "jobExited(bool, int)",
-                      "slotJobExited(bool, int)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutputNonGui(QString)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutputNonGui(QString)", true);
+    connect(cmd, SIGNAL(jobExited(bool, int)),
+            this, SLOT(jobExited(bool, int)));
+    connect(cmd, SIGNAL(receivedLine(const QString&)),
+            this, SLOT(receivedOutputNonGui(const QString&)));
 
     // we wait for 4 seconds (or the timeout set by the user) before we
     // force the dialog to show up
@@ -128,42 +117,17 @@ bool ProgressDialog::execute()
     connect(d->timer, SIGNAL(timeout()), this, SLOT(slotTimeoutOccurred()));
     d->timer->start(CervisiaSettings::timeout(), true);
 
-    bool started = d->cvsJob->execute();
-    if( !started )
-        return false;
+    d->cmd = cmd;
 
     QApplication::setOverrideCursor(waitCursor);
-    kapp->enter_loop();
-    if (QApplication::overrideCursor())
-        QApplication::restoreOverrideCursor();
-
-    return !d->isCancelled;
 }
 
 
-bool ProgressDialog::getLine(QString& line)
+void ProgressDialog::receivedOutputNonGui(const QString& line)
 {
-    if( d->output.isEmpty() )
-        return false;
+    processOutput(line);
 
-    line = d->output.first();
-    d->output.remove(d->output.begin());
-
-    return true;
-}
-
-
-QStringList ProgressDialog::getOutput() const
-{
-    return d->output;
-}
-
-
-void ProgressDialog::slotReceivedOutputNonGui(QString buffer)
-{
-    d->buffer += buffer;
-
-    processOutput();
+    // in case of an error, show the dialog
     if( d->hasError )
     {
         stopNonGuiPart();
@@ -172,44 +136,57 @@ void ProgressDialog::slotReceivedOutputNonGui(QString buffer)
 }
 
 
-void ProgressDialog::slotReceivedOutput(QString buffer)
+void ProgressDialog::receivedOutput(const QString& line)
 {
-    d->buffer += buffer;
-    processOutput();
+    processOutput(line);
 }
 
 
-void ProgressDialog::slotJobExited(bool normalExit, int status)
+void ProgressDialog::jobExited(bool normalExit, int status)
 {
     Q_UNUSED(status)
+
+    // don't expect the command to still exist
+    d->cmd = 0;
 
     if( !d->isShown )
         stopNonGuiPart();
 
     d->gear->stop();
-    if( !d->buffer.isEmpty() )
-    {
-        d->buffer += '\n';
-        processOutput();
-    }
+
+    if( QApplication::overrideCursor() )
+        QApplication::restoreOverrideCursor();
 
     // Close the dialog automatically if there are no
     // error messages or the process has been aborted
     // 'by hand' (e.g.  by clicking the cancel button)
-    if( !d->hasError || !normalExit )
-        kapp->exit_loop();
+//     if( !d->hasError || !normalExit )
+    if( !d->hasError || d->isCancelled )
+        accept();
+    else
+    {
+        showButtonOK(true);
+        showButtonCancel(false);
+    }
+}
+
+
+void ProgressDialog::slotOk()
+{
+    reject();
 }
 
 
 void ProgressDialog::slotCancel()
 {
-    d->isCancelled = true;
-
-    bool isRunning = d->cvsJob->isRunning();
-    if( isRunning )
-        d->cvsJob->cancel();
+//     if( !d->isCancelled && d->cmd->isRunning() )
+    if( d->cmd->isRunning() )
+    {
+        d->cmd->cancel();
+        d->isCancelled = true;
+    }
     else
-        kapp->exit_loop();
+        reject();
 }
 
 
@@ -222,54 +199,39 @@ void ProgressDialog::slotTimeoutOccurred()
 
 void ProgressDialog::stopNonGuiPart()
 {
+    kdDebug() << "ProgressDialog::stopNonGuiPart()" << endl;
+
     d->timer->stop();
 
-    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutputNonGui(QString)");
-    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutputNonGui(QString)");
-
-    kapp->exit_loop();
+    disconnect(d->cmd, SIGNAL(receivedLine(const QString&)),
+               this, SLOT(receivedOutputNonGui(const QString&)));
 }
 
 
 void ProgressDialog::startGuiPart()
 {
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
+    kdDebug() << "ProgressDialog::startGuiPart()" << endl;
+
+    connect(d->cmd, SIGNAL(receivedLine(const QString&)),
+            this, SLOT(receivedOutput(const QString&)));
 
     show();
     d->isShown = true;
 
     d->gear->start();
     QApplication::restoreOverrideCursor();
-    kapp->enter_loop();
 }
 
 
-void ProgressDialog::processOutput()
+void ProgressDialog::processOutput(const QString& line)
 {
-    int pos;
-    while( (pos = d->buffer.find('\n')) != -1 )
+    if( d->cmd->isErrorMessage(line) )
     {
-        QString item = d->buffer.left(pos);
-        if( item.startsWith(d->errorId1) ||
-            item.startsWith(d->errorId2) ||
-            item.startsWith("cvs [server aborted]:") )
-        {
-            d->hasError = true;
-            d->resultbox->insertItem(item);
-        }
-        else if( item.startsWith("cvs server:") )
-            d->resultbox->insertItem(item);
-        else
-            d->output.append(item);
-
-        // remove item from buffer
-        d->buffer.remove(0, pos+1);
+        d->hasError = true;
+        d->resultbox->insertItem(line);
     }
+    else if( line.startsWith("cvs server:") )
+        d->resultbox->insertItem(line);
 }
 
 

@@ -1,11 +1,12 @@
-INCLUDES    = -I$(top_srcdir)/cervisia -I../../svnservice $(all_includes)
+INCLUDES    = -I$(top_srcdir)/cervisia -I$(top_builddir)/cervisia -I../../svnservice $(all_includes)
 METASOURCES = AUTO
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = libsvnplugin.la
 
 libsvnplugin_la_SOURCES = svnplugin.cpp svnjob.cpp globalignorelist.cpp \
-                          svncommandbase.cpp svncommandbase.skel svn_log_parser.cpp
+                          svncommandbase.cpp svncommandbase.skel svn_log_parser.cpp \
+                          logcommand.cpp
 #libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(top_builddir)/cervisia/libcervisia.la
 # libcvsservice.la is HACK for progressdialog.cpp
 libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(LIB_KUTILS) $(top_builddir)/cervisia/libcervisia.la \

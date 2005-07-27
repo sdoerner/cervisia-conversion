@@ -427,7 +427,7 @@ void RepositoryDialog::slotLoginClicked()
 
 void RepositoryDialog::slotLogoutClicked()
 {
-    RepositoryListItem* item = (RepositoryListItem*)m_repoList->currentItem();
+/*    RepositoryListItem* item = (RepositoryListItem*)m_repoList->currentItem();
     if( !item )
         return;
 
@@ -441,7 +441,7 @@ void RepositoryDialog::slotLogoutClicked()
         return;
 
     item->setIsLoggedIn(false);
-    slotSelectionChanged();
+    slotSelectionChanged();*/
 }
 
 

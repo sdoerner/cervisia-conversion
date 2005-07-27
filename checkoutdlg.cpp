@@ -338,7 +338,7 @@ void CheckoutDialog::dirButtonClicked()
 
 void CheckoutDialog::moduleButtonClicked()
 {
-    DCOPRef cvsJob = cvsService->moduleList(repository());
+/*    DCOPRef cvsJob = cvsService->moduleList(repository());
     if( !cvsService->ok() )
         return;
 
@@ -361,29 +361,29 @@ void CheckoutDialog::moduleButtonClicked()
         QString module( str.left(pos).stripWhiteSpace() );
         if ( !module.isEmpty() )
             module_combo->insertItem(module);
-    }
+    }*/
 }
 
 
 void CheckoutDialog::branchButtonClicked()
 {
-    QStringList branchTagList;
+//     QStringList branchTagList;
+// 
+//     if( repository().isEmpty() )
+//     {
+//         KMessageBox::information(this, i18n("Please specify a repository."));
+//         return;
+//     }
+// 
+//     if( module().isEmpty() )
+//     {
+//         KMessageBox::information(this, i18n("Please specify a module name."));
+//         return;
+//     }
 
-    if( repository().isEmpty() )
-    {
-        KMessageBox::information(this, i18n("Please specify a repository."));
-        return;
-    }
-
-    if( module().isEmpty() )
-    {
-        KMessageBox::information(this, i18n("Please specify a module name."));
-        return;
-    }
-
-    DCOPRef cvsJob = cvsService->rlog(repository(), module(), 
-                                      false/*recursive*/);
-    if( !cvsService->ok() )
+//     DCOPRef cvsJob = cvsService->rlog(repository(), module(), 
+//                                       false/*recursive*/);
+/*    if( !cvsService->ok() )
         return;
 
     ProgressDialog dlg(this, "Remote Log", cvsJob, QString::null, 
@@ -408,7 +408,7 @@ void CheckoutDialog::branchButtonClicked()
 
     branchTagList.sort();
 
-    branchCombo->insertStringList(branchTagList);
+    branchCombo->insertStringList(branchTagList);*/
 }
 
 

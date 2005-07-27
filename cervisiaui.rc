@@ -23,7 +23,7 @@
   <Menu name="view"><text>&amp;View</text>
     <Action name="stop_job"/>
     <Separator/>
-    <Action name="view_log"/>
+<!--    <Action name="view_log"/>-->
     <Action name="view_annotate"/>
     <Action name="view_diff_base"/>
     <Action name="view_diff_head"/>

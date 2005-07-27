@@ -40,7 +40,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
-#include <krfcdate.h>
 #include <krun.h>
 #include <kurl.h>
 
@@ -48,7 +47,6 @@
 #include "annotatedlg.h"
 #include "annotatectl.h"
 #include "diffdlg.h"
-#include "loginfo.h"
 #include "loglist.h"
 #include "logplainview.h"
 #include "logtree.h"
@@ -107,9 +105,6 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     QWhatsThis::add(tree, i18n("Choose revision A by clicking with the left "
                                "mouse button,\nrevision B by clicking with "
                                "the middle mouse button."));
-
-    items.setAutoDelete(true);
-    tags.setAutoDelete(true);
 
     for (int i = 0; i < 2; ++i)
     {
@@ -214,190 +209,29 @@ LogDialog::~LogDialog()
 }
 
 
-bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
+void LogDialog::setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos)
 {
-    QString rev;
+    m_logInfos = logInfos;
 
-    Cervisia::LogInfo logInfo;
-
-    enum { Begin, Tags, Admin, Revision,
-       Author, Branches, Comment, Finished } state;
-
-    // remember DCOP reference and file name for diff or annotate
-    cvsService = service;
-    filename = fileName;
-
-    setCaption(i18n("CVS Log: %1").arg(filename));
-
-    DCOPRef job = cvsService->log(filename);
-    if( !cvsService->ok() )
-        return false;
-
-    ProgressDialog dlg(this, "Logging", job, "log", i18n("CVS Log"));
-    if( !dlg.execute() )
-        return false;
-
-    // process cvs log output
-    state = Begin;
-    QString line;
-    while( dlg.getLine(line) )
+    for( LogInfoConstIter it(m_logInfos.begin()), end(m_logInfos.end()); it != end; ++it )
     {
-        switch( state )
-        {
-            case Begin:
-                if( line == "symbolic names:" )
-                    state = Tags;
-                break;
-            case Tags:
-                if( line[0] == '\t' )
-                {
-                    const QStringList strlist(splitLine(line, ':'));
-                    rev = strlist[1].simplifyWhiteSpace();
-                    const QString tag(strlist[0].simplifyWhiteSpace());
-                    QString branchpoint;
-                    int pos1, pos2;
-                    if( (pos2 = rev.findRev('.')) > 0 &&
-                        (pos1 = rev.findRev('.', pos2-1)) > 0 &&
-                        rev.mid(pos1+1, pos2-pos1-1) == "0" )
-                    {
-                        // For a branch tag 2.10.0.6, we want:
-                        // branchpoint = "2.10"
-                        // rev = "2.10.6"
-                        branchpoint = rev.left(pos1);
-                        rev.remove(pos1+1, pos2-pos1);
-                    }
-                    if( rev != "1.1.1" )
-                    {
-                        LogDialogTagInfo *taginfo = new LogDialogTagInfo;
-                        taginfo->rev = rev;
-                        taginfo->tag = tag;
-                        taginfo->branchpoint = branchpoint;
-                        tags.append(taginfo);
-                    }
-                }
-                else
-                {
-                    state = Admin;
-                }
-                break;
-            case Admin:
-                if( line == "----------------------------" )
-                {
-                    state = Revision;
-                }
-                break;
-            case Revision:
-                logInfo.m_revision = rev = line.section(' ', 1, 1);
-                state = Author;
-                break;
-            case Author:
-                {
-                    QStringList strList = QStringList::split(";", line);
+        const Cervisia::LogInfo& info = *it;
 
-                    // convert date into ISO format (YYYY-MM-DDTHH:MM:SS)
-                    int len = strList[0].length();
-                    QString dateTimeStr = strList[0].right(len-6); // remove 'date: '
-                    dateTimeStr.replace('/', '-');
-
-                    QString date = dateTimeStr.section(' ', 0, 0);
-                    QString time = dateTimeStr.section(' ', 1, 1);
-                    logInfo.m_dateTime.setTime_t(KRFCDate::parseDateISO8601(date + 'T' + time));
-
-                    logInfo.m_author = strList[1].section(':', 1, 1).stripWhiteSpace();
-
-                    state = Branches;
-                }
-                break;
-            case Branches:
-                if( !line.startsWith("branches:") )
-                {
-                    logInfo.m_comment = line;
-                    state = Comment;
-                }
-                break;
-            case Comment:
-                if( line == "----------------------------" )
-                {
-                    state = Revision;
-                }
-                else if( line == "=============================================================================" )
-                {
-                    state = Finished;
-                }
-                if( state == Comment ) // still in message
-                    logInfo.m_comment += '\n' + line;
-                else
-                {
-                    // Create tagcomment
-                    QString branchrev;
-                    int pos1, pos2;
-                    // 1.60.x.y => revision belongs to branch 1.60.0.x
-                    if( (pos2 = rev.findRev('.')) > 0 &&
-                        (pos1 = rev.findRev('.', pos2-1)) > 0 )
-                        branchrev = rev.left(pos2);
-
-                    // Build Cervisia::TagInfo for logInfo
-                    QPtrListIterator<LogDialogTagInfo> it(tags);
-                    for( ; it.current(); ++it )
-                    {
-                        if( rev == it.current()->rev )
-                        {
-                            // This never matches branch tags...
-                            logInfo.m_tags.push_back(Cervisia::TagInfo(it.current()->tag,
-                                                                       Cervisia::TagInfo::Tag));
-                        }
-                        if( rev == it.current()->branchpoint )
-                        {
-                            logInfo.m_tags.push_back(Cervisia::TagInfo(it.current()->tag,
-                                                                       Cervisia::TagInfo::Branch));
-                        }
-                        if( branchrev == it.current()->rev )
-                        {
-                            // ... and this never matches ordinary tags :-)
-                            logInfo.m_tags.push_back(Cervisia::TagInfo(it.current()->tag,
-                                                                       Cervisia::TagInfo::OnBranch));
-                        }
-                    }
-
-                    plain->addRevision(logInfo);
-                    tree->addRevision(logInfo);
-                    list->addRevision(logInfo);
-
-                    items.append(new Cervisia::LogInfo(logInfo));
-
-                    // reset for next entry
-                    logInfo = Cervisia::LogInfo();
-                }
-                break;
-            case Finished:
-                ;
-        }
-    }
-
-    tagcombo[0]->insertItem(QString::null);
-    tagcombo[1]->insertItem(QString::null);
-    QPtrListIterator<LogDialogTagInfo> it(tags);
-    for( ; it.current(); ++it )
-    {
-        QString str = it.current()->tag;
-        if( !it.current()->branchpoint.isEmpty() )
-            str += i18n(" (Branchpoint)");
-        tagcombo[0]->insertItem(str);
-        tagcombo[1]->insertItem(str);
+        plain->addRevision(info);
+        tree->addRevision(info);
+        list->addRevision(info);
     }
 
     plain->scrollToTop();
 
     tree->collectConnections();
     tree->recomputeCellSizes();
-
-    return true;    // successful
 }
 
 
 void LogDialog::slotOk()
 {
-    // make sure that the user selected a revision
+/*    // make sure that the user selected a revision
     if( selectionA.isEmpty() && selectionB.isEmpty() )
     {
         KMessageBox::information(this,
@@ -432,13 +266,13 @@ void LogDialog::slotOk()
         KURL url;
         url.setPath(tempFileName);
         (void) new KRun(url, 0, true, false);
-    }
+    }*/
 }
 
 
 void LogDialog::slotApply()
 {
-    if( selectionA.isEmpty() )
+/*    if( selectionA.isEmpty() )
     {
         KMessageBox::information(this,
             i18n("Please select revision A or revisions A and B first."),
@@ -483,7 +317,7 @@ void LogDialog::slotApply()
     while( dlg.getLine(line) )
         t << line << '\n';
 
-    f.close();    
+    f.close();    */
 }
 
 
@@ -524,9 +358,11 @@ void LogDialog::annotateClicked()
 
 void LogDialog::revisionSelected(QString rev, bool rmb)
 {
-    QPtrListIterator<Cervisia::LogInfo> it(items);
-    for (; it.current(); ++it)
-        if (it.current()->m_revision == rev)
+    for( LogInfoConstIter it(m_logInfos.begin()), end(m_logInfos.end()); it != end; ++it )
+    {
+        const Cervisia::LogInfo& info = *it;
+
+        if( info.m_revision == rev)
             {
                 if (rmb)
                     selectionB = rev;
@@ -534,39 +370,41 @@ void LogDialog::revisionSelected(QString rev, bool rmb)
                     selectionA = rev;
 
                 revbox[rmb?1:0]->setText(rev);
-                authorbox[rmb?1:0]->setText(it.current()->m_author);
-                datebox[rmb?1:0]->setText(it.current()->dateTimeToString());
-                commentbox[rmb?1:0]->setText(it.current()->m_comment);
-                tagsbox[rmb?1:0]->setText(it.current()->tagsToString());
+                authorbox[rmb?1:0]->setText(info.m_author);
+                datebox[rmb?1:0]->setText(info.dateTimeToString());
+                commentbox[rmb?1:0]->setText(info.m_comment);
+                tagsbox[rmb?1:0]->setText(info.tagsToString());
 
                 tree->setSelectedPair(selectionA, selectionB);
                 list->setSelectedPair(selectionA, selectionB);
                 return;
             }
+    }
+
     kdDebug(8050) << "Internal error: Revision not found " << rev << "." << endl;
 }
 
 
-void LogDialog::tagSelected(LogDialogTagInfo* tag, bool rmb)
+void LogDialog::tagSelected(const Cervisia::LogInfo& info, bool rmb)
 {
-    if (tag->branchpoint.isEmpty())
-        revisionSelected(tag->rev, rmb);
-    else
-        revisionSelected(tag->branchpoint, rmb);
+//     if (tag->branchpoint.isEmpty())
+        revisionSelected(info.m_revision, rmb);
+//     else
+//         revisionSelected(tag->branchpoint, rmb);
 }
 
 
 void LogDialog::tagASelected(int n)
 {
     if (n)
-        tagSelected(tags.at(n-1), false);
+        tagSelected(m_logInfos[n-1], false);
 }
 
 
 void LogDialog::tagBSelected(int n)
 {
     if (n)
-        tagSelected(tags.at(n-1), true);
+        tagSelected(m_logInfos[n-1], true);
 }
 
 
