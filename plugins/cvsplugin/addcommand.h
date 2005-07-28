@@ -31,9 +31,10 @@ namespace Cervisia
 class AddCommand : public CvsCommandBase
 {
 public:
-    AddCommand(const QStringList& files, bool binary);
+    AddCommand(const QStringList& files);
     ~AddCommand();
 
+    void setBinary(bool binary);
     virtual bool prepare();
 
 private:

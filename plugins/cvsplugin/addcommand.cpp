@@ -26,16 +26,22 @@ using Cervisia::AddCommand;
 #include "cvsplugin.h"
 
 
-AddCommand::AddCommand(const QStringList& files, bool binary)
+AddCommand::AddCommand(const QStringList& files)
     : CvsCommandBase(Add)
     , m_fileList(files)
-    , m_binary(binary)
+    , m_binary(false)
 {
 }
 
 
 AddCommand::~AddCommand()
 {
+}
+
+
+void AddCommand::setBinary(bool binary)
+{
+    m_binary = binary;
 }
 
 
