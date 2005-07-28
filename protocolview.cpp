@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 
 #include "cervisiapart.h"
+#include "commandbase.h"
 #include "cvsjob_stub.h"
 #include "pluginbase.h"
 #include "pluginjobbase.h"
@@ -71,6 +72,8 @@ void ProtocolView::updatePlugin()
     {
         connect(currentPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
                 this, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+        connect(currentPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+                this, SLOT(commandPrepared(Cervisia::CommandBase*)));
     }
 }
 
@@ -137,6 +140,25 @@ void ProtocolView::prepareJob(Cervisia::PluginJobBase* job)
     connect(job, SIGNAL(jobExited(bool, int)),
             this, SLOT(jobExited(bool, int)));
     connect(job, SIGNAL(receivedLine(const QString&)),
+            this, SLOT(appendLine(const QString&)));
+}
+
+
+void ProtocolView::commandPrepared(Cervisia::CommandBase* cmd)
+{
+    kdDebug(8050) << "ProtocolView::commandPrepared()" << endl;
+
+    // not interesting for us?
+    if( cmd->action() == Cervisia::CommandBase::Other )
+        return;
+
+    // get command line and add it to output buffer
+    appendLine(cmd->commandString());
+
+    // connect to the command signals
+    connect(cmd, SIGNAL(jobExited(bool, int)),
+            this, SLOT(jobExited(bool, int)));
+    connect(cmd, SIGNAL(receivedLine(const QString&)),
             this, SLOT(appendLine(const QString&)));
 }
 
