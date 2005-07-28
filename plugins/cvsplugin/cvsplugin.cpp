@@ -29,7 +29,6 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#include <commitdlg.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 #include <repository_stub.h>
@@ -37,6 +36,7 @@ using Cervisia::CvsPlugin;
 
 #include "cvsjob.h"
 #include "addcommand.h"
+#include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "dirignorelist.h"
@@ -54,7 +54,6 @@ CvsService_stub* CvsPlugin::m_cvsService = 0;
 
 CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
-//     , m_cvsService(0)
     , m_cvsRepository(0)
 {
     kdDebug(8050) << "CvsPlugin::CvsPlugin()" << endl;
@@ -211,7 +210,7 @@ void CvsPlugin::add()
     if( selectionList.isEmpty() )
         return;
 
-    executeCommand(new AddCommand(selectionList, false));
+    executeCommand(new AddCommand(selectionList));
 }
 
 
@@ -223,7 +222,10 @@ void CvsPlugin::addBinary()
     if( selectionList.isEmpty() )
         return;
 
-    executeCommand(new AddCommand(selectionList, true));
+    AddCommand* cmd = new AddCommand(selectionList);
+    cmd->setBinary(true);
+
+    executeCommand(cmd);
 }
 
 // TODO: feature commit finished notification
@@ -235,37 +237,7 @@ void CvsPlugin::commit()
     if( selectionList.isEmpty() )
         return;
 
-    // modal dialog
-    CommitDialog dlg;
-//     dlg.setLogMessage(changelogstr);
-//     dlg.setLogHistory(recentCommits);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        QString msg = dlg.logMessage();
-//         if( !recentCommits.contains(msg) )
-//         {
-//             recentCommits.prepend(msg);
-//             while( recentCommits.count() > 50 )
-//                 recentCommits.remove(recentCommits.last());
-// 
-//             KConfig* conf = config();
-//             conf->setGroup("CommitLogs");
-//             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
-//         }
-
-//         DCOPRef jobRef = m_cvsService->commit(selectionList, msg, opt_commitRecursive);
-        DCOPRef jobRef = m_cvsService->commit(selectionList, msg, false);
-        CvsJob_stub cvsJob(jobRef);
-
-        m_currentJob = new CvsJob(jobRef, CvsJob::Commit);
-//         m_currentJob->setRecursive(opt_commitRecursive);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "CvsPlugin::commit(): execute cvs job" << endl;
-        cvsJob.execute();
-    }
+    executeCommand(new CommitCommand(selectionList));
 }
 
 
