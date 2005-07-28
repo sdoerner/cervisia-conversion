@@ -37,6 +37,7 @@ using Cervisia::SvnPlugin;
 #include <svnrepository_stub.h>
 
 #include "globalignorelist.h"
+#include "addcommand.h"
 #include "logcommand.h"
 #include "svnjob.h"
 
@@ -211,24 +212,7 @@ void SvnPlugin::add()
     if( selectionList.isEmpty() )
         return;
 
-    // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::Add);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        kdDebug(8050) << "SvnPlugin::add(): add files " << selectionList << endl;
-
-        DCOPRef jobRef = m_svnService->add(selectionList);
-        SvnJob_stub svnJob(jobRef);
-
-        m_currentJob = new SvnJob(jobRef, SvnJob::Add);
-        m_currentJob->setRecursive(false);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "SvnPlugin::add(): execute svn job" << endl;
-        svnJob.execute();
-    }
+    executeCommand(new AddCommand(selectionList));
 }
 
 
