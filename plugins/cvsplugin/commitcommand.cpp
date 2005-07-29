@@ -38,6 +38,7 @@ CommitCommand::~CommitCommand()
 }
 
 
+// TODO: feature commit finished notification
 bool CommitCommand::prepare()
 {
     // modal dialog
@@ -60,8 +61,7 @@ bool CommitCommand::prepare()
 //             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
 //         }
 
-//         DCOPRef jobRef = m_cvsService->commit(selectionList, msg, opt_commitRecursive);
-        DCOPRef jobRef = CvsPlugin::cvsService()->commit(m_fileList, msg, false);
+        DCOPRef jobRef = CvsPlugin::cvsService()->commit(m_fileList, msg, isRecursive());
         connectToJob(jobRef);
 
         return true;

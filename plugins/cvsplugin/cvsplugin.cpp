@@ -228,7 +228,7 @@ void CvsPlugin::addBinary()
     executeCommand(cmd);
 }
 
-// TODO: feature commit finished notification
+
 void CvsPlugin::commit()
 {
     kdDebug(8050) << "CvsPlugin::commit()" << endl;
@@ -237,7 +237,10 @@ void CvsPlugin::commit()
     if( selectionList.isEmpty() )
         return;
 
-    executeCommand(new CommitCommand(selectionList));
+    CommitCommand* cmd = new CommitCommand(selectionList);
+//     cmd->setRecursive(opt_commitRecursive);
+
+    executeCommand(cmd);
 }
 
 
@@ -261,8 +264,10 @@ void CvsPlugin::remove()
     if( selectionList.isEmpty() )
         return;
 
-    //TODO retrieve 'recursive' from configuration
-    executeCommand(new RemoveCommand(selectionList, false/*recursive*/));
+    RemoveCommand* cmd = new RemoveCommand(selectionList);
+//     cmd->setRecursive(opt_commitRecursive);
+
+    executeCommand(cmd);
 }
 
 

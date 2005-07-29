@@ -31,7 +31,7 @@ namespace Cervisia
 class RemoveCommand : public CvsCommandBase
 {
 public:
-    RemoveCommand(const QStringList& files, bool recursive);
+    RemoveCommand(const QStringList& files);
     ~RemoveCommand();
 
     virtual bool prepare();

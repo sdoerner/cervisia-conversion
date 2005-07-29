@@ -26,11 +26,10 @@ using Cervisia::RemoveCommand;
 #include "cvsplugin.h"
 
 
-RemoveCommand::RemoveCommand(const QStringList& files, bool recursive)
+RemoveCommand::RemoveCommand(const QStringList& files)
     : CvsCommandBase(Remove)
     , m_fileList(files)
 {
-    setRecursive(recursive);
 }
 
 
