@@ -39,6 +39,7 @@ using Cervisia::SvnPlugin;
 #include "globalignorelist.h"
 #include "addcommand.h"
 #include "logcommand.h"
+#include "removecommand.h"
 #include "svnjob.h"
 
 #include <kdebug.h>
@@ -106,7 +107,7 @@ bool SvnPlugin::canHandle(const KURL& workingCopy)
 
 void SvnPlugin::setWorkingCopy(const KURL& workingCopy)
 {
-    bool opened = m_svnRepository->setWorkingCopy(workingCopy.path());
+    /*bool opened = */m_svnRepository->setWorkingCopy(workingCopy.path());
 }
 
 
@@ -279,21 +280,7 @@ void SvnPlugin::remove()
     if( selectionList.isEmpty() )
         return;
 
-    // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::Remove);
-    dlg.setFileList(selectionList);
-
-    if( dlg.exec() )
-    {
-        DCOPRef jobRef = m_svnService->remove(selectionList);
-        SvnJob_stub svnJob(jobRef);
-
-        m_currentJob = new SvnJob(jobRef, SvnJob::Remove);
-        m_currentJob->setRecursive(false);
-        emit jobPrepared(m_currentJob);
-
-        svnJob.execute();
-    }
+    executeCommand(new RemoveCommand(selectionList));
 }
 
 
