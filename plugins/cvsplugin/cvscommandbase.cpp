@@ -27,8 +27,8 @@ using Cervisia::CvsCommandBase;
 
 CvsCommandBase::CvsCommandBase(const ActionKind& action)
     : CommandBase(action)
-    , m_cvsJob(0)
     , m_errorOccurred(false)
+    , m_cvsJob(0)
 {
     kdDebug(8050) << "CvsCommandBase::CvsCommandBase()" << endl;
 }
