@@ -35,13 +35,6 @@ class SvnLogParser : public LogParser
 {
 public:
 
-    enum EState
-    {
-        Begin,
-        Infos,
-        Comment,
-    };
-
     SvnLogParser();
 
 private:
@@ -54,21 +47,16 @@ private:
 
     void parseTag(const QString& line);
 
+    enum EState
+    {
+        Begin,
+        Infos,
+        Comment,
+    };
+
     EState m_state;
 
     LogInfo m_logInfo;
-
-    QString m_rev;
-
-    struct Tag
-    {
-        QString rev;
-        QString name;
-        QString branchpoint;
-    };
-
-    typedef QValueList<Tag> TTagSeq;
-    TTagSeq m_tags;
 };
 
 
