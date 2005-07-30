@@ -27,6 +27,9 @@ namespace Cervisia
 class SelectionIntf
 {
 public:
+
+    virtual ~SelectionIntf() {}
+
     virtual void getSingleSelection(QString *filename, QString *revision=0) const = 0;
 
     virtual QString singleSelection() const = 0;
