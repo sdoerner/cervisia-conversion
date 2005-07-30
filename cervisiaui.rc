@@ -81,12 +81,13 @@
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
-  <Action name="file_update"/>
+<!--  <Action name="file_update"/>
   <Action name="file_status"/>
   <Separator lineSeparator="true"/>
   <Action name="file_commit"/>
   <Action name="file_add"/>
-  <Action name="file_remove"/>
+  <Action name="file_remove"/>-->
+  <Merge/>
   <Separator lineSeparator="true"/>
   <Action name="stop_job"/>
 </ToolBar>
