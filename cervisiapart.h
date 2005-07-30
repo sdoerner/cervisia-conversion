@@ -88,10 +88,6 @@ public slots:
     void slotResolve();
     void slotUpdate();
     void slotChangeLog();
-    void slotAdd();
-    void slotAddBinary();
-
-    void slotRemove();
     void slotFileProperties();
     void slotRevert();
     //    void slotBrowseMultiLog();
@@ -109,8 +105,6 @@ public slots:
     void slotUpdateToTag();
     void slotUpdateToHead();
     void slotMerge();
-    void slotAddWatch();
-    void slotRemoveWatch();
     void slotShowWatchers();
     void slotEdit();
     void slotUnedit();
