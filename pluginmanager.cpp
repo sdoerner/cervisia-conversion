@@ -22,7 +22,8 @@ using Cervisia::PluginManager;
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 #include <kxmlguifactory.h>
-
+#include <kparts/mainwindow.h>
+#include <kstatusbar.h>
 #include "pluginbase.h"
 
 
@@ -82,7 +83,8 @@ Cervisia::PluginBase* PluginManager::pluginForUrl(const KURL& url)
     Cervisia::PluginBase* plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.first());
     for( ; plugin; plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.next()) )
     {
-        kdDebug() << "PluginManager::pluginForUrl(): type = " << plugin->type() << ", url = " << url.prettyURL() << endl;
+        kdDebug() << "PluginManager::pluginForUrl(): type = " << plugin->type()
+                  << ", url = " << url.prettyURL() << endl;
         if( plugin->canHandle(url) )
         {
             // is the plugin already active? --> no need to change the menu
@@ -96,6 +98,21 @@ Cervisia::PluginBase* PluginManager::pluginForUrl(const KURL& url)
                 m_part->factory()->removeClient(m_currentPlugin);
 
             m_part->factory()->addClient(plugin);
+
+            // show menu item hints in statusbar
+            KParts::MainWindow* win = static_cast<KParts::MainWindow*>(m_part->parent());
+            if( win )
+            {
+                KStatusBar* statusBar = win->statusBar();
+
+                statusBar->connect(
+                    plugin->actionCollection(), SIGNAL(actionStatusText(const QString &)),
+                    SLOT(message(const QString &)) );
+                statusBar->connect(
+                    plugin->actionCollection(), SIGNAL(clearStatusText()),
+                    SLOT(clear()) );
+            }
+
             plugin->setWorkingCopy(url);
             m_currentPlugin = result = plugin;
             break;
