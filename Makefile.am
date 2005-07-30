@@ -15,7 +15,7 @@ libcervisia_la_SOURCES = annotatedlg.cpp diffdlg.cpp patchoptiondlg.cpp logdlg.c
 		   loginfo.cpp misc.cpp qttableview.cpp tooltip.cpp cervisiasettings.kcfgc \
 		   settingsdlg.cpp settingsdlg_advanced.ui pluginbase.cpp entry.cpp ignorefilterbase.cpp \
 		   addremovedlg.cpp pluginjobbase.cpp pluginjobbase.skel commitdlg.cpp stringmatcher.cpp \
-		   output_parser.cpp log_parser.cpp commandbase.cpp watchdlg.cpp
+		   output_parser.cpp log_parser.cpp commandbase.cpp watchdlg.cpp annotate_parser.cpp
 libcervisia_la_COMPILE_FIRST = cvsservice/cvsservice_stub.h cervisiasettings.h
 
 #libcervisiapart_la_SOURCES = updateview.cpp protocolview.cpp protocolview.skel \
