@@ -51,6 +51,7 @@ public:
     virtual void syncWithEntries(const QString& path);
 
     virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
+    virtual UpdateParser* updateParser() const { return 0; }
 
     static SvnService_stub* svnService() { return m_svnService; }
 

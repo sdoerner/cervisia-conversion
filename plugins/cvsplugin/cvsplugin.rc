@@ -2,6 +2,8 @@
 <kpartplugin name="cvsplugin" library="libcvsplugin" version="1">
 <MenuBar>
     <Menu name="file"><Text>&amp;File</Text>
+        <Separator/>
+        <Action name="file_update"/>
         <Action name="file_status"/>
         <Separator/>
         <Action name="file_commit"/>

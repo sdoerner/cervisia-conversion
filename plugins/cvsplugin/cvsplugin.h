@@ -29,6 +29,7 @@ namespace Cervisia
 {
 
 class CvsCommandBase;
+class CvsUpdateParser;
 
 
 class CvsPlugin : public PluginBase
@@ -51,6 +52,7 @@ public:
     virtual void syncWithEntries(const QString& filePath);
 
     virtual IgnoreFilterBase* filter(const QString& path) const;
+    virtual UpdateParser* updateParser() const;
 
     static CvsService_stub* cvsService() { return m_cvsService; }
 
@@ -64,6 +66,7 @@ private slots:
     void removeWatch();
     void revert();
     void simulateUpdate();
+    void update();
 
 private:
     void executeCommand(CvsCommandBase* cmd);
@@ -73,6 +76,7 @@ private:
 
     Repository_stub* m_cvsRepository;
     static CvsService_stub* m_cvsService;
+    static CvsUpdateParser* m_updateParser;
 };
 
 

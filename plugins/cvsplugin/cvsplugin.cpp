@@ -35,12 +35,14 @@ using Cervisia::CvsPlugin;
 #include <selectionintf.h>
 
 #include "cvsjob.h"
+#include "cvs_update_parser.h"
 #include "addcommand.h"
 #include "addwatchcommand.h"
 #include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "removewatchcommand.h"
+#include "updatecommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -52,6 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( libcvsplugin, CvsPluginFactory( "cvsplugin" ) )
 
 
 CvsService_stub* CvsPlugin::m_cvsService = 0;
+Cervisia::CvsUpdateParser* CvsPlugin::m_updateParser = 0;
 
 
 CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
@@ -204,6 +207,12 @@ Cervisia::IgnoreFilterBase* CvsPlugin::filter(const QString& path) const
 }
 
 
+Cervisia::UpdateParser* CvsPlugin::updateParser() const
+{
+    return m_updateParser;
+}
+
+
 void CvsPlugin::add()
 {
     kdDebug(8050) << "CvsPlugin::add()" << endl;
@@ -327,20 +336,26 @@ void CvsPlugin::simulateUpdate()
     if( selectionList.isEmpty() )
         return;
 
-    kdDebug(8050) << "CvsPlugin::simulateUpdate(): add files " << selectionList << endl;
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setSimulation(true);
 
-//     DCOPRef cvsJob = cvsService->simulateUpdate(list, opt_updateRecursive,
-//             opt_createDirs, opt_pruneDirs);
+    executeCommand(cmd);
+}
 
-    DCOPRef jobRef = m_cvsService->simulateUpdate(selectionList, false, false, true);
-    CvsJob_stub cvsJob(jobRef);
 
-    m_currentJob = new CvsJob(jobRef, CvsJob::SimulateUpdate);
-//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
-    emit jobPrepared(m_currentJob);
+void CvsPlugin::update()
+{
+    kdDebug(8050) << "CvsPlugin::update()" << endl;
 
-    kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
-    cvsJob.execute();
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+
+    executeCommand(cmd);
 }
 
 
@@ -364,6 +379,13 @@ void CvsPlugin::setupMenuActions()
     //
     // File Menu
     //
+    action = new KAction( i18n("&Update"), "vcs_update", CTRL+Key_U,
+                          this, SLOT( update() ),
+                          actionCollection(), "file_update" );
+    hint = i18n("Updates the selected files and folders (cvs update)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
     action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
                           this, SLOT( simulateUpdate() ),
                           actionCollection(), "file_status" );
@@ -437,6 +459,8 @@ void CvsPlugin::setupMenuActions()
 
 void CvsPlugin::startService()
 {
+    kdDebug(8050) << "CvsPlugin::startService(): start cvs DCOP service" << endl;
+
     // start the cvs DCOP service
     QString error;
     QCString appId;
@@ -451,6 +475,7 @@ void CvsPlugin::startService()
         // create a reference to the service
         m_cvsService = new CvsService_stub(appId, "CvsService");
         m_cvsRepository = new Repository_stub(appId, "CvsRepository");
+        m_updateParser = new CvsUpdateParser();
     }
 }
 

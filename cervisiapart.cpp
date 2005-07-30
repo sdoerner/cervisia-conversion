@@ -69,6 +69,7 @@
 #include "editwithmenu.h"
 #include "pluginmanager.h"
 #include "pluginbase.h"
+#include "update_parser.h"
 
 #include "cervisiapart.h"
 #include "version.h"
@@ -247,12 +248,12 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Update"), "vcs_update", CTRL+Key_U,
-                          this, SLOT( slotUpdate() ),
-                          actionCollection(), "file_update" );
-    hint = i18n("Updates (cvs update) the selected files and folders");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Update"), "vcs_update", CTRL+Key_U,
+//                           this, SLOT( slotUpdate() ),
+//                           actionCollection(), "file_update" );
+//     hint = i18n("Updates (cvs update) the selected files and folders");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("&Edit"), 0,
                           this, SLOT( slotOpen() ),
@@ -783,10 +784,10 @@ void CervisiaPart::slotResolve()
 }
 
 
-void CervisiaPart::slotUpdate()
-{
-    updateSandbox();
-}
+// void CervisiaPart::slotUpdate()
+// {
+//     updateSandbox();
+// }
 
 
 void CervisiaPart::slotUpdateToTag()
@@ -1463,8 +1464,19 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     protocol->updatePlugin();
 
     m_vcsPlugin->setFileView(update);
-    connect(m_vcsPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
-            update, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+    Cervisia::UpdateParser* parser = m_vcsPlugin->updateParser();
+
+    // make sure we don't connect to the signal twice
+    disconnect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+               update, 0);
+    connect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
+            update, 0);
+
+    connect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+            update, SLOT(commandPrepared(Cervisia::CommandBase*)));
+    connect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
+            update, SLOT(updateItem(const QString&, Cervisia::EntryStatus, bool)));
+
 //    connect(m_vcsPlugin, SIGNAL(jobExited(bool, int)),
 //            update, SLOT(finishJob(bool, int)));
 //    connect(m_vcsPlugin, SIGNAL(jobExited(bool, int)),

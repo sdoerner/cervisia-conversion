@@ -29,7 +29,7 @@
 
 #include "entry.h"
 
-namespace Cervisia { class PluginJobBase; }
+namespace Cervisia { class CommandBase; }
 class KConfig;
 
 
@@ -79,15 +79,16 @@ public slots:
     void unfoldTree();
     void foldTree();
 //    void prepareJob(bool recursive, ActionKind action);
-    void prepareJob(Cervisia::PluginJobBase* job);
+    void commandPrepared(Cervisia::CommandBase* cmd);
     void finishJob(bool normalExit, int exitStatus);
-    void processUpdateLine(const QString& line);
+//     void processUpdateLine(const QString& line);
+    void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
 
 private slots:
     void itemExecuted(QListViewItem *item);
     
 private:
-    void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
+//     void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
     void rememberSelection(bool recursive);
     void syncSelection();
     void markUpdated(bool laststage, bool success);

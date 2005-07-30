@@ -32,7 +32,7 @@
 #include "entry.h"
 #include "updateview_items.h"
 #include "updateview_visitors.h"
-#include "pluginjobbase.h"
+#include "commandbase.h"
 #include "pluginmanager.h"
 
 
@@ -390,24 +390,18 @@ void UpdateView::prepareJob(bool recursive, Action action)
 }
 
 
-void UpdateView::prepareJob(Cervisia::PluginJobBase* job)
+void UpdateView::commandPrepared(Cervisia::CommandBase* cmd)
 {
-    act = (UpdateView::Action)job->action();    //FIXME: don't cast
+    act = (UpdateView::Action)cmd->action();    //FIXME: don't cast
 
-    if( act == UpdateNoAct )                    //FIXME: see cervisiapart.cpp when to connect
-    {
-        connect(job, SIGNAL(receivedLine(const QString&)),
-                this, SLOT(processUpdateLine(const QString&)));
-    }
-
-    connect(job, SIGNAL(jobExited(bool, int)),
+    connect(cmd, SIGNAL(jobExited(bool, int)),
             this, SLOT(finishJob(bool, int)));
 
     // Scan recursively all entries - there's no way around this here
-    if( job->isRecursive() )
+    if( cmd->isRecursive() )
        static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
 
-    rememberSelection(job->isRecursive());
+    rememberSelection(cmd->isRecursive());
     if (act != Add)
         markUpdated(false, false);
 }
@@ -587,54 +581,54 @@ void UpdateView::updateColors()
  * is true, it is assumed that the output is from a command
  * 'cvs update -n', i.e. cvs actually changes no files.
  */
-void UpdateView::processUpdateLine(const QString& str)
-{
-    kdDebug(8050) << "UpdateView::processUpdateLine(): str = " << str << endl;
-    if (str.length() > 2 && str[1] == ' ')
-    {
-        EntryStatus status(Cervisia::Unknown);
-        switch (str[0].latin1())
-        {
-        case 'C':
-            status = Cervisia::Conflict;
-            break;
-        case 'A':
-            status = Cervisia::LocallyAdded;
-            break;
-        case 'R':
-            status = Cervisia::LocallyRemoved;
-            break;
-        case 'M':
-            status = Cervisia::LocallyModified;
-            break;
-        case 'U':
-            status = (act == UpdateNoAct) ? Cervisia::NeedsUpdate : Cervisia::Updated;
-            break;
-        case 'P':
-            status = (act == UpdateNoAct) ? Cervisia::NeedsPatch : Cervisia::Patched;
-            break;
-        case '?':
-            status = Cervisia::NotInCVS;
-            break;
-        default:
-            return;
-        }
-//        updateItem(str.mid(2), status, false);
-        updateItem(str.mid(2).stripWhiteSpace(), status, false);
-    }
-
-    const QString removedFileStart(QString::fromLatin1("cvs server: "));
-    const QString removedFileEnd(QString::fromLatin1(" is no longer in the repository"));
-    if (str.startsWith(removedFileStart) && str.endsWith(removedFileEnd))
-    {
-    }
-
-#if 0
-    else if (str.left(21) == "cvs server: Updating " ||
-             str.left(21) == "cvs update: Updating ")
-        updateItem(str.right(str.length()-21), Unknown, true);
-#endif
-}
+// void UpdateView::processUpdateLine(const QString& str)
+// {
+//     kdDebug(8050) << "UpdateView::processUpdateLine(): str = " << str << endl;
+//     if (str.length() > 2 && str[1] == ' ')
+//     {
+//         EntryStatus status(Cervisia::Unknown);
+//         switch (str[0].latin1())
+//         {
+//         case 'C':
+//             status = Cervisia::Conflict;
+//             break;
+//         case 'A':
+//             status = Cervisia::LocallyAdded;
+//             break;
+//         case 'R':
+//             status = Cervisia::LocallyRemoved;
+//             break;
+//         case 'M':
+//             status = Cervisia::LocallyModified;
+//             break;
+//         case 'U':
+//             status = (act == UpdateNoAct) ? Cervisia::NeedsUpdate : Cervisia::Updated;
+//             break;
+//         case 'P':
+//             status = (act == UpdateNoAct) ? Cervisia::NeedsPatch : Cervisia::Patched;
+//             break;
+//         case '?':
+//             status = Cervisia::NotInCVS;
+//             break;
+//         default:
+//             return;
+//         }
+// //        updateItem(str.mid(2), status, false);
+//         updateItem(str.mid(2).stripWhiteSpace(), status, false);
+//     }
+// 
+//     const QString removedFileStart(QString::fromLatin1("cvs server: "));
+//     const QString removedFileEnd(QString::fromLatin1(" is no longer in the repository"));
+//     if (str.startsWith(removedFileStart) && str.endsWith(removedFileEnd))
+//     {
+//     }
+// 
+// #if 0
+//     else if (str.left(21) == "cvs server: Updating " ||
+//              str.left(21) == "cvs update: Updating ")
+//         updateItem(str.right(str.length()-21), Unknown, true);
+// #endif
+// }
 
 
 void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool isdir)

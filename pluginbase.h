@@ -33,6 +33,7 @@ class CommandBase;
 class IgnoreFilterBase;
 class PluginJobBase;
 class SelectionIntf;
+class UpdateParser;
 
 
 class PluginBase : public KParts::Plugin
@@ -62,6 +63,7 @@ public:
     virtual void syncWithEntries(const QString& path) = 0;
 
     virtual IgnoreFilterBase* filter(const QString& path) const = 0;
+    virtual UpdateParser* updateParser() const = 0;
 
 signals:
     void updateItem(const Cervisia::Entry& entry);

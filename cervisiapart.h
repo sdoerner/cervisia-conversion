@@ -86,7 +86,7 @@ public slots:
 
     void slotOpen();
     void slotResolve();
-    void slotUpdate();
+//     void slotUpdate();
     void slotChangeLog();
     void slotFileProperties();
     void slotRevert();
