@@ -35,18 +35,6 @@ class CvsLogParser : public LogParser
 {
 public:
 
-    enum EState
-    {
-        Begin,
-        Tags,
-        Admin,
-        Revision,
-        Infos,
-        Branches,
-        Comment,
-        Finished
-    };
-
     CvsLogParser();
 
 private:
@@ -58,6 +46,18 @@ private:
     void parseInfos(const QString& line);
 
     void parseTag(const QString& line);
+
+    enum EState
+    {
+        Begin,
+        Tags,
+        Admin,
+        Revision,
+        Infos,
+        Branches,
+        Comment,
+        Finished
+    };
 
     EState m_state;
 
