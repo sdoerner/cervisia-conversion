@@ -67,11 +67,18 @@ ProtocolView::~ProtocolView()
 
 void ProtocolView::updatePlugin()
 {
+    kdDebug(8050) << "ProtocolView::updatePlugin()" << endl;
+
     PluginBase* currentPlugin = PluginManager::self()->currentPlugin();
     if( currentPlugin )
     {
         connect(currentPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
                 this, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+
+        // make sure we don't connect to the signal twice
+        disconnect(currentPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+                   this, 0);
+
         connect(currentPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
                 this, SLOT(commandPrepared(Cervisia::CommandBase*)));
     }
