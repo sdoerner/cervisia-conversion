@@ -36,9 +36,11 @@ using Cervisia::CvsPlugin;
 
 #include "cvsjob.h"
 #include "addcommand.h"
+#include "addwatchcommand.h"
 #include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
+#include "removewatchcommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -229,6 +231,18 @@ void CvsPlugin::addBinary()
 }
 
 
+void CvsPlugin::addWatch()
+{
+    kdDebug(8050) << "CvsPlugin::addWatch()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new AddWatchCommand(selectionList));
+}
+
+
 void CvsPlugin::commit()
 {
     kdDebug(8050) << "CvsPlugin::commit()" << endl;
@@ -268,6 +282,18 @@ void CvsPlugin::remove()
 //     cmd->setRecursive(opt_commitRecursive);
 
     executeCommand(cmd);
+}
+
+
+void CvsPlugin::removeWatch()
+{
+    kdDebug(8050) << "CvsPlugin::removeWatch()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new RemoveWatchCommand(selectionList));
 }
 
 
@@ -349,8 +375,8 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( commit() ),
                           actionCollection(), "file_commit" );
     hint = i18n("Commits the selected files (cvs commit)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 
     action = new KAction( i18n("&Add to Repository..."), "vcs_add", Key_Insert,
                           this, SLOT( add() ),
@@ -363,22 +389,22 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( addBinary() ),
                           actionCollection(), "file_add_binary" );
     hint = i18n("Adds the selected files as binaries to the repository (cvs -kb add)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 
     action = new KAction( i18n("&Remove From Repository..."), "vcs_remove", Key_Delete,
                           this, SLOT( remove() ),
                           actionCollection(), "file_remove" );
     hint = i18n("Removes the selected files from the repository (cvs remove)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 
     action = new KAction( i18n("Rever&t"), 0,
                           this, SLOT( revert() ),
                           actionCollection(), "file_revert_local_changes" );
     hint = i18n("Reverts the selected files (cvs update -C / only cvs 1.11)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 
     //
     // View Menu
@@ -387,8 +413,25 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( log() ),
                           actionCollection(), "view_log" );
     hint = i18n("Shows the revision tree of the selected file (cvs log)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    //
+    // Advanced Menu
+    //
+    action = new KAction( i18n("&Add Watch..."), 0,
+                          this, SLOT( addWatch() ),
+                          actionCollection(), "add_watch" );
+    hint = i18n("Adds a watch for the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Remove Watch..."), 0,
+                          this, SLOT( removeWatch() ),
+                          actionCollection(), "remove_watch" );
+    hint = i18n("Removes a watch from the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 }
 
 

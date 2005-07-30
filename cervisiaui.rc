@@ -46,8 +46,8 @@
     <Action name="update_to_head"/>
     <Action name="merge"/>
     <Separator/>
-    <Action name="add_watch"/>
-    <Action name="remove_watch"/>
+<!--    <Action name="add_watch"/>
+    <Action name="remove_watch"/>-->
     <Action name="show_watchers"/>
     <Separator/>
     <Action name="edit_files"/>

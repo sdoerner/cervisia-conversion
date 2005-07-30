@@ -15,5 +15,10 @@
         <Separator/>
         <Action name="view_log"/>
     </Menu>
+    <Menu name="advanced"><text>&amp;Advanced</text>
+        <Separator/>
+        <Action name="add_watch"/>
+        <Action name="remove_watch"/>
+    </Menu>
 </MenuBar>
 </kpartplugin>

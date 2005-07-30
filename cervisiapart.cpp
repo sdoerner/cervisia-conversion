@@ -377,20 +377,6 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Add Watch..."), 0,
-                          this, SLOT(slotAddWatch()),
-                          actionCollection(), "add_watch" );
-    hint = i18n("Adds a watch for the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("&Remove Watch..."), 0,
-                          this, SLOT(slotRemoveWatch()),
-                          actionCollection(), "remove_watch" );
-    hint = i18n("Removes a watch from the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
     action = new KAction( i18n("Show &Watchers"), 0,
                           this, SLOT(slotShowWatchers()),
                           actionCollection(), "show_watchers" );
@@ -864,24 +850,6 @@ void CervisiaPart::slotMerge()
 }
 
 
-void CervisiaPart::slotAdd()
-{
-    addOrRemove(AddRemoveDialog::Add);
-}
-
-
-void CervisiaPart::slotAddBinary()
-{
-    addOrRemove(AddRemoveDialog::AddBinary);
-}
-
-
-void CervisiaPart::slotRemove()
-{
-    addOrRemove(AddRemoveDialog::Remove);
-}
-
-
 void CervisiaPart::slotFileProperties()
 {
     QString filename;
@@ -926,56 +894,6 @@ void CervisiaPart::updateSandbox(const QString &extraopt)
     }
 }
 
-
-void CervisiaPart::addOrRemove(AddRemoveDialog::ActionType action)
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    // modal dialog
-    AddRemoveDialog dlg(action, widget());
-    dlg.setFileList(list);
-
-    if (dlg.exec())
-    {
-        DCOPRef cvsJob;
-
-        switch (action)
-        {
-            case AddRemoveDialog::Add:
-                update->prepareJob(false, UpdateView::Add);
-                cvsJob = cvsService->add(list, false);
-            break;
-
-            case AddRemoveDialog::AddBinary:
-                update->prepareJob(false, UpdateView::Add);
-                cvsJob = cvsService->add(list, true);
-            break;
-
-            case AddRemoveDialog::Remove:
-                update->prepareJob(opt_commitRecursive, UpdateView::Remove);
-                cvsJob = cvsService->remove(list, opt_commitRecursive);
-            break;
-        }
-
-        // get command line from cvs job
-        QString cmdline;
-        DCOPReply reply = cvsJob.call("cvsCommand()");
-        if( reply.isValid() )
-            reply.get<QString>(cmdline);
-
-        if (protocol->startJob())
-        {
-            showJobStart(cmdline);
-            connect( protocol, SIGNAL(jobFinished(bool, int)),
-                     update, SLOT(finishJob(bool, int)) );
-            connect( protocol, SIGNAL(jobFinished(bool, int)),
-                     this, SLOT(slotJobFinished()) );
-        }
-    }
-}
-
 #if 0
 void CervisiaPart::slotBrowseMultiLog()
 {
@@ -1017,48 +935,6 @@ void CervisiaPart::slotDiffBase()
 void CervisiaPart::slotDiffHead()
 {
     showDiff(QString::fromLatin1("HEAD"));
-}
-
-
-void CervisiaPart::slotAddWatch()
-{
-    addOrRemoveWatch(WatchDialog::Add);
-}
-
-
-void CervisiaPart::slotRemoveWatch()
-{
-    addOrRemoveWatch(WatchDialog::Remove);
-}
-
-
-void CervisiaPart::addOrRemoveWatch(WatchDialog::ActionType action)
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    WatchDialog dlg(action, widget());
-
-    if (dlg.exec() && dlg.events() != WatchDialog::None)
-    {
-        DCOPRef cvsJob;
-
-        if (action == WatchDialog::Add)
-            cvsJob = cvsService->addWatch(list, dlg.events());
-        else
-            cvsJob = cvsService->removeWatch(list, dlg.events());
-
-        // get command line from cvs job
-        QString cmdline = cvsJob.call("cvsCommand()");
-
-        if( protocol->startJob() )
-        {
-            showJobStart(cmdline);
-            connect( protocol, SIGNAL(jobFinished(bool, int)),
-                     this,     SLOT(slotJobFinished()) );
-        }
-    }
 }
 
 

@@ -57,9 +57,11 @@ public:
 private slots:
     void add();
     void addBinary();
+    void addWatch();
     void commit();
     void log();
     void remove();
+    void removeWatch();
     void revert();
     void simulateUpdate();
 
