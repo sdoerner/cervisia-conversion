@@ -30,7 +30,7 @@ CvsCommandBase::CvsCommandBase(const ActionKind& action)
     , m_errorOccurred(false)
     , m_cvsJob(0)
 {
-    kdDebug(8050) << "CvsCommandBase::CvsCommandBase()" << endl;
+//     kdDebug(8050) << "CvsCommandBase::CvsCommandBase()" << endl;
 }
 
 
