@@ -6,8 +6,8 @@
     <Action name="file_open_recent"/>
     <Separator/>
     <Action name="insert_changelog_entry"/>
-    <Separator/>
-    <Action name="file_update"/>
+<!--     <Separator/> -->
+<!--     <Action name="file_update"/> -->
 <!--     <Action name="file_status"/> -->
     <Separator/>
     <Action name="file_edit"/>
