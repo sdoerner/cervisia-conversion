@@ -69,6 +69,18 @@ k_dcop:
     DCOPRef simulateUpdate(const QStringList& files, bool recursive);
 
     /**
+     * Merges changes from the repository into the files of the
+     * working copy.
+     *
+     * @param files A list of files that should be updated.
+     * @param recursive descend into subdirectories.
+     *
+     * @return A DCOP reference to the svn job or in case of failure a
+     *         null reference.
+     */
+    DCOPRef update(const QStringList& files, bool recursive);
+
+    /**
      * Quits the DCOP service.
      */
     void quit();

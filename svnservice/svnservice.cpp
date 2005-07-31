@@ -207,7 +207,27 @@ DCOPRef SvnService::simulateUpdate(const QStringList& files, bool recursive)
     // svn status [-N] [FILES]
     d->singleSvnJob->clearCommand();
 
-    *d->singleSvnJob << d->repository->svnClient() << "status";
+    *d->singleSvnJob << d->repository->svnClient() << "status" << "-u";
+
+    if( !recursive )
+        *d->singleSvnJob << "-N";
+
+    *d->singleSvnJob << JoinFileList(files) << REDIRECT_STDERR;
+
+    return d->setupNonConcurrentJob();
+}
+
+
+DCOPRef SvnService::update(const QStringList& files, bool recursive)
+{
+    if( !d->hasWorkingCopy() || d->hasRunningJob() )
+        return DCOPRef();
+
+    // assemble the command line
+    // svn update [-N] [FILES]
+    d->singleSvnJob->clearCommand();
+
+    *d->singleSvnJob << d->repository->svnClient() << "update";
 
     if( !recursive )
         *d->singleSvnJob << "-N";
