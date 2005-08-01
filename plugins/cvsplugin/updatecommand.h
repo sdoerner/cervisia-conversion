@@ -36,6 +36,7 @@ public:
     ~UpdateCommand();
 
     void setSimulation(bool simulation);
+    void setExtraOption(const QString& option);     // TODO: improve name
 
     virtual bool prepare();
 
@@ -43,6 +44,7 @@ private:
     QStringList   m_fileList;
     UpdateParser* m_parser;
     bool          m_simulation;
+    QString       m_option;
 };
 
 

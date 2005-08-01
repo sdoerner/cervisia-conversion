@@ -314,17 +314,11 @@ void CvsPlugin::revert()
     if( selectionList.isEmpty() )
         return;
 
-//    DCOPRef cvsJob = cvsService->update(list, opt_updateRecursive,
-//                                        opt_createDirs, opt_pruneDirs, extraopt);
-    DCOPRef jobRef = m_cvsService->update(selectionList, false, false, false, "-C");
-    CvsJob_stub cvsJob(jobRef);
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setExtraOption("-C");
 
-    m_currentJob = new CvsJob(jobRef, CvsJob::Update);
-//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
-    emit jobPrepared(m_currentJob);
-
-    kdDebug(8050) << "CvsPlugin::simulateUpdate(): execute cvs job" << endl;
-    cvsJob.execute();
+    executeCommand(cmd);
 }
 
 

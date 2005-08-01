@@ -50,6 +50,12 @@ void UpdateCommand::setSimulation(bool simulation)
 }
 
 
+void UpdateCommand::setExtraOption(const QString& option)
+{
+    m_option = option;
+}
+
+
 bool UpdateCommand::prepare()
 {
     DCOPRef jobRef;
@@ -59,7 +65,7 @@ bool UpdateCommand::prepare()
                         false/*opt_createDirs*/, false/*opt_pruneDirs*/);
     else
         jobRef = CvsPlugin::cvsService()->update(m_fileList, isRecursive(),
-                        false/*opt_createDirs*/, false/*opt_pruneDirs*/, "");
+                        false/*opt_createDirs*/, false/*opt_pruneDirs*/, m_option);
     connectToJob(jobRef);
 
     kdDebug(8050) << "UpdateCommand::prepare(): connect parser to our signal" << endl;
