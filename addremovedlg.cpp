@@ -34,9 +34,9 @@ AddRemoveDialog::AddRemoveDialog(ActionType action, QWidget* parent, const char*
     : KDialogBase(parent, name, true, QString::null,
                   Ok | Cancel | Help, Ok, true)
 {
-    setCaption( (action==Add)?       i18n("CVS Add") :
-                (action==AddBinary)? i18n("CVS Add Binary") :
-                                     i18n("CVS Remove") );
+//     setCaption( (action==Add)?       i18n("CVS Add") :
+//                 (action==AddBinary)? i18n("CVS Add Binary") :
+//                                      i18n("CVS Remove") );
 
     QFrame* mainWidget = makeMainWidget();
 

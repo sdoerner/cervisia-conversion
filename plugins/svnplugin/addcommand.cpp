@@ -20,6 +20,7 @@
 using Cervisia::AddCommand;
 
 #include <dcopref.h>
+#include <klocale.h>
 #include <addremovedlg.h>
 #include <svnservice_stub.h>
 
@@ -42,6 +43,7 @@ bool AddCommand::prepare()
 {
     // modal dialog
     AddRemoveDialog dlg(AddRemoveDialog::Add);
+    dlg.setCaption(i18n("SVN Add"));
     dlg.setFileList(m_fileList);
 
     if( dlg.exec() )

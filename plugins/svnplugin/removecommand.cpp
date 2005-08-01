@@ -20,6 +20,7 @@
 using Cervisia::RemoveCommand;
 
 #include <dcopref.h>
+#include <klocale.h>
 #include <addremovedlg.h>
 #include <svnservice_stub.h>
 
@@ -42,6 +43,7 @@ bool RemoveCommand::prepare()
 {
     // modal dialog
     AddRemoveDialog dlg(AddRemoveDialog::Remove);
+    dlg.setCaption(i18n("SVN Remove"));
     dlg.setFileList(m_fileList);
 
     if( dlg.exec() )
