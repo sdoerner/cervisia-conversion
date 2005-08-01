@@ -31,4 +31,10 @@ CommandBase::~CommandBase()
 {
 }
 
+
+void CommandBase::setAction(const ActionKind& action)
+{
+    m_action = action;
+}
+
 #include "commandbase.moc"

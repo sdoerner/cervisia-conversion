@@ -55,6 +55,9 @@ public:
      */
     virtual bool isErrorMessage(const QString& line) const = 0;
 
+protected:
+    void setAction(const ActionKind& action);
+
 signals:
     void jobExited(bool normalExit, int status);    //TODO: rename?
     void receivedStdout(const QString& buffer);
