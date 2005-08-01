@@ -1,6 +1,6 @@
-/* 
+/*
  *  Copyright (c) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
- *  Copyright (c) 2002-2004 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (c) 2002-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,6 +144,7 @@ void ProgressDialog::receivedOutput(const QString& line)
 
 void ProgressDialog::jobExited(bool normalExit, int status)
 {
+    Q_UNUSED(normalExit)
     Q_UNUSED(status)
 
     // don't expect the command to still exist
