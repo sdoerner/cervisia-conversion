@@ -24,12 +24,19 @@ using Cervisia::CvsUpdateParser;
 
 CvsUpdateParser::CvsUpdateParser()
     : UpdateParser()
+    , m_simulation(false)
 {
 }
 
 
 CvsUpdateParser::~CvsUpdateParser()
 {
+}
+
+
+void CvsUpdateParser::setSimulation(bool simulation)
+{
+    m_simulation = simulation;
 }
 
 
@@ -55,11 +62,10 @@ void CvsUpdateParser::parseLine(const QString& line)
             status = Cervisia::LocallyModified;
             break;
         case 'U':
-            status = Cervisia::Updated;
+            status = m_simulation ? Cervisia::NeedsUpdate : Cervisia::Updated;
             break;
         case 'P':
-            status = Cervisia::Patched;
-            break;
+            status = m_simulation ? Cervisia::NeedsPatch : Cervisia::Patched;
         case '?':
             status = Cervisia::NotInCVS;
             break;

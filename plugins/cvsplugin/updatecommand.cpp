@@ -23,14 +23,14 @@ using Cervisia::UpdateCommand;
 #include <klocale.h>
 
 #include <cvsservice_stub.h>
-#include <update_parser.h>
 
 #include "cvsplugin.h"
+#include "cvs_update_parser.h"
 
 #include <kdebug.h>
 
 
-UpdateCommand::UpdateCommand(const QStringList& files, UpdateParser* parser)
+UpdateCommand::UpdateCommand(const QStringList& files, CvsUpdateParser* parser)
     : CvsCommandBase(Update)
     , m_fileList(files)
     , m_parser(parser)
@@ -68,7 +68,8 @@ bool UpdateCommand::prepare()
                         false/*opt_createDirs*/, false/*opt_pruneDirs*/, m_option);
     connectToJob(jobRef);
 
-    kdDebug(8050) << "UpdateCommand::prepare(): connect parser to our signal" << endl;
+    // setup the update output parser
+    m_parser->setSimulation(m_simulation);
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_parser, SLOT(parseOutput(const QString&)));
 
