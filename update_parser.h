@@ -31,8 +31,18 @@ class UpdateParser : public OutputParser
 {
     Q_OBJECT
 
+public:
+    UpdateParser();
+    virtual ~UpdateParser();
+
+    bool isSimulation() const;
+    void setSimulation(bool simulation);
+
 signals:
     void updateItemStatus(const QString& filePath, Cervisia::EntryStatus status, bool isdir);
+
+private:
+    bool m_simulation;
 };
 
 

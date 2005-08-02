@@ -23,14 +23,14 @@ using Cervisia::UpdateCommand;
 #include <klocale.h>
 
 #include <cvsservice_stub.h>
+#include <update_parser.h>
 
 #include "cvsplugin.h"
-#include "cvs_update_parser.h"
 
 #include <kdebug.h>
 
 
-UpdateCommand::UpdateCommand(const QStringList& files, CvsUpdateParser* parser)
+UpdateCommand::UpdateCommand(const QStringList& files, UpdateParser* parser)
     : CvsCommandBase(Update)
     , m_fileList(files)
     , m_parser(parser)
@@ -47,6 +47,8 @@ UpdateCommand::~UpdateCommand()
 void UpdateCommand::setSimulation(bool simulation)
 {
     m_simulation = simulation;
+    if( m_simulation )
+        setAction(SimulateUpdate);
 }
 
 

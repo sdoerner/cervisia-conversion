@@ -26,13 +26,13 @@
 namespace Cervisia
 {
 
-class CvsUpdateParser;
+class UpdateParser;
 
 
 class UpdateCommand : public CvsCommandBase
 {
 public:
-    UpdateCommand(const QStringList& files, CvsUpdateParser* parser);
+    UpdateCommand(const QStringList& files, UpdateParser* parser);
     ~UpdateCommand();
 
     void setSimulation(bool simulation);
@@ -41,10 +41,10 @@ public:
     virtual bool prepare();
 
 private:
-    QStringList      m_fileList;
-    CvsUpdateParser* m_parser;
-    bool             m_simulation;
-    QString          m_option;
+    QStringList   m_fileList;
+    UpdateParser* m_parser;
+    bool          m_simulation;
+    QString       m_option;
 };
 
 

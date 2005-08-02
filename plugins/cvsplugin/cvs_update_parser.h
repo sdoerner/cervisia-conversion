@@ -32,12 +32,8 @@ public:
     CvsUpdateParser();
     ~CvsUpdateParser();
 
-    void setSimulation(bool simulation);
-
 private:
     virtual void parseLine(const QString& line);
-
-    bool m_simulation;
 };
 
 

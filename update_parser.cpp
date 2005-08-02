@@ -20,4 +20,26 @@
 using Cervisia::UpdateParser;
 
 
+UpdateParser::UpdateParser()
+    : m_simulation(false)
+{
+}
+
+
+UpdateParser::~UpdateParser()
+{
+}
+
+
+bool UpdateParser::isSimulation() const
+{
+    return m_simulation;
+}
+
+
+void UpdateParser::setSimulation(bool simulation)
+{
+    m_simulation = simulation;
+}
+
 #include "update_parser.moc"
