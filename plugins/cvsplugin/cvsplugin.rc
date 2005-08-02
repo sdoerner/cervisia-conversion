@@ -16,6 +16,7 @@
     <Menu name="view"><text>&amp;View</text>
         <Separator/>
         <Action name="view_log"/>
+        <Action name="view_annotate"/>
     </Menu>
     <Menu name="advanced"><text>&amp;Advanced</text>
         <Separator/>
@@ -23,7 +24,6 @@
         <Action name="remove_watch"/>
     </Menu>
 </MenuBar>
-<!--<ToolBar name="cvsToolBar" newline="false" fullWidth="false"><text>CVS Plugin Toolbar</text>-->
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
     <Action name="file_update"/>
     <Action name="file_status"/>

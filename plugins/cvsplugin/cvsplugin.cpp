@@ -38,6 +38,7 @@ using Cervisia::CvsPlugin;
 #include "cvs_update_parser.h"
 #include "addcommand.h"
 #include "addwatchcommand.h"
+#include "annotatecommand.h"
 #include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
@@ -252,6 +253,18 @@ void CvsPlugin::addWatch()
 }
 
 
+void CvsPlugin::annotate()
+{
+    kdDebug(8050) << "CvsPlugin::annotate()" << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new AnnotateCommand(fileName));
+}
+
+
 void CvsPlugin::commit()
 {
     kdDebug(8050) << "CvsPlugin::commit()" << endl;
@@ -429,6 +442,13 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( log() ),
                           actionCollection(), "view_log" );
     hint = i18n("Shows the revision tree of the selected file (cvs log)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Annotate..."), CTRL+Key_A,
+                          this, SLOT( annotate() ),
+                          actionCollection(), "view_annotate" );
+    hint = i18n("Shows a blame-annotated view of the selected file");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 

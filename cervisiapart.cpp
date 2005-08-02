@@ -290,12 +290,12 @@ void CervisiaPart::setupActions()
                           this, SLOT(slotBrowseMultiLog()),
                           actionCollection() );
 #endif
-    action = new KAction( i18n("&Annotate..."), CTRL+Key_A,
-                          this, SLOT(slotAnnotate()),
-                          actionCollection(), "view_annotate" );
-    hint = i18n("Shows a blame-annotated view of the selected file");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Annotate..."), CTRL+Key_A,
+//                           this, SLOT(slotAnnotate()),
+//                           actionCollection(), "view_annotate" );
+//     hint = i18n("Shows a blame-annotated view of the selected file");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("&Difference to Repository (BASE)..."), "vcs_diff", CTRL+Key_D,
                           this, SLOT(slotDiffBase()),
@@ -912,19 +912,19 @@ void CervisiaPart::slotBrowseMultiLog()
 #endif
 
 
-void CervisiaPart::slotAnnotate()
-{
-    QString filename;
-    update->getSingleSelection(&filename);
+// void CervisiaPart::slotAnnotate()
+// {
+//     QString filename;
+//     update->getSingleSelection(&filename);
+// 
+//     if (filename.isEmpty())
+//         return;
 
-    if (filename.isEmpty())
-        return;
-
-    // Non-modal dialog
-    AnnotateDialog* dlg = new AnnotateDialog(*config(), widget());
-    AnnotateController ctl(dlg, cvsService);
-    ctl.showDialog(filename);
-}
+//     // Non-modal dialog
+//     AnnotateDialog* dlg = new AnnotateDialog(*config(), widget());
+//     AnnotateController ctl(dlg, cvsService);
+//     ctl.showDialog(filename);
+// }
 
 
 void CervisiaPart::slotDiffBase()

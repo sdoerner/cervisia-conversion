@@ -60,6 +60,7 @@ private slots:
     void add();
     void addBinary();
     void addWatch();
+    void annotate();
     void commit();
     void log();
     void remove();
