@@ -29,6 +29,7 @@ namespace Cervisia
 {
 
 class SvnCommandBase;
+class SvnUpdateParser;
 
 
 class SvnPlugin : public PluginBase
@@ -51,7 +52,7 @@ public:
     virtual void syncWithEntries(const QString& path);
 
     virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
-    virtual UpdateParser* updateParser() const { return 0; }
+    virtual UpdateParser* updateParser() const;
 
     static SvnService_stub* svnService() { return m_svnService; }
 
@@ -70,6 +71,7 @@ private:
 
     SvnRepository_stub* m_svnRepository;
     static SvnService_stub* m_svnService;
+    static SvnUpdateParser* m_updateParser;
 };
 
 

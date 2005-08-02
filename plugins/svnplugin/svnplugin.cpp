@@ -40,7 +40,9 @@ using Cervisia::SvnPlugin;
 #include "addcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
+#include "updatecommand.h"
 #include "svnjob.h"
+#include "svn_update_parser.h"
 
 #include <kdebug.h>
 
@@ -50,6 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( libsvnplugin, SvnPluginFactory( "svnplugin" ) )
 
 
 SvnService_stub* SvnPlugin::m_svnService = 0;
+Cervisia::SvnUpdateParser* SvnPlugin::m_updateParser = 0;
 
 
 SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
@@ -205,6 +208,12 @@ Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& path) const
 }
 
 
+Cervisia::UpdateParser* SvnPlugin::updateParser() const
+{
+    return m_updateParser;
+}
+
+
 void SvnPlugin::add()
 {
     kdDebug(8050) << "SvnPlugin::add()" << endl;
@@ -292,19 +301,11 @@ void SvnPlugin::simulateUpdate()
     if( selectionList.isEmpty() )
         return;
 
-    kdDebug(8050) << "SvnPlugin::simulateUpdate(): add files " << selectionList << endl;
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setSimulation(true);
 
-//     DCOPRef cvsJob = cvsService->simulateUpdate(list, opt_updateRecursive);
-
-    DCOPRef jobRef = m_svnService->simulateUpdate(selectionList, false);
-    SvnJob_stub svnJob(jobRef);
-
-    m_currentJob = new SvnJob(jobRef, SvnJob::SimulateUpdate);
-//    m_currentJob->setRecursive(opt_updateRecursive);      //TODO: get configuration from part
-    emit jobPrepared(m_currentJob);
-
-    kdDebug(8050) << "SvnPlugin::simulateUpdate(): execute svn job" << endl;
-    svnJob.execute();
+    executeCommand(cmd);
 }
 
 
@@ -384,6 +385,7 @@ void SvnPlugin::startService()
         // create a reference to the service
         m_svnService = new SvnService_stub(appId, "SvnService");
         m_svnRepository = new SvnRepository_stub(appId, "SvnRepository");
+        m_updateParser = new SvnUpdateParser();
     }
 }
 
