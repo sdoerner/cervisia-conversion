@@ -29,19 +29,16 @@ using Cervisia::SvnPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#include <addremovedlg.h>
-#include <commitdlg.h>
 #include <selectionintf.h>
-#include <svnjob_stub.h>
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
 #include "globalignorelist.h"
 #include "addcommand.h"
+#include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "updatecommand.h"
-#include "svnjob.h"
 #include "svn_update_parser.h"
 
 #include <kdebug.h>
@@ -214,6 +211,11 @@ Cervisia::UpdateParser* SvnPlugin::updateParser() const
 }
 
 
+void SvnPlugin::annotate(const QString& fileName, const QString& revision)
+{
+}
+
+
 void SvnPlugin::add()
 {
     kdDebug(8050) << "SvnPlugin::add()" << endl;
@@ -226,7 +228,6 @@ void SvnPlugin::add()
 }
 
 
-// TODO: feature commit finished notification
 void SvnPlugin::commit()
 {
     kdDebug(8050) << "SvnPlugin::commit()" << endl;
@@ -235,37 +236,10 @@ void SvnPlugin::commit()
     if( selectionList.isEmpty() )
         return;
 
-    // modal dialog
-    CommitDialog dlg;
-//     dlg.setLogMessage(changelogstr);
-//     dlg.setLogHistory(recentCommits);
-    dlg.setFileList(selectionList);
+    CommitCommand* cmd = new CommitCommand(selectionList);
+//     cmd->setRecursive(opt_commitRecursive);
 
-    if( dlg.exec() )
-    {
-        QString msg = dlg.logMessage();
-//         if( !recentCommits.contains(msg) )
-//         {
-//             recentCommits.prepend(msg);
-//             while( recentCommits.count() > 50 )
-//                 recentCommits.remove(recentCommits.last());
-        //
-//             KConfig* conf = config();
-//             conf->setGroup("CommitLogs");
-//             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
-//         }
-
-//         DCOPRef jobRef = m_svnService->commit(selectionList, msg, opt_commitRecursive);
-        DCOPRef jobRef = m_svnService->commit(selectionList, msg, false);
-        SvnJob_stub svnJob(jobRef);
-
-        m_currentJob = new SvnJob(jobRef, SvnJob::Commit);
-//         m_currentJob->setRecursive(opt_commitRecursive);
-        emit jobPrepared(m_currentJob);
-
-        kdDebug(8050) << "SvnPlugin::commit(): execute svn job" << endl;
-        svnJob.execute();
-    }
+    executeCommand(cmd);
 }
 
 

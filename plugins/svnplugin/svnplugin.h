@@ -56,6 +56,9 @@ public:
 
     static SvnService_stub* svnService() { return m_svnService; }
 
+    virtual void annotate(const QString& fileName, 
+		          const QString& revision = QString::null);
+
 private slots:
     void add();
     void commit();

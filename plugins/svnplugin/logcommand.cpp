@@ -82,7 +82,7 @@ void LogCommand::showDialog()
         return;
 
     m_logDlg->setCaption(i18n("SVN Log: %1").arg(m_fileName));
-    m_logDlg->setLogInfos(m_parser->logInfos());
+    m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);
     m_logDlg->show();
 }
 

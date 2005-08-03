@@ -214,6 +214,12 @@ Cervisia::UpdateParser* CvsPlugin::updateParser() const
 }
 
 
+void CvsPlugin::annotate(const QString& fileName, const QString& revision)
+{
+    executeCommand(new AnnotateCommand(fileName, revision));	
+}
+
+
 void CvsPlugin::add()
 {
     kdDebug(8050) << "CvsPlugin::add()" << endl;

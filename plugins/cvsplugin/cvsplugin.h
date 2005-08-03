@@ -56,6 +56,9 @@ public:
 
     static CvsService_stub* cvsService() { return m_cvsService; }
 
+    virtual void annotate(const QString& fileName, 
+		          const QString& revision = QString::null);
+    
 private slots:
     void add();
     void addBinary();
