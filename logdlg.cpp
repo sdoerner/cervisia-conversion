@@ -44,13 +44,13 @@
 #include <kurl.h>
 
 #include "cvsservice_stub.h"
-#include "annotatedlg.h"
-#include "annotatectl.h"
 #include "diffdlg.h"
 #include "loglist.h"
 #include "logplainview.h"
 #include "logtree.h"
 #include "misc.h"
+#include "pluginbase.h"
+#include "pluginmanager.h"
 #include "progressdlg.h"
 #include "patchoptiondlg.h"
 
@@ -209,9 +209,11 @@ LogDialog::~LogDialog()
 }
 
 
-void LogDialog::setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos)
+void LogDialog::setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos,
+                            const QString& fileName)
 {
     m_logInfos = logInfos;
+    m_fileName = fileName;
 
     for( LogInfoConstIter it(m_logInfos.begin()), end(m_logInfos.end()); it != end; ++it )
     {
@@ -331,7 +333,7 @@ void LogDialog::findClicked()
 
 void LogDialog::diffClicked()
 {
-    if (selectionA.isEmpty())
+/*    if (selectionA.isEmpty())
     {
         KMessageBox::information(this,
             i18n("Please select revision A or revisions A and B first."),
@@ -344,15 +346,13 @@ void LogDialog::diffClicked()
     if (l->parseCvsDiff(cvsService, filename, selectionA, selectionB))
         l->show();
     else
-        delete l;
+        delete l;*/
 }
 
 
 void LogDialog::annotateClicked()
 {
-    AnnotateDialog *l = new AnnotateDialog(partConfig);
-    AnnotateController ctl(l, cvsService);
-    ctl.showDialog(filename, selectionA);
+    Cervisia::PluginManager::self()->currentPlugin()->annotate(m_fileName, selectionA);
 }
 
 

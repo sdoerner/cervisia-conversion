@@ -47,7 +47,8 @@ public:
     explicit LogDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
     virtual ~LogDialog();
 
-    void setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos);
+    void setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos,
+                     const QString& fileName);
 
 protected slots:
     void slotOk();
@@ -65,7 +66,7 @@ private slots:
 private:
     void tagSelected(const Cervisia::LogInfo& info, bool rmb);
 
-    QString filename;
+    QString                       m_fileName;
     QValueList<Cervisia::LogInfo> m_logInfos;
     QString selectionA;
     QString selectionB;
