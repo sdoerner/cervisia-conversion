@@ -23,6 +23,9 @@
         <Separator/>
         <Action name="add_watch"/>
         <Action name="remove_watch"/>
+        <Separator/>
+        <Action name="edit_files"/>
+        <Action name="unedit_files"/>
     </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>

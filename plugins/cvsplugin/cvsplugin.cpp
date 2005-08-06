@@ -40,6 +40,7 @@ using Cervisia::CvsPlugin;
 #include "addwatchcommand.h"
 #include "annotatecommand.h"
 #include "commitcommand.h"
+#include "editcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "removewatchcommand.h"
@@ -286,6 +287,18 @@ void CvsPlugin::commit()
 }
 
 
+void CvsPlugin::edit()
+{
+    kdDebug(8050) << "CvsPlugin::edit()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new EditCommand(selectionList, EditCommand::Edit));
+}
+
+
 void CvsPlugin::log()
 {
     kdDebug(8050) << "CvsPlugin::log()" << endl;
@@ -354,6 +367,18 @@ void CvsPlugin::simulateUpdate()
     cmd->setSimulation(true);
 
     executeCommand(cmd);
+}
+
+
+void CvsPlugin::unedit()
+{
+    kdDebug(8050) << "CvsPlugin::unedit()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new EditCommand(selectionList, EditCommand::Unedit));
 }
 
 
@@ -495,6 +520,20 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( removeWatch() ),
                           actionCollection(), "remove_watch" );
     hint = i18n("Removes a watch from the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("Ed&it Files"), 0,
+                          this, SLOT( edit() ),
+                          actionCollection(), "edit_files" );
+    hint = i18n("Edits the selected files (cvs edit)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("U&nedit Files"), 0,
+                          this, SLOT( unedit() ),
+                          actionCollection(), "unedit_files" );
+    hint = i18n("Unedits the selected files (cvs unedit)");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 }

@@ -31,7 +31,7 @@ class CommandBase : public QObject
     Q_OBJECT
 
 public:
-    enum ActionKind { Add, Remove, Update, SimulateUpdate, Commit, Other };
+    enum ActionKind { Add, Remove, Update, SimulateUpdate, Commit, Edit, Unedit, Other };
 
     CommandBase(const ActionKind& action);
     virtual ~CommandBase();

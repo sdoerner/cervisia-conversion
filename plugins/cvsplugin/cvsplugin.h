@@ -65,11 +65,13 @@ private slots:
     void addWatch();
     void annotate();
     void commit();
+    void edit();
     void log();
     void remove();
     void removeWatch();
     void revert();
     void simulateUpdate();
+    void unedit();
     void update();
     void updateToHead();
 
