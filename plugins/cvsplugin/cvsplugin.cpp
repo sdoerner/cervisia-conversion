@@ -372,6 +372,22 @@ void CvsPlugin::update()
 }
 
 
+void CvsPlugin::updateToHead()
+{
+    kdDebug(8050) << "CvsPlugin::updateToHead()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setExtraOption("-A");
+
+    executeCommand(cmd);
+}
+
+
 void CvsPlugin::executeCommand(CvsCommandBase* cmd)
 {
     if( cmd->prepare() )
@@ -461,6 +477,13 @@ void CvsPlugin::setupMenuActions()
     //
     // Advanced Menu
     //
+    action = new KAction( i18n("Update to &HEAD"), 0,
+                          this, SLOT( updateToHead() ),
+                          actionCollection(), "update_to_head" );
+    hint = i18n("Updates the selected files to the HEAD revision (cvs update -A)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
     action = new KAction( i18n("&Add Watch..."), 0,
                           this, SLOT( addWatch() ),
                           actionCollection(), "add_watch" );

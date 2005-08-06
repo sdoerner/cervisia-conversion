@@ -89,7 +89,7 @@ public slots:
 //     void slotUpdate();
     void slotChangeLog();
     void slotFileProperties();
-    void slotRevert();
+//     void slotRevert();
     //    void slotBrowseMultiLog();
 //     void slotAnnotate();
     void slotDiffBase();
@@ -103,7 +103,7 @@ public slots:
     void slotCreateTag();
     void slotDeleteTag();
     void slotUpdateToTag();
-    void slotUpdateToHead();
+//     void slotUpdateToHead();
     void slotMerge();
     void slotShowWatchers();
     void slotEdit();

@@ -364,12 +364,12 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("Update to &HEAD"), 0,
-                          this, SLOT(slotUpdateToHead()),
-                          actionCollection(), "update_to_head" );
-    hint = i18n("Updates the selected files to the HEAD revision");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("Update to &HEAD"), 0,
+//                           this, SLOT(slotUpdateToHead()),
+//                           actionCollection(), "update_to_head" );
+//     hint = i18n("Updates the selected files to the HEAD revision");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("&Merge..."), 0,
                           this, SLOT(slotMerge()),
@@ -814,16 +814,16 @@ void CervisiaPart::slotUpdateToTag()
 }
 
 
-void CervisiaPart::slotUpdateToHead()
-{
-    updateSandbox("-A");
-}
+// void CervisiaPart::slotUpdateToHead()
+// {
+//     updateSandbox("-A");
+// }
 
 
-void CervisiaPart::slotRevert()
-{
-    updateSandbox("-C");
-}
+// void CervisiaPart::slotRevert()
+// {
+//     updateSandbox("-C");
+// }
 
 
 void CervisiaPart::slotMerge()
