@@ -106,11 +106,11 @@ public slots:
 //     void slotUpdateToHead();
     void slotMerge();
     void slotShowWatchers();
-    void slotEdit();
-    void slotUnedit();
+//     void slotEdit();
+//     void slotUnedit();
     void slotShowEditors();
-    void slotLock();
-    void slotUnlock();
+//     void slotLock();
+//     void slotUnlock();
     void slotMakePatch();
     void slotCreateDirs();
     void slotPruneDirs();

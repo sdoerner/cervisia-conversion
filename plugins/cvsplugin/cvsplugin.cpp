@@ -41,6 +41,7 @@ using Cervisia::CvsPlugin;
 #include "annotatecommand.h"
 #include "commitcommand.h"
 #include "editcommand.h"
+#include "lockcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "removewatchcommand.h"
@@ -299,6 +300,18 @@ void CvsPlugin::edit()
 }
 
 
+void CvsPlugin::lock()
+{
+    kdDebug(8050) << "CvsPlugin::lock()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new LockCommand(selectionList, LockCommand::Lock));
+}
+
+
 void CvsPlugin::log()
 {
     kdDebug(8050) << "CvsPlugin::log()" << endl;
@@ -379,6 +392,18 @@ void CvsPlugin::unedit()
         return;
 
     executeCommand(new EditCommand(selectionList, EditCommand::Unedit));
+}
+
+
+void CvsPlugin::unlock()
+{
+    kdDebug(8050) << "CvsPlugin::unlock()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new LockCommand(selectionList, LockCommand::Unlock));
 }
 
 
@@ -534,6 +559,20 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( unedit() ),
                           actionCollection(), "unedit_files" );
     hint = i18n("Unedits the selected files (cvs unedit)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Lock Files"), 0,
+                          this, SLOT( lock() ),
+                          actionCollection(), "lock_files" );
+    hint = i18n("Locks the selected files, so that others cannot modify them");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("Unl&ock Files"), 0,
+                          this, SLOT( unlock() ),
+                          actionCollection(), "unlock_files" );
+    hint = i18n("Unlocks the selected files");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 }

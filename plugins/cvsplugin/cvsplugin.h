@@ -66,12 +66,14 @@ private slots:
     void annotate();
     void commit();
     void edit();
+    void lock();
     void log();
     void remove();
     void removeWatch();
     void revert();
     void simulateUpdate();
     void unedit();
+    void unlock();
     void update();
     void updateToHead();
 

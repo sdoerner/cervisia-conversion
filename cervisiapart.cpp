@@ -385,19 +385,19 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("Ed&it Files"), 0,
-                          this, SLOT(slotEdit()),
-                          actionCollection(), "edit_files" );
-    hint = i18n("Edits (cvs edit) the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("U&nedit Files"), 0,
-                          this, SLOT(slotUnedit()),
-                          actionCollection(), "unedit_files" );
-    hint = i18n("Unedits (cvs unedit) the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("Ed&it Files"), 0,
+//                           this, SLOT(slotEdit()),
+//                           actionCollection(), "edit_files" );
+//     hint = i18n("Edits (cvs edit) the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
+// 
+//     action = new KAction( i18n("U&nedit Files"), 0,
+//                           this, SLOT(slotUnedit()),
+//                           actionCollection(), "unedit_files" );
+//     hint = i18n("Unedits (cvs unedit) the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("Show &Editors"), 0,
                           this, SLOT(slotShowEditors()),
@@ -406,19 +406,19 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Lock Files"), 0,
-                          this, SLOT(slotLock()),
-                          actionCollection(), "lock_files" );
-    hint = i18n("Locks the selected files, so that others cannot modify them");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Lock Files"), 0,
+//                           this, SLOT(slotLock()),
+//                           actionCollection(), "lock_files" );
+//     hint = i18n("Locks the selected files, so that others cannot modify them");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("Unl&ock Files"), 0,
-                          this, SLOT(slotUnlock()),
-                          actionCollection(), "unlock_files" );
-    hint = i18n("Unlocks the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("Unl&ock Files"), 0,
+//                           this, SLOT(slotUnlock()),
+//                           actionCollection(), "unlock_files" );
+//     hint = i18n("Unlocks the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("Create &Patch Against Repository..."), 0,
                           this, SLOT(slotMakePatch()),
@@ -875,7 +875,7 @@ void CervisiaPart::updateSandbox(const QString &extraopt)
     if (list.isEmpty())
         return;
 
-    update->prepareJob(opt_updateRecursive, UpdateView::Update);
+//     update->prepareJob(opt_updateRecursive, UpdateView::Update);
 
     DCOPRef cvsJob = cvsService->update(list, opt_updateRecursive,
                         opt_createDirs, opt_pruneDirs, extraopt);
@@ -954,84 +954,84 @@ void CervisiaPart::slotShowWatchers()
 }
 
 
-void CervisiaPart::slotEdit()
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    DCOPRef cvsJob = cvsService->edit(list);
-
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
-
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
-}
-
-
-void CervisiaPart::slotUnedit()
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    DCOPRef cvsJob = cvsService->unedit(list);
-
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
-
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
-}
+// void CervisiaPart::slotEdit()
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
+//     DCOPRef cvsJob = cvsService->edit(list);
+// 
+//     // get command line from cvs job
+//     QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//     if( protocol->startJob() )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                  this,     SLOT(slotJobFinished()) );
+//     }
+// }
 
 
-void CervisiaPart::slotLock()
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
+// void CervisiaPart::slotUnedit()
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
+//     DCOPRef cvsJob = cvsService->unedit(list);
+// 
+//     // get command line from cvs job
+//     QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//     if( protocol->startJob() )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                  this,     SLOT(slotJobFinished()) );
+//     }
+// }
 
-    DCOPRef cvsJob = cvsService->lock(list);
 
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
+// void CervisiaPart::slotLock()
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
+//     DCOPRef cvsJob = cvsService->lock(list);
+// 
+//     // get command line from cvs job
+//     QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//     if( protocol->startJob() )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                  this,     SLOT(slotJobFinished()) );
+//     }
+// }
 
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
-}
 
-
-void CervisiaPart::slotUnlock()
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    DCOPRef cvsJob = cvsService->unlock(list);
-
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
-
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
-}
+// void CervisiaPart::slotUnlock()
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
+//     DCOPRef cvsJob = cvsService->unlock(list);
+// 
+//     // get command line from cvs job
+//     QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//     if( protocol->startJob() )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                  this,     SLOT(slotJobFinished()) );
+//     }
+// }
 
 
 void CervisiaPart::slotShowEditors()

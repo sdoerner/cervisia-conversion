@@ -26,6 +26,9 @@
         <Separator/>
         <Action name="edit_files"/>
         <Action name="unedit_files"/>
+        <Separator/>
+        <Action name="lock_files"/>
+        <Action name="unlock_files"/>
     </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
