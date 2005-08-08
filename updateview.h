@@ -27,9 +27,10 @@
 
 #include <qptrlist.h>
 
+#include "commandbase.h"
 #include "entry.h"
 
-namespace Cervisia { class CommandBase; }
+// namespace Cervisia { class CommandBase; }
 class KConfig;
 
 
@@ -41,7 +42,7 @@ public:
 
     enum Filter { NoFilter=0, OnlyDirectories=1, NoUpToDate=2,
                   NoRemoved=4, NoNotInCVS=8 , NoEmptyDirectories = 16 };
-    enum Action { Add, Remove, Update, UpdateNoAct, Commit };
+//    enum Action { Add, Remove, Update, UpdateNoAct, Commit };
     
     explicit UpdateView(KConfig& partConfig, QWidget *parent=0, const char *name=0);
 
@@ -59,7 +60,7 @@ public:
     QStringList fileSelection() const;
 
     void openDirectory(const QString& dirname);
-    void prepareJob(bool recursive, Action action);
+//    void prepareJob(bool recursive, Action action);
 
     const QColor& conflictColor() const;
     const QColor& localChangeColor() const;
@@ -98,8 +99,10 @@ private:
     KConfig& m_partConfig;
 
     Filter filt;
-    Action act;
+//    Action act;
     QPtrList<QListViewItem> relevantSelection;
+
+    Cervisia::CommandBase::ActionKind m_action;
 
     QColor m_conflictColor;
     QColor m_localChangeColor;

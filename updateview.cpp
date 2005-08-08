@@ -376,23 +376,32 @@ void UpdateView::openDirectory(const QString& dirName)
  * In the recursive case, we collect all relevant directories.
  * Furthermore, we have to change the items to undefined state.
  */
-void UpdateView::prepareJob(bool recursive, Action action)
-{
-    act = action;
-
-    // Scan recursively all entries - there's no way around this here
-    if (recursive)
-        static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
-
-    rememberSelection(recursive);
-    if (act != Add)
-        markUpdated(false, false);
-}
+// void UpdateView::prepareJob(bool recursive, Action action)
+// {
+//     act = action;
+// 
+//     // Scan recursively all entries - there's no way around this here
+//     if (recursive)
+//         static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
+// 
+//     rememberSelection(recursive);
+//     if (act != Add)
+//         markUpdated(false, false);
+// }
 
 
 void UpdateView::commandPrepared(Cervisia::CommandBase* cmd)
 {
-    act = (UpdateView::Action)cmd->action();    //FIXME: don't cast
+    using Cervisia::CommandBase;
+    
+    // not interesting for us?
+    m_action = cmd->action();
+    if( m_action != CommandBase::Add &&
+        m_action != CommandBase::Commit &&
+        m_action != CommandBase::Remove &&
+        m_action != CommandBase::SimulateUpdate &&
+        m_action != CommandBase::Update )
+        return;
 
     connect(cmd, SIGNAL(jobExited(bool, int)),
             this, SLOT(finishJob(bool, int)));
@@ -402,7 +411,7 @@ void UpdateView::commandPrepared(Cervisia::CommandBase* cmd)
        static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
 
     rememberSelection(cmd->isRecursive());
-    if (act != Add)
+    if( m_action != CommandBase::Add )
         markUpdated(false, false);
 }
 
@@ -415,19 +424,13 @@ void UpdateView::finishJob(bool normalExit, int exitStatus)
 {
     // cvs exitStatus == 1 only means that there're conflicts
     const bool success(normalExit && (exitStatus == 0 || exitStatus == 1));
-    if (act != Add)
+    if( m_action != Cervisia::CommandBase::Add )
         markUpdated(true, success);
     syncSelection();
 
     // maybe some new items were created or
     // visibility of items changed so check the whole tree
     setFilter(filter());
-
-    //FIXME: temporary HACK
-    if( act == UpdateNoAct )
-    {
-        disconnect(this, SLOT(processUpdateLine(const QString&)));
-    }
 }
 
 
