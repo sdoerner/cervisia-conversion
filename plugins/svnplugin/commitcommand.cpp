@@ -20,6 +20,7 @@
 using Cervisia::CommitCommand;
 
 #include <dcopref.h>
+#include <klocale.h>
 #include <commitdlg.h>
 #include <svnservice_stub.h>
 
@@ -43,13 +44,16 @@ bool CommitCommand::prepare()
 {
     // modal dialog
     CommitDialog dlg;
+    dlg.setCaption(i18n("SVN Commit"));
 //     dlg.setLogMessage(changelogstr);
 //     dlg.setLogHistory(recentCommits);
     dlg.setFileList(m_fileList);
 
-    if( dlg.exec() )
-    {
-        QString msg = dlg.logMessage();
+    // did the user cancel the dialog?
+    if( !dlg.exec() )
+        return false;
+    
+    QString msg = dlg.logMessage();
 //         if( !recentCommits.contains(msg) )
 //         {
 //             recentCommits.prepend(msg);
@@ -61,11 +65,8 @@ bool CommitCommand::prepare()
 //             conf->writeEntry(sandbox, recentCommits, COMMIT_SPLIT_CHAR);
 //         }
 
-        DCOPRef jobRef = SvnPlugin::svnService()->commit(m_fileList, msg, isRecursive());
-        connectToJob(jobRef);
+    DCOPRef jobRef = SvnPlugin::svnService()->commit(m_fileList, msg, isRecursive());
+    connectToJob(jobRef);
 
-        return true;
-    }
-
-    return false;
+    return true;
 }

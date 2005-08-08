@@ -38,7 +38,8 @@
 // CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
 //                            QWidget *parent, const char *name)
 CommitDialog::CommitDialog(QWidget* parent, const char* name)
-    : KDialogBase(parent, name, true, i18n("CVS Commit"),
+//     : KDialogBase(parent, name, true, i18n("CVS Commit"),
+    : KDialogBase(parent, name, true, QString::null,
                   Ok | Cancel | Help | User1, Ok, true)
     , m_partConfig(0)
 //     , partConfig(cfg)
