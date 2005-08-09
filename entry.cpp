@@ -26,7 +26,8 @@ namespace Cervisia
 
 Entry::Entry()
     : m_type(File),
-      m_status(Unknown)
+      m_status(Unknown),
+      m_binary(false)
 {
 }
 

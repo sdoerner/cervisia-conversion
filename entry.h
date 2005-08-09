@@ -76,6 +76,11 @@ struct Entry
      * The tag/branch of this entry.
      */
     QString m_tag;
+
+    /**
+     * Flag to mark entry has binary data.
+     */
+    bool m_binary;
 };
 
 
