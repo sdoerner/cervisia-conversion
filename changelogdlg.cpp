@@ -37,9 +37,6 @@ static inline QString DateStringISO8601()
 }
 
 
-ChangeLogDialog::Options *ChangeLogDialog::options = 0;
-
-
 ChangeLogDialog::ChangeLogDialog(KConfig& cfg, QWidget *parent, const char *name)
     : KDialogBase(parent, name, true, i18n("Edit ChangeLog"),
                   Ok | Cancel, Ok, true)

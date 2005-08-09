@@ -42,11 +42,6 @@ protected:
     virtual void slotOk();
 
 private:
-    struct Options {
-        QSize size;
-    };
-    static Options *options;
-
     QString fname;
     KTextEdit *edit;
     KConfig&   partConfig;
