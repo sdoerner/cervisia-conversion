@@ -1,6 +1,7 @@
 /* 
  * Copyright (C) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
  * Copyright (c) 2003-2005 André Wöbbeking <Woebbeking@web.de>
+ * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,22 +31,19 @@
 #include "commandbase.h"
 #include "entry.h"
 
-// namespace Cervisia { class CommandBase; }
 class KConfig;
 
 
 class UpdateView : public KListView, public Cervisia::SelectionIntf
 {
     Q_OBJECT
-    
+
 public:
 
     enum Filter { NoFilter=0, OnlyDirectories=1, NoUpToDate=2,
                   NoRemoved=4, NoNotInCVS=8 , NoEmptyDirectories = 16 };
-//    enum Action { Add, Remove, Update, UpdateNoAct, Commit };
-    
-    explicit UpdateView(KConfig& partConfig, QWidget *parent=0, const char *name=0);
 
+    explicit UpdateView(KConfig& partConfig, QWidget *parent=0, const char *name=0);
     virtual ~UpdateView();
 
     void setFilter(Filter filter);
@@ -60,7 +58,6 @@ public:
     QStringList fileSelection() const;
 
     void openDirectory(const QString& dirname);
-//    void prepareJob(bool recursive, Action action);
 
     const QColor& conflictColor() const;
     const QColor& localChangeColor() const;
@@ -74,22 +71,19 @@ public:
 
 signals:
     void fileOpened(QString filename);
-    
+
 public slots:
     void unfoldSelectedFolders();
     void unfoldTree();
     void foldTree();
-//    void prepareJob(bool recursive, ActionKind action);
     void commandPrepared(Cervisia::CommandBase* cmd);
     void finishJob(bool normalExit, int exitStatus);
-//     void processUpdateLine(const QString& line);
     void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
 
 private slots:
     void itemExecuted(QListViewItem *item);
     
 private:
-//     void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
     void rememberSelection(bool recursive);
     void syncSelection();
     void markUpdated(bool laststage, bool success);
@@ -99,7 +93,6 @@ private:
     KConfig& m_partConfig;
 
     Filter filt;
-//    Action act;
     QPtrList<QListViewItem> relevantSelection;
 
     Cervisia::CommandBase::ActionKind m_action;

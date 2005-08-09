@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
  * Copyright (c) 2003-2005 André Wöbbeking <Woebbeking@web.de>
+ * Copyright (c) 2003-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 
 #include "updateview.h"
 
@@ -376,24 +376,10 @@ void UpdateView::openDirectory(const QString& dirName)
  * In the recursive case, we collect all relevant directories.
  * Furthermore, we have to change the items to undefined state.
  */
-// void UpdateView::prepareJob(bool recursive, Action action)
-// {
-//     act = action;
-// 
-//     // Scan recursively all entries - there's no way around this here
-//     if (recursive)
-//         static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
-// 
-//     rememberSelection(recursive);
-//     if (act != Add)
-//         markUpdated(false, false);
-// }
-
-
 void UpdateView::commandPrepared(Cervisia::CommandBase* cmd)
 {
     using Cervisia::CommandBase;
-    
+
     // not interesting for us?
     m_action = cmd->action();
     if( m_action != CommandBase::Add &&
@@ -464,7 +450,7 @@ void UpdateView::markUpdated(bool laststage, bool success)
 
 
 /**
- * Remember the selection, see prepareJob()
+ * Remember the selection, see commandPrepared()
  */
 void UpdateView::rememberSelection(bool recursive)
 {
@@ -577,61 +563,6 @@ void UpdateView::updateColors()
 
     m_notInCvsColor = CervisiaSettings::notInCvsColor();
 }
-
-
-/**
- * Process one line from the output of 'cvs update'. If parseAsStatus
- * is true, it is assumed that the output is from a command
- * 'cvs update -n', i.e. cvs actually changes no files.
- */
-// void UpdateView::processUpdateLine(const QString& str)
-// {
-//     kdDebug(8050) << "UpdateView::processUpdateLine(): str = " << str << endl;
-//     if (str.length() > 2 && str[1] == ' ')
-//     {
-//         EntryStatus status(Cervisia::Unknown);
-//         switch (str[0].latin1())
-//         {
-//         case 'C':
-//             status = Cervisia::Conflict;
-//             break;
-//         case 'A':
-//             status = Cervisia::LocallyAdded;
-//             break;
-//         case 'R':
-//             status = Cervisia::LocallyRemoved;
-//             break;
-//         case 'M':
-//             status = Cervisia::LocallyModified;
-//             break;
-//         case 'U':
-//             status = (act == UpdateNoAct) ? Cervisia::NeedsUpdate : Cervisia::Updated;
-//             break;
-//         case 'P':
-//             status = (act == UpdateNoAct) ? Cervisia::NeedsPatch : Cervisia::Patched;
-//             break;
-//         case '?':
-//             status = Cervisia::NotInCVS;
-//             break;
-//         default:
-//             return;
-//         }
-// //        updateItem(str.mid(2), status, false);
-//         updateItem(str.mid(2).stripWhiteSpace(), status, false);
-//     }
-// 
-//     const QString removedFileStart(QString::fromLatin1("cvs server: "));
-//     const QString removedFileEnd(QString::fromLatin1(" is no longer in the repository"));
-//     if (str.startsWith(removedFileStart) && str.endsWith(removedFileEnd))
-//     {
-//     }
-// 
-// #if 0
-//     else if (str.left(21) == "cvs server: Updating " ||
-//              str.left(21) == "cvs update: Updating ")
-//         updateItem(str.right(str.length()-21), Unknown, true);
-// #endif
-// }
 
 
 void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool isdir)
