@@ -157,6 +157,8 @@ struct LogInfo
 };
 
 
+typedef QValueList<LogInfo> LogInfoList;
+
 } // namespace Cervisia
 
 

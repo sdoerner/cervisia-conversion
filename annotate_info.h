@@ -48,6 +48,8 @@ struct AnnotateInfo
 };
 
 
+typedef QValueList<AnnotateInfo> AnnotateInfoList;
+
 } // namespace Cervisia
 
 
