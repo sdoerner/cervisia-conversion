@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #ifndef CERVISIA_SVNPLUGIN_H
@@ -56,8 +56,8 @@ public:
 
     static SvnService_stub* svnService() { return m_svnService; }
 
-    virtual void annotate(const QString& fileName, 
-		          const QString& revision = QString::null);
+    virtual void annotate(const QString& fileName,
+                          const QString& revision = QString::null);
 
 private slots:
     void add();

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #include "svnplugin.h"
@@ -54,7 +54,6 @@ Cervisia::SvnUpdateParser* SvnPlugin::m_updateParser = 0;
 
 SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
-//     , m_svnService(0)
     , m_svnRepository(0)
 {
     kdDebug(8050) << "SvnPlugin::SvnPlugin()" << endl;
@@ -133,6 +132,8 @@ void SvnPlugin::syncWithEntries(const QString& path)
         return;
 
     QDomDocument doc;
+
+    // FIXME: retrieve error message from setContent() method
     if( !doc.setContent(&f) )
     {
         f.close();
@@ -148,7 +149,7 @@ void SvnPlugin::syncWithEntries(const QString& path)
         if( node.isElement() )
         {
             QDomElement e = node.toElement();
-            kdDebug(8050) << "SvnPlugin::syncWithEntries(): e = " << e.tagName() << endl;
+//            kdDebug(8050) << "SvnPlugin::syncWithEntries(): e = " << e.tagName() << endl;
 
             if( e.tagName() == "entry" )
             {
