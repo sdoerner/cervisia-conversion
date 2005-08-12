@@ -35,6 +35,7 @@ using Cervisia::SvnPlugin;
 
 #include "globalignorelist.h"
 #include "addcommand.h"
+#include "annotatecommand.h"
 #include "commitcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
@@ -229,6 +230,18 @@ void SvnPlugin::add()
 }
 
 
+void SvnPlugin::annotate()
+{
+    kdDebug(8050) << "CvsPlugin::annotate()" << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new AnnotateCommand(fileName));
+}
+
+
 void SvnPlugin::commit()
 {
     kdDebug(8050) << "SvnPlugin::commit()" << endl;
@@ -341,6 +354,13 @@ void SvnPlugin::setupMenuActions()
     hint = i18n("Shows the revision tree of the selected file (svn log)");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
+
+    action = new KAction( i18n("&Annotate..."), CTRL+Key_A,
+                          this, SLOT( annotate() ),
+                          actionCollection(), "view_annotate" );
+    hint = i18n("Shows a blame-annotated view of the selected file");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
 }
 
 

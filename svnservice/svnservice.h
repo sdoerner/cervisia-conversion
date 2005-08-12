@@ -42,6 +42,17 @@ k_dcop:
     DCOPRef add(const QStringList& files);
 
     /**
+     * Shows information on who last modified each line of a file and when.
+     *
+     * @param fileName the name of the file to show annotations for
+     * @param revision show annotations for this revision (number or tag)
+     *
+     * @return A DCOP reference to the svn job or in case of failure a
+     *         null reference.
+     */
+    DCOPRef annotate(const QString& fileName, const QString& revision);
+
+    /**
      */
     DCOPRef commit(const QStringList& files, const QString& commitMessage,
                    bool recursive);

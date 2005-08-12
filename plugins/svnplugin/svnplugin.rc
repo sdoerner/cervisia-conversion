@@ -12,6 +12,7 @@
     <Menu name="view"><text>&amp;View</text>
         <Separator/>
         <Action name="view_log"/>
+        <Action name="view_annotate"/>
     </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>

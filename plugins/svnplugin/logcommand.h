@@ -21,6 +21,8 @@
 
 #include <svncommandbase.h>
 
+#include <loginfo.h>
+
 class LogDialog;
 
 
@@ -38,6 +40,9 @@ public:
     LogCommand(const QString& fileName);
     ~LogCommand();
 
+    void setBatchMode(bool batchMode);
+    const LogInfoList& logInfos() const;
+
     virtual bool prepare();
     virtual void execute();
 
@@ -48,6 +53,7 @@ private:
     QString       m_fileName;
     SvnLogParser* m_parser;
     LogDialog*    m_logDlg;
+    bool          m_batchMode;
 };
 
 

@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libsvnplugin.la
 
 libsvnplugin_la_SOURCES = svnplugin.cpp svnjob.cpp globalignorelist.cpp \
                           svncommandbase.cpp svncommandbase.skel addcommand.cpp \
-                          commitcommand.cpp logcommand.cpp removecommand.cpp \
+                          annotatecommand.cpp commitcommand.cpp logcommand.cpp removecommand.cpp \
                           updatecommand.cpp svn_annotate_parser.cpp svn_log_parser.cpp \
                           svn_update_parser.cpp
 #libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(top_builddir)/cervisia/libcervisia.la

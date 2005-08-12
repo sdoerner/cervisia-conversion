@@ -17,19 +17,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
 #include "annotatedlg.h"
 
 #include "annotateview.h"
 
 
-AnnotateDialog::AnnotateDialog(KConfig& cfg, QWidget *parent, const char *name)
+AnnotateDialog::AnnotateDialog(KConfig& cfg, QWidget* parent, const char* name)
     : KDialogBase(parent, name, false, QString::null,
                   Close | Help, Close, true)
     , partConfig(cfg)
 {
-    annotate = new AnnotateView(partConfig, this);
-    setMainWidget(annotate);
+    m_view = new AnnotateView(partConfig, this);
+    setMainWidget(m_view);
 
     setHelp("annotate");
 
@@ -46,10 +45,50 @@ AnnotateDialog::~AnnotateDialog()
 }
 
 
-void AnnotateDialog::addLine(const Cervisia::LogInfo& logInfo,
-                             const QString& content, bool odd)
+void AnnotateDialog::setAnnotateInfos(const Cervisia::LogInfoList& logInfos,
+                                      const Cervisia::AnnotateInfoList& annotateInfos)
 {
-    annotate->addLine(logInfo, content, odd);
+    using namespace Cervisia;
+
+    setupLogInfoMap(logInfos);
+
+    bool odd = false;
+    QString oldRevision = "";
+
+    AnnotateInfoList::ConstIterator it  = annotateInfos.begin();
+    AnnotateInfoList::ConstIterator end = annotateInfos.end();
+    for( ; it != end; ++it )
+    {
+        // retrieve log information for current revision
+        Cervisia::LogInfo logInfo = m_logInfoMap[(*it).m_revision];
+
+        // revision changed?
+        if( logInfo.m_revision != oldRevision )
+        {
+            oldRevision = logInfo.m_revision;
+            odd = !odd;
+        }
+        else
+        {
+            logInfo.m_author = QString::null;
+            logInfo.m_revision = QString::null;
+        }
+
+        m_view->addLine(logInfo, (*it).m_line, odd);
+    }
+}
+
+
+void AnnotateDialog::setupLogInfoMap(const Cervisia::LogInfoList& logInfos)
+{
+    using Cervisia::LogInfoList;
+
+    LogInfoList::ConstIterator it  = logInfos.begin();
+    LogInfoList::ConstIterator end = logInfos.end();
+    for( ; it != end; ++it )
+    {
+        m_logInfoMap.insert((*it).m_revision, *it);
+    }
 }
 
 

@@ -22,26 +22,28 @@ using Cervisia::AnnotateCommand;
 #include <dcopref.h>
 #include <klocale.h>
 
+#include <loginfo.h>
 #include <annotatedlg.h>
 #include <progressdlg.h>
-#include <cvsservice_stub.h>
+#include <svnservice_stub.h>
 #include <cervisiasettings.h>
 
-#include "cvsplugin.h"
-#include "cvs_annotate_parser.h"
-#include "cvs_log_parser.h"
+#include "logcommand.h"
+#include "svnplugin.h"
+#include "svn_annotate_parser.h"
 
 
 AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revision)
-    : CvsCommandBase(Other)
+    : SvnCommandBase(Other)
     , m_fileName(fileName)
     , m_revision(revision)
-    , m_annotateParser(new CvsAnnotateParser())
-    , m_logParser(new CvsLogParser())
+    , m_annotateParser(new SvnAnnotateParser())
     , m_annotateDlg(0)
+    , m_logCmd(new Cervisia::LogCommand(fileName))
+    , m_logDone(false)
+    , m_annotateDone(false)
 {
-    m_errorId1 = "cvs annotate:";
-    m_errorId2 = "cvs [annotate aborted]:";
+    m_logCmd->setBatchMode(true);
 }
 
 
@@ -52,16 +54,20 @@ AnnotateCommand::~AnnotateCommand()
 
 bool AnnotateCommand::prepare()
 {
-    DCOPRef jobRef = CvsPlugin::cvsService()->annotate(m_fileName, m_revision);
+    connect(m_logCmd, SIGNAL(jobExited(bool, int)),
+            this, SLOT(logProcessExited()));
+
+    if( m_logCmd->prepare() )
+        m_logCmd->execute();
+
+    DCOPRef jobRef = SvnPlugin::svnService()->annotate(m_fileName, m_revision);
     connectToJob(jobRef);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_annotateParser, SLOT(parseOutput(const QString&)));
-    connect(this, SIGNAL(receivedStdout(const QString&)),
-            m_logParser, SLOT(parseOutput(const QString&)));
 
     connect(this, SIGNAL(jobExited(bool, int)),
-            this, SLOT(showDialog()));
+            this, SLOT(annotateProcessExited()));
 
     KConfig* partConfig = CervisiaSettings::self()->config();
     m_annotateDlg = new AnnotateDialog(*partConfig);
@@ -72,21 +78,43 @@ bool AnnotateCommand::prepare()
 
 void AnnotateCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, "Annotate", i18n("CVS Annotate"));
+    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, "Annotate", i18n("SVN Annotate"));
     dlg->execute(this);
 
-    CvsCommandBase::execute();
+    SvnCommandBase::execute();
+}
+
+
+void AnnotateCommand::logProcessExited()
+{
+    m_logDone = true;
+
+    m_logInfos = m_logCmd->logInfos();
+
+    if( m_logDone && m_annotateDone )
+        showDialog();
+}
+
+
+void AnnotateCommand::annotateProcessExited()
+{
+    m_annotateDone = true;
+
+    if( m_logDone && m_annotateDone )
+        showDialog();
 }
 
 
 void AnnotateCommand::showDialog()
 {
+    kdDebug(8050) << "AnnotateCommand::showDialog()" << endl;
+
     // error occurred or process was canceled
     if( m_errorOccurred )
         return;
 
-    m_annotateDlg->setCaption(i18n("CVS Annotate: %1").arg(m_fileName));
-    m_annotateDlg->setAnnotateInfos(m_logParser->logInfos(),
+    m_annotateDlg->setCaption(i18n("SVN Annotate: %1").arg(m_fileName));
+    m_annotateDlg->setAnnotateInfos(m_logInfos,
                                     m_annotateParser->annotateInfos());
     m_annotateDlg->show();
 }

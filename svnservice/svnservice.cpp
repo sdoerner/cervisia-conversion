@@ -123,6 +123,26 @@ DCOPRef SvnService::add(const QStringList& files)
 }
 
 
+DCOPRef SvnService::annotate(const QString& fileName, const QString& revision)
+{
+    if( !d->hasWorkingCopy() )
+        return DCOPRef();
+
+    // create a svn job
+    SvnJob* job = d->createSvnJob();
+
+    // assemble the command line
+    // svn annotate [FILE] [-r REVISION]
+    *job << d->repository->svnClient() << "annotate" << KProcess::quote(fileName);
+
+    if( !revision.isEmpty() )
+        *job << "-r" << revision;
+
+    // return a DCOP reference to the svn job
+    return DCOPRef(d->appId, job->objId());
+}
+
+
 DCOPRef SvnService::commit(const QStringList& files, const QString& commitMessage,
                            bool recursive)
 {

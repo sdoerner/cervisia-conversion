@@ -61,6 +61,7 @@ public:
 
 private slots:
     void add();
+    void annotate();
     void commit();
     void log();
     void remove();

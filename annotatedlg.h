@@ -17,39 +17,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
 #ifndef ANNOTATEDLG_H
 #define ANNOTATEDLG_H
 
-
 #include <kdialogbase.h>
 
+#include <qmap.h>
+
+#include "annotate_info.h"
+#include "loginfo.h"
 
 class AnnotateView;
-class QDate;
 class KConfig;
-
-namespace Cervisia
-{
-struct LogInfo;
-}
 
 
 class AnnotateDialog : public KDialogBase
 {
 public:
-
-    explicit AnnotateDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
-
+    explicit AnnotateDialog(KConfig& cfg, QWidget* parent=0, const char* name=0);
     virtual ~AnnotateDialog();
 
-    void addLine(const Cervisia::LogInfo& logInfo, const QString& content,
-                 bool odd);
+    void setAnnotateInfos(const Cervisia::LogInfoList& logInfos,
+                          const Cervisia::AnnotateInfoList& annotateInfos);
 
 private:
-    AnnotateView *annotate;
+    void setupLogInfoMap(const Cervisia::LogInfoList& logInfos);
+
+    AnnotateView* m_view;
     KConfig&      partConfig;
+
+    QMap<QString, Cervisia::LogInfo> m_logInfoMap;
 };
+
 
 #endif
 

@@ -33,6 +33,11 @@ CvsUpdateParser::~CvsUpdateParser()
 }
 
 
+/**
+ * Process one line from the output of 'cvs update'. If isSimulation()
+ * is true, it is assumed that the output is from a command
+ * 'cvs update -n', i.e. cvs actually changes no files.
+ */
 void CvsUpdateParser::parseLine(const QString& line)
 {
     kdDebug(8050) << "CvsUpdateParser::parseLine(): line = " << line << endl;

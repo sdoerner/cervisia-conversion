@@ -30,12 +30,15 @@ using Cervisia::LogCommand;
 #include "svnplugin.h"
 #include "svn_log_parser.h"
 
+#include <kdebug.h>
+
 
 LogCommand::LogCommand(const QString& fileName)
     : SvnCommandBase(Other)
     , m_fileName(fileName)
     , m_parser(new SvnLogParser())
     , m_logDlg(0)
+    , m_batchMode(false)
 {
 //     m_errorId1 = "cvs log:";
 //     m_errorId2 = "cvs [log aborted]:";
@@ -47,6 +50,18 @@ LogCommand::~LogCommand()
 }
 
 
+void LogCommand::setBatchMode(bool batchMode)
+{
+    m_batchMode = batchMode;
+}
+
+
+const Cervisia::LogInfoList& LogCommand::logInfos() const
+{
+    return m_parser->logInfos();
+}
+
+
 bool LogCommand::prepare()
 {
     DCOPRef jobRef = SvnPlugin::svnService()->log(m_fileName);
@@ -55,12 +70,14 @@ bool LogCommand::prepare()
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_parser, SLOT(parseOutput(const QString&)));
 
-    connect(this, SIGNAL(jobExited(bool, int)),
-            this, SLOT(showDialog()));
+    if( !m_batchMode )
+    {
+        connect(this, SIGNAL(jobExited(bool, int)),
+                this, SLOT(showDialog()));
 
-    KConfig* partConfig = CervisiaSettings::self()->config();
-
-    m_logDlg = new LogDialog(*partConfig);
+        KConfig* partConfig = CervisiaSettings::self()->config();
+        m_logDlg = new LogDialog(*partConfig);
+    }
 
     return true;
 }

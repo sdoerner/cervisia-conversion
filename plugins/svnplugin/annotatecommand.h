@@ -19,10 +19,9 @@
 #ifndef CERVISIA_ANNOTATECOMMAND_H
 #define CERVISIA_ANNOTATECOMMAND_H
 
-#include <cvscommandbase.h>
+#include <svncommandbase.h>
 
-#include <qmap.h>
-// #include <loginfo.h>
+#include <loginfo.h>
 
 class AnnotateDialog;
 
@@ -30,11 +29,11 @@ class AnnotateDialog;
 namespace Cervisia
 {
 
-class CvsAnnotateParser;
-class CvsLogParser;
+class SvnAnnotateParser;
+class LogCommand;
 
 
-class AnnotateCommand : public CvsCommandBase
+class AnnotateCommand : public SvnCommandBase
 {
     Q_OBJECT
 
@@ -46,14 +45,19 @@ public:
     virtual void execute();
 
 private slots:
-    void showDialog();
+    void logProcessExited();
+    void annotateProcessExited();
 
 private:
+    void showDialog();
+
     QString            m_fileName;
     QString            m_revision;
-    CvsAnnotateParser* m_annotateParser;
-    CvsLogParser*      m_logParser;
+    SvnAnnotateParser* m_annotateParser;
     AnnotateDialog*    m_annotateDlg;
+    LogCommand*        m_logCmd;
+    bool               m_logDone, m_annotateDone;
+    LogInfoList        m_logInfos;
 };
 
 
