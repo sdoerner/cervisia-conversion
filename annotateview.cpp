@@ -192,7 +192,7 @@ void AnnotateView::slotQueryToolTip(const QPoint& viewportPos,
         if ((column == AnnotateViewItem::AuthorColumn) && !item->m_logInfo.m_author.isNull())
         {
             viewportRect = itemRect(item);
-            text = item->m_logInfo.createToolTipText(false);
+            text = item->m_logInfo.createToolTipText();
         }
     }
 }

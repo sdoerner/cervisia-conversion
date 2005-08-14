@@ -69,14 +69,14 @@ QString TagInfo::typeToString() const
 }
 
 
-QString LogInfo::createToolTipText(bool showTime) const
+QString LogInfo::createToolTipText() const
 {
     QString text(QString::fromLatin1("<nobr><b>"));
     text += QStyleSheet::escape(m_revision);
     text += QString::fromLatin1("</b>&nbsp;&nbsp;");
     text += QStyleSheet::escape(m_author);
     text += QString::fromLatin1("&nbsp;&nbsp;<b>");
-    text += QStyleSheet::escape(dateTimeToString(showTime));
+    text += QStyleSheet::escape(dateTimeToString());
     text += QString::fromLatin1("</b></nobr>");
 
     if (!m_comment.isEmpty())
@@ -103,12 +103,9 @@ QString LogInfo::createToolTipText(bool showTime) const
 }
 
 
-QString LogInfo::dateTimeToString(bool showTime, bool shortFormat) const
+QString LogInfo::dateTimeToString(bool shortFormat) const
 {
-    if( showTime )
-        return KGlobal::locale()->formatDateTime(m_dateTime, shortFormat);
-    else
-        return KGlobal::locale()->formatDate(m_dateTime.date(), shortFormat);
+    return KGlobal::locale()->formatDateTime(m_dateTime, shortFormat);
 }
 
 
