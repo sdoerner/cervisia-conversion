@@ -35,7 +35,7 @@ class SvnLogParser : public LogParser
 {
 public:
 
-    SvnLogParser();
+    explicit SvnLogParser(QObject* parent = 0);
 
 private:
 

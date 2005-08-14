@@ -24,6 +24,12 @@ namespace Cervisia
 {
 
 
+OutputParser::OutputParser(QObject* parent, const char* name)
+    : QObject(parent, name)
+{
+}
+
+
 void OutputParser::parseOutput(const QString& output)
 {
     const QString text(restOutput.isEmpty() ? output : restOutput + output);

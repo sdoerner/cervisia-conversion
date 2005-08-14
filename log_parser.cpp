@@ -24,6 +24,12 @@ namespace Cervisia
 {
 
 
+LogParser::LogParser(QObject* parent, const char* name)
+    : OutputParser(parent, name)
+{
+}
+
+
 const LogParser::TLogInfoSeq& LogParser::logInfos() const
 {
     return m_logInfos;

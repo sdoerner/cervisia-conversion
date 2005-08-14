@@ -36,7 +36,7 @@ using Cervisia::LogCommand;
 LogCommand::LogCommand(const QString& fileName)
     : SvnCommandBase(Other)
     , m_fileName(fileName)
-    , m_parser(new SvnLogParser())
+    , m_parser(new SvnLogParser(this))
     , m_logDlg(0)
     , m_batchMode(false)
 {

@@ -35,7 +35,7 @@ class CvsLogParser : public LogParser
 {
 public:
 
-    CvsLogParser();
+    explicit CvsLogParser(QObject* parent = 0);
 
 private:
 

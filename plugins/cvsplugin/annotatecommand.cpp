@@ -36,8 +36,8 @@ AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revisio
     : CvsCommandBase(Other)
     , m_fileName(fileName)
     , m_revision(revision)
-    , m_annotateParser(new CvsAnnotateParser())
-    , m_logParser(new CvsLogParser())
+    , m_annotateParser(new CvsAnnotateParser(this))
+    , m_logParser(new CvsLogParser(this))
     , m_annotateDlg(0)
 {
     m_errorId1 = "cvs annotate:";

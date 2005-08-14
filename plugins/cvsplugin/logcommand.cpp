@@ -34,7 +34,7 @@ using Cervisia::LogCommand;
 LogCommand::LogCommand(const QString& fileName)
     : CvsCommandBase(Other)
     , m_fileName(fileName)
-    , m_parser(new CvsLogParser())
+    , m_parser(new CvsLogParser(this))
     , m_logDlg(0)
 {
     m_errorId1 = "cvs log:";

@@ -24,6 +24,12 @@ namespace Cervisia
 {
 
 
+AnnotateParser::AnnotateParser(QObject* parent, const char* name)
+    : OutputParser(parent, name)
+{
+}
+
+
 const AnnotateParser::TAnnotateInfoSeq& AnnotateParser::annotateInfos() const
 {
     return m_annotateInfos;

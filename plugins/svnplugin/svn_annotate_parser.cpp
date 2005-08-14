@@ -24,7 +24,8 @@ namespace Cervisia
 {
 
 
-SvnAnnotateParser::SvnAnnotateParser()
+SvnAnnotateParser::SvnAnnotateParser(QObject* parent)
+    : AnnotateParser(parent, "SvnAnnotateParser")
 {
 }
 

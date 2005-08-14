@@ -28,8 +28,9 @@ namespace Cervisia
 {
 
 
-SvnLogParser::SvnLogParser()
-    : m_state(Begin)
+SvnLogParser::SvnLogParser(QObject* parent)
+    : LogParser(parent, "SvnLogParser"),
+      m_state(Begin)
 {
 }
 

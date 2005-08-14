@@ -35,6 +35,10 @@ class OutputParser : public QObject
 {
     Q_OBJECT
 
+public:
+
+    explicit OutputParser(QObject* parent = 0, const char* name = 0);
+
 public slots:
 
     /**

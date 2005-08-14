@@ -44,6 +44,8 @@ public:
 
 
 
+    explicit LogParser(QObject* parent = 0, const char* name = 0);
+
     /**
      * @return The list of parsed LogInfos.
      */

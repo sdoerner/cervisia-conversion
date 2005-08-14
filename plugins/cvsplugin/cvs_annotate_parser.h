@@ -35,7 +35,7 @@ class CvsAnnotateParser : public AnnotateParser
 {
 public:
 
-    CvsAnnotateParser();
+    explicit CvsAnnotateParser(QObject* parent = 0);
 
 private:
 

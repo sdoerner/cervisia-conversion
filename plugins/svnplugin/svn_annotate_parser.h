@@ -35,7 +35,7 @@ class SvnAnnotateParser : public AnnotateParser
 {
 public:
 
-    SvnAnnotateParser();
+    explicit SvnAnnotateParser(QObject* parent = 0);
 
 private:
 

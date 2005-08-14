@@ -24,8 +24,9 @@ namespace Cervisia
 {
 
 
-CvsAnnotateParser::CvsAnnotateParser()
-    : m_state(Begin)
+CvsAnnotateParser::CvsAnnotateParser(QObject* parent)
+    : AnnotateParser(parent, "CvsAnnotateParser"),
+      m_state(Begin)
 {
 }
 
