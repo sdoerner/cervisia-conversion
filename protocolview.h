@@ -24,7 +24,7 @@
 
 #include <qtextedit.h>
 
-namespace Cervisia { class PluginJobBase; }
+// namespace Cervisia { class PluginJobBase; }
 namespace Cervisia { class CommandBase; }
 class QPoint;
 class QPopupMenu;
@@ -52,7 +52,7 @@ signals:                                            //TODO: remove later
 private slots:
     void receivedOutput(const QString& buffer);     //TODO: remove later
     void appendLine(const QString &line);
-    void prepareJob(Cervisia::PluginJobBase* job);
+//     void prepareJob(Cervisia::PluginJobBase* job);
     void commandPrepared(Cervisia::CommandBase* cmd);
     void jobExited(bool normalExit, int exitStatus);
     void cancelJob();

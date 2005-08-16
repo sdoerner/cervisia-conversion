@@ -27,6 +27,7 @@ class LogDialog;
 namespace Cervisia
 {
 
+class CvsPlugin;
 class CvsLogParser;
 
 
@@ -35,7 +36,7 @@ class LogCommand : public CvsCommandBase
     Q_OBJECT
 
 public:
-    LogCommand(const QString& fileName);
+    LogCommand(const QString& fileName, CvsPlugin* plugin);
     ~LogCommand();
 
     virtual bool prepare();
@@ -46,6 +47,7 @@ private slots:
 
 private:
     QString       m_fileName;
+    CvsPlugin*    m_plugin;
     CvsLogParser* m_parser;
     LogDialog*    m_logDlg;
 };

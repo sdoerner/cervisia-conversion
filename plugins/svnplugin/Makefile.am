@@ -4,7 +4,7 @@ METASOURCES = AUTO
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = libsvnplugin.la
 
-libsvnplugin_la_SOURCES = svnplugin.cpp svnjob.cpp globalignorelist.cpp \
+libsvnplugin_la_SOURCES = svnplugin.cpp globalignorelist.cpp \
                           svncommandbase.cpp svncommandbase.skel addcommand.cpp \
                           annotatecommand.cpp commitcommand.cpp logcommand.cpp removecommand.cpp \
                           updatecommand.cpp svn_annotate_parser.cpp svn_log_parser.cpp \

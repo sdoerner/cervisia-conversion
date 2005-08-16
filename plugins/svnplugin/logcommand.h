@@ -29,6 +29,7 @@ class LogDialog;
 namespace Cervisia
 {
 
+class SvnPlugin;
 class SvnLogParser;
 
 
@@ -37,7 +38,7 @@ class LogCommand : public SvnCommandBase
     Q_OBJECT
 
 public:
-    LogCommand(const QString& fileName);
+    LogCommand(const QString& fileName, SvnPlugin* plugin);
     ~LogCommand();
 
     void setBatchMode(bool batchMode);
@@ -51,6 +52,7 @@ private slots:
 
 private:
     QString       m_fileName;
+    SvnPlugin*    m_plugin;
     SvnLogParser* m_parser;
     LogDialog*    m_logDlg;
     bool          m_batchMode;

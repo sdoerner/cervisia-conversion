@@ -4,7 +4,7 @@ METASOURCES = AUTO
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = libcvsplugin.la
 
-libcvsplugin_la_SOURCES = cvsplugin.cpp cvsjob.cpp dirignorelist.cpp globalignorelist.cpp \
+libcvsplugin_la_SOURCES = cvsplugin.cpp dirignorelist.cpp globalignorelist.cpp \
                           cvscommandbase.cpp cvscommandbase.skel addcommand.cpp \
                           addwatchcommand.cpp annotatecommand.cpp commitcommand.cpp \
                           editcommand.cpp lockcommand.cpp logcommand.cpp removecommand.cpp \

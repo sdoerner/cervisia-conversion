@@ -39,7 +39,7 @@ AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revisio
     , m_revision(revision)
     , m_annotateParser(new SvnAnnotateParser(this))
     , m_annotateDlg(0)
-    , m_logCmd(new Cervisia::LogCommand(fileName))
+    , m_logCmd(new Cervisia::LogCommand(fileName, 0))
     , m_logDone(false)
     , m_annotateDone(false)
 {

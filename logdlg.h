@@ -50,6 +50,9 @@ public:
     void setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos,
                      const QString& fileName);
 
+signals:
+    void showAnnotateDialog(const QString& fileName, const QString& revision);
+
 protected slots:
     void slotOk();
     void slotApply();

@@ -31,9 +31,10 @@ using Cervisia::LogCommand;
 #include "cvs_log_parser.h"
 
 
-LogCommand::LogCommand(const QString& fileName)
+LogCommand::LogCommand(const QString& fileName, CvsPlugin* plugin)
     : CvsCommandBase(Other)
     , m_fileName(fileName)
+    , m_plugin(plugin)
     , m_parser(new CvsLogParser(this))
     , m_logDlg(0)
 {
@@ -80,6 +81,9 @@ void LogCommand::showDialog()
     // error occurred or process was canceled
     if( m_errorOccurred )
         return;
+
+    connect(m_logDlg, SIGNAL(showAnnotateDialog(const QString&, const QString&)),
+            m_plugin, SLOT(annotate(const QString&, const QString&)));
 
     m_logDlg->setCaption(i18n("CVS Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);

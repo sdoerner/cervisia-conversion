@@ -32,7 +32,7 @@
 #include "commandbase.h"
 #include "cvsjob_stub.h"
 #include "pluginbase.h"
-#include "pluginjobbase.h"
+// #include "pluginjobbase.h"
 #include "pluginmanager.h"
 using namespace Cervisia;
 
@@ -72,8 +72,8 @@ void ProtocolView::updatePlugin()
     PluginBase* currentPlugin = PluginManager::self()->currentPlugin();
     if( currentPlugin )
     {
-        connect(currentPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
-                this, SLOT(prepareJob(Cervisia::PluginJobBase*)));
+//         connect(currentPlugin, SIGNAL(jobPrepared(Cervisia::PluginJobBase*)),
+//                 this, SLOT(prepareJob(Cervisia::PluginJobBase*)));
 
         // make sure we don't connect to the signal twice
         disconnect(currentPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
@@ -130,25 +130,25 @@ void ProtocolView::receivedOutput(const QString& buffer)
 }
 
 
-void ProtocolView::prepareJob(Cervisia::PluginJobBase* job)
-{
-    kdDebug(8050) << "ProtocolView::prepareJob()" << endl;
-
-    m_isUpdateJob = ((job->action() == Cervisia::PluginJobBase::Update) ||
-                     (job->action() == Cervisia::PluginJobBase::SimulateUpdate));
-
-    // get command line and add it to output buffer
-    appendLine(job->commandString());
-
-    // disconnect 3rd party slots from our signals
-    disconnect( SIGNAL(receivedLine(QString)) );
-    disconnect( SIGNAL(jobFinished(bool, int)) );
-
-    connect(job, SIGNAL(jobExited(bool, int)),
-            this, SLOT(jobExited(bool, int)));
-    connect(job, SIGNAL(receivedLine(const QString&)),
-            this, SLOT(appendLine(const QString&)));
-}
+// void ProtocolView::prepareJob(Cervisia::PluginJobBase* job)
+// {
+//     kdDebug(8050) << "ProtocolView::prepareJob()" << endl;
+// 
+//     m_isUpdateJob = ((job->action() == Cervisia::PluginJobBase::Update) ||
+//                      (job->action() == Cervisia::PluginJobBase::SimulateUpdate));
+// 
+//     // get command line and add it to output buffer
+//     appendLine(job->commandString());
+// 
+//     // disconnect 3rd party slots from our signals
+//     disconnect( SIGNAL(receivedLine(QString)) );
+//     disconnect( SIGNAL(jobFinished(bool, int)) );
+// 
+//     connect(job, SIGNAL(jobExited(bool, int)),
+//             this, SLOT(jobExited(bool, int)));
+//     connect(job, SIGNAL(receivedLine(const QString&)),
+//             this, SLOT(appendLine(const QString&)));
+// }
 
 
 void ProtocolView::commandPrepared(Cervisia::CommandBase* cmd)

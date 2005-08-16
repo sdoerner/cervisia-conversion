@@ -265,7 +265,7 @@ void SvnPlugin::log()
     if( fileName.isEmpty() )
         return;
 
-    executeCommand(new LogCommand(fileName));
+    executeCommand(new LogCommand(fileName, this));
 }
 
 

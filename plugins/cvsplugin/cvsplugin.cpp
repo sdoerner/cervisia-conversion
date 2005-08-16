@@ -34,7 +34,6 @@ using Cervisia::CvsPlugin;
 #include <repository_stub.h>
 #include <selectionintf.h>
 
-#include "cvsjob.h"
 #include "cvs_update_parser.h"
 #include "addcommand.h"
 #include "addwatchcommand.h"
@@ -116,7 +115,7 @@ bool CvsPlugin::canHandle(const KURL& workingCopy)
 
 void CvsPlugin::setWorkingCopy(const KURL& workingCopy)
 {
-    bool opened = m_cvsRepository->setWorkingCopy(workingCopy.path());
+    /*bool opened =*/ m_cvsRepository->setWorkingCopy(workingCopy.path());
 }
 
 
@@ -321,7 +320,7 @@ void CvsPlugin::log()
     if( fileName.isEmpty() )
         return;
 
-    executeCommand(new LogCommand(fileName));
+    executeCommand(new LogCommand(fileName, this));
 }
 
 
