@@ -46,6 +46,7 @@ using Cervisia::CvsPlugin;
 #include "removecommand.h"
 #include "removewatchcommand.h"
 #include "updatecommand.h"
+#include "updatetagcommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -159,17 +160,18 @@ void CvsPlugin::syncWithEntries(const QString& filePath)
 
             if (isDir)
             {
-//                updateEntriesItem(entry, false);
                 emit updateItem(entry);
             }
             else
             {
                 QString rev(line.section('/', 2, 2));
                 const QString timestamp(line.section('/', 3, 3));
-                const QString options(line.section('/', 4, 4));
-                entry.m_tag = line.section('/', 5, 5);
 
-//                const bool isBinary(options.find("-kb") >= 0);
+                // file contains binary data?
+                const QString options(line.section('/', 4, 4));
+                entry.m_binary = (options.find("-kb") >= 0);
+
+                entry.m_tag = line.section('/', 5, 5);
 
                 // file date in local time
                 entry.m_dateTime = QFileInfo(path + entry.m_name).lastModified();
@@ -196,7 +198,6 @@ void CvsPlugin::syncWithEntries(const QString& filePath)
 
                 entry.m_revision = rev;
 
-//                updateEntriesItem(entry, isBinary);
                 emit updateItem(entry);
             }
         }
@@ -438,6 +439,21 @@ void CvsPlugin::updateToHead()
 }
 
 
+void CvsPlugin::updateToTag()
+{
+    kdDebug(8050) << "CvsPlugin::updateToTag()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    UpdateTagCommand* cmd = new UpdateTagCommand(selectionList, m_updateParser);
+//     cmd->setRecursive(opt_updateRecursive);
+
+    executeCommand(cmd);
+}
+
+
 void CvsPlugin::executeCommand(CvsCommandBase* cmd)
 {
     if( cmd->prepare() )
@@ -527,6 +543,13 @@ void CvsPlugin::setupMenuActions()
     //
     // Advanced Menu
     //
+    action = new KAction( i18n("&Update to Tag/Date..."), 0,
+                          this, SLOT( updateToTag() ),
+                          actionCollection(), "update_to_tag" );
+    hint = i18n("Updates the selected files to a given tag, branch or date");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
     action = new KAction( i18n("Update to &HEAD"), 0,
                           this, SLOT( updateToHead() ),
                           actionCollection(), "update_to_head" );

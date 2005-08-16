@@ -19,6 +19,7 @@
         <Action name="view_annotate"/>
     </Menu>
     <Menu name="advanced"><text>&amp;Advanced</text>
+        <Action name="update_to_tag"/>
         <Action name="update_to_head"/>
         <Separator/>
         <Action name="add_watch"/>

@@ -76,6 +76,7 @@ private slots:
     void unlock();
     void update();
     void updateToHead();
+    void updateToTag();
 
 private:
     void executeCommand(CvsCommandBase* cmd);
