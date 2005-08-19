@@ -42,20 +42,20 @@
   <Menu name="advanced"><text>&amp;Advanced</text>
     <Action name="create_tag"/>
     <Action name="delete_tag"/>
-    <Action name="update_to_tag"/>
-    <Action name="update_to_head"/>
+<!--     <Action name="update_to_tag"/> -->
+<!--     <Action name="update_to_head"/> -->
     <Action name="merge"/>
     <Separator/>
 <!--    <Action name="add_watch"/>
     <Action name="remove_watch"/>-->
     <Action name="show_watchers"/>
     <Separator/>
-    <Action name="edit_files"/>
-    <Action name="unedit_files"/>
+<!--     <Action name="edit_files"/> -->
+<!--     <Action name="unedit_files"/> -->
     <Action name="show_editors"/>
     <Separator/>
-    <Action name="lock_files"/>
-    <Action name="unlock_files"/>
+<!--     <Action name="lock_files"/> -->
+<!--     <Action name="unlock_files"/> -->
     <Separator/>
     <Action name="make_patch"/>
   </Menu>
@@ -71,7 +71,7 @@
     <Action name="settings_create_dirs" group="save_merge_group"/>
     <Action name="settings_prune_dirs" group="save_merge_group"/>
     <Action name="settings_update_recursively" group="save_merge_group"/>
-    <Action name="settings_commit_recursively" group="save_merge_group"/>
+<!--     <Action name="settings_commit_recursively" group="save_merge_group"/> -->
     <Action name="settings_do_cvs_edit" group="save_merge_group"/>
     <Action name="configure_cervisia" group="configure_merge_group"/>
     <Separator group="save_merge_group"/>
@@ -98,24 +98,13 @@
   <Action name="view_diff_head"/>
   <Action name="view_last_change"/>
   <Action name="file_resolve"/>
-  <Action name="view_log"/>
-  <Separator/>
-  <Action name="file_update"/>
-  <Action name="file_commit"/>
-  <Separator/>
-  <Action name="file_add"/>
-  <Action name="file_remove"/>
+  <Merge/>
   <Separator/>
   <Action name="file_properties"/>
 </Menu>
 <Menu name="folder_context_popup">
   <Action name="unfold_folder"/>
-  <Separator/>
-  <Action name="file_update"/>
-  <Action name="file_commit"/>
-  <Separator/>
-  <Action name="file_add"/>
-  <Action name="file_remove"/>
+  <Merge/>
 </Menu>
 <State name="has_sandbox">
   <Enable>

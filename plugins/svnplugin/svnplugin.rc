@@ -22,4 +22,21 @@
     <Action name="file_add"/>
     <Action name="file_remove"/>
 </ToolBar>
+<Menu name="context_popup">
+    <Action name="view_log"/>
+    <Separator/>
+<!--     <Action name="file_update"/> -->
+    <Action name="file_commit"/>
+    <Separator/>
+    <Action name="file_add"/>
+    <Action name="file_remove"/>
+</Menu>
+<Menu name="folder_context_popup">
+    <Separator/>
+<!--     <Action name="file_update"/> -->
+    <Action name="file_commit"/>
+    <Separator/>
+    <Action name="file_add"/>
+    <Action name="file_remove"/>
+</Menu>
 </kpartplugin>
