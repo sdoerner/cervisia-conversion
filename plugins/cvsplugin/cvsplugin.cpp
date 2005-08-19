@@ -34,11 +34,13 @@ using Cervisia::CvsPlugin;
 #include <repository_stub.h>
 #include <selectionintf.h>
 
+#include "cvspluginsettings.h"
 #include "cvs_update_parser.h"
 #include "addcommand.h"
 #include "addwatchcommand.h"
 #include "annotatecommand.h"
 #include "commitcommand.h"
+#include "createtagcommand.h"
 #include "editcommand.h"
 #include "lockcommand.h"
 #include "logcommand.h"
@@ -282,9 +284,21 @@ void CvsPlugin::commit()
         return;
 
     CommitCommand* cmd = new CommitCommand(selectionList);
-//     cmd->setRecursive(opt_commitRecursive);
+    cmd->setRecursive(CvsPluginSettings::commitRecursive());
 
     executeCommand(cmd);
+}
+
+
+void CvsPlugin::createTag()
+{
+    kdDebug(8050) << "CvsPlugin::createTag()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new CreateTagCommand(selectionList));
 }
 
 
@@ -333,7 +347,7 @@ void CvsPlugin::remove()
         return;
 
     RemoveCommand* cmd = new RemoveCommand(selectionList);
-//     cmd->setRecursive(opt_commitRecursive);
+    cmd->setRecursive(CvsPluginSettings::commitRecursive());
 
     executeCommand(cmd);
 }
@@ -453,6 +467,13 @@ void CvsPlugin::updateToTag()
 }
 
 
+void CvsPlugin::commitRecursive()
+{
+    bool recursive = CvsPluginSettings::commitRecursive();
+    CvsPluginSettings::setCommitRecursive(!recursive);
+}
+
+
 void CvsPlugin::executeCommand(CvsCommandBase* cmd)
 {
     if( cmd->prepare() )
@@ -542,6 +563,13 @@ void CvsPlugin::setupMenuActions()
     //
     // Advanced Menu
     //
+    action = new KAction( i18n("&Tag/Branch..."), 0,
+                          this, SLOT( createTag() ),
+                          actionCollection(), "create_tag" );
+    hint = i18n("Creates a tag or branch for the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
     action = new KAction( i18n("&Update to Tag/Date..."), 0,
                           this, SLOT( updateToTag() ),
                           actionCollection(), "update_to_tag" );
@@ -595,6 +623,16 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( unlock() ),
                           actionCollection(), "unlock_files" );
     hint = i18n("Unlocks the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    //
+    // Settings Menu
+    //
+    action = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
+                                this, SLOT( commitRecursive() ),
+                                actionCollection(), "settings_commit_recursively" );
+    hint = i18n("Determines whether commits and removes are recursive");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 }

@@ -66,6 +66,7 @@ private slots:
     void addWatch();
     void annotate();
     void commit();
+    void createTag();
     void edit();
     void lock();
     void log();
@@ -78,6 +79,8 @@ private slots:
     void update();
     void updateToHead();
     void updateToTag();
+
+    void commitRecursive();
 
 private:
     void executeCommand(CvsCommandBase* cmd);

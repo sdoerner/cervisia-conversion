@@ -1,0 +1,4 @@
+File=cvsplugin.kcfg
+ClassName=CvsPluginSettings
+Singleton=true
+Mutators=true
