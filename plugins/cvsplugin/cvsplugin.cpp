@@ -471,6 +471,8 @@ void CvsPlugin::commitRecursive()
 {
     bool recursive = CvsPluginSettings::commitRecursive();
     CvsPluginSettings::setCommitRecursive(!recursive);
+
+    CvsPluginSettings::writeConfig();
 }
 
 
@@ -629,12 +631,14 @@ void CvsPlugin::setupMenuActions()
     //
     // Settings Menu
     //
-    action = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
+    KToggleAction* toggleAction = new KToggleAction(
+                                i18n("C&ommit && Remove Recursively"), 0,
                                 this, SLOT( commitRecursive() ),
                                 actionCollection(), "settings_commit_recursively" );
     hint = i18n("Determines whether commits and removes are recursive");
-    action->setToolTip(hint);
-    action->setWhatsThis(hint);
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(CvsPluginSettings::commitRecursive());
 }
 
 
