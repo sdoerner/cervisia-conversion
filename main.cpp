@@ -109,32 +109,32 @@ static int ShowResolveDialog(const QString& fileName)
 // }
 
 
-static int ShowAnnotateDialog(const QString& fileName)
-{
-    KConfig* config = new KConfig("cervisiapartrc");
-    AnnotateDialog* dlg = new AnnotateDialog(*config);
-    kapp->setMainWidget(dlg);
-
-    // get directory for file
-    const QFileInfo fi(fileName);
-    QString directory = fi.dirPath(true);
-
-    // start the cvs DCOP service
-    CvsService_stub* cvsService = StartDCOPService(directory);
-
-    AnnotateController ctl(dlg, cvsService);
-    ctl.showDialog(fi.fileName());
-
-    int result = kapp->exec();
-
-    // stop the cvs DCOP service
-    cvsService->quit();
-    delete cvsService;
-
-    delete config;
-
-    return result;
-}
+// static int ShowAnnotateDialog(const QString& fileName)
+// {
+//     KConfig* config = new KConfig("cervisiapartrc");
+//     AnnotateDialog* dlg = new AnnotateDialog(*config);
+//     kapp->setMainWidget(dlg);
+// 
+//     // get directory for file
+//     const QFileInfo fi(fileName);
+//     QString directory = fi.dirPath(true);
+// 
+//     // start the cvs DCOP service
+//     CvsService_stub* cvsService = StartDCOPService(directory);
+// 
+//     AnnotateController ctl(dlg, cvsService);
+//     ctl.showDialog(fi.fileName());
+// 
+//     int result = kapp->exec();
+// 
+//     // stop the cvs DCOP service
+//     cvsService->quit();
+//     delete cvsService;
+// 
+//     delete config;
+// 
+//     return result;
+// }
 
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
@@ -142,8 +142,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     static KCmdLineOptions options[] = {
         { "+[directory]", I18N_NOOP("The sandbox to be loaded"), 0 },
         { "resolve <file>", I18N_NOOP("Show resolve dialog for the given file"), 0 },
-        { "log <file>", I18N_NOOP("Show log dialog for the given file"), 0 },
-        { "annotate <file>", I18N_NOOP("Show annotation dialog for the given file"), 0 },
+//         { "log <file>", I18N_NOOP("Show log dialog for the given file"), 0 },
+//         { "annotate <file>", I18N_NOOP("Show annotation dialog for the given file"), 0 },
         KCmdLineLastOption
     };
     KAboutData about("cervisia", I18N_NOOP("Cervisia"), CERVISIA_VERSION,
@@ -178,10 +178,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 //     if( !logFile.isEmpty() )
 //         return ShowLogDialog(logFile);
 
-    // is command line option 'show annotation dialog' specified?
-    QString annotateFile = KCmdLineArgs::parsedArgs()->getOption("annotate");
-    if( !annotateFile.isEmpty() )
-        return ShowAnnotateDialog(annotateFile);
+//     // is command line option 'show annotation dialog' specified?
+//     QString annotateFile = KCmdLineArgs::parsedArgs()->getOption("annotate");
+//     if( !annotateFile.isEmpty() )
+//         return ShowAnnotateDialog(annotateFile);
 
     if ( app.isRestored() ) {
         RESTORE(CervisiaShell);
