@@ -33,6 +33,7 @@ using Cervisia::SvnPlugin;
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
+#include "svnpluginsettings.h"
 #include "globalignorelist.h"
 #include "addcommand.h"
 #include "annotatecommand.h"
@@ -251,7 +252,7 @@ void SvnPlugin::commit()
         return;
 
     CommitCommand* cmd = new CommitCommand(selectionList);
-//     cmd->setRecursive(opt_commitRecursive);
+    cmd->setRecursive(SvnPluginSettings::commitRecursive());
 
     executeCommand(cmd);
 }
@@ -290,10 +291,28 @@ void SvnPlugin::simulateUpdate()
         return;
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(SvnPluginSettings::updateRecursive());
     cmd->setSimulation(true);
 
     executeCommand(cmd);
+}
+
+
+void SvnPlugin::commitRecursive()
+{
+    bool recursive = SvnPluginSettings::commitRecursive();
+    SvnPluginSettings::setCommitRecursive(!recursive);
+
+    SvnPluginSettings::writeConfig();
+}
+
+
+void SvnPlugin::updateRecursive()
+{
+    bool recursive = SvnPluginSettings::updateRecursive();
+    SvnPluginSettings::setUpdateRecursive(!recursive);
+
+    SvnPluginSettings::writeConfig();
 }
 
 
@@ -361,6 +380,26 @@ void SvnPlugin::setupMenuActions()
     hint = i18n("Shows a blame-annotated view of the selected file");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
+
+    //
+    // Settings Menu
+    //
+    KToggleAction* toggleAction = new KToggleAction(
+                                i18n("&Update Recursively"), 0,
+                                this, SLOT( updateRecursive() ),
+                                actionCollection(), "settings_update_recursively" );
+    hint = i18n("Determines whether updates are recursive");
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(SvnPluginSettings::updateRecursive());
+
+    toggleAction = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
+                                      this, SLOT( commitRecursive() ),
+                                      actionCollection(), "settings_commit_recursively" );
+    hint = i18n("Determines whether commits and removes are recursive");
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(SvnPluginSettings::commitRecursive());
 }
 
 

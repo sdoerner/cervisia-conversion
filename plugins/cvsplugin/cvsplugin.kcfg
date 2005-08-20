@@ -8,5 +8,8 @@
     <entry name="CommitRecursive" key="Commit Recursive" type="Bool">
       <default>false</default>
     </entry>
+    <entry name="UpdateRecursive" key="Update Recursive" type="Bool">
+      <default>false</default>
+    </entry>
   </group>
 </kcfg>

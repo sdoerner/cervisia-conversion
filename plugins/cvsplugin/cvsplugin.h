@@ -81,6 +81,7 @@ private slots:
     void updateToTag();
 
     void commitRecursive();
+    void updateRecursive();
 
 private:
     void executeCommand(CvsCommandBase* cmd);

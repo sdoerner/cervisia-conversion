@@ -68,6 +68,9 @@ private slots:
     void remove();
     void simulateUpdate();
 
+    void commitRecursive();
+    void updateRecursive();
+
 private:
     void executeCommand(SvnCommandBase* cmd);
 

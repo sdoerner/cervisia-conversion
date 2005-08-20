@@ -374,7 +374,7 @@ void CvsPlugin::revert()
         return;
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
     cmd->setExtraOption("-C");
 
     executeCommand(cmd);
@@ -390,7 +390,7 @@ void CvsPlugin::simulateUpdate()
         return;
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
     cmd->setSimulation(true);
 
     executeCommand(cmd);
@@ -430,7 +430,7 @@ void CvsPlugin::update()
         return;
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
 
     executeCommand(cmd);
 }
@@ -445,7 +445,7 @@ void CvsPlugin::updateToHead()
         return;
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
     cmd->setExtraOption("-A");
 
     executeCommand(cmd);
@@ -461,7 +461,7 @@ void CvsPlugin::updateToTag()
         return;
 
     UpdateTagCommand* cmd = new UpdateTagCommand(selectionList, m_updateParser);
-//     cmd->setRecursive(opt_updateRecursive);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
 
     executeCommand(cmd);
 }
@@ -471,6 +471,15 @@ void CvsPlugin::commitRecursive()
 {
     bool recursive = CvsPluginSettings::commitRecursive();
     CvsPluginSettings::setCommitRecursive(!recursive);
+
+    CvsPluginSettings::writeConfig();
+}
+
+
+void CvsPlugin::updateRecursive()
+{
+    bool recursive = CvsPluginSettings::updateRecursive();
+    CvsPluginSettings::setUpdateRecursive(!recursive);
 
     CvsPluginSettings::writeConfig();
 }
@@ -632,9 +641,17 @@ void CvsPlugin::setupMenuActions()
     // Settings Menu
     //
     KToggleAction* toggleAction = new KToggleAction(
-                                i18n("C&ommit && Remove Recursively"), 0,
-                                this, SLOT( commitRecursive() ),
-                                actionCollection(), "settings_commit_recursively" );
+                                i18n("&Update Recursively"), 0,
+                                this, SLOT( updateRecursive() ),
+                                actionCollection(), "settings_update_recursively" );
+    hint = i18n("Determines whether updates are recursive");
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(CvsPluginSettings::updateRecursive());
+
+    toggleAction = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
+                                      this, SLOT( commitRecursive() ),
+                                      actionCollection(), "settings_commit_recursively" );
     hint = i18n("Determines whether commits and removes are recursive");
     toggleAction->setToolTip(hint);
     toggleAction->setWhatsThis(hint);
