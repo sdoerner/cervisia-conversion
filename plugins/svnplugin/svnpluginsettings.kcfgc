@@ -1,0 +1,4 @@
+File=svnplugin.kcfg
+ClassName=SvnPluginSettings
+Singleton=true
+Mutators=true
