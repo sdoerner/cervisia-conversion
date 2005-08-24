@@ -47,7 +47,7 @@ public:
     explicit LogDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
     virtual ~LogDialog();
 
-    void setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos,
+    void setLogInfos(const Cervisia::LogInfoList& logInfos,
                      const QString& fileName);
 
 signals:
@@ -70,7 +70,7 @@ private:
     void tagSelected(const Cervisia::LogInfo& info, bool rmb);
 
     QString                       m_fileName;
-    QValueList<Cervisia::LogInfo> m_logInfos;
+    Cervisia::LogInfoList m_logInfos;
     QString selectionA;
     QString selectionB;
     LogTreeView *tree;
@@ -87,7 +87,7 @@ private:
     CvsService_stub* cvsService;
     KConfig&         partConfig;
 
-    typedef QValueList<Cervisia::LogInfo>::const_iterator LogInfoConstIter;
+    typedef Cervisia::LogInfoList::const_iterator LogInfoConstIter;
 };
 
 #endif

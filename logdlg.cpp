@@ -209,7 +209,7 @@ LogDialog::~LogDialog()
 }
 
 
-void LogDialog::setLogInfos(const QValueList<Cervisia::LogInfo>& logInfos,
+void LogDialog::setLogInfos(const Cervisia::LogInfoList& logInfos,
                             const QString& fileName)
 {
     m_logInfos = logInfos;
