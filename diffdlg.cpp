@@ -41,6 +41,9 @@
 #include "diffview.h"
 
 
+using namespace Cervisia;
+
+
 DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool modal)
     : KDialogBase(parent, name, modal, QString::null,
                   Close | Help | User1, Close, true, KStdGuiItem::saveAs())
@@ -219,9 +222,6 @@ public:
 bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
                               const QString &revA, const QString &revB)
 {
-    QStringList linesA, linesB;
-    int linenoA, linenoB;
-
     setCaption(i18n("CVS Diff: %1").arg(fileName));
     revlabel1->setText( revA.isEmpty()?
                         i18n("Repository:")
@@ -253,41 +253,47 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
         return false;
 
     return false;
-/*    ProgressDialog dlg(this, "Diff", job, "diff", i18n("CVS Diff"));
-    if( !dlg.execute() )
-        return false;
+}
 
+
+void DiffDialog::setDiffInfos(const DiffInfoList& diffInfos)
+{
     // remember diff output for "save as" action
-    m_diffOutput = dlg.getOutput();
+    m_diffInfos = diffInfos;
 
-    QString line;
-    while ( dlg.getLine(line) && !line.startsWith("+++"))
-        ;
+    QStringList linesA;
+    QStringList linesB;
+    int linenoA(0);
+    int linenoB(0);
 
-    linenoA = linenoB = 0;
-    while ( dlg.getLine(line) )
+    for (DiffInfoList::const_iterator itInfo(diffInfos.begin()),
+                                      itInfoEnd(diffInfos.end());
+         itInfo != itInfoEnd; ++itInfo)
     {
-        // line contains diff region?
-        if (line.startsWith("@@"))
+        const DiffInfo& diffInfo(*itInfo);
+
+        const QString& line(diffInfo.m_line);
+
+        switch (diffInfo.m_type)
         {
+        case DiffInfo::Header:
+            break;
+
+        case DiffInfo::Region:
             interpretRegion(line, &linenoA, &linenoB);
             diff1->addLine(line, DiffView::Separator);
             diff2->addLine(line, DiffView::Separator);
-            continue;
-        }
+            break;
 
-        if (line.length() < 1)
-            continue;
-
-        QChar marker = line[0];
-        line.remove(0, 1);
-
-        if (marker == '-')
+        case DiffInfo::Removed:
             linesA.append(line);
-        else if (marker == '+')
+            break;
+
+        case DiffInfo::Added:
             linesB.append(line);
-        else
-        {
+            break;
+
+        case DiffInfo::Unchanged:
             if (!linesA.isEmpty() || !linesB.isEmpty())
             {
                 newDiffHunk(linenoA, linenoB, linesA, linesB);
@@ -297,6 +303,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
             }
             diff1->addLine(line, DiffView::Unchanged, ++linenoA);
             diff2->addLine(line, DiffView::Unchanged, ++linenoB);
+            break;
         }
     }
 
@@ -307,8 +314,6 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
     itemscombo->adjustSize();
 
     updateNofN();
-
-    return true;*/
 }
 
 
@@ -495,9 +500,33 @@ void DiffDialog::saveAsClicked()
     }
 
     QTextStream ts(&f);
-    QStringList::Iterator it = m_diffOutput.begin();
-    for( ; it != m_diffOutput.end(); ++it )
-        ts << *it << "\n";
+    for (DiffInfoList::const_iterator itInfo(m_diffInfos.begin()),
+                                      itInfoEnd(m_diffInfos.end());
+         itInfo != itInfoEnd; ++itInfo)
+    {
+        const DiffInfo& diffInfo(*itInfo);
+
+        QString line(diffInfo.m_line);
+        switch (diffInfo.m_type)
+        {
+        case DiffInfo::Header:
+        case DiffInfo::Region:
+            break;
+
+        case DiffInfo::Unchanged:
+            line.prepend(' ');
+            break;
+
+        case DiffInfo::Removed:
+            line.prepend('-');
+            break;
+
+        case DiffInfo::Added:
+            line.prepend('+');
+            break;
+        }
+        ts << line << '\n';
+    }
 
     f.close();
 }

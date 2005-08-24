@@ -24,6 +24,8 @@
 #include <qptrlist.h>
 #include <kdialogbase.h>
 
+#include "diff_info.h"
+
 
 class QLabel;
 class QCheckBox;
@@ -47,6 +49,8 @@ public:
 
     bool parseCvsDiff(CvsService_stub* service, const QString &fileName, 
                       const QString &revA, const QString &revB);
+
+    void setDiffInfos(const Cervisia::DiffInfoList& diffInfos);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
@@ -76,7 +80,7 @@ private:
     QPtrList<DiffItem> items;
     int markeditem;
     KConfig& partConfig;
-    QStringList m_diffOutput;
+    Cervisia::DiffInfoList m_diffInfos;
 };
 
 #endif
