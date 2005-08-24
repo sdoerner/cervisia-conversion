@@ -25,8 +25,6 @@
 
 #include "loginfo.h"
 
-#include <qvaluelist.h>
-
 
 namespace Cervisia
 {
@@ -40,16 +38,12 @@ class LogParser : public OutputParser
 {
 public:
 
-    typedef QValueList<LogInfo> TLogInfoSeq;
-
-
-
     explicit LogParser(QObject* parent = 0, const char* name = 0);
 
     /**
      * @return The list of parsed LogInfos.
      */
-    const TLogInfoSeq& logInfos() const;
+    const LogInfoList& logInfos() const;
 
 protected:
 
@@ -62,7 +56,7 @@ protected:
 
 private:
 
-    TLogInfoSeq m_logInfos;
+    LogInfoList m_logInfos;
 };
 
 

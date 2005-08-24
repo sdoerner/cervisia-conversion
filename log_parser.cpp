@@ -30,7 +30,7 @@ LogParser::LogParser(QObject* parent, const char* name)
 }
 
 
-const LogParser::TLogInfoSeq& LogParser::logInfos() const
+const LogInfoList& LogParser::logInfos() const
 {
     return m_logInfos;
 }
