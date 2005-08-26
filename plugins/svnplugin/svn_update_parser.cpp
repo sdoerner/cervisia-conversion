@@ -19,6 +19,7 @@
 #include "svn_update_parser.h"
 using Cervisia::SvnUpdateParser;
 
+#include <qregexp.h>
 #include <kdebug.h>
 
 
@@ -35,32 +36,86 @@ SvnUpdateParser::~SvnUpdateParser()
 
 void SvnUpdateParser::parseLine(const QString& line)
 {
-    if( line.length() > 2 )
+    if( isSimulation() )
+        parseStatusLine(line);
+    else
+        parseUpdateLine(line);
+}
+
+
+void SvnUpdateParser::parseStatusLine(const QString& line)
+{
+    kdDebug(8050) << "SvnUpdateParser::parseStatusLine(): line = " << line << endl;
+
+    QRegExp rx(".*Revision.*\\d+");
+    if( line.length() > 2 && rx.search(line) < 0 )
     {
         QString fileName = line.right(line.length() - 20);
+
+        kdDebug(8050) << "SvnUpdateParser::parseStatusLine(): fileName = " << fileName
+                << ", length = " << line.length() << endl;
 
         EntryStatus status = Cervisia::Unknown;
         switch( line[0].latin1() )
         {
-        case 'C':
-            status = Cervisia::Conflict;
-            break;
-        case 'A':
-            status = Cervisia::LocallyAdded;
-            break;
-        case 'R':
-            status = Cervisia::LocallyRemoved;
-            break;
-        case 'M':
-            status = Cervisia::LocallyModified;
-            break;
-        case '?':
-            status = Cervisia::NotInCVS;
-            break;
-        default:
-            if( line[7].latin1() == '*' )
-                status = isSimulation() ? Cervisia::NeedsUpdate : Cervisia::Updated;
-            else
+            case 'C':
+                status = Cervisia::Conflict;
+                break;
+            case 'A':
+                status = Cervisia::LocallyAdded;
+                break;
+            case 'R':
+                status = Cervisia::LocallyRemoved;
+                break;
+            case 'M':
+                status = Cervisia::LocallyModified;
+                break;
+            case '?':
+                status = Cervisia::NotInCVS;
+                break;
+            default:
+                if( line[7].latin1() == '*' )
+                    status = Cervisia::NeedsUpdate;
+                else
+                    return;
+        }
+
+        updateItemStatus(fileName, status, false);
+    }
+}
+
+
+void SvnUpdateParser::parseUpdateLine(const QString& line)
+{
+    kdDebug(8050) << "SvnUpdateParser::parseUpdateLine(): line = " << line << endl;
+
+    QRegExp rx(".*Revision.*\\d+");
+    if( line.length() > 2 && rx.search(line) < 0 )
+    {
+        QString fileName = line.right(line.length() - 5);
+
+        kdDebug(8050) << "SvnUpdateParser::parseUpdateLine(): fileName = " << fileName
+                << ", length = " << line.length() << endl;
+
+        EntryStatus status = Cervisia::Unknown;
+        switch( line[0].latin1() )
+        {
+            case 'C':
+                status = Cervisia::Conflict;
+                break;
+            case 'A':
+                status = Cervisia::LocallyAdded;
+                break;
+            case 'D':
+                status = Cervisia::LocallyRemoved;
+                break;
+            case 'U':
+                status = Cervisia::Updated;
+                break;
+            case '?':
+                status = Cervisia::NotInCVS;
+                break;
+            default:
                 return;
         }
 

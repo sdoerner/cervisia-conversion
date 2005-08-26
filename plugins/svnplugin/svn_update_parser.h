@@ -34,6 +34,9 @@ public:
 
 private:
     virtual void parseLine(const QString& line);
+
+    void parseStatusLine(const QString& line);
+    void parseUpdateLine(const QString& line);
 };
 
 
