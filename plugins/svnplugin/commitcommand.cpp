@@ -52,7 +52,12 @@ bool CommitCommand::prepare()
     // did the user cancel the dialog?
     if( !dlg.exec() )
         return false;
-    
+
+    // get new list of files
+    m_fileList = dlg.fileList();
+    if( m_fileList.isEmpty() )
+        return;
+
     QString msg = dlg.logMessage();
 //         if( !recentCommits.contains(msg) )
 //         {
