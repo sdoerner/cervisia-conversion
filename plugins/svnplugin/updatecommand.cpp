@@ -58,8 +58,8 @@ bool UpdateCommand::prepare()
 
     if( m_simulation )
         jobRef = SvnPlugin::svnService()->simulateUpdate(m_fileList, isRecursive());
-//     else
-//         jobRef = SvnPlugin::svnService()->update(m_fileList, isRecursive());
+    else
+        jobRef = SvnPlugin::svnService()->update(m_fileList, isRecursive());
     connectToJob(jobRef);
 
     // setup the update output parser
