@@ -123,7 +123,7 @@ class UpdateFileItem : public UpdateItem
 {
 public:
 
-    enum { Name, Status, Revision, TagOrDate, Timestamp };
+    enum { Name, MimeType, Status, Revision, TagOrDate, Timestamp };
 
     UpdateFileItem(UpdateDirItem* parent, const Cervisia::Entry& entry);
 

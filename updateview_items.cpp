@@ -29,6 +29,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmimetype.h>
 
 #include "cvsdir.h"
 #include "entry.h"
@@ -590,6 +591,9 @@ int UpdateFileItem::compare(QListViewItem* i,
     case Name:
         iResult = entry().m_name.localeAwareCompare(item->entry().m_name);
         break;
+    case MimeType:
+        iResult = KMimeType::findByPath(entry().m_name)->comment().localeAwareCompare(KMimeType::findByPath(item->entry().m_name)->comment());
+        break;
     case Status:
         if ((iResult = ::compare(statusClass(), item->statusClass())) == 0)
             iResult = entry().m_name.localeAwareCompare(item->entry().m_name);
@@ -617,6 +621,9 @@ QString UpdateFileItem::text(int column) const
     case Name:
         result = entry().m_name;
         break;
+    case MimeType:
+	result = KMimeType::findByPath(entry().m_name)->comment();
+	break;
     case Status:
         result = toString(entry().m_status);
         break;
