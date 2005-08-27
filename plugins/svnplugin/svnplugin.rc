@@ -2,6 +2,7 @@
 <kpartplugin name="svnplugin" library="libsvnplugin" version="2">
 <MenuBar>
     <Menu name="file"><Text>&amp;File</Text>
+        <Action name="file_update"/>
         <Action name="file_status"/>
         <Separator/>
         <Action name="file_commit"/>
@@ -22,7 +23,7 @@
     </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
-<!--     <Action name="file_update"/> -->
+    <Action name="file_update"/>
     <Action name="file_status"/>
     <Separator lineSeparator="true"/>
     <Action name="file_commit"/>
@@ -32,7 +33,7 @@
 <Menu name="context_popup">
     <Action name="view_log"/>
     <Separator/>
-<!--     <Action name="file_update"/> -->
+    <Action name="file_update"/>
     <Action name="file_commit"/>
     <Separator/>
     <Action name="file_add"/>
@@ -40,7 +41,7 @@
 </Menu>
 <Menu name="folder_context_popup">
     <Separator/>
-<!--     <Action name="file_update"/> -->
+    <Action name="file_update"/>
     <Action name="file_commit"/>
     <Separator/>
     <Action name="file_add"/>

@@ -59,6 +59,7 @@ public:
 public slots:
     void annotate(const QString& fileName,
                   const QString& revision = QString::null);
+    void simulateUpdate();
 
 private slots:
     void add();
@@ -66,7 +67,7 @@ private slots:
     void commit();
     void log();
     void remove();
-    void simulateUpdate();
+    void update();
 
     void commitRecursive();
     void updateRecursive();

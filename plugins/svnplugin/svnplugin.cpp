@@ -233,7 +233,7 @@ void SvnPlugin::add()
 
 void SvnPlugin::annotate()
 {
-    kdDebug(8050) << "CvsPlugin::annotate()" << endl;
+    kdDebug(8050) << "SvnPlugin::annotate()" << endl;
 
     QString fileName = m_fileView->singleSelection();
     if( fileName.isEmpty() )
@@ -298,6 +298,21 @@ void SvnPlugin::simulateUpdate()
 }
 
 
+void SvnPlugin::update()
+{
+    kdDebug(8050) << "SvnPlugin::update()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
+    cmd->setRecursive(SvnPluginSettings::updateRecursive());
+
+    executeCommand(cmd);
+}
+
+
 void SvnPlugin::commitRecursive()
 {
     bool recursive = SvnPluginSettings::commitRecursive();
@@ -336,6 +351,13 @@ void SvnPlugin::setupMenuActions()
     //
     // File Menu
     //
+    action = new KAction( i18n("&Update"), "vcs_update", CTRL+Key_U,
+                          this, SLOT( update() ),
+                          actionCollection(), "file_update" );
+    hint = i18n("Updates the selected files and folders (svn update)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
     action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
                           this, SLOT( simulateUpdate() ),
                           actionCollection(), "file_status" );
