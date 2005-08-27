@@ -1469,7 +1469,7 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     // make sure we don't connect to the signal twice
     disconnect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
                update, 0);
-    connect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
+    disconnect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
             update, 0);
 
     connect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
@@ -1517,11 +1517,11 @@ bool CervisiaPart::openSandbox(const QString &dirname)
                                         "StatusForRemoteRepos" :
                                         "StatusForLocalRepos",
                                         false);
-//     if (dostatus)
-//     {
-//         update->setSelected(update->firstChild(), true);
-//         slotStatus();
-//     }
+    if (dostatus)
+    {
+        update->setSelected(update->firstChild(), true);
+        m_vcsPlugin->simulateUpdate();
+    }
 
     //load the recentCommits for this app from the KConfig app
     conf->setGroup( "CommitLogs" );

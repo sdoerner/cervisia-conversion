@@ -64,6 +64,8 @@ public:
     virtual IgnoreFilterBase* filter(const QString& path) const = 0;
     virtual UpdateParser* updateParser() const = 0;
 
+    virtual void simulateUpdate() = 0;
+
 //     virtual void annotate(const QString& fileName, 
 //                           const QString& revision = QString::null) = 0;
 

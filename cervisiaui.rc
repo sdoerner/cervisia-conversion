@@ -23,7 +23,7 @@
   <Menu name="view"><text>&amp;View</text>
     <Action name="stop_job"/>
     <Separator/>
-<!--    <Action name="view_log"/>-->
+<!--     <Action name="view_log"/> -->
 <!--     <Action name="view_annotate"/> -->
     <Action name="view_diff_base"/>
     <Action name="view_diff_head"/>
@@ -40,14 +40,14 @@
     <Action name="view_fold_tree"/>
   </Menu>
   <Menu name="advanced"><text>&amp;Advanced</text>
-    <Action name="create_tag"/>
-    <Action name="delete_tag"/>
+<!--     <Action name="create_tag"/> -->
+<!--     <Action name="delete_tag"/> -->
 <!--     <Action name="update_to_tag"/> -->
 <!--     <Action name="update_to_head"/> -->
     <Action name="merge"/>
     <Separator/>
-<!--    <Action name="add_watch"/>
-    <Action name="remove_watch"/>-->
+<!--     <Action name="add_watch"/> -->
+<!--     <Action name="remove_watch"/> -->
     <Action name="show_watchers"/>
     <Separator/>
 <!--     <Action name="edit_files"/> -->
@@ -56,7 +56,7 @@
     <Separator/>
 <!--     <Action name="lock_files"/> -->
 <!--     <Action name="unlock_files"/> -->
-    <Separator/>
+<!--     <Separator/> -->
     <Action name="make_patch"/>
   </Menu>
   <Menu name="repository"><text>&amp;Repository</text>
@@ -70,7 +70,7 @@
     <Separator group="save_merge_group"/>
     <Action name="settings_create_dirs" group="save_merge_group"/>
     <Action name="settings_prune_dirs" group="save_merge_group"/>
-    <Action name="settings_update_recursively" group="save_merge_group"/>
+<!--     <Action name="settings_update_recursively" group="save_merge_group"/> -->
 <!--     <Action name="settings_commit_recursively" group="save_merge_group"/> -->
     <Action name="settings_do_cvs_edit" group="save_merge_group"/>
     <Action name="configure_cervisia" group="configure_merge_group"/>
@@ -81,12 +81,6 @@
   </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
-<!--  <Action name="file_update"/>
-  <Action name="file_status"/>
-  <Separator lineSeparator="true"/>
-  <Action name="file_commit"/>
-  <Action name="file_add"/>
-  <Action name="file_remove"/>-->
   <Merge/>
   <Separator lineSeparator="true"/>
   <Action name="stop_job"/>
