@@ -20,6 +20,7 @@
     </Menu>
     <Menu name="advanced"><text>&amp;Advanced</text>
         <Action name="create_tag"/>
+        <Action name="delete_tag"/>
         <Action name="update_to_tag"/>
         <Action name="update_to_head"/>
         <Separator/>

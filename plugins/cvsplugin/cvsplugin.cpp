@@ -41,6 +41,7 @@ using Cervisia::CvsPlugin;
 #include "annotatecommand.h"
 #include "commitcommand.h"
 #include "createtagcommand.h"
+#include "deletetagcommand.h"
 #include "editcommand.h"
 #include "lockcommand.h"
 #include "logcommand.h"
@@ -299,6 +300,18 @@ void CvsPlugin::createTag()
         return;
 
     executeCommand(new CreateTagCommand(selectionList));
+}
+
+
+void CvsPlugin::deleteTag()
+{
+    kdDebug(8050) << "CvsPlugin::deleteTag()" << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    executeCommand(new DeleteTagCommand(selectionList));
 }
 
 
@@ -578,6 +591,13 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( createTag() ),
                           actionCollection(), "create_tag" );
     hint = i18n("Creates a tag or branch for the selected files");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Delete Tag..."), 0,
+                          this, SLOT( deleteTag() ),
+                          actionCollection(), "delete_tag" );
+    hint = i18n("Deletes a tag from the selected files");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 

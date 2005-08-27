@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = libcvsplugin.la
 libcvsplugin_la_SOURCES = cvsplugin.cpp dirignorelist.cpp globalignorelist.cpp \
                           cvscommandbase.cpp cvscommandbase.skel addcommand.cpp \
                           addwatchcommand.cpp annotatecommand.cpp commitcommand.cpp \
-                          createtagcommand.cpp editcommand.cpp lockcommand.cpp \
+                          createtagcommand.cpp deletetagcommand.cpp editcommand.cpp lockcommand.cpp \
                           logcommand.cpp removecommand.cpp removewatchcommand.cpp \
                           updatecommand.cpp updatetagcommand.cpp \
                           cvs_log_parser.cpp cvs_annotate_parser.cpp cvs_update_parser.cpp \

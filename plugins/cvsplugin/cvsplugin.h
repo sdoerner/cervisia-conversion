@@ -59,6 +59,7 @@ public:
 public slots:
     void annotate(const QString& fileName,
                   const QString& revision = QString::null);
+    void simulateUpdate();
 
 private slots:
     void add();
@@ -67,13 +68,13 @@ private slots:
     void annotate();
     void commit();
     void createTag();
+    void deleteTag();
     void edit();
     void lock();
     void log();
     void remove();
     void removeWatch();
     void revert();
-    void simulateUpdate();
     void unedit();
     void unlock();
     void update();
