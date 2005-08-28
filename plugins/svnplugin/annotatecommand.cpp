@@ -107,7 +107,7 @@ void AnnotateCommand::annotateProcessExited()
 
 void AnnotateCommand::showDialog()
 {
-    kdDebug(8050) << "AnnotateCommand::showDialog()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     // error occurred or process was canceled
     if( m_errorOccurred )

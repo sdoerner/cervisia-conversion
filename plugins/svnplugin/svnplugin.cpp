@@ -58,7 +58,7 @@ SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
     , m_svnRepository(0)
 {
-    kdDebug(8050) << "SvnPlugin::SvnPlugin()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     startService();
     setupMenuActions();
@@ -67,7 +67,7 @@ SvnPlugin::SvnPlugin(QObject* parent, const char* name, const QStringList&)
 
 SvnPlugin::~SvnPlugin()
 {
-    kdDebug(8050) << "SvnPlugin::~SvnPlugin()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     // stop the cvs DCOP service and delete reference
     if( m_svnService )
@@ -91,7 +91,7 @@ DCOPRef SvnPlugin::service() const
 
 bool SvnPlugin::canHandle(const KURL& workingCopy)
 {
-    kdDebug(8050) << "SvnPlugin::canHandle(): url = " << workingCopy << endl;
+    kdDebug(8050) << k_funcinfo << "url = " << workingCopy << endl;
 
     const QFileInfo fi(workingCopy.path());
 
@@ -126,7 +126,7 @@ QString SvnPlugin::repository() const
 
 void SvnPlugin::syncWithEntries(const QString& path)
 {
-    kdDebug(8050) << "SvnPlugin::syncWithEntries(): path = " << path << endl;
+    kdDebug(8050) << k_funcinfo << "path = " << path << endl;
     const QString fileName = path + QDir::separator() + ".svn/entries";
 
     QFile f(fileName);
@@ -144,14 +144,14 @@ void SvnPlugin::syncWithEntries(const QString& path)
     f.close();
 
     QDomElement root = doc.documentElement();
-    kdDebug(8050) << "SvnPlugin::syncWithEntries(): root = " << root.tagName() << endl;
+    kdDebug(8050) << k_funcinfo << "root = " << root.tagName() << endl;
 
     for( QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         if( node.isElement() )
         {
             QDomElement e = node.toElement();
-//            kdDebug(8050) << "SvnPlugin::syncWithEntries(): e = " << e.tagName() << endl;
+//             kdDebug(8050) << k_funcinfo << "e = " << e.tagName() << endl;
 
             if( e.tagName() == "entry" )
             {
@@ -221,7 +221,7 @@ void SvnPlugin::annotate(const QString& fileName, const QString& revision)
 
 void SvnPlugin::add()
 {
-    kdDebug(8050) << "SvnPlugin::add()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -233,7 +233,7 @@ void SvnPlugin::add()
 
 void SvnPlugin::annotate()
 {
-    kdDebug(8050) << "SvnPlugin::annotate()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QString fileName = m_fileView->singleSelection();
     if( fileName.isEmpty() )
@@ -245,7 +245,7 @@ void SvnPlugin::annotate()
 
 void SvnPlugin::commit()
 {
-    kdDebug(8050) << "SvnPlugin::commit()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -260,7 +260,7 @@ void SvnPlugin::commit()
 
 void SvnPlugin::log()
 {
-    kdDebug(8050) << "SvnPlugin::log()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QString fileName = m_fileView->singleSelection();
     if( fileName.isEmpty() )
@@ -272,7 +272,7 @@ void SvnPlugin::log()
 
 void SvnPlugin::remove()
 {
-    kdDebug(8050) << "SvnPlugin::remove()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -284,7 +284,7 @@ void SvnPlugin::remove()
 
 void SvnPlugin::simulateUpdate()
 {
-    kdDebug(8050) << "SvnPlugin::simulateUpdate()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -300,7 +300,7 @@ void SvnPlugin::simulateUpdate()
 
 void SvnPlugin::update()
 {
-    kdDebug(8050) << "SvnPlugin::update()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )

@@ -30,7 +30,7 @@ SvnCommandBase::SvnCommandBase(const ActionKind& action)
     , m_errorOccurred(false)
     , m_svnJob(0)
 {
-    kdDebug(8050) << "SvnCommandBase::SvnCommandBase()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 }
 
 
@@ -60,14 +60,14 @@ void SvnCommandBase::cancel()
 
 void SvnCommandBase::execute()
 {
-    kdDebug(8050) << "SvnCommandBase::execute()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
     m_svnJob->execute();
 }
 
 
 void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 {
-    kdDebug(8050) << "SvnCommandBase::dcopJobExited(): normalExit = " << normalExit << endl;
+    kdDebug(8050) << k_funcinfo << "normalExit = " << normalExit << endl;
 
     // do we have some output left to process
     if( !m_lineBuffer.isEmpty() )
@@ -82,7 +82,7 @@ void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 
 void SvnCommandBase::dcopReceivedStdout(QString buffer)
 {
-    kdDebug(8050) << "SvnCommandBase::dcopReceivedStdout(): buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
 
     processOutput(buffer);
     emit receivedStdout(buffer);
@@ -91,7 +91,7 @@ void SvnCommandBase::dcopReceivedStdout(QString buffer)
 
 void SvnCommandBase::dcopReceivedStderr(QString buffer)
 {
-    kdDebug(8050) << "SvnCommandBase::dcopReceivedStderr(): buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
 
     processOutput(buffer);
     emit receivedStderr(buffer);

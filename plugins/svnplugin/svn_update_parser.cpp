@@ -45,15 +45,15 @@ void SvnUpdateParser::parseLine(const QString& line)
 
 void SvnUpdateParser::parseStatusLine(const QString& line)
 {
-    kdDebug(8050) << "SvnUpdateParser::parseStatusLine(): line = " << line << endl;
+    kdDebug(8050) << k_funcinfo << "line = " << line << endl;
 
     QRegExp rx(".*Revision.*\\d+");
     if( line.length() > 2 && rx.search(line) < 0 )
     {
         QString fileName = line.right(line.length() - 20);
 
-        kdDebug(8050) << "SvnUpdateParser::parseStatusLine(): fileName = " << fileName
-                << ", length = " << line.length() << endl;
+        kdDebug(8050) << k_funcinfo << "fileName = " << fileName
+                      << ", length = " << line.length() << endl;
 
         EntryStatus status = Cervisia::Unknown;
         switch( line[0].latin1() )
@@ -87,15 +87,15 @@ void SvnUpdateParser::parseStatusLine(const QString& line)
 
 void SvnUpdateParser::parseUpdateLine(const QString& line)
 {
-    kdDebug(8050) << "SvnUpdateParser::parseUpdateLine(): line = " << line << endl;
+    kdDebug(8050) << k_funcinfo << "line = " << line << endl;
 
     QRegExp rx(".*Revision.*\\d+");
     if( line.length() > 2 && rx.search(line) < 0 )
     {
         QString fileName = line.right(line.length() - 5);
 
-        kdDebug(8050) << "SvnUpdateParser::parseUpdateLine(): fileName = " << fileName
-                << ", length = " << line.length() << endl;
+        kdDebug(8050) << k_funcinfo << "fileName = " << fileName
+                      << ", length = " << line.length() << endl;
 
         EntryStatus status = Cervisia::Unknown;
         switch( line[0].latin1() )
