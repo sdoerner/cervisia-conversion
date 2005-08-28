@@ -56,7 +56,7 @@ bool CommitCommand::prepare()
     // get new list of files
     m_fileList = dlg.fileList();
     if( m_fileList.isEmpty() )
-        return;
+        return false;
 
     QString msg = dlg.logMessage();
 //         if( !recentCommits.contains(msg) )
