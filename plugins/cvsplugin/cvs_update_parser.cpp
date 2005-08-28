@@ -40,7 +40,7 @@ CvsUpdateParser::~CvsUpdateParser()
  */
 void CvsUpdateParser::parseLine(const QString& line)
 {
-    kdDebug(8050) << "CvsUpdateParser::parseLine(): line = " << line << endl;
+    kdDebug(8050) << k_funcinfo << "line = " << line << endl;
 
     if( line.length() > 2 && line[1] == ' ' )
     {

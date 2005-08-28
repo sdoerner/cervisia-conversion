@@ -67,7 +67,7 @@ CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
     : PluginBase(parent, name)
     , m_cvsRepository(0)
 {
-    kdDebug(8050) << "CvsPlugin::CvsPlugin()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     startService();
     setupMenuActions();
@@ -76,7 +76,7 @@ CvsPlugin::CvsPlugin(QObject* parent, const char* name, const QStringList&)
 
 CvsPlugin::~CvsPlugin()
 {
-    kdDebug(8050) << "CvsPlugin::~CvsPlugin()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     // stop the cvs DCOP service and delete reference
     if( m_cvsService )
@@ -100,7 +100,7 @@ DCOPRef CvsPlugin::service() const
 
 bool CvsPlugin::canHandle(const KURL& workingCopy)
 {
-    kdDebug(8050) << "CvsPlugin::canHandle(): url = " << workingCopy << endl;
+    kdDebug(8050) << k_funcinfo << "url = " << workingCopy << endl;
     const QFileInfo fi(workingCopy.path());
 
     QString path = fi.absFilePath() + "/CVS";
@@ -136,7 +136,7 @@ QString CvsPlugin::repository() const
 
 void CvsPlugin::syncWithEntries(const QString& filePath)
 {
-    kdDebug(8050) << "CvsPlugin::syncWithEntries(): path = " << filePath << endl;
+    kdDebug(8050) << k_funcinfo << "path = " << filePath << endl;
     const QString path = filePath + QDir::separator();
 
     QFile f(path + "CVS/Entries");
@@ -227,7 +227,7 @@ void CvsPlugin::annotate(const QString& fileName, const QString& revision)
 
 void CvsPlugin::add()
 {
-    kdDebug(8050) << "CvsPlugin::add()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -239,7 +239,7 @@ void CvsPlugin::add()
 
 void CvsPlugin::addBinary()
 {
-    kdDebug(8050) << "CvsPlugin::addBinary()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -254,7 +254,7 @@ void CvsPlugin::addBinary()
 
 void CvsPlugin::addWatch()
 {
-    kdDebug(8050) << "CvsPlugin::addWatch()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -266,7 +266,7 @@ void CvsPlugin::addWatch()
 
 void CvsPlugin::annotate()
 {
-    kdDebug(8050) << "CvsPlugin::annotate()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QString fileName = m_fileView->singleSelection();
     if( fileName.isEmpty() )
@@ -278,7 +278,7 @@ void CvsPlugin::annotate()
 
 void CvsPlugin::commit()
 {
-    kdDebug(8050) << "CvsPlugin::commit()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -293,7 +293,7 @@ void CvsPlugin::commit()
 
 void CvsPlugin::createTag()
 {
-    kdDebug(8050) << "CvsPlugin::createTag()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -305,7 +305,7 @@ void CvsPlugin::createTag()
 
 void CvsPlugin::deleteTag()
 {
-    kdDebug(8050) << "CvsPlugin::deleteTag()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -317,7 +317,7 @@ void CvsPlugin::deleteTag()
 
 void CvsPlugin::edit()
 {
-    kdDebug(8050) << "CvsPlugin::edit()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -329,7 +329,7 @@ void CvsPlugin::edit()
 
 void CvsPlugin::lock()
 {
-    kdDebug(8050) << "CvsPlugin::lock()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -341,7 +341,7 @@ void CvsPlugin::lock()
 
 void CvsPlugin::log()
 {
-    kdDebug(8050) << "CvsPlugin::log()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QString fileName = m_fileView->singleSelection();
     if( fileName.isEmpty() )
@@ -353,7 +353,7 @@ void CvsPlugin::log()
 
 void CvsPlugin::remove()
 {
-    kdDebug(8050) << "CvsPlugin::remove()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -368,7 +368,7 @@ void CvsPlugin::remove()
 
 void CvsPlugin::removeWatch()
 {
-    kdDebug(8050) << "CvsPlugin::removeWatch()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -380,7 +380,7 @@ void CvsPlugin::removeWatch()
 
 void CvsPlugin::revert()
 {
-    kdDebug(8050) << "CvsPlugin::revert()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -396,7 +396,7 @@ void CvsPlugin::revert()
 
 void CvsPlugin::simulateUpdate()
 {
-    kdDebug(8050) << "CvsPlugin::simulateUpdate()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -412,7 +412,7 @@ void CvsPlugin::simulateUpdate()
 
 void CvsPlugin::unedit()
 {
-    kdDebug(8050) << "CvsPlugin::unedit()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -424,7 +424,7 @@ void CvsPlugin::unedit()
 
 void CvsPlugin::unlock()
 {
-    kdDebug(8050) << "CvsPlugin::unlock()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -436,7 +436,7 @@ void CvsPlugin::unlock()
 
 void CvsPlugin::update()
 {
-    kdDebug(8050) << "CvsPlugin::update()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -451,7 +451,7 @@ void CvsPlugin::update()
 
 void CvsPlugin::updateToHead()
 {
-    kdDebug(8050) << "CvsPlugin::updateToHead()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -467,7 +467,7 @@ void CvsPlugin::updateToHead()
 
 void CvsPlugin::updateToTag()
 {
-    kdDebug(8050) << "CvsPlugin::updateToTag()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     QStringList selectionList = m_fileView->multipleSelection();
     if( selectionList.isEmpty() )
@@ -681,7 +681,7 @@ void CvsPlugin::setupMenuActions()
 
 void CvsPlugin::startService()
 {
-    kdDebug(8050) << "CvsPlugin::startService(): start cvs DCOP service" << endl;
+    kdDebug(8050) << k_funcinfo << "start cvs DCOP service" << endl;
 
     // start the cvs DCOP service
     QString error;

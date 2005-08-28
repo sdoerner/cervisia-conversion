@@ -30,7 +30,7 @@ CvsCommandBase::CvsCommandBase(const ActionKind& action)
     , m_errorOccurred(false)
     , m_cvsJob(0)
 {
-//     kdDebug(8050) << "CvsCommandBase::CvsCommandBase()" << endl;
+//     kdDebug(8050) << k_funcinfo << endl;
 }
 
 
@@ -54,14 +54,14 @@ bool CvsCommandBase::isRunning() const
 
 void CvsCommandBase::cancel()
 {
-    kdDebug() << "CvsCommandBase::cancel()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
     m_cvsJob->cancel();
 }
 
 
 void CvsCommandBase::execute()
 {
-    kdDebug(8050) << "CvsCommandBase::execute()" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
     m_cvsJob->execute();
 }
 
@@ -76,7 +76,7 @@ bool CvsCommandBase::isErrorMessage(const QString& line) const
 
 void CvsCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 {
-    kdDebug(8050) << "CvsCommandBase::dcopJobExited(): normalExit = " << normalExit << endl;
+    kdDebug(8050) << k_funcinfo << "normalExit = " << normalExit << endl;
 
     // do we have some output left to process
     if( !m_lineBuffer.isEmpty() )
@@ -91,7 +91,7 @@ void CvsCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 
 void CvsCommandBase::dcopReceivedStdout(QString buffer)
 {
-    kdDebug(8050) << "CvsCommandBase::dcopReceivedStdout(): buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
 
     processOutput(buffer);
     emit receivedStdout(buffer);
@@ -100,7 +100,7 @@ void CvsCommandBase::dcopReceivedStdout(QString buffer)
 
 void CvsCommandBase::dcopReceivedStderr(QString buffer)
 {
-    kdDebug(8050) << "CvsCommandBase::dcopReceivedStderr(): buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
 
     processOutput(buffer);
     emit receivedStderr(buffer);
