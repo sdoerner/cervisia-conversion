@@ -38,6 +38,7 @@ using Cervisia::SvnPlugin;
 #include "addcommand.h"
 #include "annotatecommand.h"
 #include "commitcommand.h"
+#include "diffcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "updatecommand.h"
@@ -258,6 +259,30 @@ void SvnPlugin::commit()
 }
 
 
+void SvnPlugin::diffToBase()
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new DiffCommand(fileName, "BASE", QString::null, QStringList()));
+}
+
+
+void SvnPlugin::diffToHead()
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    QString fileName = m_fileView->singleSelection();
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new DiffCommand(fileName, "HEAD", QString::null, QStringList()));
+}
+
+
 void SvnPlugin::log()
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -400,6 +425,20 @@ void SvnPlugin::setupMenuActions()
                           this, SLOT( annotate() ),
                           actionCollection(), "view_annotate" );
     hint = i18n("Shows a blame-annotated view of the selected file");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Difference to Repository (BASE)..."), CTRL+Key_D,
+                          this, SLOT( diffToBase() ),
+                          actionCollection(), "view_diff_base" );
+    hint = i18n("Shows the differences of the selected file to the checked out version (tag BASE)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("Difference &to Repository (HEAD)..."), CTRL+Key_H,
+                          this, SLOT( diffToHead() ),
+                          actionCollection(), "view_diff_head" );
+    hint = i18n("Shows the differences of the selected file to the newest version in the repository (tag HEAD)");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 

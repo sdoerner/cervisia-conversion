@@ -58,6 +58,22 @@ k_dcop:
                    bool recursive);
 
     /**
+     * Show differences between different revisions of a file.
+     *
+     * @param fileName the name of the file to show differences for
+     * @param revA
+     * @param revB
+     * @param options
+     *
+     * @return A DCOP reference to the svn job or in case of failure a
+     *         null reference.
+     */
+    DCOPRef diff(const QString& fileName,
+                 const QString& revisionA,
+                 const QString& revisionB,
+                 const QStringList& options);
+
+    /**
      * Shows log messages for a file.
      *
      * @param fileName the name of the file to show log messages for

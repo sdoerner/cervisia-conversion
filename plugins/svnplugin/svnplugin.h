@@ -65,6 +65,8 @@ private slots:
     void add();
     void annotate();
     void commit();
+    void diffToBase();
+    void diffToHead();
     void log();
     void remove();
     void update();

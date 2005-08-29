@@ -165,12 +165,40 @@ DCOPRef SvnService::commit(const QStringList& files, const QString& commitMessag
 }
 
 
+DCOPRef SvnService::diff(const QString& fileName,
+                         const QString& revisionA,
+                         const QString& revisionB,
+                         const QStringList& options)
+{
+    if( !d->hasWorkingCopy() )
+        return DCOPRef();
+
+    // create a svn job
+    SvnJob* job = d->createSvnJob();
+
+    // assemble the command line
+    // svn diff [DIFFOPTIONS] [FORMAT] [-r REVA] {-r REVB] [FILE]
+    *job << d->repository->svnClient() << "diff";
+
+    if( !revisionA.isEmpty() )
+        *job << "-r" << KProcess::quote(revisionA);
+
+    if( !revisionB.isEmpty() )
+        *job << "-r" << KProcess::quote(revisionB);
+
+    *job << KProcess::quote(fileName);
+
+    // return a DCOP reference to the svn job
+    return DCOPRef(d->appId, job->objId());
+}
+
+
 DCOPRef SvnService::log(const QString& fileName)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
 
-    // create a cvs job
+    // create a svn job
     SvnJob* job = d->createSvnJob();
 
     // assemble the command line
