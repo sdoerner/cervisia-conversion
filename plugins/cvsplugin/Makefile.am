@@ -9,7 +9,7 @@ libcvsplugin_la_SOURCES = cvsplugin.cpp dirignorelist.cpp globalignorelist.cpp \
                           addwatchcommand.cpp annotatecommand.cpp commitcommand.cpp \
                           createtagcommand.cpp deletetagcommand.cpp editcommand.cpp lockcommand.cpp \
                           logcommand.cpp removecommand.cpp removewatchcommand.cpp \
-                          updatecommand.cpp updatetagcommand.cpp \
+                          updatecommand.cpp updatetagcommand.cpp diffcommand.cpp \
                           cvs_log_parser.cpp cvs_annotate_parser.cpp cvs_update_parser.cpp \
                           cvspluginsettings.kcfgc
 #libcvsplugin_la_LIBADD  = $(LIB_KPARTS) $(top_builddir)/cervisia/libcervisia.la

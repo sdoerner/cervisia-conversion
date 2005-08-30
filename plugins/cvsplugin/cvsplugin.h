@@ -69,6 +69,8 @@ private slots:
     void commit();
     void createTag();
     void deleteTag();
+    void diffToBase();
+    void diffToHead();
     void edit();
     void lock();
     void log();

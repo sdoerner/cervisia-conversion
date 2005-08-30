@@ -183,15 +183,13 @@ k_dcop:
      * @param fileName
      * @param revA
      * @param revB
-     * @param diffOptions
-     * @param format
+     * @param options
      *
      * @return A DCOP reference to the cvs job or in case of failure a
      *         null reference.
      */
     DCOPRef diff(const QString& fileName, const QString& revA,
-                 const QString& revB, const QString& diffOptions,
-                 const QString& format);
+                 const QString& revB, const QStringList& options);
 
     /**
      * @param files

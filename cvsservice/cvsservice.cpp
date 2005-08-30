@@ -455,14 +455,16 @@ DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
                          unsigned contextLines)
 {
     // cvs diff [DIFFOPTIONS] -U CONTEXTLINES [-r REVA] {-r REVB] [FILE]
-    QString format = "-U" + QString::number(contextLines);
-    return diff(fileName, revA, revB, diffOptions, format);
+    QStringList options(diffOptions);
+    options << "-U" + QString::number(contextLines);
+    return diff(fileName, revA, revB, options);
 }
 
 
-DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
-                         const QString& revB, const QString& diffOptions,
-                         const QString& format)
+DCOPRef CvsService::diff(const QString& fileName,
+                         const QString& revA,
+                         const QString& revB,
+                         const QStringList& options)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -472,8 +474,8 @@ DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
 
     // assemble the command line
     // cvs diff [DIFFOPTIONS] [FORMAT] [-r REVA] {-r REVB] [FILE]
-    *job << d->repository->cvsClient() << "diff" << diffOptions
-         << format;
+    *job << d->repository->cvsClient() << "diff"
+         << CvsServiceUtils::joinFileList(options);
 
     if( !revA.isEmpty() )
         *job << "-r" << KProcess::quote(revA);
