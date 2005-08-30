@@ -419,6 +419,36 @@ void CvsPlugin::revert()
 }
 
 
+void CvsPlugin::showLastChange()
+{
+    QString fileName, revisionA;
+    m_fileView->getSingleSelection(&fileName, &revisionA);
+    if (fileName.isEmpty())
+        return;
+
+    const int pos = revisionA.findRev('.') + 1;
+    bool ok;
+    const unsigned int lastNumber(revisionA.mid(pos).toUInt(&ok));
+    if ((pos <= 0) || !ok)
+    {
+        KMessageBox::sorry(0,
+                           i18n("The revision looks invalid."),
+                           "Cervisia");
+        return;
+    }
+    if (!lastNumber)
+    {
+        KMessageBox::sorry(0,
+                           i18n("This is the first revision of the branch."),
+                           "Cervisia");
+        return;
+    }
+    const QString revisionB = revisionA.left(pos) + QString::number(lastNumber - 1);
+
+    executeCommand(new DiffCommand(fileName, revisionB, revisionA, QStringList()));
+}
+
+
 void CvsPlugin::simulateUpdate()
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -622,6 +652,13 @@ void CvsPlugin::setupMenuActions()
     hint = i18n("Shows the differences of the selected file to the newest version in the repository (tag HEAD)");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
+
+    action = new KAction( i18n("Last &Change..."), 0,
+                          this, SLOT(showLastChange()),
+                          actionCollection(), "view_last_change" );
+    hint = i18n("Shows the differences between the last two revisions of the selected file");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
 
     //
     // Advanced Menu

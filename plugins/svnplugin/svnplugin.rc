@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="svnplugin" library="libsvnplugin" version="3">
+<kpartplugin name="svnplugin" library="libsvnplugin" version="4">
 <MenuBar>
     <Menu name="file"><Text>&amp;File</Text>
         <Action name="file_update"/>
@@ -16,6 +16,7 @@
         <Action name="view_annotate"/>
         <Action name="view_diff_base"/>
         <Action name="view_diff_head"/>
+        <Action name="view_last_change"/>
     </Menu>
     <Menu name="settings"><text>&amp;Settings</text>
         <Separator group="save_merge_group"/>

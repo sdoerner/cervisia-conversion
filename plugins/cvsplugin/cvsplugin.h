@@ -77,6 +77,7 @@ private slots:
     void remove();
     void removeWatch();
     void revert();
+    void showLastChange();
     void unedit();
     void unlock();
     void update();

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="cvsplugin" library="libcvsplugin" version="2">
+<kpartplugin name="cvsplugin" library="libcvsplugin" version="3">
 <MenuBar>
     <Menu name="file"><Text>&amp;File</Text>
         <Separator/>
@@ -19,6 +19,7 @@
         <Action name="view_annotate"/>
         <Action name="view_diff_base"/>
         <Action name="view_diff_head"/>
+        <Action name="view_last_change"/>
     </Menu>
     <Menu name="advanced"><text>&amp;Advanced</text>
         <Action name="create_tag"/>

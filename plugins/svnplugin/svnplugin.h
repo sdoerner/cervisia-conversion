@@ -69,6 +69,7 @@ private slots:
     void diffToHead();
     void log();
     void remove();
+    void showLastChange();
     void update();
 
     void commitRecursive();

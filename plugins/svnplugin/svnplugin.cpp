@@ -70,7 +70,7 @@ SvnPlugin::~SvnPlugin()
 {
     kdDebug(8050) << k_funcinfo << endl;
 
-    // stop the cvs DCOP service and delete reference
+    // stop the svn DCOP service and delete reference
     if( m_svnService )
         m_svnService->quit();
 
@@ -307,6 +307,16 @@ void SvnPlugin::remove()
 }
 
 
+void SvnPlugin::showLastChange()
+{
+    const QString fileName = m_fileView->singleSelection();
+    if (fileName.isEmpty())
+        return;
+
+    executeCommand(new DiffCommand(fileName, "PREV", "COMMITTED", QStringList()));
+}
+
+
 void SvnPlugin::simulateUpdate()
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -442,6 +452,13 @@ void SvnPlugin::setupMenuActions()
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 
+    action = new KAction( i18n("Last &Change..."), 0,
+                          this, SLOT(showLastChange()),
+                          actionCollection(), "view_last_change" );
+    hint = i18n("Shows the differences between the last two revisions of the selected file");
+    action->setToolTip( hint );
+    action->setWhatsThis( hint );
+
     //
     // Settings Menu
     //
@@ -466,7 +483,7 @@ void SvnPlugin::setupMenuActions()
 
 void SvnPlugin::startService()
 {
-    // start the cvs DCOP service
+    // start the svn DCOP service
     QString error;
     QCString appId;
 
