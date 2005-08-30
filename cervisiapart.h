@@ -90,11 +90,6 @@ public slots:
     void slotChangeLog();
     void slotFileProperties();
 //     void slotRevert();
-    //    void slotBrowseMultiLog();
-//     void slotAnnotate();
-    void slotDiffBase();
-    void slotDiffHead();
-    void slotLastChange();
     void slotHistory();
     void slotCreateRepository();
     void slotCheckout();
@@ -157,7 +152,6 @@ private:
     void addOrRemoveWatch(WatchDialog::ActionType action);
     void createOrDeleteTag(Cervisia::TagDialog::ActionType action);
     void showJobStart(const QString &command);
-    void showDiff(const QString& revision);
     void setFilter();
 
     UpdateView *update;

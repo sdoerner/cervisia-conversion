@@ -219,43 +219,6 @@ public:
 };
 
 
-bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
-                              const QString &revA, const QString &revB)
-{
-    setCaption(i18n("CVS Diff: %1").arg(fileName));
-    revlabel1->setText( revA.isEmpty()?
-                        i18n("Repository:")
-                        : i18n("Revision ")+revA+":" );
-    revlabel2->setText( revB.isEmpty()?
-                        i18n("Working dir:")
-                        : i18n("Revision ")+revB+":" );
-
-    KConfigGroupSaver cs(&partConfig, "General");
-
-    // Ok, this is a hack: When the user wants an external diff
-    // front end, it is executed from here. Of course, in that
-    // case this dialog wouldn't have to be created in the first
-    // place, but this design at least makes the handling trans-
-    // parent for the calling routines
-
-    QString extdiff = partConfig.readPathEntry("ExternalDiff");
-    if (!extdiff.isEmpty())
-        {
-            callExternalDiff(extdiff, service, fileName, revA, revB);
-            return false;
-        }
-
-    const QString diffOptions   = partConfig.readEntry("DiffOptions");
-    const unsigned contextLines = partConfig.readUnsignedNumEntry("ContextLines", 65535);
-
-    DCOPRef job = service->diff(fileName, revA, revB, diffOptions, contextLines);
-    if( !service->ok() )
-        return false;
-
-    return false;
-}
-
-
 void DiffDialog::setDiffInfos(const DiffInfoList& diffInfos)
 {
     // remember diff output for "save as" action

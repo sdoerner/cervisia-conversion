@@ -45,8 +45,6 @@
 #include "progressdlg.h"
 #include "diffdlg.h"
 #include "resolvedlg.h"
-#include "annotatedlg.h"
-#include "annotatectl.h"
 #include "commitdlg.h"
 #include "updatedlg.h"
 #include "checkoutdlg.h"
@@ -282,39 +280,6 @@ void CervisiaPart::setupActions()
                           actionCollection(), "stop_job" );
     action->setEnabled( false );
     hint = i18n("Stops any running sub-processes");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-#if 0
-    action = new KAction( i18n("Browse Multi-File Log..."), 0,
-                          this, SLOT(slotBrowseMultiLog()),
-                          actionCollection() );
-#endif
-//     action = new KAction( i18n("&Annotate..."), CTRL+Key_A,
-//                           this, SLOT(slotAnnotate()),
-//                           actionCollection(), "view_annotate" );
-//     hint = i18n("Shows a blame-annotated view of the selected file");
-//     action->setToolTip( hint );
-//     action->setWhatsThis( hint );
-
-    action = new KAction( i18n("&Difference to Repository (BASE)..."), "vcs_diff", CTRL+Key_D,
-                          this, SLOT(slotDiffBase()),
-                          actionCollection(), "view_diff_base" );
-    hint = i18n("Shows the differences of the selected file to the checked out version (tag BASE)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("Difference to Repository (HEAD)..."), "vcs_diff", CTRL+Key_H,
-                          this, SLOT(slotDiffHead()),
-                          actionCollection(), "view_diff_head" );
-    hint = i18n("Shows the differences of the selected file to the newest version in the repository (tag HEAD)");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
-
-    action = new KAction( i18n("Last &Change..."), 0,
-                          this, SLOT(slotLastChange()),
-                          actionCollection(), "view_last_change" );
-    hint = i18n("Shows the differences between the last two revisions of the selected file");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
@@ -895,50 +860,6 @@ void CervisiaPart::updateSandbox(const QString &extraopt)
     }
 }
 
-#if 0
-void CervisiaPart::slotBrowseMultiLog()
-{
-    QStrList list = update->multipleSelection();
-    if (!list.isEmpty())
-    {
-        // Non-modal dialog
-        MultiLogDialog *l = new MultiLogDialog();
-        if (l->parseCvsLog(".", list))
-            l->show();
-        else
-            delete l;
-    }
-}
-#endif
-
-
-// void CervisiaPart::slotAnnotate()
-// {
-//     QString filename;
-//     update->getSingleSelection(&filename);
-// 
-//     if (filename.isEmpty())
-//         return;
-
-//     // Non-modal dialog
-//     AnnotateDialog* dlg = new AnnotateDialog(*config(), widget());
-//     AnnotateController ctl(dlg, cvsService);
-//     ctl.showDialog(filename);
-// }
-
-
-void CervisiaPart::slotDiffBase()
-{
-    showDiff(QString::fromLatin1("BASE"));
-}
-
-
-void CervisiaPart::slotDiffHead()
-{
-    showDiff(QString::fromLatin1("HEAD"));
-}
-
-
 void CervisiaPart::slotShowWatchers()
 {
     QStringList list = update->multipleSelection();
@@ -1216,42 +1137,6 @@ void CervisiaPart::createOrDeleteTag(TagDialog::ActionType action)
 
 
 
-void CervisiaPart::slotLastChange()
-{
-    QString filename, revA, revB;
-    update->getSingleSelection(&filename, &revA);
-    if (filename.isEmpty())
-        return;
-
-    int pos, lastnumber;
-    bool ok;
-    if ( (pos = revA.findRev('.')) == -1
-         || (lastnumber=revA.right(revA.length()-pos-1).toUInt(&ok), !ok) )
-    {
-        KMessageBox::sorry(widget(),
-                           i18n("The revision looks invalid."),
-                           "Cervisia");
-        return;
-    }
-    if (lastnumber == 0)
-    {
-        KMessageBox::sorry(widget(),
-                           i18n("This is the first revision of the branch."),
-                           "Cervisia");
-        return;
-    }
-    revB = revA.left(pos+1);
-    revB += QString::number(lastnumber-1);
-
-    // Non-modal dialog
-    DiffDialog *l = new DiffDialog(*config());
-    if (l->parseCvsDiff(cvsService, filename, revB, revA))
-        l->show();
-    else
-        delete l;
-}
-
-
 void CervisiaPart::slotHistory()
 {
     // Non-modal dialog
@@ -1381,23 +1266,6 @@ void CervisiaPart::showJobStart(const QString &cmdline)
 
     emit setStatusBarText( cmdline );
     updateActions();
-}
-
-
-void CervisiaPart::showDiff(const QString& revision)
-{
-    QString fileName;
-    update->getSingleSelection(&fileName);
-
-    if (fileName.isEmpty())
-        return;
-
-    // Non-modal dialog
-    DiffDialog *l = new DiffDialog(*config());
-    if (l->parseCvsDiff(cvsService, fileName, revision, QString::null))
-        l->show();
-    else
-        delete l;
 }
 
 

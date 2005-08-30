@@ -47,9 +47,6 @@ public:
 
     virtual ~DiffDialog();
 
-    bool parseCvsDiff(CvsService_stub* service, const QString &fileName, 
-                      const QString &revA, const QString &revB);
-
     void setDiffInfos(const Cervisia::DiffInfoList& diffInfos);
 
 protected:
