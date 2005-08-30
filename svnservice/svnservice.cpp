@@ -180,11 +180,16 @@ DCOPRef SvnService::diff(const QString& fileName,
     // svn diff [DIFFOPTIONS] [FORMAT] [-r REVA] {-r REVB] [FILE]
     *job << d->repository->svnClient() << "diff";
 
-    if( !revisionA.isEmpty() )
-        *job << "-r" << KProcess::quote(revisionA);
+    QString revision;
+    if( !revisionA.isEmpty() && !revisionB.isEmpty() )
+        revision = revisionA + ':' + revisionB;
+    else if( !revisionA.isEmpty() )
+        revision = revisionA;
+    else if( !revisionB.isEmpty() )
+        revision = revisionB;
 
-    if( !revisionB.isEmpty() )
-        *job << "-r" << KProcess::quote(revisionB);
+    if( !revision.isEmpty() )
+        *job << "-r" << KProcess::quote(revision);
 
     *job << KProcess::quote(fileName);
 
