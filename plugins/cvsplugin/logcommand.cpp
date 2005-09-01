@@ -82,9 +82,6 @@ void LogCommand::showDialog()
     if( m_errorOccurred )
         return;
 
-    connect(m_logDlg, SIGNAL(showAnnotateDialog(const QString&, const QString&)),
-            m_plugin, SLOT(annotate(const QString&, const QString&)));
-
     m_logDlg->setCaption(i18n("CVS Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);
     m_logDlg->show();

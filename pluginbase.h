@@ -21,7 +21,6 @@
 
 #include <kparts/plugin.h>
 
-#include "entry.h"
 
 class DCOPRef;      // needed for service()
 
@@ -30,6 +29,7 @@ namespace Cervisia
 {
 
 class CommandBase;
+class Entry;
 class IgnoreFilterBase;
 class SelectionIntf;
 class UpdateParser;
@@ -66,8 +66,8 @@ public:
 
     virtual void simulateUpdate() = 0;
 
-//     virtual void annotate(const QString& fileName, 
-//                           const QString& revision = QString::null) = 0;
+    virtual void annotate(const QString& fileName, 
+                          const QString& revision = QString::null) = 0;
 
 signals:
     void updateItem(const Cervisia::Entry& entry);

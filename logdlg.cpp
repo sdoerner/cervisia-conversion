@@ -43,15 +43,13 @@
 #include <krun.h>
 #include <kurl.h>
 
-// #include "cvsservice_stub.h"
 #include "diffdlg.h"
 #include "loglist.h"
 #include "logplainview.h"
 #include "logtree.h"
 #include "misc.h"
-// #include "pluginbase.h"
-// #include "pluginmanager.h"
-// #include "progressdlg.h"
+#include "pluginbase.h"
+#include "pluginmanager.h"
 #include "patchoptiondlg.h"
 
 
@@ -352,8 +350,7 @@ void LogDialog::diffClicked()
 
 void LogDialog::annotateClicked()
 {
-//     Cervisia::PluginManager::self()->currentPlugin()->annotate(m_fileName, selectionA);
-    emit showAnnotateDialog(m_fileName, selectionA);
+    Cervisia::PluginManager::self()->currentPlugin()->annotate(m_fileName, selectionA);
 }
 
 
