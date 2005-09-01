@@ -333,7 +333,7 @@ void LogDialog::findClicked()
 
 void LogDialog::diffClicked()
 {
-/*    if (selectionA.isEmpty())
+    if (selectionA.isEmpty())
     {
         KMessageBox::information(this,
             i18n("Please select revision A or revisions A and B first."),
@@ -341,12 +341,7 @@ void LogDialog::diffClicked()
         return;
     }
 
-    // Non-modal dialog
-    DiffDialog *l = new DiffDialog(partConfig);
-    if (l->parseCvsDiff(cvsService, filename, selectionA, selectionB))
-        l->show();
-    else
-        delete l;*/
+    emit showDiffDialog(m_fileName, selectionA, selectionB);
 }
 
 

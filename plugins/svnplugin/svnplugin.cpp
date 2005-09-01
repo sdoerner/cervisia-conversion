@@ -265,6 +265,19 @@ void SvnPlugin::commit()
 }
 
 
+void SvnPlugin::diff(const QString& fileName,
+                     const QString& revisionA,
+                     const QString& revisionB)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new DiffCommand(fileName, revisionA, revisionB, QStringList()));	
+}
+
+
 void SvnPlugin::diffToBase()
 {
     kdDebug(8050) << k_funcinfo << endl;

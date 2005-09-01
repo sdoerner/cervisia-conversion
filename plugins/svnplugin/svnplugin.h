@@ -59,6 +59,9 @@ public:
 public slots:
     void annotate(const QString& fileName,
                   const QString& revision = QString::null);
+    void diff(const QString& fileName,
+              const QString& revisionA,
+              const QString& revisionB = QString::null);
     void simulateUpdate();
 
 private slots:

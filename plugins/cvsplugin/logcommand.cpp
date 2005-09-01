@@ -84,6 +84,8 @@ void LogCommand::showDialog()
 
     connect(m_logDlg, SIGNAL(showAnnotateDialog(const QString&, const QString&)),
             m_plugin, SLOT(annotate(const QString&, const QString&)));
+    connect(m_logDlg, SIGNAL(showDiffDialog(const QString&, const QString&, const QString&)),
+            m_plugin, SLOT(diff(const QString&, const QString&, const QString&)));
 
     m_logDlg->setCaption(i18n("CVS Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);

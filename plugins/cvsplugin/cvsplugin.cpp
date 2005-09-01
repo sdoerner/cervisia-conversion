@@ -222,6 +222,11 @@ Cervisia::UpdateParser* CvsPlugin::updateParser() const
 
 void CvsPlugin::annotate(const QString& fileName, const QString& revision)
 {
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
     executeCommand(new AnnotateCommand(fileName, revision));	
 }
 
@@ -313,6 +318,19 @@ void CvsPlugin::deleteTag()
         return;
 
     executeCommand(new DeleteTagCommand(selectionList));
+}
+
+
+void CvsPlugin::diff(const QString& fileName,
+                     const QString& revisionA,
+                     const QString& revisionB)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new DiffCommand(fileName, revisionA, revisionB, QStringList()));	
 }
 
 

@@ -51,7 +51,12 @@ public:
                      const QString& fileName);
 
 signals:
-    void showAnnotateDialog(const QString& fileName, const QString& revision);
+    void showAnnotateDialog(const QString& fileName,
+                            const QString& revision);
+
+    void showDiffDialog(const QString& fileName,
+                        const QString& revisionA,
+                        const QString& revisionB);
 
 protected slots:
     void slotOk();
