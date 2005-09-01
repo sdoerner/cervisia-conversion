@@ -62,6 +62,9 @@ bool AddCommand::prepare()
         DCOPRef jobRef = CvsPlugin::cvsService()->add(m_fileList, m_binary);
         connectToJob(jobRef);
 
+        connect(this, SIGNAL(jobExited(bool, int)),
+                this, SLOT(deleteLater()));
+
         return true;
     }
 

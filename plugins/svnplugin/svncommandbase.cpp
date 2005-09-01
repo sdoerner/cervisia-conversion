@@ -76,7 +76,6 @@ void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
     }
 
     emit jobExited(normalExit, exitStatus);
-    deleteLater();  //TODO: Okay?
 }
 
 

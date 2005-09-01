@@ -89,6 +89,8 @@ void AnnotateCommand::showDialog()
     m_annotateDlg->setAnnotateInfos(m_logParser->logInfos(),
                                     m_annotateParser->annotateInfos());
     m_annotateDlg->show();
+
+    deleteLater();
 }
 
 #include "annotatecommand.moc"

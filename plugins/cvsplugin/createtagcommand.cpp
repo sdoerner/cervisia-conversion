@@ -45,11 +45,14 @@ bool CreateTagCommand::prepare()
     // did the user cancel the dialog?
     if( !dlg.exec() )
         return false;
-    
-    DCOPRef jobRef = CvsPlugin::cvsService()->createTag(m_fileList, dlg.tag(), 
-		                                        dlg.branchTag(),
-							dlg.forceTag());
+
+    DCOPRef jobRef = CvsPlugin::cvsService()->createTag(m_fileList, dlg.tag(),
+                                                        dlg.branchTag(),
+                                                        dlg.forceTag());
     connectToJob(jobRef);
+
+    connect(this, SIGNAL(jobExited(bool, int)),
+            this, SLOT(deleteLater()));
 
     return true;
 }

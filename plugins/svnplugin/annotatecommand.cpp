@@ -32,6 +32,8 @@ using Cervisia::AnnotateCommand;
 #include "svnplugin.h"
 #include "svn_annotate_parser.h"
 
+#include <kdebug.h>
+
 
 AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revision)
     : SvnCommandBase(Other)
@@ -49,6 +51,7 @@ AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revisio
 
 AnnotateCommand::~AnnotateCommand()
 {
+    delete m_logCmd;
 }
 
 
@@ -117,6 +120,8 @@ void AnnotateCommand::showDialog()
     m_annotateDlg->setAnnotateInfos(m_logInfos,
                                     m_annotateParser->annotateInfos());
     m_annotateDlg->show();
+
+    deleteLater();
 }
 
 #include "annotatecommand.moc"

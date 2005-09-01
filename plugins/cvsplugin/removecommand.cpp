@@ -51,6 +51,9 @@ bool RemoveCommand::prepare()
         DCOPRef jobRef = CvsPlugin::cvsService()->remove(m_fileList, isRecursive());
         connectToJob(jobRef);
 
+        connect(this, SIGNAL(jobExited(bool, int)),
+                this, SLOT(deleteLater()));
+
         return true;
     }
 

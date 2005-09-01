@@ -90,6 +90,8 @@ void LogCommand::showDialog()
     m_logDlg->setCaption(i18n("CVS Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);
     m_logDlg->show();
+
+    deleteLater();
 }
 
 #include "logcommand.moc"

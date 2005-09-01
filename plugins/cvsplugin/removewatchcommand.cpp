@@ -48,6 +48,9 @@ bool RemoveWatchCommand::prepare()
         DCOPRef jobRef = CvsPlugin::cvsService()->removeWatch(m_fileList, dlg.events());
         connectToJob(jobRef);
 
+        connect(this, SIGNAL(jobExited(bool, int)),
+                this, SLOT(deleteLater()));
+
         return true;
     }
 

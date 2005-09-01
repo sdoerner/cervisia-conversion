@@ -27,8 +27,6 @@ using Cervisia::UpdateCommand;
 
 #include "svnplugin.h"
 
-#include <kdebug.h>
-
 
 UpdateCommand::UpdateCommand(const QStringList& files, UpdateParser* parser)
     : SvnCommandBase(Update)
@@ -61,6 +59,9 @@ bool UpdateCommand::prepare()
     else
         jobRef = SvnPlugin::svnService()->update(m_fileList, isRecursive());
     connectToJob(jobRef);
+
+    connect(this, SIGNAL(jobExited(bool, int)),
+            this, SLOT(deleteLater()));
 
     // setup the update output parser
     m_parser->setSimulation(m_simulation);

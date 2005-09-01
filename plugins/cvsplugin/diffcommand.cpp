@@ -100,6 +100,8 @@ void DiffCommand::showDialog()
     m_diffDialog->setCaption(i18n("CVS Diff: %1").arg(m_fileName));
     m_diffDialog->setDiffInfos(m_parser->diffInfos());
     m_diffDialog->show();
+
+    deleteLater();
 }
 
 

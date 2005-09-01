@@ -30,8 +30,6 @@ using Cervisia::LogCommand;
 #include "svnplugin.h"
 #include "svn_log_parser.h"
 
-#include <kdebug.h>
-
 
 LogCommand::LogCommand(const QString& fileName, SvnPlugin* plugin)
     : SvnCommandBase(Other)
@@ -107,6 +105,8 @@ void LogCommand::showDialog()
     m_logDlg->setCaption(i18n("SVN Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);
     m_logDlg->show();
+
+    deleteLater();
 }
 
 #include "logcommand.moc"
