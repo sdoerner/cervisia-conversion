@@ -53,7 +53,7 @@ AnnotateCommand::~AnnotateCommand()
 bool AnnotateCommand::prepare()
 {
     DCOPRef jobRef = CvsPlugin::cvsService()->annotate(m_fileName, m_revision);
-    connectToJob(jobRef);
+    connectToJob(jobRef, ManualDeletion);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_annotateParser, SLOT(parseOutput(const QString&)));

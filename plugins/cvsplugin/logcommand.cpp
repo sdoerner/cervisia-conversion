@@ -51,7 +51,7 @@ LogCommand::~LogCommand()
 bool LogCommand::prepare()
 {
     DCOPRef jobRef = CvsPlugin::cvsService()->log(m_fileName);
-    connectToJob(jobRef);
+    connectToJob(jobRef, ManualDeletion);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_parser, SLOT(parseOutput(const QString&)));

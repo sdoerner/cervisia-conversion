@@ -73,8 +73,5 @@ bool CommitCommand::prepare()
     DCOPRef jobRef = CvsPlugin::cvsService()->commit(m_fileList, msg, isRecursive());
     connectToJob(jobRef);
 
-    connect(this, SIGNAL(jobExited(bool, int)),
-            this, SLOT(deleteLater()));
-
     return true;
 }

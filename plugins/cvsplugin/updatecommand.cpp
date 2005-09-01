@@ -70,9 +70,6 @@ bool UpdateCommand::prepare()
                         false/*opt_createDirs*/, false/*opt_pruneDirs*/, m_option);
     connectToJob(jobRef);
 
-    connect(this, SIGNAL(jobExited(bool, int)),
-            this, SLOT(deleteLater()));
-
     // setup the update output parser
     m_parser->setSimulation(m_simulation);
     connect(this, SIGNAL(receivedStdout(const QString&)),
