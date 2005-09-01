@@ -61,8 +61,8 @@ k_dcop:
      * Show differences between different revisions of a file.
      *
      * @param fileName the name of the file to show differences for
-     * @param revA
-     * @param revB
+     * @param revisionA
+     * @param revisionB
      * @param options
      *
      * @return A DCOP reference to the svn job or in case of failure a
