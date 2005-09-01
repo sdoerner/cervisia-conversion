@@ -203,7 +203,7 @@ void SvnPlugin::syncWithEntries(const QString& path)
 }
 
 
-Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& path) const
+Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& /* path */) const
 {
     return new GlobalIgnoreList;
 }
@@ -212,11 +212,6 @@ Cervisia::IgnoreFilterBase* SvnPlugin::filter(const QString& path) const
 Cervisia::UpdateParser* SvnPlugin::updateParser() const
 {
     return m_updateParser;
-}
-
-
-void SvnPlugin::annotate(const QString& fileName, const QString& revision)
-{
 }
 
 
@@ -229,6 +224,17 @@ void SvnPlugin::add()
         return;
 
     executeCommand(new AddCommand(selectionList));
+}
+
+
+void SvnPlugin::annotate(const QString& fileName, const QString& revision)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new AnnotateCommand(fileName, revision));
 }
 
 
