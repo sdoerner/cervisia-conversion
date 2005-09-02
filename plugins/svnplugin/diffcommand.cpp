@@ -65,7 +65,7 @@ bool DiffCommand::prepare()
                                                    m_revisionA,
                                                    m_revisionB,
                                                    m_options);
-    connectToJob(jobRef);
+    connectToJob(jobRef, ManualDeletion);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_parser, SLOT(parseOutput(const QString&)));

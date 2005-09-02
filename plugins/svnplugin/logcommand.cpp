@@ -64,7 +64,7 @@ const Cervisia::LogInfoList& LogCommand::logInfos() const
 bool LogCommand::prepare()
 {
     DCOPRef jobRef = SvnPlugin::svnService()->log(m_fileName);
-    connectToJob(jobRef);
+    connectToJob(jobRef, ManualDeletion);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_parser, SLOT(parseOutput(const QString&)));

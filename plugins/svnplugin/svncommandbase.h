@@ -37,6 +37,8 @@ class SvnCommandBase : public CommandBase, public DCOPObject
     Q_OBJECT
 
 public:
+    enum DeletionHandling { ManualDeletion, AutomaticDeletion };
+
     SvnCommandBase(const ActionKind& action);
     virtual ~SvnCommandBase();
 
@@ -56,7 +58,8 @@ k_dcop:
     void dcopReceivedStderr(QString buffer);
 
 protected:
-    void connectToJob(const DCOPRef& jobRef);
+    void connectToJob(const DCOPRef& jobRef,
+                      DeletionHandling deletion = AutomaticDeletion);
 
     QString      m_errorId1, m_errorId2;
     bool         m_errorOccurred;

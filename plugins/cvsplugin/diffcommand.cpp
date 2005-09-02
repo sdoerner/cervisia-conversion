@@ -45,8 +45,8 @@ DiffCommand::DiffCommand(const QString& fileName,
     , m_parser(new DiffParser(this))
     , m_diffDialog(0)
 {
-//     m_errorId1 = "cvs diff:";
-//     m_errorId2 = "cvs [diff aborted]:";
+    m_errorId1 = "cvs diff:";
+    m_errorId2 = "cvs [diff aborted]:";
 }
 
 

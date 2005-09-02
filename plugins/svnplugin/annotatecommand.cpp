@@ -64,7 +64,7 @@ bool AnnotateCommand::prepare()
         m_logCmd->execute();
 
     DCOPRef jobRef = SvnPlugin::svnService()->annotate(m_fileName, m_revision);
-    connectToJob(jobRef);
+    connectToJob(jobRef, ManualDeletion);
 
     connect(this, SIGNAL(receivedStdout(const QString&)),
             m_annotateParser, SLOT(parseOutput(const QString&)));

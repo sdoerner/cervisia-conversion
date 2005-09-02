@@ -97,7 +97,7 @@ void SvnCommandBase::dcopReceivedStderr(QString buffer)
 }
 
 
-void SvnCommandBase::connectToJob(const DCOPRef& jobRef)
+void SvnCommandBase::connectToJob(const DCOPRef& jobRef, DeletionHandling deletion)
 {
     m_svnJob = new SvnJob_stub(jobRef);
 
@@ -108,6 +108,12 @@ void SvnCommandBase::connectToJob(const DCOPRef& jobRef)
                       "dcopReceivedStdout(QString)", true);
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "receivedStderr(QString)",
                       "dcopReceivedStderr(QString)", true);
+
+    if( deletion == AutomaticDeletion )
+    {
+        connect(this, SIGNAL(jobExited(bool, int)),
+                this, SLOT(deleteLater()));
+    }
 }
 
 

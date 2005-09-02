@@ -326,7 +326,9 @@ void CvsPlugin::diff(const QString& fileName,
     if( fileName.isEmpty() )
         return;
 
-    executeCommand(new DiffCommand(fileName, revisionA, revisionB, QStringList()));	
+    QStringList options;
+    options += "-u";
+    executeCommand(new DiffCommand(fileName, revisionA, revisionB, options));
 }
 
 
