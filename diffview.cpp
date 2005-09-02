@@ -20,13 +20,12 @@
 
 #include "diffview.h"
 
+#include <qapplication.h>
 #include <qpainter.h>
-#include <qscrollbar.h>
 #include <qpixmap.h>
-#include <qregexp.h>
+#include <qscrollbar.h>
 #include <qstyle.h>
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -56,6 +55,9 @@ const int DiffView::BORDER = 7;
 DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
                     QWidget *parent, const char *name )
     : QtTableView(parent, name, WRepaintNoErase)
+    , linenos(withlinenos)
+    , marker(withmarker)
+    , textwidth(0)
     , partConfig(cfg)
 {
     setNumRows(0);
@@ -71,14 +73,11 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
     QFontMetrics fm(font());
     setCellHeight(fm.lineSpacing());
     setCellWidth(0);
-    textwidth = 0;
 
     partConfig.setGroup("General");
     m_tabWidth = partConfig.readNumEntry("TabWidth", 8);
 
     items.setAutoDelete(true);
-    linenos = withlinenos;
-    marker = withmarker;
 
     partConfig.setGroup("Colors");
     QColor defaultColor=QColor(237, 190, 190);
@@ -174,7 +173,7 @@ void DiffView::addLine(const QString &line, DiffType type, int no)
     // fmbold.maxWidth().
     QString copy(line);
     const int numTabs = copy.contains('\t', false);
-    copy.replace( QRegExp("\t"), "");
+    copy.remove('\t');
 
     const int tabSize   = m_tabWidth * QMAX(fm.maxWidth(), fmbold.maxWidth());
     const int copyWidth = QMAX(fm.width(copy), fmbold.width(copy));
