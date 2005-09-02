@@ -11,7 +11,6 @@
         <Separator/>
     </Menu>
     <Menu name="view"><text>&amp;View</text>
-        <Separator/>
         <Action name="view_log"/>
         <Action name="view_annotate"/>
         <Action name="view_diff_base"/>
