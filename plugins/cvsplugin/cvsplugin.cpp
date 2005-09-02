@@ -419,6 +419,8 @@ void CvsPlugin::revert()
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
     cmd->setRecursive(CvsPluginSettings::updateRecursive());
+    cmd->setCreateDirectories(CvsPluginSettings::createDirectories());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
     cmd->setExtraOption("-C");
 
     executeCommand(cmd);
@@ -465,6 +467,8 @@ void CvsPlugin::simulateUpdate()
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
     cmd->setRecursive(CvsPluginSettings::updateRecursive());
+    cmd->setCreateDirectories(CvsPluginSettings::createDirectories());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
     cmd->setSimulation(true);
 
     executeCommand(cmd);
@@ -505,6 +509,8 @@ void CvsPlugin::update()
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
     cmd->setRecursive(CvsPluginSettings::updateRecursive());
+    cmd->setCreateDirectories(CvsPluginSettings::createDirectories());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
 
     executeCommand(cmd);
 }
@@ -520,6 +526,8 @@ void CvsPlugin::updateToHead()
 
     UpdateCommand* cmd = new UpdateCommand(selectionList, m_updateParser);
     cmd->setRecursive(CvsPluginSettings::updateRecursive());
+    cmd->setCreateDirectories(CvsPluginSettings::createDirectories());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
     cmd->setExtraOption("-A");
 
     executeCommand(cmd);
@@ -538,6 +546,24 @@ void CvsPlugin::updateToTag()
     cmd->setRecursive(CvsPluginSettings::updateRecursive());
 
     executeCommand(cmd);
+}
+
+
+void CvsPlugin::createDirectoriesOnUpdate()
+{
+    bool createDirs = CvsPluginSettings::createDirectories();
+    CvsPluginSettings::setCreateDirectories(!createDirs);
+
+    CvsPluginSettings::writeConfig();
+}
+
+
+void CvsPlugin::pruneDirectoriesOnUpdate()
+{
+    bool pruneDirs = CvsPluginSettings::pruneDirectories();
+    CvsPluginSettings::setPruneDirectories(!pruneDirs);
+
+    CvsPluginSettings::writeConfig();
 }
 
 
@@ -743,9 +769,25 @@ void CvsPlugin::setupMenuActions()
     // Settings Menu
     //
     KToggleAction* toggleAction = new KToggleAction(
-                                i18n("&Update Recursively"), 0,
-                                this, SLOT( updateRecursive() ),
-                                actionCollection(), "settings_update_recursively" );
+                                i18n("Create &Folders on Update"), 0,
+                                this, SLOT( createDirectoriesOnUpdate() ),
+                                actionCollection(), "settings_create_dirs" );
+    hint = i18n("Determines whether updates create folders");
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(CvsPluginSettings::createDirectories());
+
+    toggleAction = new KToggleAction( i18n("&Prune Empty Folders on Update"), 0,
+                                      this, SLOT( pruneDirectoriesOnUpdate() ),
+                                      actionCollection(), "settings_prune_dirs" );
+    hint = i18n("Determines whether updates remove empty folders");
+    toggleAction->setToolTip(hint);
+    toggleAction->setWhatsThis(hint);
+    toggleAction->setChecked(CvsPluginSettings::pruneDirectories());
+
+    toggleAction = new KToggleAction( i18n("&Update Recursively"), 0,
+                                      this, SLOT( updateRecursive() ),
+                                      actionCollection(), "settings_update_recursively" );
     hint = i18n("Determines whether updates are recursive");
     toggleAction->setToolTip(hint);
     toggleAction->setWhatsThis(hint);

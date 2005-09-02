@@ -35,12 +35,25 @@ UpdateCommand::UpdateCommand(const QStringList& files, UpdateParser* parser)
     , m_fileList(files)
     , m_parser(parser)
     , m_simulation(false)
+    , m_createDirectories(false)
+    , m_pruneDirectories(false)
 {
 }
 
 
 UpdateCommand::~UpdateCommand()
 {
+}
+
+void UpdateCommand::setCreateDirectories(bool createDirs)
+{
+    m_createDirectories = createDirs;
+}
+
+
+void UpdateCommand::setPruneDirectories(bool pruneDirs)
+{
+    m_pruneDirectories = pruneDirs;
 }
 
 
@@ -64,10 +77,10 @@ bool UpdateCommand::prepare()
 
     if( m_simulation )
         jobRef = CvsPlugin::cvsService()->simulateUpdate(m_fileList, isRecursive(),
-                        false/*opt_createDirs*/, false/*opt_pruneDirs*/);
+                        m_createDirectories, m_pruneDirectories);
     else
         jobRef = CvsPlugin::cvsService()->update(m_fileList, isRecursive(),
-                        false/*opt_createDirs*/, false/*opt_pruneDirs*/, m_option);
+                        m_createDirectories, m_pruneDirectories, m_option);
     connectToJob(jobRef);
 
     // setup the update output parser

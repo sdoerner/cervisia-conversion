@@ -54,6 +54,8 @@ public:
     virtual IgnoreFilterBase* filter(const QString& path) const;
     virtual UpdateParser* updateParser() const;
 
+    virtual QWidget* checkoutWidget() { return 0; }
+
     static CvsService_stub* cvsService() { return m_cvsService; }
 
 public slots:
@@ -87,6 +89,8 @@ private slots:
     void updateToHead();
     void updateToTag();
 
+    void createDirectoriesOnUpdate();
+    void pruneDirectoriesOnUpdate();
     void commitRecursive();
     void updateRecursive();
 

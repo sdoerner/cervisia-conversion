@@ -37,6 +37,8 @@
     </Menu>
     <Menu name="settings"><text>&amp;Settings</text>
         <Separator group="save_merge_group"/>
+        <Action name="settings_create_dirs" group="save_merge_group"/>
+        <Action name="settings_prune_dirs" group="save_merge_group"/>
         <Action name="settings_update_recursively" group="save_merge_group"/>
         <Action name="settings_commit_recursively" group="save_merge_group"/>
         <Separator group="save_merge_group"/>

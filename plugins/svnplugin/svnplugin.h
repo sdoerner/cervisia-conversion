@@ -54,6 +54,8 @@ public:
     virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
     virtual UpdateParser* updateParser() const;
 
+    virtual QWidget* checkoutWidget() { return 0; }
+
     static SvnService_stub* svnService() { return m_svnService; }
 
 public slots:

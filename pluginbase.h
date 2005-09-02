@@ -69,6 +69,8 @@ public:
     virtual void annotate(const QString& fileName, 
                           const QString& revision = QString::null) = 0;
 
+    virtual QWidget* checkoutWidget() = 0;
+
 signals:
     void updateItem(const Cervisia::Entry& entry);
     void commandPrepared(Cervisia::CommandBase* cmd);

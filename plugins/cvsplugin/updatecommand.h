@@ -36,6 +36,8 @@ public:
     ~UpdateCommand();
 
     void setSimulation(bool simulation);
+    void setCreateDirectories(bool createDirs);
+    void setPruneDirectories(bool pruneDirs);
     void setExtraOption(const QString& option);     // TODO: improve name
 
     virtual bool prepare();
@@ -44,6 +46,8 @@ private:
     QStringList   m_fileList;
     UpdateParser* m_parser;
     bool          m_simulation;
+    bool          m_createDirectories;
+    bool          m_pruneDirectories;
     QString       m_option;
 };
 
