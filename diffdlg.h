@@ -48,6 +48,8 @@ public:
     virtual ~DiffDialog();
 
     void setDiffInfos(const Cervisia::DiffInfoList& diffInfos);
+    void setRevisionA(const QString& revisionA);
+    void setRevisionB(const QString& revisionB);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *e);

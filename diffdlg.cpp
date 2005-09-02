@@ -280,6 +280,22 @@ void DiffDialog::setDiffInfos(const DiffInfoList& diffInfos)
 }
 
 
+void DiffDialog::setRevisionA(const QString& revisionA)
+{
+    QString text = (revisionA.isEmpty() ? i18n("Repository:")
+                                        : i18n("Revision ") + revisionA + ":");
+    revlabel1->setText(text);
+}
+
+
+void DiffDialog::setRevisionB(const QString& revisionB)
+{
+    QString text = (revisionB.isEmpty() ? i18n("Working dir:")
+                                        : i18n("Revision ") + revisionB + ":");
+    revlabel2->setText(text);
+}
+
+
 void DiffDialog::newDiffHunk(int& linenoA, int& linenoB,
                              const QStringList& linesA, const QStringList& linesB)
 {
