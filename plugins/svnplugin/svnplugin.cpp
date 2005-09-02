@@ -242,11 +242,7 @@ void SvnPlugin::annotate()
 {
     kdDebug(8050) << k_funcinfo << endl;
 
-    QString fileName = m_fileView->singleSelection();
-    if( fileName.isEmpty() )
-        return;
-
-    executeCommand(new AnnotateCommand(fileName));
+    annotate(m_fileView->singleSelection());
 }
 
 
@@ -282,11 +278,7 @@ void SvnPlugin::diffToBase()
 {
     kdDebug(8050) << k_funcinfo << endl;
 
-    QString fileName = m_fileView->singleSelection();
-    if( fileName.isEmpty() )
-        return;
-
-    executeCommand(new DiffCommand(fileName, "BASE", QString::null, QStringList()));
+    diff(m_fileView->singleSelection(), "BASE", QString::null);
 }
 
 
@@ -294,11 +286,7 @@ void SvnPlugin::diffToHead()
 {
     kdDebug(8050) << k_funcinfo << endl;
 
-    QString fileName = m_fileView->singleSelection();
-    if( fileName.isEmpty() )
-        return;
-
-    executeCommand(new DiffCommand(fileName, "HEAD", QString::null, QStringList()));
+    diff(m_fileView->singleSelection(), "HEAD", QString::null);
 }
 
 
