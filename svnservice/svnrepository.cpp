@@ -21,6 +21,7 @@
 #include "svnrepository.h"
 
 #include <qdir.h>
+#include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
 
@@ -119,16 +120,32 @@ bool SvnRepository::setWorkingCopy(const QString& dirName)
     d->workingCopy = path;
     d->location    = QString::null;
 
-//     // determine path to the repository
-//     QFile rootFile(path + "/CVS/Root");
-//     if( rootFile.open(IO_ReadOnly) )
-//     {
-//         QTextStream stream(&rootFile);
-//         d->location = stream.readLine();
-//     }
-//     rootFile.close();
+    // determine path to the repository
+    QFile entriesFile(svnDirInfo.filePath() + "/entries");
+    if( entriesFile.open(IO_ReadOnly) )
+    {
+        QDomDocument doc;
 
-    QDir::setCurrent(path);
+	if( doc.setContent(&entriesFile) )
+	{
+            QDomElement root = doc.documentElement();
+	    for( QDomNode node = root.firstChild(); !node.isNull(); node = node.nextSibling() )
+	    {
+                if( node.isElement() )
+		{
+                    QDomElement e = node.toElement();
+
+		    if( e.tagName() == "entry" && e.attribute("name").isEmpty() )
+	            {
+                        d->location = e.attribute("url");
+		    }
+		}
+            }
+     	}
+    }
+    entriesFile.close();
+    
+//     QDir::setCurrent(path);
     d->readConfig();
 
     return true;
