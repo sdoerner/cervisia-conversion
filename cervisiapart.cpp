@@ -90,8 +90,8 @@ CervisiaPart::CervisiaPart( QWidget *parentWidget, const char *widgetName,
     , opt_hideEmptyDirectories( false )
     , opt_createDirs( false )
     , opt_pruneDirs( false )
-    , opt_updateRecursive( true )
-    , opt_commitRecursive( true )
+//     , opt_updateRecursive( true )
+//     , opt_commitRecursive( true )
     , opt_doCVSEdit( false )
     , recent( 0 )
     , cvsService( 0 )
@@ -308,26 +308,26 @@ void CervisiaPart::setupActions()
     //
     // Advanced Menu
     //
-    action = new KAction( i18n("&Tag/Branch..."), 0,
-                          this, SLOT(slotCreateTag()),
-                          actionCollection(), "create_tag" );
-    hint = i18n("Creates a tag or branch for the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Tag/Branch..."), 0,
+//                           this, SLOT(slotCreateTag()),
+//                           actionCollection(), "create_tag" );
+//     hint = i18n("Creates a tag or branch for the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Delete Tag..."), 0,
-                          this, SLOT(slotDeleteTag()),
-                          actionCollection(), "delete_tag" );
-    hint = i18n("Deletes a tag from the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Delete Tag..."), 0,
+//                           this, SLOT(slotDeleteTag()),
+//                           actionCollection(), "delete_tag" );
+//     hint = i18n("Deletes a tag from the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Update to Tag/Date..."), 0,
-                          this, SLOT(slotUpdateToTag()),
-                          actionCollection(), "update_to_tag" );
-    hint = i18n("Updates the selected files to a given tag, branch or date");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Update to Tag/Date..."), 0,
+//                           this, SLOT(slotUpdateToTag()),
+//                           actionCollection(), "update_to_tag" );
+//     hint = i18n("Updates the selected files to a given tag, branch or date");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
 //     action = new KAction( i18n("Update to &HEAD"), 0,
 //                           this, SLOT(slotUpdateToHead()),
@@ -478,19 +478,19 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KToggleAction( i18n("&Update Recursively"), 0,
-                                this, SLOT(slotUpdateRecursive()),
-                                actionCollection(), "settings_update_recursively" );
-    hint = i18n("Determines whether updates are recursive");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KToggleAction( i18n("&Update Recursively"), 0,
+//                                 this, SLOT(slotUpdateRecursive()),
+//                                 actionCollection(), "settings_update_recursively" );
+//     hint = i18n("Determines whether updates are recursive");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
-    action = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
-                                this, SLOT(slotCommitRecursive()),
-                                actionCollection(), "settings_commit_recursively" );
-    hint = i18n("Determines whether commits and removes are recursive");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KToggleAction( i18n("C&ommit && Remove Recursively"), 0,
+//                                 this, SLOT(slotCommitRecursive()),
+//                                 actionCollection(), "settings_commit_recursively" );
+//     hint = i18n("Determines whether commits and removes are recursive");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KToggleAction( i18n("Do cvs &edit Automatically When Necessary"), 0,
                                 this, SLOT(slotDoCVSEdit()),
@@ -1092,48 +1092,48 @@ void CervisiaPart::slotRepositories()
 }
 
 
-void CervisiaPart::slotCreateTag()
-{
-    createOrDeleteTag(TagDialog::Create);
-}
+// void CervisiaPart::slotCreateTag()
+// {
+//     createOrDeleteTag(TagDialog::Create);
+// }
 
 
-void CervisiaPart::slotDeleteTag()
-{
-    createOrDeleteTag(TagDialog::Delete);
-}
+// void CervisiaPart::slotDeleteTag()
+// {
+//     createOrDeleteTag(TagDialog::Delete);
+// }
 
 
-void CervisiaPart::createOrDeleteTag(TagDialog::ActionType action)
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
-    TagDialog dlg(action, cvsService, widget());
-
-    if (dlg.exec())
-    {
-        DCOPRef cvsJob;
-
-        if( action == TagDialog::Create )
-            cvsJob = cvsService->createTag(list, dlg.tag(), dlg.branchTag(),
-                                           dlg.forceTag());
-        else
-            cvsJob = cvsService->deleteTag(list, dlg.tag(), dlg.branchTag(),
-                                           dlg.forceTag());
-
-        // get command line from cvs job
-        QString cmdline = cvsJob.call("cvsCommand()");
-
-        if( protocol->startJob() )
-        {
-            showJobStart(cmdline);
-            connect( protocol, SIGNAL(jobFinished(bool, int)),
-                     this,     SLOT(slotJobFinished()) );
-        }
-    }
-}
+// void CervisiaPart::createOrDeleteTag(TagDialog::ActionType action)
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
+//     TagDialog dlg(action, cvsService, widget());
+// 
+//     if (dlg.exec())
+//     {
+//         DCOPRef cvsJob;
+// 
+//         if( action == TagDialog::Create )
+//             cvsJob = cvsService->createTag(list, dlg.tag(), dlg.branchTag(),
+//                                            dlg.forceTag());
+//         else
+//             cvsJob = cvsService->deleteTag(list, dlg.tag(), dlg.branchTag(),
+//                                            dlg.forceTag());
+// 
+//         // get command line from cvs job
+//         QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//         if( protocol->startJob() )
+//         {
+//             showJobStart(cmdline);
+//             connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                      this,     SLOT(slotJobFinished()) );
+//         }
+//     }
+// }
 
 
 
@@ -1215,16 +1215,16 @@ void CervisiaPart::slotPruneDirs()
 }
 
 
-void CervisiaPart::slotUpdateRecursive()
-{
-    opt_updateRecursive = !opt_updateRecursive;
-}
+// void CervisiaPart::slotUpdateRecursive()
+// {
+//     opt_updateRecursive = !opt_updateRecursive;
+// }
 
 
-void CervisiaPart::slotCommitRecursive()
-{
-    opt_commitRecursive = !opt_commitRecursive;
-}
+// void CervisiaPart::slotCommitRecursive()
+// {
+//     opt_commitRecursive = !opt_commitRecursive;
+// }
 
 
 void CervisiaPart::slotDoCVSEdit()
@@ -1448,13 +1448,13 @@ void CervisiaPart::readSettings()
     (static_cast<KToggleAction *> (actionCollection()->action( "settings_prune_dirs" )))
     ->setChecked( opt_pruneDirs );
 
-    opt_updateRecursive = config->readBoolEntry("Update Recursive", false);
-    (static_cast<KToggleAction *> (actionCollection()->action( "settings_update_recursively" )))
-    ->setChecked( opt_updateRecursive );
+//     opt_updateRecursive = config->readBoolEntry("Update Recursive", false);
+//     (static_cast<KToggleAction *> (actionCollection()->action( "settings_update_recursively" )))
+//     ->setChecked( opt_updateRecursive );
 
-    opt_commitRecursive = config->readBoolEntry("Commit Recursive", false);
-    (static_cast<KToggleAction *> (actionCollection()->action( "settings_commit_recursively" )))
-    ->setChecked( opt_commitRecursive );
+//     opt_commitRecursive = config->readBoolEntry("Commit Recursive", false);
+//     (static_cast<KToggleAction *> (actionCollection()->action( "settings_commit_recursively" )))
+//     ->setChecked( opt_commitRecursive );
 
     opt_doCVSEdit = config->readBoolEntry("Do cvs edit", false);
     (static_cast<KToggleAction *> (actionCollection()->action( "settings_do_cvs_edit" )))
@@ -1503,8 +1503,8 @@ void CervisiaPart::writeSettings()
 
     config->writeEntry("Create Dirs", opt_createDirs);
     config->writeEntry("Prune Dirs", opt_pruneDirs);
-    config->writeEntry("Update Recursive", opt_updateRecursive);
-    config->writeEntry("Commit Recursive", opt_commitRecursive);
+//     config->writeEntry("Update Recursive", opt_updateRecursive);
+//     config->writeEntry("Commit Recursive", opt_commitRecursive);
     config->writeEntry("Do cvs edit", opt_doCVSEdit);
     config->writeEntry("Hide Files", opt_hideFiles);
     config->writeEntry("Hide UpToDate Files", opt_hideUpToDate);

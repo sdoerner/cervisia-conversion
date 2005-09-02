@@ -95,8 +95,8 @@ public slots:
     void slotCheckout();
     void slotImport();
     void slotRepositories();
-    void slotCreateTag();
-    void slotDeleteTag();
+//     void slotCreateTag();
+//     void slotDeleteTag();
     void slotUpdateToTag();
 //     void slotUpdateToHead();
     void slotMerge();
@@ -120,8 +120,8 @@ public slots:
     void slotUnfoldTree();
     void slotUnfoldFolder();
 
-    void slotUpdateRecursive();
-    void slotCommitRecursive();
+//     void slotUpdateRecursive();
+//     void slotCommitRecursive();
     void slotDoCVSEdit();
     void slotConfigure();
     void slotHelp();
