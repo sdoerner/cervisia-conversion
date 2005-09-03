@@ -32,7 +32,7 @@
 #include "cervisiashell.h"
 #include "cvsservice_stub.h"
 #include "annotatedlg.h"
-#include "annotatectl.h"
+// #include "annotatectl.h"
 #include "logdlg.h"
 #include "resolvedlg.h"
 #include "version.h"
