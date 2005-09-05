@@ -22,6 +22,7 @@
 
 
 #include <qstring.h>
+#include <qvaluelist.h>
 
 
 namespace Cervisia

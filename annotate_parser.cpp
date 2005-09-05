@@ -30,7 +30,7 @@ AnnotateParser::AnnotateParser(QObject* parent, const char* name)
 }
 
 
-const AnnotateParser::TAnnotateInfoSeq& AnnotateParser::annotateInfos() const
+const AnnotateInfoList& AnnotateParser::annotateInfos() const
 {
     return m_annotateInfos;
 }

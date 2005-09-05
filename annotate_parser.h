@@ -25,8 +25,6 @@
 
 #include "annotate_info.h"
 
-#include <qvaluelist.h>
-
 
 namespace Cervisia
 {
@@ -40,16 +38,12 @@ class AnnotateParser : public OutputParser
 {
 public:
 
-    typedef QValueList<AnnotateInfo> TAnnotateInfoSeq;
-
-
-
     explicit AnnotateParser(QObject* parent = 0, const char* name = 0);
 
     /**
      * @return The list of parsed AnnotateInfos.
      */
-    const TAnnotateInfoSeq& annotateInfos() const;
+    const AnnotateInfoList& annotateInfos() const;
 
 protected:
 
@@ -62,7 +56,7 @@ protected:
 
 private:
 
-    TAnnotateInfoSeq m_annotateInfos;
+    AnnotateInfoList m_annotateInfos;
 };
 
 
