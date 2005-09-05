@@ -21,6 +21,9 @@ using Cervisia::RemoveCommand;
 
 #include <dcopref.h>
 #include <klocale.h>
+
+#include <qapplication.h>
+
 #include <addremovedlg.h>
 #include <svnservice_stub.h>
 
@@ -42,7 +45,7 @@ RemoveCommand::~RemoveCommand()
 bool RemoveCommand::prepare()
 {
     // modal dialog
-    AddRemoveDialog dlg(AddRemoveDialog::Remove);
+    AddRemoveDialog dlg(AddRemoveDialog::Remove, qApp->activeWindow());
     dlg.setCaption(i18n("SVN Remove"));
     dlg.setFileList(m_fileList);
 

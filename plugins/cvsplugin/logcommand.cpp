@@ -22,6 +22,8 @@ using Cervisia::LogCommand;
 #include <dcopref.h>
 #include <klocale.h>
 
+#include <qapplication.h>
+
 #include <logdlg.h>
 #include <progressdlg.h>
 #include <cvsservice_stub.h>
@@ -61,7 +63,7 @@ bool LogCommand::prepare()
 
     KConfig* partConfig = CervisiaSettings::self()->config();
 
-    m_logDlg = new LogDialog(*partConfig);
+    m_logDlg = new LogDialog(*partConfig, qApp->activeWindow());
 
     return true;
 }

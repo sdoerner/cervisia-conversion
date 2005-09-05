@@ -20,6 +20,9 @@
 using Cervisia::CreateTagCommand;
 
 #include <dcopref.h>
+
+#include <qapplication.h>
+
 #include <tagdlg.h>
 #include <cvsservice_stub.h>
 
@@ -40,7 +43,7 @@ CreateTagCommand::~CreateTagCommand()
 
 bool CreateTagCommand::prepare()
 {
-    TagDialog dlg(TagDialog::Create, CvsPlugin::cvsService());
+    TagDialog dlg(TagDialog::Create, CvsPlugin::cvsService(), qApp->activeWindow());
 
     // did the user cancel the dialog?
     if( !dlg.exec() )

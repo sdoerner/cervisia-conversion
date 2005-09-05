@@ -20,6 +20,9 @@
 using Cervisia::AddWatchCommand;
 
 #include <dcopref.h>
+
+#include <qapplication.h>
+
 #include <watchdlg.h>
 #include <cvsservice_stub.h>
 
@@ -41,7 +44,7 @@ AddWatchCommand::~AddWatchCommand()
 bool AddWatchCommand::prepare()
 {
     // modal dialog
-    WatchDialog dlg(WatchDialog::Add);
+    WatchDialog dlg(WatchDialog::Add, qApp->activeWindow());
 
     if( dlg.exec() && dlg.events() != WatchDialog::None )
     {

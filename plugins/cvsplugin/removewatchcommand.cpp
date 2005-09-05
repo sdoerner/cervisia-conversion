@@ -20,6 +20,9 @@
 using Cervisia::RemoveWatchCommand;
 
 #include <dcopref.h>
+
+#include <qapplication.h>
+
 #include <watchdlg.h>
 #include <cvsservice_stub.h>
 
@@ -41,7 +44,7 @@ RemoveWatchCommand::~RemoveWatchCommand()
 bool RemoveWatchCommand::prepare()
 {
     // modal dialog
-    WatchDialog dlg(WatchDialog::Remove);
+    WatchDialog dlg(WatchDialog::Remove, qApp->activeWindow());
 
     if( dlg.exec() && dlg.events() != WatchDialog::None )
     {

@@ -22,6 +22,8 @@ using Cervisia::DiffCommand;
 #include <dcopref.h>
 #include <klocale.h>
 
+#include <qapplication.h>
+
 #include <cervisiasettings.h>
 #include <diff_parser.h>
 #include <diffdlg.h>
@@ -74,7 +76,7 @@ bool DiffCommand::prepare()
             this, SLOT(showDialog()));
 
     KConfig* partConfig = CervisiaSettings::self()->config();
-    m_diffDialog = new DiffDialog(*partConfig);
+    m_diffDialog = new DiffDialog(*partConfig, qApp->activeWindow());
 
     return true;
 }

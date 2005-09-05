@@ -20,6 +20,9 @@
 using Cervisia::DeleteTagCommand;
 
 #include <dcopref.h>
+
+#include <qapplication.h>
+
 #include <tagdlg.h>
 #include <cvsservice_stub.h>
 
@@ -40,7 +43,7 @@ DeleteTagCommand::~DeleteTagCommand()
 
 bool DeleteTagCommand::prepare()
 {
-    TagDialog dlg(TagDialog::Delete, CvsPlugin::cvsService());
+    TagDialog dlg(TagDialog::Delete, CvsPlugin::cvsService(), qApp->activeWindow());
 
     // did the user cancel the dialog?
     if( !dlg.exec() )

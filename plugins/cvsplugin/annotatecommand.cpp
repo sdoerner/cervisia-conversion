@@ -22,6 +22,8 @@ using Cervisia::AnnotateCommand;
 #include <dcopref.h>
 #include <klocale.h>
 
+#include <qapplication.h>
+
 #include <annotatedlg.h>
 #include <progressdlg.h>
 #include <cvsservice_stub.h>
@@ -64,7 +66,7 @@ bool AnnotateCommand::prepare()
             this, SLOT(showDialog()));
 
     KConfig* partConfig = CervisiaSettings::self()->config();
-    m_annotateDlg = new AnnotateDialog(*partConfig);
+    m_annotateDlg = new AnnotateDialog(*partConfig, qApp->activeWindow());
 
     return true;
 }

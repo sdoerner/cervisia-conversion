@@ -20,6 +20,9 @@
 using Cervisia::UpdateTagCommand;
 
 #include <kprocess.h>
+
+#include <qapplication.h>
+
 #include <updatedlg.h>
 
 #include "cvsplugin.h"
@@ -38,7 +41,7 @@ UpdateTagCommand::~UpdateTagCommand()
 
 bool UpdateTagCommand::prepare()
 {
-    UpdateDialog dlg(CvsPlugin::cvsService(), 0 /*widget()*/);
+    UpdateDialog dlg(CvsPlugin::cvsService(), qApp->activeWindow());
 
     if( !dlg.exec() )
         return false;

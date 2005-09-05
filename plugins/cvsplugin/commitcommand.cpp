@@ -21,6 +21,9 @@ using Cervisia::CommitCommand;
 
 #include <dcopref.h>
 #include <klocale.h>
+
+#include <qapplication.h>
+
 #include <commitdlg.h>
 #include <cvsservice_stub.h>
 
@@ -43,7 +46,7 @@ CommitCommand::~CommitCommand()
 bool CommitCommand::prepare()
 {
     // modal dialog
-    CommitDialog dlg;
+    CommitDialog dlg(qApp->activeWindow());
     dlg.setCaption(i18n("CVS Commit"));
 //     dlg.setLogMessage(changelogstr);
 //     dlg.setLogHistory(recentCommits);

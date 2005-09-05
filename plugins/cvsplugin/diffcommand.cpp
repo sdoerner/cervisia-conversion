@@ -20,7 +20,10 @@
 using Cervisia::DiffCommand;
 
 #include <dcopref.h>
+#include <kdebug.h>
 #include <klocale.h>
+
+#include <qapplication.h>
 
 #include <cervisiasettings.h>
 #include <diff_parser.h>
@@ -29,8 +32,6 @@ using Cervisia::DiffCommand;
 #include <cvsservice_stub.h>
 
 #include "cvsplugin.h"
-
-#include <kdebug.h>
 
 
 DiffCommand::DiffCommand(const QString& fileName,
@@ -76,7 +77,7 @@ bool DiffCommand::prepare()
             this, SLOT(showDialog()));
 
     KConfig* partConfig = CervisiaSettings::self()->config();
-    m_diffDialog = new DiffDialog(*partConfig);
+    m_diffDialog = new DiffDialog(*partConfig, qApp->activeWindow());
 
     return true;
 }

@@ -21,6 +21,9 @@ using Cervisia::AddCommand;
 
 #include <dcopref.h>
 #include <klocale.h>
+
+#include <qapplication.h>
+
 #include <addremovedlg.h>
 #include <cvsservice_stub.h>
 
@@ -52,7 +55,7 @@ bool AddCommand::prepare()
                                                       : AddRemoveDialog::Add;
 
     // modal dialog
-    AddRemoveDialog dlg(dialogType);
+    AddRemoveDialog dlg(dialogType, qApp->activeWindow());
     QString dialogCaption = (m_binary ? i18n("CVS Add Binary") : i18n("CVS Add"));
     dlg.setCaption(dialogCaption);
     dlg.setFileList(m_fileList);

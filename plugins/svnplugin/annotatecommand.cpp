@@ -20,9 +20,11 @@
 using Cervisia::AnnotateCommand;
 
 #include <dcopref.h>
+#include <kdebug.h>
 #include <klocale.h>
 
-#include <loginfo.h>
+#include <qapplication.h>
+
 #include <annotatedlg.h>
 #include <progressdlg.h>
 #include <svnservice_stub.h>
@@ -31,8 +33,6 @@ using Cervisia::AnnotateCommand;
 #include "logcommand.h"
 #include "svnplugin.h"
 #include "svn_annotate_parser.h"
-
-#include <kdebug.h>
 
 
 AnnotateCommand::AnnotateCommand(const QString& fileName, const QString& revision)
@@ -73,7 +73,7 @@ bool AnnotateCommand::prepare()
             this, SLOT(annotateProcessExited()));
 
     KConfig* partConfig = CervisiaSettings::self()->config();
-    m_annotateDlg = new AnnotateDialog(*partConfig);
+    m_annotateDlg = new AnnotateDialog(*partConfig, qApp->activeWindow());
 
     return true;
 }
