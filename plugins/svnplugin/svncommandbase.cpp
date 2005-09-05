@@ -81,7 +81,8 @@ void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 
 void SvnCommandBase::dcopReceivedStdout(QString buffer)
 {
-    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+//     kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     processOutput(buffer);
     emit receivedStdout(buffer);
@@ -90,7 +91,8 @@ void SvnCommandBase::dcopReceivedStdout(QString buffer)
 
 void SvnCommandBase::dcopReceivedStderr(QString buffer)
 {
-    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+//     kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     processOutput(buffer);
     emit receivedStderr(buffer);

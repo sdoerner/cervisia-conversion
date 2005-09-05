@@ -90,7 +90,8 @@ void CvsCommandBase::dcopJobExited(bool normalExit, int exitStatus)
 
 void CvsCommandBase::dcopReceivedStdout(QString buffer)
 {
-    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+//     kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     processOutput(buffer);
     emit receivedStdout(buffer);
@@ -99,7 +100,8 @@ void CvsCommandBase::dcopReceivedStdout(QString buffer)
 
 void CvsCommandBase::dcopReceivedStderr(QString buffer)
 {
-    kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+//     kdDebug(8050) << k_funcinfo << "buffer = " << buffer << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     processOutput(buffer);
     emit receivedStderr(buffer);
