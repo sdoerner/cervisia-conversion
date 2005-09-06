@@ -52,7 +52,7 @@
 // #include "pluginbase.h"
 // #include "pluginmanager.h"
 // #include "progressdlg.h"
-#include "patchoptiondlg.h"
+// #include "patchoptiondlg.h"
 
 
 LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
@@ -274,52 +274,15 @@ void LogDialog::slotOk()
 
 void LogDialog::slotApply()
 {
-/*    if( selectionA.isEmpty() )
+    if( selectionA.isEmpty() )
     {
         KMessageBox::information(this,
             i18n("Please select revision A or revisions A and B first."),
             "Cervisia");
         return;
     }
-    
-    Cervisia::PatchOptionDialog optionDlg;
-    if( optionDlg.exec() == KDialogBase::Rejected )
-        return;
-    
-    QString format      = optionDlg.formatOption();
-    QString diffOptions = optionDlg.diffOptions();
-    
-    DCOPRef job = cvsService->diff(filename, selectionA, selectionB, diffOptions,
-                                   format);
-    if( !cvsService->ok() )
-        return;
 
-    ProgressDialog dlg(this, "Diff", job, "", i18n("CVS Diff"));
-    if( !dlg.execute() )
-        return;
-
-    QString fileName = KFileDialog::getSaveFileName();
-    if( fileName.isEmpty() )
-        return;
-
-    if( !Cervisia::CheckOverwrite(fileName) )
-        return;
-
-    QFile f(fileName);
-    if( !f.open(IO_WriteOnly) )
-    {
-        KMessageBox::sorry(this,
-                           i18n("Could not open file for writing."),
-                           "Cervisia");
-        return;
-    }
-
-    QTextStream t(&f);
-    QString line;
-    while( dlg.getLine(line) )
-        t << line << '\n';
-
-    f.close();    */
+    emit createPatch(m_fileName, selectionA, selectionB);
 }
 
 

@@ -64,6 +64,9 @@ public slots:
     void diff(const QString& fileName,
               const QString& revisionA,
               const QString& revisionB = QString::null);
+    void createPatch(const QString& fileName,
+                     const QString& revisionA,
+                     const QString& revisionB);
     void simulateUpdate();
 
 private slots:

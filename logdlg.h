@@ -57,6 +57,8 @@ signals:
     void showDiffDialog(const QString& fileName,
                         const QString& revisionA,
                         const QString& revisionB);
+    void createPatch(const QString& fileName, const QString& revisionA,
+                     const QString& revisionB);
 
 protected slots:
     void slotOk();

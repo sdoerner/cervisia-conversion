@@ -40,6 +40,7 @@ using Cervisia::CvsPlugin;
 #include "addwatchcommand.h"
 #include "annotatecommand.h"
 #include "commitcommand.h"
+#include "createpatchcommand.h"
 #include "createtagcommand.h"
 #include "deletetagcommand.h"
 #include "diffcommand.h"
@@ -290,6 +291,19 @@ void CvsPlugin::commit()
     cmd->setRecursive(CvsPluginSettings::commitRecursive());
 
     executeCommand(cmd);
+}
+
+
+void CvsPlugin::createPatch(const QString& fileName,
+                            const QString& revisionA,
+                            const QString& revisionB)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new CreatePatchCommand(fileName, revisionA, revisionB));
 }
 
 
