@@ -51,7 +51,7 @@ private:
     enum EState
     {
         Header,
-        Lines,
+        Lines
     };
 
     DiffInfoList m_diffInfos;

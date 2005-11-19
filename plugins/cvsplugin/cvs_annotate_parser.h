@@ -46,7 +46,7 @@ private:
     enum EState
     {
         Begin,
-        Infos,
+        Infos
     };
 
     EState m_state;

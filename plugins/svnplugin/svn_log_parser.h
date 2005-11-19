@@ -51,7 +51,7 @@ private:
     {
         Begin,
         Infos,
-        Comment,
+        Comment
     };
 
     EState m_state;

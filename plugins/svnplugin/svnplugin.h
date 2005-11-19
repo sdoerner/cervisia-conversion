@@ -51,7 +51,7 @@ public:
 
     virtual void syncWithEntries(const QString& path);
 
-    virtual IgnoreFilterBase* SvnPlugin::filter(const QString& path) const;
+    virtual IgnoreFilterBase* filter(const QString& path) const;
     virtual UpdateParser* updateParser() const;
 
     virtual QWidget* checkoutWidget() { return 0; }
