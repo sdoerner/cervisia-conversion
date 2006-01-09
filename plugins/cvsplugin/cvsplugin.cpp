@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #include "cvsplugin.h"
@@ -34,11 +34,13 @@ using Cervisia::CvsPlugin;
 #include <repository_stub.h>
 #include <selectionintf.h>
 
+#include "checkoutwidget.h"
 #include "cvspluginsettings.h"
 #include "cvs_update_parser.h"
 #include "addcommand.h"
 #include "addwatchcommand.h"
 #include "annotatecommand.h"
+#include "checkoutcommand.h"
 #include "commitcommand.h"
 #include "createpatchcommand.h"
 #include "createtagcommand.h"
@@ -221,6 +223,12 @@ Cervisia::UpdateParser* CvsPlugin::updateParser() const
 }
 
 
+Cervisia::CheckoutWidgetBase* CvsPlugin::checkoutWidget(QWidget* parent)
+{
+    return new Cervisia::CheckoutWidget(parent);
+}
+
+
 void CvsPlugin::annotate(const QString& fileName, const QString& revision)
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -276,6 +284,24 @@ void CvsPlugin::annotate()
     kdDebug(8050) << k_funcinfo << endl;
 
     annotate(m_fileView->singleSelection());
+}
+
+
+void CvsPlugin::checkout(CheckoutWidgetBase* checkoutWidget)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    CheckoutWidget* w = static_cast<CheckoutWidget*>(checkoutWidget);
+
+    QString workingFolder = w->workingFolder();
+    QString repository    = w->repository();
+    QString module        = w->module();
+
+    CheckoutCommand* cmd = new CheckoutCommand(workingFolder, repository, module);
+    cmd->setRecursive(w->isRecursive());
+    cmd->setExportOnly(w->isExportOnly());
+
+    executeCommand(cmd);
 }
 
 

@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #ifndef CERVISIA_CVSPLUGIN_H
@@ -54,7 +54,7 @@ public:
     virtual IgnoreFilterBase* filter(const QString& path) const;
     virtual UpdateParser* updateParser() const;
 
-    virtual QWidget* checkoutWidget() { return 0; }
+    virtual CheckoutWidgetBase* checkoutWidget(QWidget* parent);
 
     static CvsService_stub* cvsService() { return m_cvsService; }
 
@@ -68,6 +68,7 @@ public slots:
                      const QString& revisionA,
                      const QString& revisionB);
     void simulateUpdate();
+    void checkout(CheckoutWidgetBase* checkoutWidget);
 
 private slots:
     void add();
