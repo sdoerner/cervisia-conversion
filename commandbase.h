@@ -32,7 +32,7 @@ class CommandBase : public QObject
 
 public:
     enum ActionKind { Add, Remove, Update, SimulateUpdate, Commit, Edit, Unedit,
-                      Lock, Unlock, Other };
+                      Lock, Unlock, Checkout, Other };
 
     CommandBase(const ActionKind& action);
     virtual ~CommandBase();
