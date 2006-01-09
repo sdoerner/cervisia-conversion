@@ -18,4 +18,10 @@
       <default>false</default>
     </entry>
   </group>
+  <group name="CheckoutWidget">
+    <entry name="Repository" type="String">
+    </entry>
+    <entry name="Module" type="String">
+    </entry>
+  </group>
 </kcfg>
