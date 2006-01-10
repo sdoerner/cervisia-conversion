@@ -26,7 +26,7 @@
 #include <kconfig.h>
 
 #include "repositories.h"
-#include "cervisiapart.h"
+//#include "cervisiapart.h"
 
 
 // old .cvspass format:
@@ -66,7 +66,8 @@ QStringList Repositories::readConfigFile()
 {
     QStringList list;
     
-    KConfig *config = CervisiaPart::config();
+//     KConfig *config = CervisiaPart::config();
+    KConfig* config = new KConfig("cervisiapartrc");
     config->setGroup("Repositories");
     list = config->readListEntry("Repos");
 
