@@ -21,65 +21,35 @@
 #ifndef CHECKOUTDLG_H
 #define CHECKOUTDLG_H
 
-
 #include <kdialogbase.h>
 
-
-class QCheckBox;
 class QComboBox;
+class QWidgetStack;
 class KConfig;
-class KLineEdit;
-class CvsService_stub;
+
+namespace Cervisia { class CheckoutWidgetBase; }
 
 
 class CheckoutDialog : public KDialogBase
 {
-    Q_OBJECT
-
 public:
-    enum ActionType { Checkout, Import };
-    
-    CheckoutDialog( KConfig& cfg, CvsService_stub* service, ActionType action,
-                    QWidget *parent=0, const char *name=0 );
+    explicit CheckoutDialog(KConfig& cfg, QWidget* parent=0);
 
-    QString workingDirectory() const;
-    QString repository() const;
-    QString module() const;
-    QString branch() const;
-    QString vendorTag() const;
-    QString releaseTag() const;
-    QString ignoreFiles() const;
-    QString comment() const;
-    QString alias() const;
-    bool importBinary() const;
-    bool useModificationTime() const;
-    bool exportOnly() const;
-    bool recursive() const;
+    void addCheckoutWidget(const QString& pluginType, Cervisia::CheckoutWidgetBase* w);
+
+    QString pluginType() const;
+    Cervisia::CheckoutWidgetBase* currentWidget() const;
 
 protected:
     virtual void slotOk();
-    
-private slots:
-    void dirButtonClicked();
-    void moduleButtonClicked();
-    void branchButtonClicked();
-    void branchTextChanged();
 
 private:
-    void saveUserInput();
-    void restoreUserInput();
-    
-    QComboBox *repo_combo, *module_combo, *branchCombo;
-    KLineEdit *module_edit, *workdir_edit;
-    KLineEdit *comment_edit;
-    KLineEdit *vendortag_edit, *releasetag_edit, *ignore_edit, *alias_edit;
-    QCheckBox *binary_box, *export_box, *recursive_box;
-    QCheckBox* m_useModificationTimeBox;
-    ActionType act;
-    KConfig&   partConfig;
+    QComboBox*    m_versionControlSystemCombo;
+    QWidgetStack* m_widgetStack;
 
-    CvsService_stub *cvsService;
+    KConfig&   partConfig;
 };
+
 
 #endif
 

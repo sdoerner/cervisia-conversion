@@ -1019,26 +1019,26 @@ void CervisiaPart::slotMakePatch()
 
 void CervisiaPart::slotImport()
 {
-    CheckoutDialog dlg(*config(), cvsService, CheckoutDialog::Import, widget());
-
-    if( !dlg.exec() )
-        return;
-
-    DCOPRef cvsJob = cvsService->import(dlg.workingDirectory(), dlg.repository(),
-                                        dlg.module(), dlg.ignoreFiles(),
-                                        dlg.comment(), dlg.vendorTag(),
-                                        dlg.releaseTag(), dlg.importBinary(),
-                                        dlg.useModificationTime());
-
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
-
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
+//     CheckoutDialog dlg(*config(), cvsService, CheckoutDialog::Import, widget());
+// 
+//     if( !dlg.exec() )
+//         return;
+// 
+//     DCOPRef cvsJob = cvsService->import(dlg.workingDirectory(), dlg.repository(),
+//                                         dlg.module(), dlg.ignoreFiles(),
+//                                         dlg.comment(), dlg.vendorTag(),
+//                                         dlg.releaseTag(), dlg.importBinary(),
+//                                         dlg.useModificationTime());
+// 
+//     // get command line from cvs job
+//     QString cmdline = cvsJob.call("cvsCommand()");
+// 
+//     if( protocol->startJob() )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(jobFinished(bool, int)),
+//                  this,     SLOT(slotJobFinished()) );
+//     }
 }
 
 
@@ -1064,24 +1064,27 @@ void CervisiaPart::slotCreateRepository()
 
 void CervisiaPart::slotCheckout()
 {
-    CheckoutDialog dlg(*config(), cvsService, CheckoutDialog::Checkout, widget());
+    CheckoutDialog dlg(*config(), widget());
 
+    // add widgets from plugins to checkout dialog
+    Cervisia::PluginList plugins = Cervisia::PluginManager::self()->plugins();
+
+    Cervisia::PluginList::ConstIterator it;
+    for( it = plugins.begin(); it != plugins.end(); ++it )
+    {
+        Cervisia::CheckoutWidgetBase* w = (*it)->checkoutWidget(&dlg);
+        if( w )
+            dlg.addCheckoutWidget((*it)->type(), w);
+    }
+
+    // did the user cancel the dialog?
     if( !dlg.exec() )
         return;
 
-    DCOPRef cvsJob = cvsService->checkout(dlg.workingDirectory(), dlg.repository(),
-                                          dlg.module(), dlg.branch(), opt_pruneDirs,
-                                          dlg.alias(), dlg.exportOnly(), dlg.recursive());
-
-    // get command line from cvs job
-    QString cmdline = cvsJob.call("cvsCommand()");
-
-    if( protocol->startJob() )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(jobFinished(bool, int)),
-                 this,     SLOT(slotJobFinished()) );
-    }
+    // checkout the working copy
+    QString pluginType = dlg.pluginType();
+    Cervisia::PluginBase* plugin = Cervisia::PluginManager::self()->pluginForType(pluginType);
+    plugin->checkout(dlg.currentWidget());
 }
 
 

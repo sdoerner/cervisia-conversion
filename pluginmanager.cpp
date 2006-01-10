@@ -43,36 +43,43 @@ PluginManager::PluginManager()
     : m_part(0)
     , m_currentPlugin(0)
 {
-    kdDebug() << "PluginManager::PluginManager()" << endl;
+//     kdDebug(8050) << k_funcinfo << endl;
 }
 
 
 PluginManager::~PluginManager()
 {
-    kdDebug() << "PluginManager::~PluginManager()" << endl;
+//     kdDebug(8050) << k_funcinfo << endl;
 }
 
 
 void PluginManager::setPart(KParts::Part* part)
 {
-    kdDebug() << "PluginManager::setPart()" << endl;
+//     kdDebug(8050) << k_funcinfo << endl;
 
     m_part = part;
 
     // get the list of all KPart plugins
-    m_pluginList = KParts::Plugin::pluginObjects(m_part);
+    QPtrList<KParts::Plugin> pluginList = KParts::Plugin::pluginObjects(m_part);
 
-    kdDebug() << "PluginManager::setPart(): plugins count = " << m_pluginList.count() << endl;
+    kdDebug(8050) << k_funcinfo << " plugins count = " << pluginList.count() << endl;
 
     // remove all plugins from main menu
     if( m_part->factory() )
     {
-        KParts::Plugin* plugin = m_pluginList.first();
-        for( ; plugin; plugin = m_pluginList.next() )
+        PluginBase* plugin = static_cast<PluginBase*>(pluginList.first());
+        for( ; plugin; plugin = static_cast<PluginBase*>(pluginList.next()) )
         {
             m_part->factory()->removeClient(plugin);
+            m_plugins.push_back(plugin);
         }
     }
+}
+
+
+Cervisia::PluginList PluginManager::plugins() const
+{
+    return m_plugins;
 }
 
 
@@ -80,11 +87,14 @@ Cervisia::PluginBase* PluginManager::pluginForUrl(const KURL& url)
 {
     PluginBase* result = 0;
 
-    Cervisia::PluginBase* plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.first());
-    for( ; plugin; plugin = static_cast<Cervisia::PluginBase*>(m_pluginList.next()) )
+    PluginList::ConstIterator it;
+    for( it = m_plugins.begin(); it != m_plugins.end(); ++it )
     {
-        kdDebug() << "PluginManager::pluginForUrl(): type = " << plugin->type()
-                  << ", url = " << url.prettyURL() << endl;
+        PluginBase* plugin = *it;
+
+        kdDebug(8050) << k_funcinfo << " type = " << plugin->type()
+                                    << ", url = " << url.prettyURL() << endl;
+
         if( plugin->canHandle(url) )
         {
             // is the plugin already active? --> no need to change the menu
@@ -115,6 +125,24 @@ Cervisia::PluginBase* PluginManager::pluginForUrl(const KURL& url)
 
             plugin->setWorkingCopy(url);
             m_currentPlugin = result = plugin;
+            break;
+        }
+    }
+
+    return result;
+}
+
+
+Cervisia::PluginBase* PluginManager::pluginForType(const QString& type)
+{
+    PluginBase* result = 0;
+
+    PluginList::ConstIterator it;
+    for( it = m_plugins.begin(); it != m_plugins.end(); ++it )
+    {
+        if( (*it)->type() == type )
+        {
+            result = *it;
             break;
         }
     }

@@ -27,6 +27,7 @@ namespace Cervisia
 {
 
 class PluginBase;
+typedef QValueList<PluginBase*> PluginList;
 
 
 class PluginManager
@@ -37,17 +38,20 @@ public:
 
     void setPart(KParts::Part* part);
 
+    PluginList plugins() const;
     PluginBase* pluginForUrl(const KURL& url);
+    PluginBase* pluginForType(const QString& type);
 
     PluginBase* currentPlugin() const;
 
 private:
     PluginManager();
 
-    KParts::Part*            m_part;
-    PluginBase*              m_currentPlugin;
-    QPtrList<KParts::Plugin> m_pluginList;
-    static PluginManager*    m_self;
+    KParts::Part*         m_part;
+    PluginBase*           m_currentPlugin;
+    PluginList            m_plugins;
+    static PluginManager* m_self;
+
 };
 
 

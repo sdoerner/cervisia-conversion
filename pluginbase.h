@@ -28,6 +28,7 @@ class DCOPRef;      // needed for service()
 namespace Cervisia
 {
 
+class CheckoutWidgetBase;
 class CommandBase;
 class Entry;
 class IgnoreFilterBase;
@@ -69,7 +70,8 @@ public:
     virtual void annotate(const QString& fileName, 
                           const QString& revision = QString::null) = 0;
 
-    virtual QWidget* checkoutWidget() = 0;
+    virtual void checkout(CheckoutWidgetBase* checkoutWidget) = 0;
+    virtual CheckoutWidgetBase* checkoutWidget(QWidget* parent) = 0;
 
 signals:
     void updateItem(const Cervisia::Entry& entry);
