@@ -28,6 +28,7 @@ class SvnRepository_stub;
 namespace Cervisia
 {
 
+class CheckoutWidgetBase;
 class SvnCommandBase;
 class SvnUpdateParser;
 
@@ -54,7 +55,7 @@ public:
     virtual IgnoreFilterBase* filter(const QString& path) const;
     virtual UpdateParser* updateParser() const;
 
-    virtual QWidget* checkoutWidget() { return 0; }
+    virtual CheckoutWidgetBase* checkoutWidget(QWidget* parent);
 
     static SvnService_stub* svnService() { return m_svnService; }
 
@@ -65,6 +66,7 @@ public slots:
               const QString& revisionA,
               const QString& revisionB = QString::null);
     void simulateUpdate();
+    void checkout(CheckoutWidgetBase* checkoutWidget);
 
 private slots:
     void add();

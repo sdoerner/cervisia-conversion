@@ -215,6 +215,14 @@ Cervisia::UpdateParser* SvnPlugin::updateParser() const
 }
 
 
+Cervisia::CheckoutWidgetBase* SvnPlugin::checkoutWidget(QWidget* parent)
+{
+    kdDebug(8050) << k_funcinfo << "NOT YET IMPLEMENTED!" << endl;
+
+    return 0;
+}
+
+
 void SvnPlugin::add()
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -243,6 +251,12 @@ void SvnPlugin::annotate()
     kdDebug(8050) << k_funcinfo << endl;
 
     annotate(m_fileView->singleSelection());
+}
+
+
+void SvnPlugin::checkout(CheckoutWidgetBase* checkoutWidget)
+{
+    kdDebug(8050) << k_funcinfo << "NOT YET IMPLEMENTED!" << endl;
 }
 
 
