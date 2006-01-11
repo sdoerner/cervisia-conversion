@@ -200,7 +200,7 @@ void ProgressDialog::slotTimeoutOccurred()
 
 void ProgressDialog::stopNonGuiPart()
 {
-    kdDebug() << "ProgressDialog::stopNonGuiPart()" << endl;
+//     kdDebug() << "ProgressDialog::stopNonGuiPart()" << endl;
 
     d->timer->stop();
 
@@ -211,7 +211,7 @@ void ProgressDialog::stopNonGuiPart()
 
 void ProgressDialog::startGuiPart()
 {
-    kdDebug() << "ProgressDialog::startGuiPart()" << endl;
+//     kdDebug() << "ProgressDialog::startGuiPart()" << endl;
 
     connect(d->cmd, SIGNAL(receivedLine(const QString&)),
             this, SLOT(receivedOutput(const QString&)));

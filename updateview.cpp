@@ -573,9 +573,9 @@ void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool is
 
     const QFileInfo fileInfo(filePath);
 
-    kdDebug(8050) << "UpdateView::updateItem(): dirPath = " << fileInfo.dirPath()
-                  << ", filename = " << fileInfo.fileName()
-                  << ", status = " << status << endl;
+//     kdDebug(8050) << "UpdateView::updateItem(): dirPath = " << fileInfo.dirPath()
+//                   << ", filename = " << fileInfo.fileName()
+//                   << ", status = " << status << endl;
 
     UpdateDirItem* rootItem = static_cast<UpdateDirItem*>(firstChild());
     UpdateDirItem* dirItem = findOrCreateDirItem(fileInfo.dirPath(), rootItem);
