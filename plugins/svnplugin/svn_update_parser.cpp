@@ -48,6 +48,7 @@ void SvnUpdateParser::parseStatusLine(const QString& line)
     kdDebug(8050) << k_funcinfo << "line = " << line << endl;
 
     QRegExp rx(".*Revision.*\\d+");
+    rx.setCaseSensitive(false);
     if( line.length() > 2 && rx.search(line) < 0 )
     {
         QString fileName = line.right(line.length() - 20);
@@ -90,6 +91,7 @@ void SvnUpdateParser::parseUpdateLine(const QString& line)
     kdDebug(8050) << k_funcinfo << "line = " << line << endl;
 
     QRegExp rx(".*Revision.*\\d+");
+    rx.setCaseSensitive(false);
     if( line.length() > 2 && rx.search(line) < 0 )
     {
         QString fileName = line.right(line.length() - 5);
@@ -108,6 +110,9 @@ void SvnUpdateParser::parseUpdateLine(const QString& line)
                 break;
             case 'D':
                 status = Cervisia::LocallyRemoved;
+                break;
+            case 'G':
+                status = Cervisia::Patched;
                 break;
             case 'U':
                 status = Cervisia::Updated;
