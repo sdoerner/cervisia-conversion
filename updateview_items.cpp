@@ -557,6 +557,7 @@ int UpdateFileItem::statusClass() const
     case Cervisia::Updated:
     case Cervisia::NeedsUpdate:
     case Cervisia::Patched:
+    case Cervisia::Merged:
     case Cervisia::Removed:
     case Cervisia::NeedsPatch:
     case Cervisia::NeedsMerge:
@@ -666,6 +667,7 @@ void UpdateFileItem::paintCell(QPainter *p,
     case Cervisia::NeedsPatch:
     case Cervisia::NeedsUpdate:
     case Cervisia::Patched:
+    case Cervisia::Merged:
     case Cervisia::Removed:
     case Cervisia::Updated:
         color = view->remoteChangeColor();

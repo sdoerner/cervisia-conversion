@@ -63,6 +63,9 @@ QString toString(EntryStatus entryStatus)
     case Patched:
         result = i18n("Patched");
         break;
+    case Merged:
+        result = i18n("Merged");
+        break;
     case Removed:
         result = i18n("Removed");
         break;

@@ -43,6 +43,7 @@ enum EntryStatus
     Conflict,
     Updated,
     Patched,
+    Merged,
     Removed,
     NotInCVS,
     Unknown

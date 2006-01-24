@@ -112,7 +112,7 @@ void SvnUpdateParser::parseUpdateLine(const QString& line)
                 status = Cervisia::LocallyRemoved;
                 break;
             case 'G':
-                status = Cervisia::Patched;
+                status = Cervisia::Merged;
                 break;
             case 'U':
                 status = Cervisia::Updated;
