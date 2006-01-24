@@ -33,6 +33,8 @@ public:
                     const QString& module);
     ~CheckoutCommand();
 
+    void setBranchTag(const QString& tag);
+    void setAliasName(const QString& alias);
     void setPruneDirectories(bool pruneDirs);
     void setExportOnly(bool exportOnly);
 
@@ -42,6 +44,8 @@ private:
     QString m_workingFolder;
     QString m_repository;
     QString m_module;
+    QString m_branchTag;
+    QString m_aliasName;
     bool    m_pruneDirectories;
     bool    m_exportOnly;
 };

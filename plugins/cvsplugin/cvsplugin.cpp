@@ -299,6 +299,9 @@ void CvsPlugin::checkout(CheckoutWidgetBase* checkoutWidget)
 
     CheckoutCommand* cmd = new CheckoutCommand(workingFolder, repository, module);
     cmd->setRecursive(w->isRecursive());
+    cmd->setBranchTag(w->branch());
+    cmd->setAliasName(w->alias());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
     cmd->setExportOnly(w->isExportOnly());
 
     executeCommand(cmd);

@@ -35,6 +35,8 @@ CheckoutCommand::CheckoutCommand(const QString& workingFolder, const QString& re
     , m_workingFolder(workingFolder)
     , m_repository(repository)
     , m_module(module)
+    , m_branchTag("")
+    , m_aliasName("")
     , m_pruneDirectories(false)
     , m_exportOnly(false)
 {
@@ -43,6 +45,18 @@ CheckoutCommand::CheckoutCommand(const QString& workingFolder, const QString& re
 
 CheckoutCommand::~CheckoutCommand()
 {
+}
+
+
+void CheckoutCommand::setBranchTag(const QString& tag)
+{
+    m_branchTag = tag;
+}
+
+
+void CheckoutCommand::setAliasName(const QString& alias)
+{
+    m_aliasName = alias;
 }
 
 
@@ -63,8 +77,9 @@ bool CheckoutCommand::prepare()
     kdDebug(8050) << k_funcinfo << endl;
 
     DCOPRef jobRef = CvsPlugin::cvsService()->checkout(m_workingFolder, m_repository,
-                                                       m_module, "" /*tag*/, m_pruneDirectories,
-                                                       "" /*alias*/, m_exportOnly, isRecursive());
+                                                       m_module, m_branchTag,
+                                                       m_pruneDirectories, m_aliasName,
+                                                       m_exportOnly, isRecursive());
     connectToJob(jobRef);
 
     return true;
