@@ -1330,6 +1330,8 @@ bool CervisiaPart::openSandbox(const QString &dirname)
 //    repository   = "";
 
     //FIXME: temporarily get cvsservice reference from plugin
+    if( cvsService )
+        cvsService->quit();
     delete cvsService;
     cvsService = new CvsService_stub(m_vcsPlugin->service());
     protocol->updatePlugin();
