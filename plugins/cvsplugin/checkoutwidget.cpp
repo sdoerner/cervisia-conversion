@@ -30,17 +30,20 @@ using Cervisia::CheckoutWidget;
 #include <kfiledialog.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kurlcompletion.h>
 
 #include <repositories.h>
 
 #include "cvspluginsettings.h"
+#include "fetchbranchtagscommand.h"
 
 #include <kdebug.h>
 
 
 CheckoutWidget::CheckoutWidget(QWidget* parent)
     : CheckoutWidgetBase(parent)
+    , m_cmd(0)
 {
     QBoxLayout* mainLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -154,6 +157,7 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
 
 CheckoutWidget::~CheckoutWidget()
 {
+    delete m_cmd;
 }
 
 QString CheckoutWidget::repository() const
@@ -250,50 +254,33 @@ void CheckoutWidget::moduleButtonClicked()
 
 void CheckoutWidget::branchButtonClicked()
 {
-    kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
-
-//     QStringList branchTagList;
-    //
-//     if( repository().isEmpty() )
-//     {
-//         KMessageBox::information(this, i18n("Please specify a repository."));
-//         return;
-//     }
-    //
-//     if( module().isEmpty() )
-//     {
-//         KMessageBox::information(this, i18n("Please specify a module name."));
-//         return;
-//     }
-
-//     DCOPRef cvsJob = cvsService->rlog(repository(), module(), 
-//                                       false/*recursive*/);
-/*    if( !cvsService->ok() )
-    return;
-
-    ProgressDialog dlg(this, "Remote Log", cvsJob, QString::null,
-    i18n("CVS Remote Log"));
-    if( !dlg.execute() )
-    return;
-
-    QString line;
-    while( dlg.getLine(line) )
+    if( repository().isEmpty() )
     {
-    int colonPos;
+        KMessageBox::information(this, i18n("Please specify a repository."));
+        return;
+    }
 
-    if( line.isEmpty() || line[0] != '\t' )
-    continue;
-    if( (colonPos = line.find(':', 1)) < 0 )
-    continue;
+    if( module().isEmpty() )
+    {
+        KMessageBox::information(this, i18n("Please specify a module name."));
+        return;
+    }
 
-    const QString tag  = line.mid(1, colonPos - 1);
-    if( !branchTagList.contains(tag) )
-    branchTagList.push_back(tag);
+    m_cmd = new FetchBranchTagsCommand(repository(), module());
+    connect( m_cmd, SIGNAL(jobExited(bool, int)),
+             this, SLOT(jobExited(bool, int)) );
+    if( m_cmd->prepare() )
+    {
+        m_cmd->execute();
+    }
 }
 
-    branchTagList.sort();
 
-    branchCombo->insertStringList(branchTagList);*/
+void CheckoutWidget::jobExited(bool normalExit, int status)
+{
+    m_branchCombo->insertStringList(m_cmd->branchTagList());
+
+    delete m_cmd; m_cmd = 0;
 }
 
 

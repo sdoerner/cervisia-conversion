@@ -29,6 +29,8 @@ class KLineEdit;
 namespace Cervisia
 {
 
+class FetchBranchTagsCommand;
+
 
 class CheckoutWidget : public CheckoutWidgetBase
 {
@@ -53,19 +55,21 @@ private slots:
     void moduleButtonClicked();
     void branchButtonClicked();
     void branchTextChanged();
+    void jobExited(bool normalExit, int status);
 
 private:
     void addRepositories();
     void saveUserInput();
     void restoreUserInput();
 
-    QComboBox* m_repositoryCombo;
-    QComboBox* m_moduleCombo;
-    QComboBox* m_branchCombo;
-    QCheckBox* m_recursiveChkBox;
-    KLineEdit* m_workFolderEdt;
-    KLineEdit* m_aliasEdt;
-    QCheckBox* m_exportChkBox;
+    QComboBox*              m_repositoryCombo;
+    QComboBox*              m_moduleCombo;
+    QComboBox*              m_branchCombo;
+    QCheckBox*              m_recursiveChkBox;
+    KLineEdit*              m_workFolderEdt;
+    KLineEdit*              m_aliasEdt;
+    QCheckBox*              m_exportChkBox;
+    FetchBranchTagsCommand* m_cmd;
 };
 
 
