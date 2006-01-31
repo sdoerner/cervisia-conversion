@@ -209,6 +209,7 @@ bool CheckoutWidget::checkUserInput()
 {
     kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
 
+    saveUserInput();
     return true;
 }
 
@@ -276,9 +277,12 @@ void CheckoutWidget::branchButtonClicked()
 }
 
 
-void CheckoutWidget::jobExited(bool normalExit, int status)
+void CheckoutWidget::jobExited(bool /*normalExit*/, int /*status*/)
 {
-    m_branchCombo->insertStringList(m_cmd->branchTagList());
+    QStringList branchTagList = m_cmd->branchTagList();
+    branchTagList.sort();
+
+    m_branchCombo->insertStringList(branchTagList);
 
     delete m_cmd; m_cmd = 0;
 }
@@ -318,9 +322,12 @@ void CheckoutWidget::addRepositories()
 
 void CheckoutWidget::saveUserInput()
 {
-    kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
-
+    CvsPluginSettings::setRepository(repository());
     CvsPluginSettings::setModule(module());
+    CvsPluginSettings::setBranch(branch());
+    CvsPluginSettings::setWorkingFolder(workingFolder());
+    CvsPluginSettings::setAlias(alias());
+    CvsPluginSettings::setExportOnly(isExportOnly());
 
     CvsPluginSettings::writeConfig();
 }
@@ -328,8 +335,13 @@ void CheckoutWidget::saveUserInput()
 
 void CheckoutWidget::restoreUserInput()
 {
-    kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
+    m_repositoryCombo->setEditText(CvsPluginSettings::repository());
     m_moduleCombo->setEditText(CvsPluginSettings::module());
+    m_branchCombo->setCurrentText(CvsPluginSettings::branch());
+    m_workFolderEdt->setText(CvsPluginSettings::workingFolder());
+    m_aliasEdt->setText(CvsPluginSettings::alias());
+    m_exportChkBox->setChecked(CvsPluginSettings::exportOnly());
+    m_recursiveChkBox->setChecked(true);
 }
 
 #include "checkoutwidget.moc"

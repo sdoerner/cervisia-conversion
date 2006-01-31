@@ -19,9 +19,13 @@
     </entry>
   </group>
   <group name="CheckoutWidget">
-    <entry name="Repository" type="String">
-    </entry>
-    <entry name="Module" type="String">
+    <entry name="Repository" type="String"></entry>
+    <entry name="Module" type="String"></entry>
+    <entry name="Branch" type="String"></entry>
+    <entry name="WorkingFolder" type="Path"></entry>
+    <entry name="Alias" type="String"></entry>
+    <entry name="ExportOnly" type="Bool">
+      <default>false</default>
     </entry>
   </group>
 </kcfg>
