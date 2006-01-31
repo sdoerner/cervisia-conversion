@@ -207,7 +207,36 @@ bool CheckoutWidget::isExportOnly() const
 
 bool CheckoutWidget::checkUserInput()
 {
-    kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
+    if( repository().isEmpty() )
+    {
+        KMessageBox::information(this, i18n("Please specify a repository."));
+        m_repositoryCombo->setFocus();
+        return false;
+    }
+
+    if( module().isEmpty() )
+    {
+        KMessageBox::information(this, i18n("Please specify a module name."));
+        m_moduleCombo->setFocus();
+        return false;
+    }
+
+    QFileInfo fi(workingFolder());
+    if( !fi.exists() || !fi.isDir() )
+    {
+        KMessageBox::information(this,
+                                 i18n("Please choose an existing working folder."));
+        m_workFolderEdt->setFocus();
+        return false;
+    }
+
+    if( isExportOnly() && branch().isEmpty() )
+    {
+        KMessageBox::information(this,
+                                 i18n("A branch must be specified for export."));
+        m_branchCombo->setFocus();
+        return false;
+    }
 
     saveUserInput();
     return true;
