@@ -190,7 +190,7 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
                              const QString& module, const QString& tag, 
                              bool pruneDirs)
 {
-    if( d->hasRunningJob() )
+    if( d->hasRunningJob() || repository.isEmpty() )
         return DCOPRef();
 
     Repository repo(repository);
@@ -220,7 +220,7 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
                              const QString& module, const QString& tag, 
                              bool pruneDirs, const QString& alias, bool exportOnly)
 {
-    if( d->hasRunningJob() )
+    if( d->hasRunningJob() || repository.isEmpty() )
         return DCOPRef();
 
     Repository repo(repository);
@@ -256,7 +256,7 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
                              bool pruneDirs, const QString& alias, bool exportOnly,
                              bool recursive)
 {
-    if( d->hasRunningJob() )
+    if( d->hasRunningJob() || repository.isEmpty() )
         return DCOPRef();
 
     Repository repo(repository);
