@@ -97,7 +97,7 @@ public slots:
     void slotRepositories();
 //     void slotCreateTag();
 //     void slotDeleteTag();
-    void slotUpdateToTag();
+//     void slotUpdateToTag();
 //     void slotUpdateToHead();
     void slotMerge();
     void slotShowWatchers();

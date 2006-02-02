@@ -749,48 +749,6 @@ void CervisiaPart::slotResolve()
 }
 
 
-// void CervisiaPart::slotUpdate()
-// {
-//     updateSandbox();
-// }
-
-
-void CervisiaPart::slotUpdateToTag()
-{
-    UpdateDialog *l = new UpdateDialog(cvsService, widget() );
-
-    if (l->exec())
-    {
-        QString tagopt;
-        if (l->byTag())
-        {
-            tagopt = "-r ";
-            tagopt += l->tag();
-        }
-        else
-        {
-            tagopt = "-D ";
-            tagopt += KProcess::quote(l->date());
-        }
-        tagopt += " ";
-        updateSandbox(tagopt);
-    }
-    delete l;
-}
-
-
-// void CervisiaPart::slotUpdateToHead()
-// {
-//     updateSandbox("-A");
-// }
-
-
-// void CervisiaPart::slotRevert()
-// {
-//     updateSandbox("-C");
-// }
-
-
 void CervisiaPart::slotMerge()
 {
     MergeDialog dlg(cvsService, widget());
