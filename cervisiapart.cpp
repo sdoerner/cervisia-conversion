@@ -1237,8 +1237,8 @@ void CervisiaPart::slotJobFinished()
     emit setStatusBarText( i18n("Done") );
     updateActions();
 
-    disconnect( protocol, SIGNAL(receivedLine(QString)),
-                update,   SLOT(processUpdateLine(QString)) );
+//     disconnect( protocol, SIGNAL(receivedLine(QString)),
+//                 update,   SLOT(processUpdateLine(QString)) );
 
     if( m_jobType == Commit )
     {
@@ -1250,13 +1250,27 @@ void CervisiaPart::slotJobFinished()
 }
 
 
+void CervisiaPart::commandPrepared(Cervisia::CommandBase* cmd)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    m_jobType = Unknown;
+    if( cmd->action() == Cervisia::CommandBase::Commit )
+        m_jobType = Commit;
+
+    // connect to the command signal
+    connect(cmd, SIGNAL(jobExited(bool, int)),
+            this, SLOT(slotJobFinished()));
+}
+
+
 bool CervisiaPart::openSandbox(const QString &dirname)
 {
     // Do we have a cvs service?
     if( !cvsService )
         return false;
 
-    kdDebug(8050) << "openSandbox(): dirname = " << dirname << endl;
+    kdDebug(8050) << k_funcinfo << "dirname = " << dirname << endl;
 
     KURL url;
     url.setPath(dirname);
@@ -1301,10 +1315,14 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     disconnect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
                update, 0);
     disconnect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
-            update, 0);
+               update, 0);
+    disconnect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+               this, 0);
 
     connect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
             update, SLOT(commandPrepared(Cervisia::CommandBase*)));
+    connect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+            this, SLOT(commandPrepared(Cervisia::CommandBase*)));
     connect(parser, SIGNAL(updateItemStatus(const QString&, Cervisia::EntryStatus, bool)),
             update, SLOT(updateItem(const QString&, Cervisia::EntryStatus, bool)));
 

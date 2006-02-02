@@ -134,6 +134,7 @@ private slots:
     // called by menu action "Open Sandbox..."
     void slotOpenSandbox();
     void slotSetupStatusBar();
+    void commandPrepared(Cervisia::CommandBase* cmd);
 
 protected:
     virtual void guiActivateEvent(KParts::GUIActivateEvent* event);
