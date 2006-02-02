@@ -29,6 +29,7 @@ CvsCommandBase::CvsCommandBase(const ActionKind& action)
     : CommandBase(action)
     , m_errorOccurred(false)
     , m_cvsJob(0)
+    , m_deletion(AutomaticDeletion)
 {
 //     kdDebug(8050) << k_funcinfo << endl;
 }
@@ -36,6 +37,7 @@ CvsCommandBase::CvsCommandBase(const ActionKind& action)
 
 CvsCommandBase::~CvsCommandBase()
 {
+    kdDebug(8050) << k_funcinfo << endl;
     delete m_cvsJob;
 }
 
@@ -85,6 +87,9 @@ void CvsCommandBase::dcopJobExited(bool normalExit, int exitStatus)
     }
 
     emit jobExited(normalExit, exitStatus);
+
+    if( m_deletion == AutomaticDeletion )
+        deleteLater();
 }
 
 
@@ -120,11 +125,11 @@ void CvsCommandBase::connectToJob(const DCOPRef& jobRef, DeletionHandling deleti
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "receivedStderr(QString)",
                       "dcopReceivedStderr(QString)", true);
 
-    if( deletion == AutomaticDeletion )
-    {
-        connect(this, SIGNAL(jobExited(bool, int)),
-                this, SLOT(deleteLater()));
-    }
+//     if( deletion == AutomaticDeletion )
+//     {
+//         connect(this, SIGNAL(jobExited(bool, int)),
+//                 this, SLOT(deleteLater()));
+//     }
 }
 
 

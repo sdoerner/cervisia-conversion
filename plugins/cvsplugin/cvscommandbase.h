@@ -67,8 +67,9 @@ protected:
 private:
     void processOutput(const QString& buffer);
 
-    CvsJob_stub* m_cvsJob;
-    QString      m_lineBuffer;
+    CvsJob_stub*     m_cvsJob;
+    QString          m_lineBuffer;
+    DeletionHandling m_deletion;
 };
 
 
