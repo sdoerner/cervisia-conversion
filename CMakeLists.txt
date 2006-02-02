@@ -23,7 +23,7 @@ KDE3_AUTOMOC(${cervisia_KDEINIT_SRCS})
 
 KDE3_ADD_KLM( cervisia ${cervisia_KDEINIT_SRCS})
 
-TARGET_LINK_LIBRARIES(kdeinit_cervisia  ${QT_AND_KDECORE_LIBS} kparts cvsservice cervisialib )
+TARGET_LINK_LIBRARIES(kdeinit_cervisia  ${QT_AND_KDECORE_LIBS} kparts cvsservicestubs cervisialib )
 
 INSTALL_TARGETS(/lib kdeinit_cervisia )
 
@@ -55,7 +55,7 @@ KDE3_AUTOMOC(${cervisiapart_PART_SRCS})
 
 KDE3_ADD_KPART(cervisiapart WITH_PREFIX ${cervisiapart_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(cervisiapart  ${QT_AND_KDECORE_LIBS} kparts cvsservice cervisialib )
+TARGET_LINK_LIBRARIES(cervisiapart  ${QT_AND_KDECORE_LIBS} kparts cvsservicestubs cervisialib )
 
 INSTALL_TARGETS(/lib/kde3 cervisiapart )
 
