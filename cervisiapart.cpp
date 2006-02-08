@@ -1039,9 +1039,18 @@ void CervisiaPart::slotCheckout()
     if( !dlg.exec() )
         return;
 
-    // checkout the working copy
+    // change plugin for checkout
     QString pluginType = dlg.pluginType();
     Cervisia::PluginBase* plugin = Cervisia::PluginManager::self()->pluginForType(pluginType);
+    protocol->updatePlugin(plugin);
+
+    disconnect(plugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+               this, 0);
+
+    connect(plugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+            this, SLOT(commandPrepared(Cervisia::CommandBase*)));
+
+    // checkout the working copy
     plugin->checkout(dlg.currentWidget());
 }
 
@@ -1237,6 +1246,13 @@ void CervisiaPart::slotJobFinished()
     emit setStatusBarText( i18n("Done") );
     updateActions();
 
+    // restore plugin
+    protocol->updatePlugin(m_vcsPlugin);
+    disconnect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+               this, 0);
+    connect(m_vcsPlugin, SIGNAL(commandPrepared(Cervisia::CommandBase*)),
+            this, SLOT(commandPrepared(Cervisia::CommandBase*)));
+
 //     disconnect( protocol, SIGNAL(receivedLine(QString)),
 //                 update,   SLOT(processUpdateLine(QString)) );
 
@@ -1306,7 +1322,7 @@ bool CervisiaPart::openSandbox(const QString &dirname)
         cvsService->quit();
     delete cvsService;
     cvsService = new CvsService_stub(m_vcsPlugin->service());
-    protocol->updatePlugin();
+    protocol->updatePlugin(m_vcsPlugin);
 
     m_vcsPlugin->setFileView(update);
     Cervisia::UpdateParser* parser = m_vcsPlugin->updateParser();

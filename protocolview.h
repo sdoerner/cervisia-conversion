@@ -24,8 +24,11 @@
 
 #include <qtextedit.h>
 
-// namespace Cervisia { class PluginJobBase; }
-namespace Cervisia { class CommandBase; }
+namespace Cervisia {
+class CommandBase;
+class PluginBase;
+}
+
 class QPoint;
 class QPopupMenu;
 class CvsJob_stub;
@@ -39,7 +42,7 @@ public:
     explicit ProtocolView(QWidget *parent=0, const char *name=0);
     ~ProtocolView();
 
-    void updatePlugin();                            //TODO: use signal/slot instead?
+    void updatePlugin(Cervisia::PluginBase* plugin); //TODO: use signal/slot instead?
     bool startJob(bool isUpdateJob = false);
 
 protected:
