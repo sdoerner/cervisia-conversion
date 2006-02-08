@@ -37,6 +37,7 @@ using Cervisia::CheckoutWidget;
 
 #include "cvspluginsettings.h"
 #include "fetchbranchtagscommand.h"
+#include "fetchmodulelistcommand.h"
 
 #include <kdebug.h>
 
@@ -44,6 +45,7 @@ using Cervisia::CheckoutWidget;
 CheckoutWidget::CheckoutWidget(QWidget* parent)
     : CheckoutWidgetBase(parent)
     , m_cmd(0)
+    , m_moduleCmd(0)
 {
     QBoxLayout* mainLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -158,7 +160,9 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
 CheckoutWidget::~CheckoutWidget()
 {
     delete m_cmd;
+    delete m_moduleCmd;
 }
+
 
 QString CheckoutWidget::repository() const
 {
@@ -255,30 +259,13 @@ void CheckoutWidget::moduleButtonClicked()
 {
     kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
 
-/*    DCOPRef cvsJob = cvsService->moduleList(repository());
-    if( !cvsService->ok() )
-    return;
-
-    ProgressDialog dlg(this, "Checkout", cvsJob, "checkout", i18n("CVS Checkout"));
-    if( !dlg.execute() )
-    return;
-
-    module_combo->clear();
-    QString str;
-    while (dlg.getLine(str))
+    m_moduleCmd = new FetchModuleListCommand(repository());
+    connect( m_moduleCmd, SIGNAL(jobExited(bool, int)),
+             this, SLOT(moduleJobExited(bool, int)) );
+    if( m_moduleCmd->prepare() )
     {
-    if (str.left(12) == "Unknown host")
-    continue;
-
-    int pos = str.find(' ');
-    if (pos == -1)
-    pos = str.find('\t');
-    if (pos == -1)
-    pos = str.length();
-    QString module( str.left(pos).stripWhiteSpace() );
-    if ( !module.isEmpty() )
-    module_combo->insertItem(module);
-}*/
+        m_moduleCmd->execute();
+    }
 }
 
 
@@ -311,9 +298,19 @@ void CheckoutWidget::jobExited(bool /*normalExit*/, int /*status*/)
     QStringList branchTagList = m_cmd->branchTagList();
     branchTagList.sort();
 
+    m_branchCombo->clear();
     m_branchCombo->insertStringList(branchTagList);
 
     delete m_cmd; m_cmd = 0;
+}
+
+
+void CheckoutWidget::moduleJobExited(bool /*normalExit*/, int /*status*/)
+{
+    m_moduleCombo->clear();
+    m_moduleCombo->insertStringList(m_moduleCmd->moduleList());
+
+    delete m_moduleCmd; m_moduleCmd = 0;
 }
 
 

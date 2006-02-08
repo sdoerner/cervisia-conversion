@@ -30,6 +30,7 @@ namespace Cervisia
 {
 
 class FetchBranchTagsCommand;
+class FetchModuleListCommand;
 
 
 class CheckoutWidget : public CheckoutWidgetBase
@@ -56,6 +57,7 @@ private slots:
     void branchButtonClicked();
     void branchTextChanged();
     void jobExited(bool normalExit, int status);
+    void moduleJobExited(bool normalExit, int status);
 
 private:
     void addRepositories();
@@ -70,6 +72,7 @@ private:
     KLineEdit*              m_aliasEdt;
     QCheckBox*              m_exportChkBox;
     FetchBranchTagsCommand* m_cmd;
+    FetchModuleListCommand* m_moduleCmd;
 };
 
 

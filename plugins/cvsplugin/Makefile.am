@@ -8,7 +8,7 @@ libcvsplugin_la_SOURCES = cvsplugin.cpp dirignorelist.cpp globalignorelist.cpp \
                           cvscommandbase.cpp cvscommandbase.skel addcommand.cpp \
                           addwatchcommand.cpp annotatecommand.cpp commitcommand.cpp \
                           createtagcommand.cpp deletetagcommand.cpp editcommand.cpp \
-                          fetchbranchtagscommand.cpp lockcommand.cpp \
+                          fetchbranchtagscommand.cpp fetchmodulelistcommand.cpp lockcommand.cpp \
                           logcommand.cpp removecommand.cpp removewatchcommand.cpp \
                           updatecommand.cpp updatetagcommand.cpp diffcommand.cpp \
                           createpatchcommand.cpp checkoutcommand.cpp \
