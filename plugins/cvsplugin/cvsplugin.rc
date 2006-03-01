@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="cvsplugin" library="libcvsplugin" version="3">
+<kpartplugin name="cvsplugin" library="libcvsplugin" version="4">
 <MenuBar>
     <Menu name="file"><Text>&amp;File</Text>
         <Separator/>
@@ -53,6 +53,9 @@
     <Action name="file_remove"/>
 </ToolBar>
 <Menu name="context_popup">
+    <Action name="view_diff_base"/>
+    <Action name="view_diff_head"/>
+    <Action name="view_last_change"/>
     <Action name="view_log"/>
     <Separator/>
     <Action name="file_update"/>
