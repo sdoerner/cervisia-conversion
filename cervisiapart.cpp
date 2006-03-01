@@ -101,6 +101,7 @@ CervisiaPart::CervisiaPart( QWidget *parentWidget, const char *widgetName,
     , m_editWithId(0)
     , m_currentEditMenu(0)
     , m_jobType(Unknown)
+    , m_vcsPlugin(0)
 {
     KGlobal::locale()->insertCatalogue("cervisia");
 
@@ -167,7 +168,9 @@ CervisiaPart::CervisiaPart( QWidget *parentWidget, const char *widgetName,
 CervisiaPart::~CervisiaPart()
 {
     // stop the cvs DCOP service and delete reference
-    if( cvsService )
+    // plugin's services are quitted by the plugins only the dummy service
+    // started in the ctor must be quit here
+    if( cvsService && !m_vcsPlugin )
         cvsService->quit();
     delete cvsService;
 
@@ -1288,6 +1291,11 @@ bool CervisiaPart::openSandbox(const QString &dirname)
 
     kdDebug(8050) << k_funcinfo << "dirname = " << dirname << endl;
 
+    // plugin's services are quitted by the plugins only the dummy service
+    // started in the ctor must be quit here
+    if( cvsService && !m_vcsPlugin )
+        cvsService->quit();
+
     KURL url;
     url.setPath(dirname);
     m_vcsPlugin = Cervisia::PluginManager::self()->pluginForUrl(url);
@@ -1318,8 +1326,6 @@ bool CervisiaPart::openSandbox(const QString &dirname)
 //    repository   = "";
 
     //FIXME: temporarily get cvsservice reference from plugin
-    if( cvsService )
-        cvsService->quit();
     delete cvsService;
     cvsService = new CvsService_stub(m_vcsPlugin->service());
     protocol->updatePlugin(m_vcsPlugin);
