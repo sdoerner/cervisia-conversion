@@ -41,7 +41,7 @@ FetchBranchTagsCommand::FetchBranchTagsCommand(const QString& repository, const 
 
 FetchBranchTagsCommand::~FetchBranchTagsCommand()
 {
-    delete m_progressDlg;
+//     delete m_progressDlg;
 }
 
 

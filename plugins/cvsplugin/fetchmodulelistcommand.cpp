@@ -40,7 +40,7 @@ FetchModuleListCommand::FetchModuleListCommand(const QString& repository)
 
 FetchModuleListCommand::~FetchModuleListCommand()
 {
-    delete m_progressDlg;
+//     delete m_progressDlg; m_progressDlg = 0;
 }
 
 
