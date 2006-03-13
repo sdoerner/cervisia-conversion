@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,8 +67,9 @@ protected:
 private:
     void processOutput(const QString& buffer);
 
-    SvnJob_stub* m_svnJob;
-    QString      m_lineBuffer;
+    SvnJob_stub*     m_svnJob;
+    QString          m_lineBuffer;
+    DeletionHandling m_deletion;
 };
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@ SvnCommandBase::SvnCommandBase(const ActionKind& action)
     : CommandBase(action)
     , m_errorOccurred(false)
     , m_svnJob(0)
+    , m_deletion(AutomaticDeletion)
 {
-    kdDebug(8050) << k_funcinfo << endl;
+//     kdDebug(8050) << k_funcinfo << endl;
 }
 
 
@@ -76,6 +77,9 @@ void SvnCommandBase::dcopJobExited(bool normalExit, int exitStatus)
     }
 
     emit jobExited(normalExit, exitStatus);
+
+    if( m_deletion == AutomaticDeletion )
+        deleteLater();
 }
 
 
@@ -110,12 +114,6 @@ void SvnCommandBase::connectToJob(const DCOPRef& jobRef, DeletionHandling deleti
                       "dcopReceivedStdout(QString)", true);
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "receivedStderr(QString)",
                       "dcopReceivedStderr(QString)", true);
-
-    if( deletion == AutomaticDeletion )
-    {
-        connect(this, SIGNAL(jobExited(bool, int)),
-                this, SLOT(deleteLater()));
-    }
 }
 
 
