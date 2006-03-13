@@ -159,8 +159,8 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
 
 CheckoutWidget::~CheckoutWidget()
 {
-    delete m_cmd;
-    delete m_moduleCmd;
+//     delete m_cmd; m_cmd = 0;
+//     delete m_moduleCmd; m_moduleCmd = 0;
 }
 
 
@@ -257,7 +257,7 @@ void CheckoutWidget::dirButtonClicked()
 
 void CheckoutWidget::moduleButtonClicked()
 {
-    kdDebug(8050) << k_funcinfo << " -- NOT YET IMPLEMENTED -- " << endl;
+    kdDebug(8050) << k_funcinfo << endl;
 
     m_moduleCmd = new FetchModuleListCommand(repository());
     connect( m_moduleCmd, SIGNAL(jobExited(bool, int)),
@@ -301,7 +301,7 @@ void CheckoutWidget::jobExited(bool /*normalExit*/, int /*status*/)
     m_branchCombo->clear();
     m_branchCombo->insertStringList(branchTagList);
 
-    delete m_cmd; m_cmd = 0;
+//     delete m_cmd; m_cmd = 0;
 }
 
 
@@ -310,7 +310,7 @@ void CheckoutWidget::moduleJobExited(bool /*normalExit*/, int /*status*/)
     m_moduleCombo->clear();
     m_moduleCombo->insertStringList(m_moduleCmd->moduleList());
 
-    delete m_moduleCmd; m_moduleCmd = 0;
+//     delete m_moduleCmd; m_moduleCmd = 0;
 }
 
 
