@@ -66,6 +66,8 @@ private:
     QColor remoteChangeColor;
 
     bool   m_isUpdateJob;
+
+    Cervisia::CommandBase* m_currentCmd;
 };
 
 #endif

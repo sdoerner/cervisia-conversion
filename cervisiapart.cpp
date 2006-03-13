@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 1999-2002 Bernd Gehrmann
  *                          bernd@mail.berlios.de
- *  Copyright (c) 2002-2005 Christian Loose <christian.loose@kdemail.net>
+ *  Copyright (c) 2002-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1234,19 +1234,19 @@ void CervisiaPart::slotCVSInfo()
 
 void CervisiaPart::showJobStart(const QString &cmdline)
 {
-    hasRunningJob = true;
-    actionCollection()->action( "stop_job" )->setEnabled( true );
-
-    emit setStatusBarText( cmdline );
-    updateActions();
+//     hasRunningJob = true;
+//     actionCollection()->action( "stop_job" )->setEnabled( true );
+// 
+//     emit setStatusBarText( cmdline );
+//     updateActions();
 }
 
 
 void CervisiaPart::slotJobFinished()
 {
-    actionCollection()->action( "stop_job" )->setEnabled( false );
+    actionCollection()->action("stop_job")->setEnabled(false);
     hasRunningJob = false;
-    emit setStatusBarText( i18n("Done") );
+    emit setStatusBarText(i18n("Done"));
     updateActions();
 
     // restore plugin
@@ -1272,6 +1272,12 @@ void CervisiaPart::slotJobFinished()
 void CervisiaPart::commandPrepared(Cervisia::CommandBase* cmd)
 {
     kdDebug(8050) << k_funcinfo << endl;
+
+    hasRunningJob = true;
+    actionCollection()->action("stop_job")->setEnabled(true);
+
+    emit setStatusBarText(cmd->commandString());
+    updateActions();
 
     m_jobType = Unknown;
     if( cmd->action() == Cervisia::CommandBase::Commit )

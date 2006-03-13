@@ -39,6 +39,7 @@ using namespace Cervisia;
 ProtocolView::ProtocolView(QWidget *parent, const char *name)
     : QTextEdit(parent, name)
     , m_isUpdateJob(false)
+    , m_currentCmd(0)
 {
     setReadOnly(true);
     setUndoRedoEnabled(false);
@@ -110,8 +111,7 @@ QPopupMenu* ProtocolView::createPopupMenu(const QPoint &pos)
 
 void ProtocolView::cancelJob()
 {
-    //FIXME
-//     job->cancel();
+    m_currentCmd->cancel();
 }
 
 
@@ -151,6 +151,8 @@ void ProtocolView::commandPrepared(Cervisia::CommandBase* cmd)
     if( cmd->action() == Cervisia::CommandBase::Other )
         return;
 
+    m_currentCmd = cmd;
+
     // get command line and add it to output buffer
     appendLine(cmd->commandString());
 
@@ -177,6 +179,8 @@ void ProtocolView::jobExited(bool normalExit, int exitStatus)
         msg = i18n("[Aborted]\n");
 
     appendLine(msg);
+
+    m_currentCmd = 0;
 
     emit jobFinished(normalExit, exitStatus);
 }
