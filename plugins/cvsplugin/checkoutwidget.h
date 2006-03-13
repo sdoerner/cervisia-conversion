@@ -23,6 +23,7 @@
 
 class QCheckBox;
 class QComboBox;
+class QPushButton;
 class KLineEdit;
 
 
@@ -55,6 +56,7 @@ private slots:
     void dirButtonClicked();
     void moduleButtonClicked();
     void branchButtonClicked();
+    void repositoryTextChanged();
     void branchTextChanged();
     void jobExited(bool normalExit, int status);
     void moduleJobExited(bool normalExit, int status);
@@ -66,7 +68,9 @@ private:
 
     QComboBox*              m_repositoryCombo;
     QComboBox*              m_moduleCombo;
+    QPushButton*            m_fetchModulesBtn;
     QComboBox*              m_branchCombo;
+    QPushButton*            m_fetchBranchesBtn;
     QCheckBox*              m_recursiveChkBox;
     KLineEdit*              m_workFolderEdt;
     KLineEdit*              m_aliasEdt;

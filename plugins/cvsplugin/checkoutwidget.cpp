@@ -68,19 +68,22 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
     QLabel* repositoryLbl = new QLabel(m_repositoryCombo, i18n("&Repository:"), this);
     grid->addWidget(repositoryLbl, 0, 0, AlignLeft | AlignVCenter);
 
+    connect( m_repositoryCombo, SIGNAL(textChanged(const QString&)),
+             this, SLOT(repositoryTextChanged()) );
+
     //
     // module
     //
     m_moduleCombo = new QComboBox(true, this);
 
-    QPushButton* fetchModulesBtn = new QPushButton(i18n("Fetch &List"), this);
-    connect( fetchModulesBtn, SIGNAL(clicked()),
+    m_fetchModulesBtn = new QPushButton(i18n("Fetch &List"), this);
+    connect( m_fetchModulesBtn, SIGNAL(clicked()),
              this, SLOT(moduleButtonClicked()) );
 
     QBoxLayout* moduleLayout = new QHBoxLayout();
     grid->addLayout(moduleLayout, 1, 1);
     moduleLayout->addWidget(m_moduleCombo, 10);
-    moduleLayout->addWidget(fetchModulesBtn, 0, AlignVCenter);
+    moduleLayout->addWidget(m_fetchModulesBtn, 0, AlignVCenter);
 
     QLabel* moduleLbl = new QLabel(m_moduleCombo, i18n("&Module:"), this);
     grid->addWidget(moduleLbl, 1, 0, AlignLeft | AlignVCenter);
@@ -90,14 +93,14 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
     //
     m_branchCombo = new QComboBox(true, this);
 
-    QPushButton* fetchBranchesBtn = new QPushButton(i18n("Fetch &List"), this);
-    connect( fetchBranchesBtn, SIGNAL(clicked()),
+    m_fetchBranchesBtn = new QPushButton(i18n("Fetch &List"), this);
+    connect( m_fetchBranchesBtn, SIGNAL(clicked()),
              this, SLOT(branchButtonClicked()) );
 
     QBoxLayout* branchLayout = new QHBoxLayout();
     grid->addLayout(branchLayout, 2, 1);
     branchLayout->addWidget(m_branchCombo, 10);
-    branchLayout->addWidget(fetchBranchesBtn, 0, AlignVCenter);
+    branchLayout->addWidget(m_fetchBranchesBtn, 0, AlignVCenter);
 
     QLabel* branchLbl = new QLabel(m_branchCombo, i18n("&Branch tag:"), this);
     grid->addWidget(branchLbl, 2, 0, AlignLeft | AlignVCenter);
@@ -271,12 +274,6 @@ void CheckoutWidget::moduleButtonClicked()
 
 void CheckoutWidget::branchButtonClicked()
 {
-    if( repository().isEmpty() )
-    {
-        KMessageBox::information(this, i18n("Please specify a repository."));
-        return;
-    }
-
     if( module().isEmpty() )
     {
         KMessageBox::information(this, i18n("Please specify a module name."));
@@ -311,6 +308,14 @@ void CheckoutWidget::moduleJobExited(bool /*normalExit*/, int /*status*/)
     m_moduleCombo->insertStringList(m_moduleCmd->moduleList());
 
 //     delete m_moduleCmd; m_moduleCmd = 0;
+}
+
+
+void CheckoutWidget::repositoryTextChanged()
+{
+    bool enabled = !repository().isEmpty();
+    m_fetchModulesBtn->setEnabled(enabled);
+    m_fetchBranchesBtn->setEnabled(enabled);
 }
 
 
