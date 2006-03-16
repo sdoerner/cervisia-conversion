@@ -24,15 +24,16 @@
 #include <qdir.h>
 #include <qpopupmenu.h>
 #include <dcopref.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "cervisiapart.h"
+#include "cervisiasettings.h"
 #include "commandbase.h"
 #include "cvsjob_stub.h"
 #include "pluginbase.h"
 #include "pluginmanager.h"
+
+
 using namespace Cervisia;
 
 
@@ -46,17 +47,11 @@ ProtocolView::ProtocolView(QWidget *parent, const char *name)
     setTabChangesFocus(true);
     setTextFormat(Qt::LogText);
 
-    KConfig *config = CervisiaPart::config();
-    config->setGroup("LookAndFeel");
-    setFont(config->readFontEntry("ProtocolFont"));
+    setFont(CervisiaSettings::protocolFont());
 
-    config->setGroup("Colors");
-    QColor defaultColor = QColor(255, 130, 130);
-    conflictColor=config->readColorEntry("Conflict",&defaultColor);
-    defaultColor=QColor(130, 130, 255);
-    localChangeColor=config->readColorEntry("LocalChange",&defaultColor);
-    defaultColor=QColor(70, 210, 70);
-    remoteChangeColor=config->readColorEntry("RemoteChange",&defaultColor);
+    conflictColor = CervisiaSettings::conflictColor();
+    localChangeColor = CervisiaSettings::localChangeColor();
+    remoteChangeColor = CervisiaSettings::remoteChangeColor();
 }
 
 

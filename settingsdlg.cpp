@@ -138,18 +138,18 @@ void SettingsDialog::readSettings()
     usernameedit->setText(config->readEntry("Username", Cervisia::UserName()));
 
     contextedit->setValue((int)config->readUnsignedNumEntry("ContextLines", 65535));
-    tabwidthedit->setValue((int)config->readUnsignedNumEntry("TabWidth", 8));
+    tabwidthedit->setValue(CervisiaSettings::tabWidth());
     diffoptedit->setText(config->readEntry("DiffOptions"));
-    extdiffedit->setURL(config->readPathEntry("ExternalDiff"));
+    extdiffedit->setURL(CervisiaSettings::externalDiff());
     remotestatusbox->setChecked(config->readBoolEntry("StatusForRemoteRepos", false));
     localstatusbox->setChecked(config->readBoolEntry("StatusForLocalRepos", false));
 
     // read configuration for look and feel page
     config->setGroup("LookAndFeel");
-    m_protocolFontBox->setFont(config->readFontEntry("ProtocolFont"));
-    m_annotateFontBox->setFont(config->readFontEntry("AnnotateFont"));
-    m_diffFontBox->setFont(config->readFontEntry("DiffFont"));
-    m_changelogFontBox->setFont(config->readFontEntry("ChangeLogFont"));
+    m_protocolFontBox->setFont(CervisiaSettings::protocolFont());
+    m_annotateFontBox->setFont(CervisiaSettings::annotateFont());
+    m_diffFontBox->setFont(CervisiaSettings::diffFont());
+    m_changelogFontBox->setFont(CervisiaSettings::changeLogFont());
     m_splitterBox->setChecked(config->readBoolEntry("SplitHorizontally",true));
 
     m_conflictButton->setColor(CervisiaSettings::conflictColor());
@@ -180,19 +180,19 @@ void SettingsDialog::writeSettings()
     CervisiaSettings::setTimeout(m_advancedPage->kcfg_Timeout->value());
     config->writeEntry("Username", usernameedit->text());
 
-    config->writePathEntry("ExternalDiff", extdiffedit->url());
+    CervisiaSettings::setExternalDiff(extdiffedit->url());
 
     config->writeEntry("ContextLines", (unsigned)contextedit->value());
-    config->writeEntry("TabWidth", tabwidthedit->value());
+    CervisiaSettings::setTabWidth(tabwidthedit->value());
     config->writeEntry("DiffOptions", diffoptedit->text());
     config->writeEntry("StatusForRemoteRepos", remotestatusbox->isChecked());
     config->writeEntry("StatusForLocalRepos", localstatusbox->isChecked());
 
     config->setGroup("LookAndFeel");
-    config->writeEntry("ProtocolFont", m_protocolFontBox->font());
-    config->writeEntry("AnnotateFont", m_annotateFontBox->font());
-    config->writeEntry("DiffFont", m_diffFontBox->font());
-    config->writeEntry("ChangeLogFont", m_changelogFontBox->font());
+    CervisiaSettings::setProtocolFont(m_protocolFontBox->font());
+    CervisiaSettings::setAnnotateFont(m_annotateFontBox->font());
+    CervisiaSettings::setDiffFont(m_diffFontBox->font());
+    CervisiaSettings::setChangeLogFont(m_changelogFontBox->font());
     config->writeEntry("SplitHorizontally", m_splitterBox->isChecked());
 
     CervisiaSettings::setConflictColor(m_conflictButton->color());

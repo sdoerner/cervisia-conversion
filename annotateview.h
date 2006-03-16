@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
- * Copyright (c) 2003-2005 André Wöbbeking <Woebbeking@web.de>
+ * Copyright (c) 2003-2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,6 @@
 #include <qlistview.h>
 
 
-class KConfig;
-
-
 namespace Cervisia
 {
 struct LogInfo;
@@ -40,7 +37,7 @@ class AnnotateView : public QListView
 
 public:
 
-    explicit AnnotateView( KConfig &cfg, QWidget *parent=0, const char *name=0 );
+    explicit AnnotateView( QWidget *parent=0, const char *name=0 );
 
     void addLine(const Cervisia::LogInfo& logInfo, const QString& content,
                  bool odd);

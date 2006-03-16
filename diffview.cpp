@@ -26,10 +26,11 @@
 #include <qscrollbar.h>
 #include <qstyle.h>
 
-#include <kconfig.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+
+#include "cervisiasettings.h"
 
 
 class DiffViewItem
@@ -52,13 +53,12 @@ int DiffViewItemList::compareItems(QPtrCollection::Item item1, QPtrCollection::I
 const int DiffView::BORDER = 7;
 
 
-DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
+DiffView::DiffView( bool withlinenos, bool withmarker,
                     QWidget *parent, const char *name )
     : QtTableView(parent, name, WRepaintNoErase)
     , linenos(withlinenos)
     , marker(withmarker)
     , textwidth(0)
-    , partConfig(cfg)
 {
     setNumRows(0);
     setNumCols( 1 + (withlinenos?1:0) + (withmarker?1:0) );
@@ -68,24 +68,18 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
     setBackgroundMode( PaletteBase );
     setWFlags( WResizeNoErase );
 
-    partConfig.setGroup("LookAndFeel");
-    setFont(partConfig.readFontEntry("DiffFont"));
+    setFont(CervisiaSettings::diffFont());
     QFontMetrics fm(font());
     setCellHeight(fm.lineSpacing());
     setCellWidth(0);
 
-    partConfig.setGroup("General");
-    m_tabWidth = partConfig.readNumEntry("TabWidth", 8);
+    m_tabWidth = CervisiaSettings::tabWidth();
 
     items.setAutoDelete(true);
 
-    partConfig.setGroup("Colors");
-    QColor defaultColor=QColor(237, 190, 190);
-    diffChangeColor=partConfig.readColorEntry("DiffChange",&defaultColor);
-    defaultColor=QColor(190, 190, 237);
-    diffInsertColor=partConfig.readColorEntry("DiffInsert",&defaultColor);
-    defaultColor=QColor(190, 237, 190);
-    diffDeleteColor=partConfig.readColorEntry("DiffDelete",&defaultColor);
+    diffChangeColor = CervisiaSettings::diffChangeColor();
+    diffInsertColor = CervisiaSettings::diffInsertColor();
+    diffDeleteColor = CervisiaSettings::diffDeleteColor();
 }
 
 
@@ -387,18 +381,14 @@ void DiffView::wheelEvent(QWheelEvent *e)
 }
 
 
-DiffZoomWidget::DiffZoomWidget(KConfig& cfg, QWidget *parent, const char *name)
+DiffZoomWidget::DiffZoomWidget(QWidget *parent, const char *name)
     : QFrame(parent, name)
 {
     setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum ) );
 
-    cfg.setGroup("Colors");
-    QColor defaultColor=QColor(237, 190, 190);
-    diffChangeColor=cfg.readColorEntry("DiffChange",&defaultColor);
-    defaultColor=QColor(190, 190, 237);
-    diffInsertColor=cfg.readColorEntry("DiffInsert",&defaultColor);
-    defaultColor=QColor(190, 237, 190);
-    diffDeleteColor=cfg.readColorEntry("DiffDelete",&defaultColor);
+    diffChangeColor = CervisiaSettings::diffChangeColor();
+    diffInsertColor = CervisiaSettings::diffInsertColor();
+    diffDeleteColor = CervisiaSettings::diffDeleteColor();
 }
 
 

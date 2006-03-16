@@ -27,7 +27,7 @@ AnnotateDialog::AnnotateDialog(KConfig& cfg, QWidget* parent, const char* name)
                   Close | Help, Close, true)
     , partConfig(cfg)
 {
-    m_view = new AnnotateView(partConfig, this);
+    m_view = new AnnotateView(this);
     setMainWidget(m_view);
 
     setHelp("annotate");

@@ -117,7 +117,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, QWidget *parent, const char *name)
 
     QLabel *revlabel1 = new QLabel(i18n("Your version (A):"), versionALayoutWidget);
     versionAlayout->addWidget(revlabel1);
-    diff1 = new DiffView(cfg, true, false, versionALayoutWidget);
+    diff1 = new DiffView(true, false, versionALayoutWidget);
     versionAlayout->addWidget(diff1, 10);
 
     QWidget* versionBLayoutWidget = new QWidget(splitter);
@@ -125,7 +125,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, QWidget *parent, const char *name)
 
     QLabel *revlabel2 = new QLabel(i18n("Other version (B):"), versionBLayoutWidget);
     versionBlayout->addWidget(revlabel2);
-    diff2 = new DiffView(cfg, true, false, versionBLayoutWidget);
+    diff2 = new DiffView(true, false, versionBLayoutWidget);
     versionBlayout->addWidget(diff2, 10);
 
     diff1->setPartner(diff2);
@@ -137,7 +137,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, QWidget *parent, const char *name)
     QLabel *mergelabel = new QLabel(i18n("Merged version:"), mergeLayoutWidget);
     mergeLayout->addWidget(mergelabel);
 
-    merge = new DiffView(cfg, false, false, mergeLayoutWidget);
+    merge = new DiffView(false, false, mergeLayoutWidget);
     mergeLayout->addWidget(merge, 10);
 
     layout->addWidget(vertSplitter);

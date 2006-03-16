@@ -28,6 +28,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
+
+#include "cervisiasettings.h"
 #include "misc.h"
 
 
@@ -44,8 +46,7 @@ ChangeLogDialog::ChangeLogDialog(KConfig& cfg, QWidget *parent, const char *name
 {
     edit = new KTextEdit(this);
 
-    cfg.setGroup("LookAndFeel");
-    edit->setFont(cfg.readFontEntry("ChangeLogFont"));
+    edit->setFont(CervisiaSettings::changeLogFont());
 
     edit->setFocus();
     edit->setWordWrap(QTextEdit::NoWrap);

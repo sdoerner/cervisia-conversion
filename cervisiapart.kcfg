@@ -28,8 +28,30 @@
       <default code="true">KGlobalSettings::textColor()</default>
     </entry>
   </group>
+  <group name="LookAndFeel" >
+    <entry name="AnnotateFont" type="Font">
+      <label>Font used in the annotate view.</label>
+    </entry>
+    <entry name="ChangeLogFont" type="Font">
+      <label>Font used in the ChangeLog view.</label>
+    </entry>
+    <entry name="DiffFont" type="Font">
+      <label>Font used in the diff view.</label>
+    </entry>
+    <entry name="ProtocolFont" type="Font">
+      <label>Font used in the protocol view.</label>
+    </entry>
+  </group>
   <group name="General" >
-    <entry key="Timeout" type="UInt">
+    <entry name="ExternalDiff" type="Path">
+      <label>Path to exteral diff frontend.</label>
+      <default>8</default>
+    </entry>
+    <entry name="TabWidth" type="UInt">
+      <label>Tab width in annotate and diff dialog.</label>
+      <default>8</default>
+    </entry>
+    <entry name="Timeout" type="UInt">
       <label>Delay (ms) until the progress dialog appears.</label>
       <default>4000</default>
     </entry>

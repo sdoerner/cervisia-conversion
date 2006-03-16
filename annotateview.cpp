@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
- * Copyright (c) 2003-2005 André Wöbbeking <Woebbeking@web.de>
+ * Copyright (c) 2003-2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 #include <qheader.h>
 #include <qpainter.h>
-#include <kconfig.h>
 #include <kglobalsettings.h>
 
+#include "cervisiasettings.h"
 #include "loginfo.h"
 #include "tooltip.h"
 
@@ -140,7 +140,7 @@ int AnnotateViewItem::width(const QFontMetrics &fm, const QListView *, int col) 
   caused by a bug in QHeader::adjustHeaderSize() in Qt <= 3.0.4.
 */
 
-AnnotateView::AnnotateView(KConfig &cfg, QWidget *parent, const char *name)
+AnnotateView::AnnotateView(QWidget *parent, const char *name)
     : QListView(parent, name, WRepaintNoErase | WResizeNoErase)
 {
     setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
@@ -162,8 +162,7 @@ AnnotateView::AnnotateView(KConfig &cfg, QWidget *parent, const char *name)
     connect(toolTip, SIGNAL(queryToolTip(const QPoint&, QRect&, QString&)),
             this, SLOT(slotQueryToolTip(const QPoint&, QRect&, QString&)));
 
-    KConfigGroupSaver cs(&cfg, "LookAndFeel");
-    setFont(cfg.readFontEntry("AnnotateFont"));
+    setFont(CervisiaSettings::annotateFont());
 }
 
 

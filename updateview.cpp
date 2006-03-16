@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2002 Bernd Gehrmann <bernd@mail.berlios.de>
- * Copyright (c) 2003-2005 André Wöbbeking <Woebbeking@web.de>
+ * Copyright (c) 2003-2006 André Wöbbeking <Woebbeking@web.de>
  * Copyright (c) 2003-2005 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,6 @@
 #include <qapplication.h>
 #include <qfileinfo.h>
 #include <qptrstack.h>
-#include <kconfig.h>
 #include <klocale.h>
 
 #include "cervisiasettings.h"
@@ -550,18 +549,9 @@ void UpdateView::syncSelection()
  */
 void UpdateView::updateColors()
 {
-    KConfigGroupSaver cs(&m_partConfig, "Colors");
-    m_partConfig.setGroup("Colors");
-
-    QColor defaultColor = QColor(255, 130, 130);
-    m_conflictColor = m_partConfig.readColorEntry("Conflict", &defaultColor);
-
-    defaultColor = QColor(130, 130, 255);
-    m_localChangeColor = m_partConfig.readColorEntry("LocalChange", &defaultColor);
-
-    defaultColor = QColor(70, 210, 70);
-    m_remoteChangeColor = m_partConfig.readColorEntry("RemoteChange", &defaultColor);
-
+    m_conflictColor = CervisiaSettings::conflictColor();
+    m_localChangeColor = CervisiaSettings::localChangeColor();
+    m_remoteChangeColor = CervisiaSettings::remoteChangeColor();
     m_notInCvsColor = CervisiaSettings::notInCvsColor();
 }
 
