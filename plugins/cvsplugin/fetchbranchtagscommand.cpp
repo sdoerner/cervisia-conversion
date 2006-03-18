@@ -60,7 +60,7 @@ bool FetchBranchTagsCommand::prepare()
 
 void FetchBranchTagsCommand::execute()
 {
-    m_progressDlg = new ProgressDialog(0, "Remote Logging", i18n("CVS RLog"));
+    m_progressDlg = new ProgressDialog(0, i18n("Remote Logging"), i18n("CVS RLog"));
     m_progressDlg->execute(this);
 
     CvsCommandBase::execute();

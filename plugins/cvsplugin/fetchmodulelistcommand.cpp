@@ -58,7 +58,7 @@ bool FetchModuleListCommand::prepare()
 
 void FetchModuleListCommand::execute()
 {
-    m_progressDlg = new ProgressDialog(0, "Checkout", i18n("CVS Checkout"));
+    m_progressDlg = new ProgressDialog(0, i18n("Checkout"), i18n("CVS Checkout"));
     m_progressDlg->execute(this);
 
     CvsCommandBase::execute();

@@ -74,7 +74,7 @@ bool AnnotateCommand::prepare()
 
 void AnnotateCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, "Annotate", i18n("CVS Annotate"));
+    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, i18n("Annotate"), i18n("CVS Annotate"));
     dlg->execute(this);
 
     CvsCommandBase::execute();

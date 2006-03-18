@@ -86,7 +86,7 @@ bool LogCommand::prepare()
 
 void LogCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_logDlg, "Logging", i18n("SVN Log"));
+    ProgressDialog* dlg = new ProgressDialog(m_logDlg, i18n("Logging"), i18n("SVN Log"));
     dlg->execute(this);
 
     SvnCommandBase::execute();

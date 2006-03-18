@@ -82,7 +82,7 @@ bool CreatePatchCommand::prepare()
 
 void CreatePatchCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(qApp->activeWindow(), "Diff", i18n("CVS Diff"));
+    ProgressDialog* dlg = new ProgressDialog(qApp->activeWindow(), i18n("Diffing"), i18n("CVS Diff"));
     dlg->execute(this);
 
     CvsCommandBase::execute();

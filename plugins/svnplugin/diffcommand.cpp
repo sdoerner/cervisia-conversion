@@ -84,7 +84,7 @@ bool DiffCommand::prepare()
 
 void DiffCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_diffDialog, "Diffing", i18n("SVN Diff"));
+    ProgressDialog* dlg = new ProgressDialog(m_diffDialog, i18n("Diffing"), i18n("SVN Diff"));
     dlg->execute(this);
 
     SvnCommandBase::execute();

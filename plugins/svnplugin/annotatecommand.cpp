@@ -81,7 +81,7 @@ bool AnnotateCommand::prepare()
 
 void AnnotateCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, "Annotate", i18n("SVN Annotate"));
+    ProgressDialog* dlg = new ProgressDialog(m_annotateDlg, i18n("Annotate"), i18n("SVN Annotate"));
     dlg->execute(this);
 
     SvnCommandBase::execute();

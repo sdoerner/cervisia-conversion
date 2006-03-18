@@ -85,7 +85,7 @@ bool DiffCommand::prepare()
 
 void DiffCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_diffDialog, "Diffing", i18n("CVS Diff"));
+    ProgressDialog* dlg = new ProgressDialog(m_diffDialog, i18n("Diffing"), i18n("CVS Diff"));
     dlg->execute(this);
 
     CvsCommandBase::execute();

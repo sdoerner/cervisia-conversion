@@ -71,7 +71,7 @@ bool LogCommand::prepare()
 
 void LogCommand::execute()
 {
-    ProgressDialog* dlg = new ProgressDialog(m_logDlg, "Logging", i18n("CVS Log"));
+    ProgressDialog* dlg = new ProgressDialog(m_logDlg, i18n("Logging"), i18n("CVS Log"));
     dlg->execute(this);
 
     CvsCommandBase::execute();
