@@ -125,11 +125,7 @@ void CvsCommandBase::connectToJob(const DCOPRef& jobRef, DeletionHandling deleti
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "receivedStderr(QString)",
                       "dcopReceivedStderr(QString)", true);
 
-//     if( deletion == AutomaticDeletion )
-//     {
-//         connect(this, SIGNAL(jobExited(bool, int)),
-//                 this, SLOT(deleteLater()));
-//     }
+    m_deletion = deletion;
 }
 
 

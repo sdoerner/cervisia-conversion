@@ -114,6 +114,8 @@ void SvnCommandBase::connectToJob(const DCOPRef& jobRef, DeletionHandling deleti
                       "dcopReceivedStdout(QString)", true);
     connectDCOPSignal(jobRef.app(), jobRef.obj(), "receivedStderr(QString)",
                       "dcopReceivedStderr(QString)", true);
+
+    m_deletion = deletion;
 }
 
 
