@@ -70,8 +70,8 @@ void CvsUpdateParser::parseLine(const QString& line)
         default:
             return;
         }
-//        updateItem(str.mid(2), status, false);
-        updateItemStatus(line.mid(2).stripWhiteSpace(), status, false);
+
+        emit updateItemStatus(line.mid(2).stripWhiteSpace(), status, false);
     }
 
     const QString removedFileStart(QString::fromLatin1("cvs server: "));

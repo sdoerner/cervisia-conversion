@@ -81,7 +81,7 @@ void SvnUpdateParser::parseStatusLine(const QString& line)
                     return;
         }
 
-        updateItemStatus(fileName, status, false);
+        emit updateItemStatus(fileName, status, false);
     }
 }
 
@@ -124,6 +124,6 @@ void SvnUpdateParser::parseUpdateLine(const QString& line)
                 return;
         }
 
-        updateItemStatus(fileName, status, false);
+        emit updateItemStatus(fileName, status, false);
     }
 }
