@@ -67,6 +67,8 @@ public slots:
               const QString& revisionB = QString::null);
     void simulateUpdate();
     void checkout(CheckoutWidgetBase* checkoutWidget);
+    void view(const QString& fileName,
+              const QString& revision);
 
 private slots:
     void add();

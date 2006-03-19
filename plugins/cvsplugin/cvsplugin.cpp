@@ -53,6 +53,7 @@ using Cervisia::CvsPlugin;
 #include "removewatchcommand.h"
 #include "updatecommand.h"
 #include "updatetagcommand.h"
+#include "view_command.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 
@@ -627,6 +628,18 @@ void CvsPlugin::updateRecursive()
     CvsPluginSettings::setUpdateRecursive(!recursive);
 
     CvsPluginSettings::writeConfig();
+}
+
+
+void CvsPlugin::view(const QString& fileName,
+                     const QString& revision)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new ViewCommand(fileName, revision));
 }
 
 

@@ -90,6 +90,8 @@ void LogCommand::showDialog()
             m_plugin, SLOT(diff(const QString&, const QString&, const QString&)));
     connect(m_logDlg, SIGNAL(createPatch(const QString&, const QString&, const QString&)),
             m_plugin, SLOT(createPatch(const QString&, const QString&, const QString&)));
+    connect(m_logDlg, SIGNAL(viewFile(const QString&, const QString&)),
+            m_plugin, SLOT(view(const QString&, const QString&)));
 
     m_logDlg->setCaption(i18n("CVS Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);

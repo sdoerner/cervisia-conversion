@@ -36,7 +36,6 @@ class QComboBox;
 class QLabel;
 class QTabWidget;
 class QTextEdit;
-class CvsService_stub;
 
 
 class LogDialog : public KDialogBase
@@ -59,6 +58,7 @@ signals:
                         const QString& revisionB);
     void createPatch(const QString& fileName, const QString& revisionA,
                      const QString& revisionB);
+    void viewFile(const QString& fileName, const QString& revision);
 
 protected slots:
     void slotOk();
@@ -91,7 +91,6 @@ private:
     QTextEdit *tagsbox[2];
     QComboBox *tagcombo[2];
 
-    CvsService_stub* cvsService;
     KConfig&         partConfig;
 
     typedef Cervisia::LogInfoList::const_iterator LogInfoConstIter;

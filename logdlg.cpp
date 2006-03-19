@@ -22,8 +22,6 @@
 #include "logdlg.h"
 
 #include <qcombobox.h>
-#include <qfile.h>
-#include <qfileinfo.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -32,27 +30,16 @@
 #include <qwhatsthis.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kfiledialog.h>
 #include <kfinddialog.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klistviewsearchline.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
-#include <krun.h>
-#include <kurl.h>
 
-// #include "cvsservice_stub.h"
-#include "diffdlg.h"
 #include "loglist.h"
 #include "logplainview.h"
 #include "logtree.h"
-#include "misc.h"
-// #include "pluginbase.h"
-// #include "pluginmanager.h"
-// #include "progressdlg.h"
-// #include "patchoptiondlg.h"
 
 
 LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
@@ -61,7 +48,6 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
                   KGuiItem(i18n("&Annotate")),
                   KGuiItem(i18n("&Diff"), "vcs_diff"),
                   KGuiItem(i18n("&Find..."), "find"))
-    , cvsService(0)
     , partConfig(cfg)
 {
     QFrame* mainWidget = makeMainWidget();
@@ -233,7 +219,7 @@ void LogDialog::setLogInfos(const Cervisia::LogInfoList& logInfos,
 
 void LogDialog::slotOk()
 {
-/*    // make sure that the user selected a revision
+    // make sure that the user selected a revision
     if( selectionA.isEmpty() && selectionB.isEmpty() )
     {
         KMessageBox::information(this,
@@ -248,27 +234,7 @@ void LogDialog::slotOk()
     else
         revision = selectionB;
 
-    // create a temporary file
-    const QString suffix("-" + revision + "-" + QFileInfo(filename).fileName());
-    const QString tempFileName(::tempFileName(suffix));
-
-    // retrieve the file with the selected revision from cvs
-    // and save the content into the temporary file
-    DCOPRef job = cvsService->downloadRevision(filename, revision, tempFileName);
-    if( !cvsService->ok() )
-        return;
-
-    ProgressDialog dlg(this, "View", job, "view", i18n("View File"));
-    if( dlg.execute() )
-    {
-        // make file read-only
-        chmod(QFile::encodeName(tempFileName), 0400);
-
-        // open file in preferred editor
-        KURL url;
-        url.setPath(tempFileName);
-        (void) new KRun(url, 0, true, false);
-    }*/
+    emit viewFile(m_fileName, revision);
 }
 
 

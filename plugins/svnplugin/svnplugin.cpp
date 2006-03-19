@@ -42,6 +42,7 @@ using Cervisia::SvnPlugin;
 #include "logcommand.h"
 #include "removecommand.h"
 #include "updatecommand.h"
+#include "view_command.h"
 #include "svn_update_parser.h"
 
 #include <kdebug.h>
@@ -384,6 +385,18 @@ void SvnPlugin::updateRecursive()
     SvnPluginSettings::setUpdateRecursive(!recursive);
 
     SvnPluginSettings::writeConfig();
+}
+
+
+void SvnPlugin::view(const QString& fileName,
+                     const QString& revision)
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    if( fileName.isEmpty() )
+        return;
+
+    executeCommand(new ViewCommand(fileName, revision));
 }
 
 

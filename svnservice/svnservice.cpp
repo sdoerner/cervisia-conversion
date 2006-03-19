@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +48,7 @@ struct SvnService::Private
     }
 
     SvnJob*               singleSvnJob;   // non-concurrent svn job, like update or commit
-    DCOPRef               singleJobRef;   // DCOP reference to non-concurrent cvs job
+    DCOPRef               singleJobRef;   // DCOP reference to non-concurrent svn job
     QIntDict<SvnJob>      svnJobs;        // concurrent svn jobs, like diff or annotate
     unsigned              lastJobId;
 
@@ -192,6 +193,56 @@ DCOPRef SvnService::diff(const QString& fileName,
         *job << "-r" << KProcess::quote(revision);
 
     *job << KProcess::quote(fileName);
+
+    // return a DCOP reference to the svn job
+    return DCOPRef(d->appId, job->objId());
+}
+
+
+DCOPRef SvnService::downloadRevision(const QString& fileName,
+                                     const QString& revision,
+                                     const QString& outputFile)
+{
+    if( !d->hasWorkingCopy() )
+        return DCOPRef();
+
+    SvnJob* job = d->createSvnJob();
+
+    // assemble the command line
+    // svn cat -r [REV] [FILE] > [OUTPUTFILE]
+    *job << d->repository->svnClient() << "cat";
+
+    if( !revision.isEmpty() )
+        *job << "-r" << KProcess::quote(revision);
+
+    *job << KProcess::quote(fileName) << ">" << KProcess::quote(outputFile);
+
+    // return a DCOP reference to the svn job
+    return DCOPRef(d->appId, job->objId());
+}
+
+
+DCOPRef SvnService::downloadRevision(const QString& fileName,
+                                     const QString& revA,
+                                     const QString& outputFileA,
+                                     const QString& revB,
+                                     const QString& outputFileB)
+{
+    if( !d->hasWorkingCopy() )
+        return DCOPRef();
+
+    // create a svn job
+    SvnJob* job = d->createSvnJob();
+
+    // assemble the command line
+    // svn cat -r [REVA] [FILE] > [OUTPUTFILEA] ;
+    // svn cat -r [REVB] [FILE] > [OUTPUTFILEB]
+    *job << d->repository->svnClient() << "cat"
+         << "-r" << KProcess::quote(revA)
+         << KProcess::quote(fileName) << ">" << KProcess::quote(outputFileA)
+         << ";" << d->repository->svnClient() << "cat"
+         << "-r" << KProcess::quote(revB)
+         << KProcess::quote(fileName) << ">" << KProcess::quote(outputFileB);
 
     // return a DCOP reference to the svn job
     return DCOPRef(d->appId, job->objId());

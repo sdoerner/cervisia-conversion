@@ -103,6 +103,8 @@ void LogCommand::showDialog()
             m_plugin, SLOT(annotate(const QString&, const QString&)));
     connect(m_logDlg, SIGNAL(showDiffDialog(const QString&, const QString&, const QString&)),
             m_plugin, SLOT(diff(const QString&, const QString&, const QString&)));
+    connect(m_logDlg, SIGNAL(viewFile(const QString&, const QString&)),
+            m_plugin, SLOT(view(const QString&, const QString&)));
 
     m_logDlg->setCaption(i18n("SVN Log: %1").arg(m_fileName));
     m_logDlg->setLogInfos(m_parser->logInfos(), m_fileName);

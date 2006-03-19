@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,6 +73,38 @@ k_dcop:
                  const QString& revisionA,
                  const QString& revisionB,
                  const QStringList& options);
+
+    /**
+     * Download a revision of a file.
+     *
+     * @param fileName the name of the file to download
+     * @param revision the revision to download
+     * @param outputFile the local name of the downloaded file
+     *
+     * @return A DCOP reference to the svn job or in case of failure a
+     *         null reference.
+     */
+    DCOPRef downloadRevision(const QString& fileName,
+                             const QString& revision,
+                             const QString& outputFile);
+
+    /**
+     * Download two revisions of a file in one job.
+     *
+     * @param fileName the name of the file to download
+     * @param revisionA the first revision to download
+     * @param outputFileA the local name of the downloaded file for the first revision
+     * @param revisionB the second revision to download
+     * @param outputFileB the local name of the downloaded file for the second revision
+     *
+     * @return A DCOP reference to the svn job or in case of failure a
+     *         null reference.
+     */
+    DCOPRef downloadRevision(const QString& fileName,
+                             const QString& revisionA,
+                             const QString& outputFileA,
+                             const QString& revisionB,
+                             const QString& outputFileB);
 
     /**
      * Shows log messages for a file.
