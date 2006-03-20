@@ -1025,7 +1025,7 @@ void CervisiaPart::slotCreateRepository()
 
 void CervisiaPart::slotCheckout()
 {
-    CheckoutDialog dlg(*config(), widget());
+    CheckoutDialog dlg(widget());
 
     // add widgets from plugins to checkout dialog
     Cervisia::PluginList plugins = Cervisia::PluginManager::self()->plugins();

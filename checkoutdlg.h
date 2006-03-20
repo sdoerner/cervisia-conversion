@@ -1,6 +1,7 @@
 /*
  *  Copyright (C) 1999-2002 Bernd Gehrmann
  *                          bernd@mail.berlios.de
+ *  Copyright (c) 2003-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@ namespace Cervisia { class CheckoutWidgetBase; }
 class CheckoutDialog : public KDialogBase
 {
 public:
-    explicit CheckoutDialog(KConfig& cfg, QWidget* parent=0);
+    explicit CheckoutDialog(QWidget* parent=0);
 
     void addCheckoutWidget(const QString& pluginType, Cervisia::CheckoutWidgetBase* w);
 
@@ -46,8 +47,7 @@ protected:
 private:
     QComboBox*    m_versionControlSystemCombo;
     QWidgetStack* m_widgetStack;
-
-    KConfig&   partConfig;
+    int           m_id;
 };
 
 

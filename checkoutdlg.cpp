@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 1999-2002 Bernd Gehrmann
  *                          bernd@mail.berlios.de
- *  Copyright (c) 2003-2004 Christian Loose <christian.loose@hamburg.de>
+ *  Copyright (c) 2003-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,14 +46,13 @@
 #include <kdebug.h>
 
 using Cervisia::CheckoutWidgetBase;
-using Cervisia::IsValidTag;
 using Cervisia::PluginManager;
 
 
-CheckoutDialog::CheckoutDialog(KConfig& cfg, QWidget* parent)
+CheckoutDialog::CheckoutDialog(QWidget* parent)
     : KDialogBase(parent, 0, true, QString::null,
                   Ok | Cancel | Help, Ok, true)
-    , partConfig(cfg)
+    , m_id(0)
 {
     setCaption( i18n("CVS Checkout") );
 
@@ -76,7 +75,8 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, QWidget* parent)
 void CheckoutDialog::addCheckoutWidget(const QString& pluginType, Cervisia::CheckoutWidgetBase* w)
 {
     m_versionControlSystemCombo->insertItem(pluginType);
-    m_widgetStack->addWidget(w);
+    m_widgetStack->addWidget(w, m_id);
+    ++m_id;
 }
 
 
