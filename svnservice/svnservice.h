@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or
@@ -52,6 +52,11 @@ k_dcop:
      *         null reference.
      */
     DCOPRef annotate(const QString& fileName, const QString& revision);
+
+    /**
+     */
+    DCOPRef checkout(const QString& repository, const QString& revision,
+                     const QString& workingFolder, bool recursive);
 
     /**
      */

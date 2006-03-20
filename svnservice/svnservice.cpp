@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or
@@ -141,6 +141,34 @@ DCOPRef SvnService::annotate(const QString& fileName, const QString& revision)
 
     // return a DCOP reference to the svn job
     return DCOPRef(d->appId, job->objId());
+}
+
+
+DCOPRef SvnService::checkout(const QString& repository, const QString& revision,
+                             const QString& workingFolder, bool recursive)
+{
+    if( d->hasRunningJob() || repository.isEmpty() )
+        return DCOPRef();
+
+    SvnRepository repo(repository);
+
+    // assemble the command line
+    // svn checkout [REPOSITORY][@REVISION] [PFAD]
+    d->singleSvnJob->clearCommand();
+
+    *d->singleSvnJob << repo.svnClient()
+                     << "checkout"
+                     << KProcess::quote(repository);
+
+    if( !recursive )
+        *d->singleSvnJob << "-N";
+
+    if( !revision.isEmpty() )
+        *d->singleSvnJob << "-r" << KProcess::quote(revision);
+
+    *d->singleSvnJob << KProcess::quote(workingFolder);
+
+    return d->setupNonConcurrentJob(&repo);
 }
 
 
