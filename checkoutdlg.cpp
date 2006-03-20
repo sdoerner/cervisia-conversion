@@ -18,32 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #include "checkoutdlg.h"
 
-#include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qdir.h>
 #include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
 #include <qwidgetstack.h>
-#include <kprocess.h>
-#include <kfiledialog.h>
-#include <klineedit.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kurlcompletion.h>
 
 #include "checkoutwidgetbase.h"
-#include "pluginbase.h"
 #include "pluginmanager.h"
-#include "progressdlg.h"
-#include "repositories.h"
-#include "misc.h"
-#include "cvsservice_stub.h"
-
-#include <kdebug.h>
 
 using Cervisia::CheckoutWidgetBase;
 using Cervisia::PluginManager;
