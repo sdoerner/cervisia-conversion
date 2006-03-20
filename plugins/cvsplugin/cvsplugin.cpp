@@ -53,7 +53,7 @@ using Cervisia::CvsPlugin;
 #include "removewatchcommand.h"
 #include "updatecommand.h"
 #include "updatetagcommand.h"
-#include "view_command.h"
+#include "viewcommand.h"
 #include "dirignorelist.h"
 #include "globalignorelist.h"
 

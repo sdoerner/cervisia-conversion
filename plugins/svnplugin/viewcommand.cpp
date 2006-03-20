@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "view_command.h"
+#include "viewcommand.h"
 
-#include "cvsplugin.h"
+#include "svnplugin.h"
 
-#include <cvsservice_stub.h>
 #include <misc.h>
 #include <progressdlg.h>
+#include <svnservice_stub.h>
 
 #include <dcopref.h>
 #include <klocale.h>
@@ -38,7 +38,7 @@ using Cervisia::ViewCommand;
 
 
 ViewCommand::ViewCommand(const QString& fileName, const QString& revision)
-    : CvsCommandBase(Other)
+    : SvnCommandBase(Other)
     , m_fileName(fileName)
     , m_revision(revision)
 {
@@ -56,7 +56,7 @@ bool ViewCommand::prepare()
     const QString suffix('-' + m_revision + '-' + QFileInfo(m_fileName).fileName());
     m_tempFileName = ::tempFileName(suffix);
 
-    DCOPRef jobRef = CvsPlugin::cvsService()->downloadRevision(m_fileName,
+    DCOPRef jobRef = SvnPlugin::svnService()->downloadRevision(m_fileName,
                                                                m_revision,
                                                                m_tempFileName);
     connectToJob(jobRef);
@@ -73,7 +73,7 @@ void ViewCommand::execute()
     ProgressDialog* dlg = new ProgressDialog(qApp->activeWindow(), i18n("View"), i18n("View File"));
     dlg->execute(this);
 
-    CvsCommandBase::execute();
+    SvnCommandBase::execute();
 }
 
 
@@ -94,4 +94,4 @@ void ViewCommand::view()
 }
 
 
-#include "view_command.moc"
+#include "viewcommand.moc"

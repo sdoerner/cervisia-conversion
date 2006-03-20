@@ -42,7 +42,7 @@ using Cervisia::SvnPlugin;
 #include "logcommand.h"
 #include "removecommand.h"
 #include "updatecommand.h"
-#include "view_command.h"
+#include "viewcommand.h"
 #include "svn_update_parser.h"
 
 #include <kdebug.h>
