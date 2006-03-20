@@ -8,7 +8,8 @@ libsvnplugin_la_SOURCES = svnplugin.cpp globalignorelist.cpp svnpluginsettings.k
                           svncommandbase.cpp svncommandbase.skel addcommand.cpp \
                           annotatecommand.cpp commitcommand.cpp logcommand.cpp removecommand.cpp \
                           updatecommand.cpp svn_annotate_parser.cpp svn_log_parser.cpp \
-                          svn_update_parser.cpp diffcommand.cpp viewcommand.cpp
+                          svn_update_parser.cpp diffcommand.cpp viewcommand.cpp \
+                          checkoutcommand.cpp checkoutwidget.cpp
 libsvnplugin_la_LIBADD  = $(LIB_KPARTS) $(LIB_KUTILS) $(top_builddir)/cervisia/libcervisia.la \
                           $(top_builddir)/cervisia/svnservice/libsvnservice.la
 libsvnplugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)

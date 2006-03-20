@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,10 +33,12 @@ using Cervisia::SvnPlugin;
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
 
+#include "checkoutwidget.h"
 #include "svnpluginsettings.h"
 #include "globalignorelist.h"
 #include "addcommand.h"
 #include "annotatecommand.h"
+#include "checkoutcommand.h"
 #include "commitcommand.h"
 #include "diffcommand.h"
 #include "logcommand.h"
@@ -218,9 +220,7 @@ Cervisia::UpdateParser* SvnPlugin::updateParser() const
 
 Cervisia::CheckoutWidgetBase* SvnPlugin::checkoutWidget(QWidget* parent)
 {
-    kdDebug(8050) << k_funcinfo << "NOT YET IMPLEMENTED!" << endl;
-
-    return 0;
+    return new Cervisia::CheckoutWidget(parent);
 }
 
 
@@ -257,7 +257,18 @@ void SvnPlugin::annotate()
 
 void SvnPlugin::checkout(CheckoutWidgetBase* checkoutWidget)
 {
-    kdDebug(8050) << k_funcinfo << "NOT YET IMPLEMENTED!" << endl;
+    kdDebug(8050) << k_funcinfo << endl;
+
+    CheckoutWidget* w = static_cast<CheckoutWidget*>(checkoutWidget);
+
+    QString workingFolder = w->workingFolder();
+    QString repository    = w->repository();
+
+    CheckoutCommand* cmd = new CheckoutCommand(workingFolder, repository);
+    cmd->setRecursive(w->isRecursive());
+    cmd->setRevision(w->revision());
+
+    executeCommand(cmd);
 }
 
 
