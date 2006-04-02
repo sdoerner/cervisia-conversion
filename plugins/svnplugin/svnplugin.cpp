@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@ using Cervisia::SvnPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
+#include <cervisiasettings.h>
 #include <selectionintf.h>
 #include <svnservice_stub.h>
 #include <svnrepository_stub.h>
@@ -41,6 +43,7 @@ using Cervisia::SvnPlugin;
 #include "checkoutcommand.h"
 #include "commitcommand.h"
 #include "diffcommand.h"
+#include "externaldiffcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
 #include "updatecommand.h"
@@ -296,7 +299,13 @@ void SvnPlugin::diff(const QString& fileName,
     if( fileName.isEmpty() )
         return;
 
-    executeCommand(new DiffCommand(fileName, revisionA, revisionB, QStringList()));	
+    if (CervisiaSettings::externalDiff().isEmpty())
+        executeCommand(new DiffCommand(fileName, revisionA, revisionB, QStringList()));
+    else
+        executeCommand(new ExternalDiffCommand(CervisiaSettings::externalDiff(),
+                                               fileName,
+                                               revisionA,
+                                               revisionB));
 }
 
 
@@ -342,11 +351,11 @@ void SvnPlugin::remove()
 
 void SvnPlugin::showLastChange()
 {
-    const QString fileName = m_fileView->singleSelection();
-    if (fileName.isEmpty())
-        return;
+    kdDebug(8050) << k_funcinfo << endl;
 
-    executeCommand(new DiffCommand(fileName, "PREV", "COMMITTED", QStringList()));
+    const QString fileName = m_fileView->singleSelection();
+
+    diff(fileName, "PREV", "COMMITTED");
 }
 
 

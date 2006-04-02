@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@ using Cervisia::CvsPlugin;
 #include <kmessagebox.h>
 #include <kurl.h>
 
+#include <cervisiasettings.h>
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 #include <repository_stub.h>
@@ -47,6 +49,7 @@ using Cervisia::CvsPlugin;
 #include "deletetagcommand.h"
 #include "diffcommand.h"
 #include "editcommand.h"
+#include "externaldiffcommand.h"
 #include "lockcommand.h"
 #include "logcommand.h"
 #include "removecommand.h"
@@ -370,9 +373,19 @@ void CvsPlugin::diff(const QString& fileName,
     if( fileName.isEmpty() )
         return;
 
-    QStringList options;
-    options += "-u";
-    executeCommand(new DiffCommand(fileName, revisionA, revisionB, options));
+    if (CervisiaSettings::externalDiff().isEmpty())
+    {
+        QStringList options;
+        options += "-u";
+        executeCommand(new DiffCommand(fileName, revisionA, revisionB, options));
+    }
+    else
+    {
+        executeCommand(new ExternalDiffCommand(CervisiaSettings::externalDiff(),
+                                               fileName,
+                                               revisionA,
+                                               revisionB));
+    }
 }
 
 
@@ -475,6 +488,8 @@ void CvsPlugin::revert()
 
 void CvsPlugin::showLastChange()
 {
+    kdDebug(8050) << k_funcinfo << endl;
+
     QString fileName, revisionA;
     m_fileView->getSingleSelection(&fileName, &revisionA);
     if (fileName.isEmpty())
@@ -499,7 +514,7 @@ void CvsPlugin::showLastChange()
     }
     const QString revisionB = revisionA.left(pos) + QString::number(lastNumber - 1);
 
-    executeCommand(new DiffCommand(fileName, revisionB, revisionA, QStringList()));
+    diff(fileName, revisionB, revisionA);
 }
 
 
