@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 1999-2002 Bernd Gehrmann
- *                          bernd@mail.berlios.de
+ * Copyright (c) 1999-2002 Bernd Gehrmann bernd@mail.berlios.de
+ * Copyright (c) 2005,2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,19 +25,13 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qkeycode.h>
-#include <qfileinfo.h>
 #include <qregexp.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ktempfile.h>
-#include <kprocess.h>
 
-#include "cvsservice_stub.h"
-#include "repository_stub.h"
 #include "misc.h"
-#include "progressdlg.h"
 #include "diffview.h"
 
 
@@ -333,59 +327,6 @@ void DiffDialog::newDiffHunk(int& linenoA, int& linenoB,
         if (itB != linesB.end())
             ++itB;
     }
-}
-
-
-void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* service,
-                                  const QString& fileName, const QString &revA,
-                                  const QString &revB)
-{
-    QString extcmdline = extdiff;
-    extcmdline += " ";
-
-    // create suffix for temporary file (used QFileInfo to remove path from file name)
-    const QString suffix = "-" + QFileInfo(fileName).fileName();
-
-    DCOPRef job;
-    if (!revA.isEmpty() && !revB.isEmpty())
-    {
-        // We're comparing two revisions
-        QString revAFilename = tempFileName(suffix+QString("-")+revA);
-        QString revBFilename = tempFileName(suffix+QString("-")+revB);
-
-        // download the files for revision A and B
-        job = service->downloadRevision(fileName, revA, revAFilename,
-                                                revB, revBFilename);
-        if( !service->ok() )
-            return;
-
-        extcmdline += KProcess::quote(revAFilename);
-        extcmdline += " ";
-        extcmdline += KProcess::quote(revBFilename);
-    }
-    else
-    {
-        // We're comparing to a file, and perhaps one revision
-        QString revAFilename = tempFileName(suffix+QString("-")+revA);
-        job = service->downloadRevision(fileName, revA, revAFilename);
-        if( !service->ok() )
-            return;
-
-        extcmdline += KProcess::quote(revAFilename);
-        extcmdline += " ";
-        extcmdline += KProcess::quote(QFileInfo(fileName).absFilePath());
-    }
-
-/*    ProgressDialog dlg(this, "Diff", job, "diff");
-    if( dlg.execute() )
-    {
-        // call external diff application
-        // TODO CL maybe use system()?
-        KProcess proc;
-        proc.setUseShell(true, "/bin/sh");
-        proc << extcmdline;
-        proc.start(KProcess::DontCare);
-    }*/
 }
 
 
