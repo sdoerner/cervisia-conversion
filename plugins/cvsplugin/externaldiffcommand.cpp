@@ -49,7 +49,6 @@ ExternalDiffCommand::ExternalDiffCommand(const QString& diffApplication,
     Q_ASSERT(!m_diffApplication.isEmpty());
     Q_ASSERT(!m_fileName.isEmpty());
     Q_ASSERT(!m_revisionA.isEmpty());
-    Q_ASSERT(!m_revisionB.isEmpty());
 }
 
 
@@ -61,15 +60,29 @@ ExternalDiffCommand::~ExternalDiffCommand()
 bool ExternalDiffCommand::prepare()
 {
     const QString suffixA('-' + m_revisionA + '-' + QFileInfo(m_fileName).fileName());
-    const QString suffixB('-' + m_revisionB + '-' + QFileInfo(m_fileName).fileName());
     m_tempFileNameA = ::tempFileName(suffixA);
-    m_tempFileNameB = ::tempFileName(suffixB);
 
-    DCOPRef jobRef = CvsPlugin::cvsService()->downloadRevision(m_fileName,
-                                                               m_revisionA,
-                                                               m_tempFileNameA,
-                                                               m_revisionB,
-                                                               m_tempFileNameB);
+    DCOPRef jobRef;
+    if (m_revisionB.isEmpty())
+    {
+        m_tempFileNameB = m_fileName;
+
+        jobRef = CvsPlugin::cvsService()->downloadRevision(m_fileName,
+                                                           m_revisionA,
+                                                           m_tempFileNameA);
+    }
+    else
+    {
+        const QString suffixB('-' + m_revisionB + '-' + QFileInfo(m_fileName).fileName());
+        m_tempFileNameB = ::tempFileName(suffixB);
+
+        jobRef = CvsPlugin::cvsService()->downloadRevision(m_fileName,
+                                                           m_revisionA,
+                                                           m_tempFileNameA,
+                                                           m_revisionB,
+                                                           m_tempFileNameB);
+    }
+
     connectToJob(jobRef);
 
     connect(this, SIGNAL(jobExited(bool, int)),
