@@ -45,7 +45,6 @@
   <group name="General" >
     <entry name="ExternalDiff" type="Path">
       <label>Path to exteral diff frontend.</label>
-      <default>8</default>
     </entry>
     <entry name="TabWidth" type="UInt">
       <label>Tab width in annotate and diff dialog.</label>
