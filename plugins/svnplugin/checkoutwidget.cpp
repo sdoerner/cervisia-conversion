@@ -35,17 +35,13 @@ using Cervisia::CheckoutWidget;
 
 #include <repositories.h>
 
-// #include "cvspluginsettings.h"
-// #include "fetchbranchtagscommand.h"
-// #include "fetchmodulelistcommand.h"
+#include "svnpluginsettings.h"
 
 #include <kdebug.h>
 
 
 CheckoutWidget::CheckoutWidget(QWidget* parent)
     : CheckoutWidgetBase(parent)
-//     , m_cmd(0)
-//     , m_moduleCmd(0)
 {
     QBoxLayout* mainLayout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -116,8 +112,6 @@ CheckoutWidget::CheckoutWidget(QWidget* parent)
 
 CheckoutWidget::~CheckoutWidget()
 {
-//     delete m_cmd;
-//     delete m_moduleCmd;
 }
 
 
@@ -196,26 +190,21 @@ void CheckoutWidget::dirButtonClicked()
 
 void CheckoutWidget::saveUserInput()
 {
-/*    CvsPluginSettings::setRepository(repository());
-    CvsPluginSettings::setModule(module());
-    CvsPluginSettings::setBranch(branch());
-    CvsPluginSettings::setWorkingFolder(workingFolder());
-    CvsPluginSettings::setAlias(alias());
-    CvsPluginSettings::setExportOnly(isExportOnly());
+    SvnPluginSettings::setRepository(repository());
+    SvnPluginSettings::setRevision(revision());
+    SvnPluginSettings::setWorkingFolder(workingFolder());
 
-    CvsPluginSettings::writeConfig();*/
+    SvnPluginSettings::writeConfig();
 }
 
 
 void CheckoutWidget::restoreUserInput()
 {
-/*    m_repositoryCombo->setEditText(CvsPluginSettings::repository());
-    m_moduleCombo->setEditText(CvsPluginSettings::module());
-    m_branchCombo->setCurrentText(CvsPluginSettings::branch());
-    m_workFolderEdt->setText(CvsPluginSettings::workingFolder());
-    m_aliasEdt->setText(CvsPluginSettings::alias());
-    m_exportChkBox->setChecked(CvsPluginSettings::exportOnly());
-    m_recursiveChkBox->setChecked(true);*/
+    m_repositoryCombo->setEditText(SvnPluginSettings::repository());
+    m_revisionEdt->setText(SvnPluginSettings::revision());
+    m_workFolderEdt->setText(SvnPluginSettings::workingFolder());
+
+    m_recursiveChkBox->setChecked(true);
 }
 
 #include "checkoutwidget.moc"

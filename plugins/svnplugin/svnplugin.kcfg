@@ -12,4 +12,9 @@
       <default>false</default>
     </entry>
   </group>
+  <group name="CheckoutWidget">
+    <entry name="Repository" type="String"></entry>
+    <entry name="Revision" type="String"></entry>
+    <entry name="WorkingFolder" type="Path"></entry>
+  </group>
 </kcfg>
