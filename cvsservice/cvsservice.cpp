@@ -410,8 +410,8 @@ DCOPRef CvsService::downloadRevision(const QString& fileName,
     CvsJob* job = d->createCvsJob();
 
     // assemble the command line
-    // cvs update -p -r [REV] [FILE] > [OUTPUTFILE]
-    *job << d->repository->cvsClient() << "update -p";
+    // cvs -q update -p -r [REV] [FILE] > [OUTPUTFILE]
+    *job << d->repository->cvsClient() << "-q update -p";
 
     if( !revision.isEmpty() )
         *job << "-r" << KProcess::quote(revision);
