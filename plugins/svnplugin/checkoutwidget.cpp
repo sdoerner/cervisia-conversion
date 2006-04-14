@@ -148,15 +148,6 @@ bool CheckoutWidget::checkUserInput()
         return false;
     }
 
-//     QFileInfo fi(workingFolder());
-//     if( !fi.exists() || !fi.isDir() )
-//     {
-//         KMessageBox::information(this,
-//                                  i18n("Please choose an existing working folder."));
-//         m_workFolderEdt->setFocus();
-//         return false;
-//     }
-
     saveUserInput();
     return true;
 }
