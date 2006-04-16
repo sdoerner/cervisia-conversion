@@ -139,37 +139,6 @@ void UpdateDirItem::updateChildItem(const QString& name,
  * Update the revision and tag of an item. Use status only to create
  * new items and for items which were NotInCVS.
  */
-void UpdateDirItem::updateEntriesItem(const Entry& entry,
-                                      bool isBinary)
-{
-    if (UpdateItem* item = findItem(entry.m_name))
-    {
-        if (isFileItem(item))
-        {
-            UpdateFileItem* fileItem = static_cast<UpdateFileItem*>(item);
-            if (fileItem->entry().m_status == Cervisia::NotInCVS ||
-                fileItem->entry().m_status == Cervisia::LocallyRemoved ||
-                entry.m_status == Cervisia::LocallyAdded ||
-                entry.m_status == Cervisia::LocallyRemoved ||
-                entry.m_status == Cervisia::Conflict)
-            {
-                fileItem->setStatus(entry.m_status);
-            }
-            fileItem->setRevTag(entry.m_revision, entry.m_tag);
-            fileItem->setDate(entry.m_dateTime);
-            fileItem->setPixmap(0, isBinary ? SmallIcon("binary") : QPixmap());
-        }
-        return;
-    }
-
-    // Not found, make new entry
-    if (entry.m_type == Entry::Dir)
-        createDirItem(entry)->maybeScanDir(true);
-    else
-        createFileItem(entry);
-}
-
-
 void UpdateDirItem::updateItem(const Entry& entry)
 {
 //     kdDebug() << "UpdateDirItem::updateItem(): name = " << entry.m_name << endl;

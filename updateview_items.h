@@ -80,7 +80,6 @@ public:
     void syncWithDirectory();
     void syncWithEntries();
     void updateChildItem(const QString& name, Cervisia::EntryStatus status, bool isdir);
-    void updateEntriesItem(const Cervisia::Entry& entry, bool isBinary);
 
     bool wasScanned() const { return m_opened; }
 
