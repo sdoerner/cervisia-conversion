@@ -125,7 +125,7 @@ void UpdateDirItem::updateChildItem(const QString& name,
     if (isdir)
     {
         entry.m_type = Entry::Dir;
-        createDirItem(entry)->maybeScanDir(true);
+        createDirItem(entry);
     }
     else
     {
@@ -164,7 +164,7 @@ void UpdateDirItem::updateItem(const Entry& entry)
 
     // Not found, make new entry
     if (entry.m_type == Entry::Dir)
-        createDirItem(entry)->maybeScanDir(true);
+        createDirItem(entry);
     else
         createFileItem(entry);
 }

@@ -392,10 +392,6 @@ void UpdateView::commandPrepared(Cervisia::CommandBase* cmd)
     connect(cmd, SIGNAL(jobExited(bool, int)),
             this, SLOT(finishJob(bool, int)));
 
-    // Scan recursively all entries - there's no way around this here
-    if( cmd->isRecursive() )
-       static_cast<UpdateDirItem*>(firstChild())->maybeScanDir(true);
-
     rememberSelection(cmd->isRecursive());
     if( m_action != CommandBase::Add )
         markUpdated(false, false);
