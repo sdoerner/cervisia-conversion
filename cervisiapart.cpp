@@ -49,7 +49,7 @@
 #include "updatedlg.h"
 #include "checkoutdlg.h"
 #include "tagdlg.h"
-#include "mergedlg.h"
+// #include "mergedlg.h"
 #include "historydlg.h"
 #include "updateview.h"
 #include "updateview_items.h"
@@ -88,8 +88,8 @@ CervisiaPart::CervisiaPart( QWidget *parentWidget, const char *widgetName,
     , opt_hideRemoved( false )
     , opt_hideNotInCVS( false )
     , opt_hideEmptyDirectories( false )
-    , opt_createDirs( false )
-    , opt_pruneDirs( false )
+//     , opt_createDirs( false )
+//     , opt_pruneDirs( false )
 //     , opt_updateRecursive( true )
 //     , opt_commitRecursive( true )
     , opt_doCVSEdit( false )
@@ -339,12 +339,12 @@ void CervisiaPart::setupActions()
 //     action->setToolTip( hint );
 //     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Merge..."), 0,
-                          this, SLOT(slotMerge()),
-                          actionCollection(), "merge" );
-    hint = i18n("Merges a branch or a set of modifications into the selected files");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KAction( i18n("&Merge..."), 0,
+//                           this, SLOT(slotMerge()),
+//                           actionCollection(), "merge" );
+//     hint = i18n("Merges a branch or a set of modifications into the selected files");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
     action = new KAction( i18n("Show &Watchers"), 0,
                           this, SLOT(slotShowWatchers()),
@@ -467,19 +467,19 @@ void CervisiaPart::setupActions()
     toggaction->setToolTip( hint );
     toggaction->setWhatsThis( hint );
 
-    action = new KToggleAction( i18n("Create &Folders on Update"), 0,
-                                this, SLOT(slotCreateDirs()),
-                                actionCollection(), "settings_create_dirs" );
-    hint = i18n("Determines whether updates create folders");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KToggleAction( i18n("Create &Folders on Update"), 0,
+//                                 this, SLOT(slotCreateDirs()),
+//                                 actionCollection(), "settings_create_dirs" );
+//     hint = i18n("Determines whether updates create folders");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
-    action = new KToggleAction( i18n("&Prune Empty Folders on Update"), 0,
-                                this, SLOT(slotPruneDirs()),
-                                actionCollection(), "settings_prune_dirs" );
-    hint = i18n("Determines whether updates remove empty folders");
-    action->setToolTip( hint );
-    action->setWhatsThis( hint );
+//     action = new KToggleAction( i18n("&Prune Empty Folders on Update"), 0,
+//                                 this, SLOT(slotPruneDirs()),
+//                                 actionCollection(), "settings_prune_dirs" );
+//     hint = i18n("Determines whether updates remove empty folders");
+//     action->setToolTip( hint );
+//     action->setWhatsThis( hint );
 
 //     action = new KToggleAction( i18n("&Update Recursively"), 0,
 //                                 this, SLOT(slotUpdateRecursive()),
@@ -752,29 +752,29 @@ void CervisiaPart::slotResolve()
 }
 
 
-void CervisiaPart::slotMerge()
-{
-    MergeDialog dlg(cvsService, widget());
-
-    if (dlg.exec())
-    {
-        QString tagopt;
-        if (dlg.byBranch())
-        {
-            tagopt = "-j ";
-            tagopt += dlg.branch();
-        }
-        else
-        {
-            tagopt = "-j ";
-            tagopt += dlg.tag1();
-            tagopt += " -j ";
-            tagopt += dlg.tag2();
-        }
-        tagopt += " ";
-        updateSandbox(tagopt);
-    }
-}
+// void CervisiaPart::slotMerge()
+// {
+//     MergeDialog dlg(cvsService, widget());
+// 
+//     if (dlg.exec())
+//     {
+//         QString tagopt;
+//         if (dlg.byBranch())
+//         {
+//             tagopt = "-j ";
+//             tagopt += dlg.branch();
+//         }
+//         else
+//         {
+//             tagopt = "-j ";
+//             tagopt += dlg.tag1();
+//             tagopt += " -j ";
+//             tagopt += dlg.tag2();
+//         }
+//         tagopt += " ";
+//         updateSandbox(tagopt);
+//     }
+// }
 
 
 void CervisiaPart::slotFileProperties()
@@ -795,31 +795,31 @@ void CervisiaPart::slotFileProperties()
 }
 
 
-void CervisiaPart::updateSandbox(const QString &extraopt)
-{
-    QStringList list = update->multipleSelection();
-    if (list.isEmpty())
-        return;
-
+// void CervisiaPart::updateSandbox(const QString &extraopt)
+// {
+//     QStringList list = update->multipleSelection();
+//     if (list.isEmpty())
+//         return;
+// 
 //     update->prepareJob(opt_updateRecursive, UpdateView::Update);
-
-    DCOPRef cvsJob = cvsService->update(list, opt_updateRecursive,
-                        opt_createDirs, opt_pruneDirs, extraopt);
-
-    // get command line from cvs job
-    QString cmdline;
-    DCOPReply reply = cvsJob.call("cvsCommand()");
-    if( reply.isValid() )
-        reply.get<QString>(cmdline);
-
-    if( protocol->startJob(true) )
-    {
-        showJobStart(cmdline);
-        connect( protocol, SIGNAL(receivedLine(QString)), update, SLOT(processUpdateLine(QString)) );
-        connect( protocol, SIGNAL(jobFinished(bool, int)), update, SLOT(finishJob(bool, int)) );
-        connect( protocol, SIGNAL(jobFinished(bool, int)), this, SLOT(slotJobFinished()) );
-    }
-}
+// 
+//     DCOPRef cvsJob = cvsService->update(list, opt_updateRecursive,
+//                         opt_createDirs, opt_pruneDirs, extraopt);
+// 
+//     get command line from cvs job
+//     QString cmdline;
+//     DCOPReply reply = cvsJob.call("cvsCommand()");
+//     if( reply.isValid() )
+//         reply.get<QString>(cmdline);
+// 
+//     if( protocol->startJob(true) )
+//     {
+//         showJobStart(cmdline);
+//         connect( protocol, SIGNAL(receivedLine(QString)), update, SLOT(processUpdateLine(QString)) );
+//         connect( protocol, SIGNAL(jobFinished(bool, int)), update, SLOT(finishJob(bool, int)) );
+//         connect( protocol, SIGNAL(jobFinished(bool, int)), this, SLOT(slotJobFinished()) );
+//     }
+// }
 
 void CervisiaPart::slotShowWatchers()
 {
@@ -1176,16 +1176,16 @@ void CervisiaPart::slotUnfoldFolder()
 }
 
 
-void CervisiaPart::slotCreateDirs()
-{
-    opt_createDirs = !opt_createDirs;
-}
+// void CervisiaPart::slotCreateDirs()
+// {
+//     opt_createDirs = !opt_createDirs;
+// }
 
 
-void CervisiaPart::slotPruneDirs()
-{
-    opt_pruneDirs = !opt_pruneDirs;
-}
+// void CervisiaPart::slotPruneDirs()
+// {
+//     opt_pruneDirs = !opt_pruneDirs;
+// }
 
 
 // void CervisiaPart::slotUpdateRecursive()
@@ -1449,13 +1449,13 @@ void CervisiaPart::readSettings()
     // Unfortunately, the KConfig systems sucks and we have to live
     // with all entries in one group for session management.
 
-    opt_createDirs = config->readBoolEntry("Create Dirs", true);
-    (static_cast<KToggleAction *> (actionCollection()->action( "settings_create_dirs" )))
-    ->setChecked( opt_createDirs );
-
-    opt_pruneDirs = config->readBoolEntry("Prune Dirs", true);
-    (static_cast<KToggleAction *> (actionCollection()->action( "settings_prune_dirs" )))
-    ->setChecked( opt_pruneDirs );
+//     opt_createDirs = config->readBoolEntry("Create Dirs", true);
+//     (static_cast<KToggleAction *> (actionCollection()->action( "settings_create_dirs" )))
+//     ->setChecked( opt_createDirs );
+// 
+//     opt_pruneDirs = config->readBoolEntry("Prune Dirs", true);
+//     (static_cast<KToggleAction *> (actionCollection()->action( "settings_prune_dirs" )))
+//     ->setChecked( opt_pruneDirs );
 
 //     opt_updateRecursive = config->readBoolEntry("Update Recursive", false);
 //     (static_cast<KToggleAction *> (actionCollection()->action( "settings_update_recursively" )))
@@ -1510,8 +1510,8 @@ void CervisiaPart::writeSettings()
     config->setGroup("Session");
     recent->saveEntries( config );
 
-    config->writeEntry("Create Dirs", opt_createDirs);
-    config->writeEntry("Prune Dirs", opt_pruneDirs);
+//     config->writeEntry("Create Dirs", opt_createDirs);
+//     config->writeEntry("Prune Dirs", opt_pruneDirs);
 //     config->writeEntry("Update Recursive", opt_updateRecursive);
 //     config->writeEntry("Commit Recursive", opt_commitRecursive);
     config->writeEntry("Do cvs edit", opt_doCVSEdit);

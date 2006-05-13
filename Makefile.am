@@ -16,14 +16,14 @@ libcervisia_la_SOURCES = annotatedlg.cpp diffdlg.cpp patchoptiondlg.cpp logdlg.c
 		   settingsdlg.cpp settingsdlg_advanced.ui pluginbase.cpp entry.cpp ignorefilterbase.cpp \
 		   addremovedlg.cpp commitdlg.cpp stringmatcher.cpp logmessageedit.cpp \
 		   output_parser.cpp log_parser.cpp commandbase.cpp watchdlg.cpp annotate_parser.cpp \
-		   repositories.cpp update_parser.cpp pluginmanager.cpp updatedlg.cpp tagdlg.cpp diff_parser.cpp \
+		   repositories.cpp update_parser.cpp pluginmanager.cpp updatedlg.cpp tagdlg.cpp diff_parser.cpp mergedlg.cpp \
 		   checkoutwidgetbase.cpp
 libcervisia_la_COMPILE_FIRST = cvsservice/cvsservice_stub.h cervisiasettings.h
 
 libcervisiapart_la_SOURCES = updateview.cpp protocolview.cpp \
 		   changelogdlg.cpp historydlg.cpp \
 		   repositorydlg.cpp checkoutdlg.cpp \
-		   mergedlg.cpp cvsdir.cpp cervisiapart.cpp \
+		   cvsdir.cpp cervisiapart.cpp \
 		   addrepositorydlg.cpp watchersdlg.cpp \
 		   updateview_items.cpp updateview_visitors.cpp \
 		   entry_status.cpp cvsinitdlg.cpp \

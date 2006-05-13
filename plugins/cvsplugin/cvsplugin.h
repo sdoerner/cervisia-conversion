@@ -85,6 +85,7 @@ private slots:
     void edit();
     void lock();
     void log();
+    void merge();
     void remove();
     void removeWatch();
     void revert();

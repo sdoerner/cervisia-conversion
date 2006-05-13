@@ -99,7 +99,7 @@ public slots:
 //     void slotDeleteTag();
 //     void slotUpdateToTag();
 //     void slotUpdateToHead();
-    void slotMerge();
+//     void slotMerge();
     void slotShowWatchers();
 //     void slotEdit();
 //     void slotUnedit();
@@ -107,8 +107,8 @@ public slots:
 //     void slotLock();
 //     void slotUnlock();
     void slotMakePatch();
-    void slotCreateDirs();
-    void slotPruneDirs();
+//     void slotCreateDirs();
+//     void slotPruneDirs();
     void slotHideFiles();
     void slotHideUpToDate();
     void slotHideRemoved();

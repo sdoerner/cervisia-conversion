@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Christian Loose <christian.loose@kdemail.net>
+ * Copyright (c) 2005-2006 Christian Loose <christian.loose@kdemail.net>
  * Copyright (c) 2006 André Wöbbeking <Woebbeking@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,6 +52,7 @@ using Cervisia::CvsPlugin;
 #include "externaldiffcommand.h"
 #include "lockcommand.h"
 #include "logcommand.h"
+#include "mergecommand.h"
 #include "removecommand.h"
 #include "removewatchcommand.h"
 #include "updatecommand.h"
@@ -441,6 +442,23 @@ void CvsPlugin::log()
 }
 
 
+void CvsPlugin::merge()
+{
+    kdDebug(8050) << k_funcinfo << endl;
+
+    QStringList selectionList = m_fileView->multipleSelection();
+    if( selectionList.isEmpty() )
+        return;
+
+    MergeCommand* cmd = new MergeCommand(selectionList);
+    cmd->setRecursive(CvsPluginSettings::updateRecursive());
+    cmd->setCreateDirectories(CvsPluginSettings::createDirectories());
+    cmd->setPruneDirectories(CvsPluginSettings::pruneDirectories());
+
+    executeCommand(cmd);
+}
+
+
 void CvsPlugin::remove()
 {
     kdDebug(8050) << k_funcinfo << endl;
@@ -793,6 +811,13 @@ void CvsPlugin::setupMenuActions()
                           this, SLOT( updateToHead() ),
                           actionCollection(), "update_to_head" );
     hint = i18n("Updates the selected files to the HEAD revision (cvs update -A)");
+    action->setToolTip(hint);
+    action->setWhatsThis(hint);
+
+    action = new KAction( i18n("&Merge..."), 0,
+                          this, SLOT( merge() ),
+                          actionCollection(), "merge" );
+    hint = i18n("Merges a branch or a set of modifications into the selected files");
     action->setToolTip(hint);
     action->setWhatsThis(hint);
 
