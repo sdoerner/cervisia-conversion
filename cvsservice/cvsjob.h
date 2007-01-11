@@ -35,8 +35,6 @@ class KProcess;
 class KDE_EXPORT CvsJob : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.cervisia.cvsservice.cvsjob")
-
 public:
     explicit CvsJob(unsigned jobNum);
     explicit CvsJob(const QString& objId);
@@ -51,7 +49,8 @@ public:
     CvsJob& operator<<(const char* arg);
     CvsJob& operator<<(const Q3CString& arg);
     CvsJob& operator<<(const QStringList& args);
-
+    
+    QString dbusObjectPath() const;
 public Q_SLOTS: //dbus function
     Q_SCRIPTABLE bool execute();
     Q_SCRIPTABLE void cancel();

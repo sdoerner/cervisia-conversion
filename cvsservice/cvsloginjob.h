@@ -25,14 +25,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include <dcopobject.h>
-
 #include <kdesu/process.h>
 
 
-class CvsLoginJob : public DCOPObject
+class CvsLoginJob : public QObject
 {
-    K_DCOP
+    Q_OBJECT 
 
 public:
     explicit CvsLoginJob(unsigned jobNum);
@@ -43,7 +41,8 @@ public:
     void setCvsClient(const QByteArray& cvsClient);
     void setRepository(const QByteArray& repository);
 
-k_dcop:
+    QString dbusObjectPath() const;
+public slots:
     bool execute();
     QStringList output();
 
@@ -54,6 +53,7 @@ private:
     QByteArray     m_CvsClient;
     QList<QByteArray> m_Arguments;
     QStringList    m_output;
+    QString        m_dbusObjectPath;
 };
 
 

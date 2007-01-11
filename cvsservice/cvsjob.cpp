@@ -26,8 +26,7 @@
 #include <Q3CString>
 #include <kdebug.h>
 #include <kprocess.h>
-#include <dbus/qdbus.h>
-
+#include <cvsjobadaptor.h>
 #include "sshagent.h"
 
 
@@ -46,6 +45,7 @@ struct CvsJob::Private
     QString     directory;
     bool        isRunning;
     QStringList outputLines;
+    QString     dbusObjectPath;
 };
 
 
@@ -53,9 +53,10 @@ CvsJob::CvsJob(unsigned jobNum)
     : QObject()
     , d(new Private)
 {
-	QDBus::sessionBus().registerObject("/CvsJob"+QString::number(jobNum), this, QDBusConnection::ExportSlots);
-	//QString objId("CvsJob" + QString::number(jobNum));
-    //setObjId(objId.toLocal8Bit());
+    (void)new CvsjobAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    d->dbusObjectPath = "/CvsJob"+QString::number(jobNum);
+    dbus.registerObject( d->dbusObjectPath, this, QDBusConnection::ExportNonScriptableSlots );
 }
 
 
@@ -63,8 +64,10 @@ CvsJob::CvsJob(const QString& objId)
     : QObject()
     , d(new Private)
 {
-	QDBus::sessionBus().registerObject('/'+objId, this, QDBusConnection::ExportSlots);
-    //setObjId(objId.toLocal8Bit());
+    (void)new CvsjobAdaptor(this);
+    //TODO register it with good name
+    d->dbusObjectPath = "/"+objId;
+    QDBusConnection::sessionBus().registerObject( d->dbusObjectPath, this, QDBusConnection::ExportNonScriptableSlots );
 }
 
 
@@ -73,6 +76,10 @@ CvsJob::~CvsJob()
     delete d;
 }
 
+QString CvsJob::dbusObjectPath() const
+{
+   return d->dbusObjectPath;
+}
 
 void CvsJob::clearCvsCommand()
 {

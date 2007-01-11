@@ -26,15 +26,14 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kdirwatch.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
 #include "sshagent.h"
-
-
+#include <QDBusConnection>
+#include <repositoryadaptor.h>
 struct Repository::Private
 {
     Private() : compressionLevel(0) {}
@@ -58,10 +57,12 @@ struct Repository::Private
 
 Repository::Repository()
     : QObject()
-    , DCOPObject("CvsRepository")
     , d(new Private)
 {
     d->readGeneralConfig();
+    new RepositoryAdaptor(this );
+    QDBusConnection::sessionBus().registerObject("/CvsRepository", this);
+
 
     // other cvsservice instances might change the configuration file
     // so we watch it for changes
@@ -75,12 +76,14 @@ Repository::Repository()
 
 Repository::Repository(const QString& repository)
     : QObject()
-    , DCOPObject()
     , d(new Private)
 {
     d->location = repository;
     d->readGeneralConfig();
     d->readConfig();
+    //TODO verify it before : DCOPObject()
+    new RepositoryAdaptor(this );
+    QDBusConnection::sessionBus().registerObject("/CvsRepository", this);
 
     // other cvsservice instances might change the configuration file
     // so we watch it for changes
@@ -204,17 +207,15 @@ void Repository::slotConfigDirty(const QString& fileName)
 
 void Repository::Private::readGeneralConfig()
 {
-    KConfig* config = KGlobal::config();
-
     // get path to cvs client program
-    config->setGroup("General");
-    client = config->readPathEntry("CVSPath", "cvs");
+    KConfigGroup cg(KGlobal::config(), "General");
+    client = cg.readPathEntry("CVSPath", "cvs");
 }
 
 
 void Repository::Private::readConfig()
 {
-    KConfig* config = KGlobal::config();
+    KConfigBase* config = KGlobal::config();
 
     // Sometimes the location can be unequal to the entry in the CVS/Root.
     //
