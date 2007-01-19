@@ -52,19 +52,18 @@ public:
     
     QString dbusObjectPath() const;
 public Q_SLOTS: //dbus function
-    Q_SCRIPTABLE bool execute();
-    Q_SCRIPTABLE void cancel();
-
-    Q_SCRIPTABLE bool isRunning() const;
+    bool execute();
+    void cancel();
+    bool isRunning() const;
 
     /**
      * Current cvs command.
      *
      * @return The current cvs command. Can be null if not set.
      */
-    Q_SCRIPTABLE QString cvsCommand() const;
+    QString cvsCommand() const;
 
-    Q_SCRIPTABLE QStringList output() const;
+    QStringList output() const;
 
 signals: //dbus signal
     void jobExited(bool normalExit, int status);

@@ -55,7 +55,7 @@ DiffDialog::DiffDialog(KConfigBase& cfg, QWidget *parent, const char *name, bool
 	setButtons(Close | Help | User1);
 	setDefaultButton(Close);
 	showButtonSeparator(true);
-	setButtonGuiItem(Close,KStandardGuiItem::saveAs());
+	setButtonGuiItem(User1,KStandardGuiItem::saveAs());
     QFrame* mainWidget = new QFrame(this);
 	setMainWidget(mainWidget);
 
@@ -261,7 +261,7 @@ bool DiffDialog::parseCvsDiff(OrgKdeCervisiaCvsserviceCvsserviceInterface* servi
     if( !job.isValid() )
         return false;
 
-    ProgressDialog dlg(this, "Diff", job, "diff", i18n("CVS Diff"));
+    ProgressDialog dlg(this, "Diff", service->service(),job, "diff", i18n("CVS Diff"));
     if( !dlg.execute() )
         return false;
 
@@ -400,7 +400,7 @@ void DiffDialog::callExternalDiff(const QString& extdiff, OrgKdeCervisiaCvsservi
         extcmdline += KProcess::quote(QFileInfo(fileName).absoluteFilePath());
     }
 
-    ProgressDialog dlg(this, "Diff", job, "diff");
+    ProgressDialog dlg(this, "Diff", service->service(),job, "diff");
     if( dlg.execute() )
     {
         // call external diff application

@@ -70,9 +70,9 @@ public:
     static KAboutData* createAboutData();
 
 public slots:
-    // unused because we overwrite the default behaviour of openURL()
+    // unused because we overwrite the default behaviour of openUrl()
     virtual bool openFile() { return true; }
-    virtual bool openURL( const KUrl & );
+    virtual bool openUrl( const KUrl & );
 
     void openFile(QString filename);
     void openFiles(const QStringList &filenames);
@@ -189,6 +189,7 @@ private:
     int                         m_editWithId;
     Cervisia::EditWithMenu*     m_currentEditMenu;
     JobType                     m_jobType;
+    QString 			m_cvsServiceInterfaceName;
 };
 
 typedef KParts::GenericFactory<CervisiaPart> CervisiaFactory;
