@@ -37,15 +37,14 @@ class RepositoryDialog : public KDialog
     Q_OBJECT
 
 public:
-    RepositoryDialog(KConfigBase& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* cvsService,
-                     QWidget* parent = 0, const char* name = 0);
+    RepositoryDialog(KConfig& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* cvsService, const QString& cvsServiceInterfaceName, QWidget* parent = 0, const char* name = 0);
     virtual ~RepositoryDialog();
 
     void readConfigFile();
     void readCvsPassFile();
 
-protected:
-    virtual void slotOk();
+protected slots:
+    void slotOk();
 
 private slots:
     void slotAddClicked();
@@ -60,14 +59,15 @@ private:
     void writeRepositoryData(RepositoryListItem* item);
 
 private:
-    KConfigBase&     m_partConfig;
+    KConfig&         m_partConfig;
     OrgKdeCervisiaCvsserviceCvsserviceInterface* m_cvsService;
-    KConfigBase*     m_serviceConfig;
+    KConfig*         m_serviceConfig;
     K3ListView*       m_repoList;
     QPushButton*     m_modifyButton;
     QPushButton*     m_removeButton;
     QPushButton*     m_loginButton;
     QPushButton*     m_logoutButton;
+    QString          m_cvsServiceInterfaceName;
 };
 
 #endif

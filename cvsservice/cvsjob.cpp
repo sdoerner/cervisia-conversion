@@ -56,7 +56,8 @@ CvsJob::CvsJob(unsigned jobNum)
     (void)new CvsjobAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     d->dbusObjectPath = "/CvsJob"+QString::number(jobNum);
-    dbus.registerObject( d->dbusObjectPath, this, QDBusConnection::ExportNonScriptableSlots );
+    kDebug()<<" vsJob::CvsJob(unsigned jobNum) :"<<d->dbusObjectPath<<endl;
+    dbus.registerObject( d->dbusObjectPath, this );
 }
 
 
@@ -67,7 +68,8 @@ CvsJob::CvsJob(const QString& objId)
     (void)new CvsjobAdaptor(this);
     //TODO register it with good name
     d->dbusObjectPath = "/"+objId;
-    QDBusConnection::sessionBus().registerObject( d->dbusObjectPath, this, QDBusConnection::ExportNonScriptableSlots );
+    kDebug()<<" CvsJob::CvsJob(const QString& objId) :"<<d->dbusObjectPath<<endl;
+    QDBusConnection::sessionBus().registerObject( d->dbusObjectPath, this );
 }
 
 
@@ -205,9 +207,9 @@ void CvsJob::cancel()
     d->childproc->kill();
 }
 
-
 void CvsJob::slotProcessExited()
 {
+    kDebug()<<  k_funcinfo <<endl;
     // disconnect all connections to childproc's signals
     d->childproc->disconnect();
     d->childproc->clearArguments();
@@ -226,7 +228,8 @@ void CvsJob::slotReceivedStdout(KProcess* proc, char* buffer, int buflen)
 
     // accumulate output
     d->outputLines += QStringList::split("\n", output);
-
+    kDebug()<<" CvsJob::slotReceivedStdout(KProcess* proc, char* buffer, int buflen)\n";
+    kDebug()<<" output :"<<output<<endl;
     emit receivedStdout(output);
 }
 
@@ -240,6 +243,8 @@ void CvsJob::slotReceivedStderr(KProcess* proc, char* buffer, int buflen)
     // accumulate output
     d->outputLines += QStringList::split("\n", output);
 
+    kDebug()<<"CvsJob::slotReceivedStderr(KProcess* proc, char* buffer, int buflen)\n";
+    kDebug()<<" output "<<output<<endl;
     emit receivedStderr(output);
 }
 

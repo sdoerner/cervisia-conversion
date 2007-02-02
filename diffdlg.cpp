@@ -34,18 +34,20 @@
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QVBoxLayout>
+#include <kconfig.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
 #include <kprocess.h>
+#include <kconfiggroup.h>
 #include "cvsserviceinterface.h"
 #include "misc.h"
 #include "progressdlg.h"
 #include "diffview.h"
 
 
-DiffDialog::DiffDialog(KConfigBase& cfg, QWidget *parent, const char *name, bool modal)
+DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool modal)
     : KDialog(parent)
     , partConfig(cfg)
 {

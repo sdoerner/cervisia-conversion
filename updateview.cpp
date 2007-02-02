@@ -27,8 +27,9 @@
 #include <q3ptrstack.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <kconfigbase.h>
+#include <kconfig.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
 
 #include "cervisiasettings.h"
 #include "entry.h"
@@ -40,7 +41,7 @@ using Cervisia::Entry;
 using Cervisia::EntryStatus;
 
 
-UpdateView::UpdateView(KConfigBase& partConfig, QWidget *parent, const char *name)
+UpdateView::UpdateView(KConfig& partConfig, QWidget *parent, const char *name)
     : K3ListView(parent),
       m_partConfig(partConfig),
       m_unfoldingTree(false)
@@ -66,15 +67,13 @@ UpdateView::UpdateView(KConfigBase& partConfig, QWidget *parent, const char *nam
     // without this restoreLayout() can't change the column widths
     for (int col = 0; col < columns(); ++col)
         setColumnWidthMode(col, Q3ListView::Manual);
-#warning "kde4: reactivate it"
-    //restoreLayout(&m_partConfig, QLatin1String("UpdateView"));
+    restoreLayout(&m_partConfig, QLatin1String("UpdateView"));
 }
 
 
 UpdateView::~UpdateView()
 {
-#warning "kde4: reactivate it"	
-    //saveLayout(&m_partConfig, QLatin1String("UpdateView"));
+    saveLayout(&m_partConfig, QLatin1String("UpdateView"));
 }
 
 

@@ -110,7 +110,7 @@ int LogListViewItem::compare(Q3ListViewItem* i, int col, bool ascending) const
 }
 
 
-LogListView::LogListView(KConfigBase& cfg, QWidget *parent, const char *name)
+LogListView::LogListView(KConfig& cfg, QWidget *parent, const char *name)
     : K3ListView(parent)
     , partConfig(cfg)
 {
@@ -135,15 +135,13 @@ LogListView::LogListView(KConfigBase& cfg, QWidget *parent, const char *name)
     // without this restoreLayout() can't change the column widths
     for (int i = 0; i < columns(); ++i)
         setColumnWidthMode(i, Manual);
-#warning "kde4 readd it "
-    //restoreLayout(&partConfig, QLatin1String("LogList view"));
+    restoreLayout(&partConfig, QLatin1String("LogList view"));
 }
 
 
 LogListView::~LogListView()
 {
-#warning "kde4: readd it"	
-    //saveLayout(&partConfig, QLatin1String("LogList view"));
+    saveLayout(&partConfig, QLatin1String("LogList view"));
 }
 
 

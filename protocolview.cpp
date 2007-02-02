@@ -20,11 +20,11 @@
 
 
 #include "protocolview.h"
-
+#include "protocolviewadaptor.h"
 #include <qdir.h>
 #include <q3popupmenu.h>
 #include <qtextdocument.h>
-#include <kconfigbase.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -32,17 +32,20 @@
 #include "cvsjobinterface.h"
 
 
-ProtocolView::ProtocolView(/*const DCOPCString& appId,*/ QWidget *parent, const char *name)
+ProtocolView::ProtocolView(const QString& appId, QWidget *parent, const char *name)
     : Q3TextEdit(parent, name)
     , job(0)
     , m_isUpdateJob(false)
 {
+    new ProtocolviewAdaptor(this);
+    QDBusConnection::sessionBus().registerObject( "/ProtocolView", this );
+
     setReadOnly(true);
     setUndoRedoEnabled(false);
     setTabChangesFocus(true);
     setTextFormat(Qt::LogText);
 
-    KConfigBase *config = CervisiaPart::config();
+    KConfig *config = CervisiaPart::config();
     config->setGroup("LookAndFeel");
     setFont(config->readEntry("ProtocolFont",QFont()));
 
@@ -50,18 +53,15 @@ ProtocolView::ProtocolView(/*const DCOPCString& appId,*/ QWidget *parent, const 
     conflictColor=config->readEntry("Conflict", QColor(255, 130, 130));
     localChangeColor=config->readEntry("LocalChange", QColor(130, 130, 255));
     remoteChangeColor=config->readEntry("RemoteChange", QColor(70, 210, 70));
-#warning "kde4: port it"
-#if 0
-    // create a DCOP stub for the non-concurrent cvs job
-    job = new OrgKdeCervisiaCvsserviceCvsjobInterface(appId, "NonConcurrentJob");
-    // establish connections to the signals of the cvs job
-    connectDCOPSignal(job->app(), job->obj(), "jobExited(bool, int)",
-                      "slotJobExited(bool, int)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
-#endif
+    
+    //kDebug()<<"protocol view appId : "<<appId<<endl;
+    
+    job = new OrgKdeCervisiaCvsserviceCvsjobInterface(appId, "/NonConcurrentJob",QDBusConnection::sessionBus(), this);
+    
+    QDBusConnection::sessionBus().connect(QString(), "/NonConcurrentJob", "org.kde.cervisia.cvsservice.cvsjob", "jobExited", this, SLOT(slotJobExited(bool,int)));
+   QDBusConnection::sessionBus().connect(QString(), "/NonConcurrentJob", "org.kde.cervisia.cvsservice.cvsjob", "receivedStdout", this, SLOT(slotReceivedOutput(QString)));
+   QDBusConnection::sessionBus().connect(QString(), "/NonConcurrentJob", "org.kde.cervisia.cvsservice.cvsjob", "receivedStderr", this, SLOT(slotReceivedOutput(QString)));
+
 }
 
 
@@ -104,6 +104,7 @@ Q3PopupMenu* ProtocolView::createPopupMenu(const QPoint &pos)
 
 void ProtocolView::cancelJob()
 {
+    kDebug()<< k_funcinfo <<endl;
     job->cancel();
 }
 
@@ -117,6 +118,7 @@ void ProtocolView::slotReceivedOutput(QString buffer)
 
 void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
 {
+    kDebug()<< k_funcinfo<<endl;
     QString msg;
 
     if( normalExit )

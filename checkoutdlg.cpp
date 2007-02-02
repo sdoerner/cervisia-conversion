@@ -38,6 +38,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kurlcompletion.h>
+#include <kconfiggroup.h>
 
 #include "progressdlg.h"
 #include "repositories.h"
@@ -47,7 +48,7 @@
 using Cervisia::IsValidTag;
 
 
-CheckoutDialog::CheckoutDialog(KConfigBase& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* service,
+CheckoutDialog::CheckoutDialog(KConfig& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* service,
                                ActionType action, QWidget* parent,
                                const char* name)
     : KDialog(parent)
@@ -358,10 +359,10 @@ void CheckoutDialog::dirButtonClicked()
 void CheckoutDialog::moduleButtonClicked()
 {
     QDBusReply<QDBusObjectPath> cvsJob = cvsService->moduleList(repository());
-    if( !job.isValid() )
+    if( !cvsJob.isValid() )
         return;
 
-    ProgressDialog dlg(this, "Checkout", cvsJob, "checkout", i18n("CVS Checkout"));
+    ProgressDialog dlg(this, "Checkout", cvsService->service(),cvsJob, "checkout", i18n("CVS Checkout"));
     if( !dlg.execute() )
         return;
 
@@ -402,10 +403,10 @@ void CheckoutDialog::branchButtonClicked()
 
     QDBusReply<QDBusObjectPath> cvsJob = cvsService->rlog(repository(), module(),
                                       false/*recursive*/);
-    if( !job.isValid() )
+    if( !cvsJob.isValid() )
         return;
 
-    ProgressDialog dlg(this, "Remote Log", cvsJob, QString::null,
+    ProgressDialog dlg(this, "Remote Log", cvsService->service(),cvsJob, QString::null,
                        i18n("CVS Remote Log"));
     if( !dlg.execute() )
         return;

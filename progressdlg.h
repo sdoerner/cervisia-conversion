@@ -30,7 +30,7 @@ class ProgressDialog : public KDialog
     Q_OBJECT
 
 public:
-    ProgressDialog(QWidget* parent, const QString& heading, const QDBusReply<QDBusObjectPath>& job,
+    ProgressDialog(QWidget* parent, const QString& heading, const QString &cvsServiceNameService,const QDBusReply<QDBusObjectPath>& job,
                    const QString& errorIndicator, const QString& caption = "");
     ~ProgressDialog();
 
@@ -39,9 +39,9 @@ public:
     QStringList getOutput() const;
 
 public Q_SLOTS:
-    Q_SCRIPTABLE void slotReceivedOutputNonGui(QString buffer);
-    Q_SCRIPTABLE void slotReceivedOutput(QString buffer);
-    Q_SCRIPTABLE void slotJobExited(bool normalExit, int status);
+    void slotReceivedOutputNonGui(QString buffer);
+    void slotReceivedOutput(QString buffer);
+    void slotJobExited(bool normalExit, int status);
 
 protected slots:
     virtual void slotCancel();

@@ -35,6 +35,7 @@
 #include <QVBoxLayout>
 #include <kbuttonbox.h>
 #include <kcolorbutton.h>
+#include <kconfig.h>
 #include <kfontdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -42,7 +43,8 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kurlrequester.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
+#include <kvbox.h>
 #include "misc.h"
 #include "cervisiasettings.h"
 #include "settingsdlg_advanced.h"
@@ -53,8 +55,7 @@ namespace
     // helper method to load icons for configuration pages
     inline QPixmap LoadIcon(const char* iconName)
     {
-        KIconLoader* loader = KGlobal::instance()->iconLoader();
-        return loader->loadIcon(QLatin1String(iconName), K3Icon::NoGroup,
+        return KIconLoader::global()->loadIcon(QLatin1String(iconName), K3Icon::NoGroup,
                                  K3Icon::SizeMedium);
     }
 }
@@ -79,9 +80,10 @@ void FontButton::chooseFont()
 }
 
 
-SettingsDialog::SettingsDialog( KConfigBase *conf, QWidget *parent, const char *name )
-    : KDialog(IconList, parent)
+SettingsDialog::SettingsDialog( KConfig *conf, QWidget *parent, const char *name )
+    : KPageDialog(parent)
 {
+    setFaceType( List );
     setCaption(i18n("Configure Cervisia"));
     setButtons(Ok | Cancel | Help);
     setDefaultButton(Ok);
@@ -171,7 +173,7 @@ void SettingsDialog::writeSettings()
 {
     // write entries to cvs DCOP service configuration
     serviceConfig->setGroup("General");
-    serviceConfig->writePathEntry("CVSPath", cvspathedit->url());
+    serviceConfig->writePathEntry("CVSPath", cvspathedit->url().path());
     serviceConfig->writeEntry("Compression",
         m_advancedPage->kcfg_Compression->value());
     serviceConfig->writeEntry("UseSshAgent",
@@ -184,7 +186,7 @@ void SettingsDialog::writeSettings()
     CervisiaSettings::setTimeout(m_advancedPage->kcfg_Timeout->value());
     config->writeEntry("Username", usernameedit->text());
 
-    config->writePathEntry("ExternalDiff", extdiffedit->url());
+    config->writePathEntry("ExternalDiff", extdiffedit->url().path());
 
     config->writeEntry("ContextLines", (unsigned)contextedit->value());
     config->writeEntry("TabWidth", tabwidthedit->value());
@@ -208,7 +210,9 @@ void SettingsDialog::writeSettings()
     CervisiaSettings::setDiffDeleteColor(m_diffDeleteButton->color());
 
     // I'm not yet sure whether this is a hack or not :-)
+#ifdef __GNUC__
 #warning would QApplication::topLevelWidgets be sufficient?
+#endif
     const QWidgetList& widgets = QApplication::allWidgets();
     Q_FOREACH (QWidget* w, widgets)
     {
@@ -229,7 +233,6 @@ void SettingsDialog::done(int res)
     if (res == Accepted)
         writeSettings();
     KDialog::done(res);
-    delete this;
 }
 
 
@@ -238,8 +241,11 @@ void SettingsDialog::done(int res)
  */
 void SettingsDialog::addGeneralPage()
 {
-    QFrame* generalPage = addPage(i18n("General"), QString::null,
-                                  LoadIcon("misc"));
+    QFrame* generalPage = new QFrame;
+    KPageWidgetItem *page = new KPageWidgetItem( generalPage, i18n("General") );
+    page->setIcon( KIcon(LoadIcon("misc")) );
+    addPage(page);
+    
     QVBoxLayout* layout = new QVBoxLayout(generalPage);
     layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(0);
@@ -268,7 +274,12 @@ void SettingsDialog::addGeneralPage()
  */
 void SettingsDialog::addDiffPage()
 {
-    QFrame* diffPage = addPage(i18n("Diff Viewer"), QString::null, LoadIcon("vcs_diff"));
+    QFrame* diffPage = new QFrame;
+    KPageWidgetItem *page = new KPageWidgetItem( diffPage, i18n("Diff Viewer") );
+    page->setIcon( KIcon(LoadIcon("vcs_diff")) );
+    addPage(page);
+
+
 
     QGridLayout* layout = new QGridLayout(diffPage);
 
@@ -313,8 +324,11 @@ void SettingsDialog::addDiffPage()
  */
 void SettingsDialog::addStatusPage()
 {
-    KVBox* statusPage = addVBoxPage(i18n("Status"), QString::null,
-                                    LoadIcon("fork"));
+    KVBox* statusPage = new KVBox;
+    KPageWidgetItem *page = new KPageWidgetItem( statusPage, i18n("Status") );
+    page->setIcon( KIcon(LoadIcon("fork")) );
+    addPage(page);
+
 
     remotestatusbox = new QCheckBox(i18n("When opening a sandbox from a &remote repository,\n"
                                          "start a File->Status command automatically"), statusPage);
@@ -331,8 +345,10 @@ void SettingsDialog::addStatusPage()
  */
 void SettingsDialog::addAdvancedPage()
 {
-    KVBox* frame = addVBoxPage(i18n("Advanced"), QString::null,
-                               LoadIcon("configure"));
+    KVBox* frame = new KVBox;
+    KPageWidgetItem *page = new KPageWidgetItem( frame, i18n("Advanced") );
+    page->setIcon( KIcon(LoadIcon("configure")) );
+    addPage(page);
 
     m_advancedPage = new AdvancedPage(frame);
     m_advancedPage->kcfg_Timeout->setRange(0, 50000, 100, false);
@@ -345,8 +361,11 @@ void SettingsDialog::addAdvancedPage()
  */
 void SettingsDialog::addLookAndFeelPage()
 {
-    KVBox* lookPage = addVBoxPage(i18n("Appearance"), QString::null,
-                                  LoadIcon("looknfeel"));
+    KVBox* lookPage = new KVBox;
+    KPageWidgetItem *page = new KPageWidgetItem( lookPage, i18n("Appearance") );
+    page->setIcon( KIcon(LoadIcon("looknfeel")) );
+    addPage(page);
+
 
     Q3GroupBox* fontGroupBox = new Q3GroupBox(4, Qt::Vertical, i18n("Fonts"),
                                             lookPage);

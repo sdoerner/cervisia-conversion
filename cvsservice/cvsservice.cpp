@@ -37,6 +37,7 @@
 #include "sshagent.h"
 #include "cvsserviceadaptor.h"
 #include <cvsjobadaptor.h>
+#include <kconfiggroup.h>
 static const char SINGLE_JOB_ID[]   = "NonConcurrentJob";
 static const char REDIRECT_STDERR[] = "2>&1";
 
@@ -52,7 +53,6 @@ struct CvsService::Private
     }
 
     CvsJob*               singleCvsJob;   // non-concurrent cvs job, like update or commit
-    QDBusObjectPath               singleJobRef;   // DCOP reference to non-concurrent cvs job
     Q3IntDict<CvsJob>      cvsJobs;        // concurrent cvs jobs, like diff or annotate
     Q3IntDict<CvsLoginJob> loginJobs;
     unsigned              lastJobId;
@@ -77,8 +77,6 @@ CvsService::CvsService()
  
     // create non-concurrent cvs job
     d->singleCvsJob = new CvsJob(SINGLE_JOB_ID);
-#warning "kde4 define singleJobRef"    
-    //d->singleJobRef.setRef(d->appId, d->singleCvsJob->objId());
 
     // create repository manager
     d->repository = new Repository();
@@ -86,7 +84,7 @@ CvsService::CvsService()
     d->cvsJobs.setAutoDelete(true);
     d->loginJobs.setAutoDelete(true);
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup cs(config, "General");
     if( cs.readEntry("UseSshAgent", false) )
     {
@@ -291,6 +289,8 @@ QDBusObjectPath CvsService::checkout(const QString& workingDir, const QString& r
 QDBusObjectPath CvsService::commit(const QStringList& files, const QString& commitMessage,
                            bool recursive)
 {
+    kDebug()<<" QDBusObjectPath CvsService::commit(const QStringList& files, const QString& commitMessage, bool recursive) \n";
+    kdDebug()<<" d->hasWorkingCopy :"<<d->hasWorkingCopy()<<" d->hasRunningJob :"<<d->hasRunningJob()<<endl;
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return QDBusObjectPath();
 
@@ -306,6 +306,7 @@ QDBusObjectPath CvsService::commit(const QStringList& files, const QString& comm
     *d->singleCvsJob << "-m" << KProcess::quote(commitMessage)
                      << CvsServiceUtils::joinFileList(files) << REDIRECT_STDERR;
 
+    kDebug()<<"end of CvsService::commit \n";
     return d->setupNonConcurrentJob();
 }
 
@@ -978,7 +979,7 @@ QDBusObjectPath CvsService::Private::setupNonConcurrentJob(Repository* repo)
     singleCvsJob->setServer(repo->server());
     singleCvsJob->setDirectory(repo->workingCopy());
 
-    return singleJobRef;
+    return QDBusObjectPath(singleCvsJob->dbusObjectPath());
 }
 
 
@@ -1004,3 +1005,6 @@ bool CvsService::Private::hasRunningJob()
 
     return result;
 }
+
+
+#include "cvsservice.moc"

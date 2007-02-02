@@ -32,9 +32,11 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kconfiggroup.h>
 
 #include "addrepositorydlg.h"
 #include "cvsserviceinterface.h"
+#include "cvsjobinterface.h"
 #include "misc.h"
 #include "progressdlg.h"
 #include "repositories.h"
@@ -156,11 +158,11 @@ void RepositoryListItem::changeLoginStatusColumn()
 }
 
 
-RepositoryDialog::RepositoryDialog(KConfigBase& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* cvsService,
-                                   QWidget* parent, const char* name)
+RepositoryDialog::RepositoryDialog(KConfig& cfg, OrgKdeCervisiaCvsserviceCvsserviceInterface* cvsService, const QString& cvsServiceInterfaceName, QWidget* parent, const char* name)
     : KDialog(parent)
     , m_partConfig(cfg)
     , m_cvsService(cvsService)
+    , m_cvsServiceInterfaceName(cvsServiceInterfaceName)			      
 {
     setCaption(i18n("Configure Access to Repositories"));
     setModal(true);
@@ -430,14 +432,20 @@ void RepositoryDialog::slotLoginClicked()
               << item->repository() << endl;
 
     QDBusReply<QDBusObjectPath> job = m_cvsService->login(item->repository());
-    if( !m_job.isValid() )
+    if( !job.isValid() )
         // TODO: error handling
         return;
-
-    bool success = job.call("execute()");
+    QDBusObjectPath jobPath = job;
+    OrgKdeCervisiaCvsserviceCvsjobInterface cvsjobinterface(m_cvsServiceInterfaceName,jobPath.path(),QDBusConnection::sessionBus(), this);
+    QDBusReply<bool> reply = cvsjobinterface.execute();
+    bool success = false;
+    if(reply.isValid()) 
+	 success = reply;
     if( !success )
     {
-        QStringList output = job.call("output()");
+	QDBusReply<QStringList> ret = cvsjobinterface.output();
+	
+        QStringList output = ret;
         KMessageBox::detailedError(this, i18n("Login failed."), output.join("\n"));
         return;
     }
@@ -454,11 +462,11 @@ void RepositoryDialog::slotLogoutClicked()
         return;
 
     QDBusReply<QDBusObjectPath> job = m_cvsService->logout(item->repository());
-    if( !m_job.isValid() )
+    if( !job.isValid() )
         // TODO: error handling
         return;
 
-    ProgressDialog dlg(this, "Logout", job, "logout", i18n("CVS Logout"));
+    ProgressDialog dlg(this, "Logout", m_cvsService->service(),job, "logout", i18n("CVS Logout"));
     if( !dlg.execute() )
         return;
 

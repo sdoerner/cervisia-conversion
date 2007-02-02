@@ -31,6 +31,7 @@
 #include <q3textedit.h>
 #include <qtextstream.h>
 
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kfinddialog.h>
@@ -43,6 +44,7 @@
 #include <krfcdate.h>
 #include <krun.h>
 #include <kurl.h>
+#include <kconfiggroup.h>
 
 #include "cvsserviceinterface.h"
 #include "annotatedlg.h"
@@ -57,7 +59,7 @@
 #include "patchoptiondlg.h"
 
 
-LogDialog::LogDialog(KConfigBase& cfg, QWidget *parent, const char *name)
+LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     : KDialog(parent)
     , cvsService(0)
     , partConfig(cfg)
@@ -201,7 +203,8 @@ LogDialog::LogDialog(KConfigBase& cfg, QWidget *parent, const char *name)
              this, SLOT(findClicked()) );
 
     connect(this,SIGNAL(okClicked()),
-		    this, SLOT(okClicked()));
+		    this, SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
     setButtonGuiItem(Ok, KGuiItem(i18nc("to view something", "&View"),"fileopen"));
     setButtonGuiItem(Apply, KGuiItem(i18n("Create Patch...")));
     setHelp("browsinglogs");
@@ -243,7 +246,7 @@ bool LogDialog::parseCvsLog(OrgKdeCervisiaCvsserviceCvsserviceInterface* service
     if( !job.isValid() )
         return false;
 
-    ProgressDialog dlg(this, "Logging", job, "log", i18n("CVS Log"));
+    ProgressDialog dlg(this, "Logging", cvsService->service(),job, "log", i18n("CVS Log"));
     if( !dlg.execute() )
         return false;
 
@@ -432,7 +435,7 @@ void LogDialog::slotOk()
     if( !job.isValid() )
         return;
 
-    ProgressDialog dlg(this, "View", job, "view", i18n("View File"));
+    ProgressDialog dlg(this, "View",cvsService->service(), job, "view", i18n("View File"));
     if( dlg.execute() )
     {
         // make file read-only
@@ -468,7 +471,7 @@ void LogDialog::slotApply()
     if( !job.isValid() )
         return;
 
-    ProgressDialog dlg(this, "Diff", job, "", i18n("CVS Diff"));
+    ProgressDialog dlg(this, "Diff",cvsService->service(), job, "", i18n("CVS Diff"));
     if( !dlg.execute() )
         return;
 

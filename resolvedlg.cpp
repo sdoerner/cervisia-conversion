@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qregexp.h>
+#include <kconfiggroup.h>
 #include "misc.h"
 #include "resolvedlg_p.h"
 using Cervisia::ResolveEditorDialog;
@@ -101,7 +102,7 @@ private:
 }
 
 
-ResolveDialog::ResolveDialog(KConfigBase& cfg, QWidget *parent, const char *name)
+ResolveDialog::ResolveDialog(KConfig& cfg, QWidget *parent, const char *name)
     : KDialog(parent)
     , markeditem(-1)
     , partConfig(cfg)

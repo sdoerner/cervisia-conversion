@@ -24,15 +24,17 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QBoxLayout>
+#include <kconfig.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
 
 #include "misc.h"
 #include "cvsserviceinterface.h"
 #include "progressdlg.h"
 
 
-WatchersDialog::WatchersDialog(KConfigBase& cfg, QWidget* parent, const char* name)
+WatchersDialog::WatchersDialog(KConfig& cfg, QWidget* parent, const char* name)
     : KDialog(parent)
     , partConfig(cfg)
 {
@@ -89,7 +91,7 @@ bool WatchersDialog::parseWatchers(OrgKdeCervisiaCvsserviceCvsserviceInterface* 
     if( !job.isValid() )
         return false;
 
-    ProgressDialog dlg(this, "Watchers", job, "watchers", i18n("CVS Watchers"));
+    ProgressDialog dlg(this, "Watchers",cvsService->service(), job, "watchers", i18n("CVS Watchers"));
     if( !dlg.execute() )
         return false;
 
