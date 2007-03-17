@@ -231,10 +231,15 @@ void CervisiaPart::setupActions()
 {
     QAction *action;
     QString hint;
+#ifdef __GNUC__
+#warning "kde4: port it actionCollection()->setHighlightingEnabled(true);";
+#endif
+    //actionCollection()->setHighlightingEnabled(true);
+
     //
     // File Menu
     //
-    action  = new KAction(KIcon("document-open"), i18n("O&pen Sandbox..."), this);
+    action  = new KAction(KIcon("fileopen"), i18n("O&pen Sandbox..."), this);
     actionCollection()->addAction("file_open", action );
     connect(action, SIGNAL(triggered(bool) ), SLOT( slotOpenSandbox() ));
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
@@ -329,7 +334,7 @@ void CervisiaPart::setupActions()
     //
     // View Menu
     //
-    action  = new KAction(KIcon("process-stop"), i18n("Stop"), this);
+    action  = new KAction(KIcon("stop"), i18n("Stop"), this);
     actionCollection()->addAction("stop_job", action );
     connect(action, SIGNAL(triggered(bool) ), protocol, SLOT(cancelJob()));
     action->setShortcut(QKeySequence(Qt::Key_Escape));
@@ -1808,13 +1813,13 @@ bool CervisiaPart::openSandbox(const QString &dirname)
     emit setWindowCaption(sandbox + '(' + repository + ')');
 
     // set m_url member for tabbed window modus of Konqueror
-    setUrl(KUrl(sandbox));
+    m_url = KUrl(sandbox);
 
     // *NOTICE*
-    // The order is important here. We have to set the url member before
+    // The order is important here. We have to set the m_url member before
     // calling this function because the progress dialog uses the enter_loop()/
     // exit_loop() methods. Those methods result in a call to queryExit() in
-    // cervisiashell.cpp which then uses the url member to save the last used
+    // cervisiashell.cpp which then uses the m_url member to save the last used
     // directory.
     if( cvsRepository.retrieveCvsignoreFile() )
         Cervisia::GlobalIgnoreList().retrieveServerIgnoreList(cvsService,

@@ -55,8 +55,8 @@ ChangeLogDialog::ChangeLogDialog(KConfig& cfg, QWidget *parent, const char *name
 
     edit = new KTextEdit(this);
 
-    KConfigGroup group = cfg.group("LookAndFeel");
-    edit->setFont(group.readEntry("ChangeLogFont",QFont()));
+    cfg.setGroup("LookAndFeel");
+    edit->setFont(cfg.readEntry("ChangeLogFont",QFont()));
 
     edit->setFocus();
     edit->setLineWrapMode(QTextEdit::NoWrap);
