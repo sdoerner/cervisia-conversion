@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
-#include <krfcdate.h>
+#include <kdatetime.h>
 #include <krun.h>
 #include <kurl.h>
 #include <kconfiggroup.h>
@@ -67,7 +67,7 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     setButtons(Ok | Apply | Close | Help | User1 | User2 | User3);
     setButtonGuiItem(User1, KGuiItem(i18n("&Annotate")));
     setButtonGuiItem(User2, KGuiItem(i18n("&Diff"), "vcs_diff"));
-    setButtonGuiItem(User3, KGuiItem(i18n("&Find"), "find"));
+    setButtonGuiItem(User3, KGuiItem(i18n("&Find"), "edit-find"));
     setDefaultButton(Close);
     showButtonSeparator(true);
 
@@ -205,7 +205,7 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     connect(this,SIGNAL(okClicked()),
 		    this, SLOT(slotOk()));
     connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
-    setButtonGuiItem(Ok, KGuiItem(i18nc("to view something", "&View"),"fileopen"));
+    setButtonGuiItem(Ok, KGuiItem(i18nc("to view something", "&View"),"document-open"));
     setButtonGuiItem(Apply, KGuiItem(i18n("Create Patch...")));
     setHelp("browsinglogs");
 
@@ -314,7 +314,7 @@ bool LogDialog::parseCvsLog(OrgKdeCervisiaCvsserviceCvsserviceInterface* service
 
                     QString date = dateTimeStr.section(' ', 0, 0);
                     QString time = dateTimeStr.section(' ', 1, 1);
-                    logInfo.m_dateTime.setTime_t(KRFCDate::parseDateISO8601(date + 'T' + time));
+                    logInfo.m_dateTime.setTime_t(KDateTime::fromString(date + 'T' + time).toTime_t());
 
                     logInfo.m_author = strList[1].section(':', 1, 1).trimmed();
 
