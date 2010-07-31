@@ -24,7 +24,7 @@
 
 #include <klistview.h>
 
-#include <qptrlist.h>
+#include <tqptrlist.h>
 
 #include "entry.h"
 
@@ -42,7 +42,7 @@ public:
                   NoRemoved=4, NoNotInCVS=8 , NoEmptyDirectories = 16 };
     enum Action { Add, Remove, Update, UpdateNoAct, Commit };
     
-    explicit UpdateView(KConfig& partConfig, QWidget *parent=0, const char *name=0);
+    explicit UpdateView(KConfig& partConfig, TQWidget *parent=0, const char *name=0);
 
     virtual ~UpdateView();
 
@@ -50,42 +50,42 @@ public:
     Filter filter() const;
 
     bool hasSingleSelection() const;
-    void getSingleSelection(QString *filename, QString *revision=0) const;
+    void getSingleSelection(TQString *filename, TQString *revision=0) const;
     /* Returns a list of all marked files and directories */
-    QStringList multipleSelection() const;
+    TQStringList multipleSelection() const;
     /* Returns a list of all marked files, excluding directories*/
-    QStringList fileSelection() const;
+    TQStringList fileSelection() const;
 
-    void openDirectory(const QString& dirname);
+    void openDirectory(const TQString& dirname);
     void prepareJob(bool recursive, Action action);
 
-    const QColor& conflictColor() const;
-    const QColor& localChangeColor() const;
-    const QColor& remoteChangeColor() const;
-    const QColor& notInCvsColor() const;
+    const TQColor& conflictColor() const;
+    const TQColor& localChangeColor() const;
+    const TQColor& remoteChangeColor() const;
+    const TQColor& notInCvsColor() const;
 
     /**
      * @return \c true iff unfoldTree() is active.
      */
     bool isUnfoldingTree() const;
 
-    void replaceItem(QListViewItem*, QListViewItem*);
+    void replaceItem(TQListViewItem*, TQListViewItem*);
 
 signals:
-    void fileOpened(QString filename);
+    void fileOpened(TQString filename);
     
 public slots:
     void unfoldSelectedFolders();
     void unfoldTree();
     void foldTree();
     void finishJob(bool normalExit, int exitStatus);
-    void processUpdateLine(QString line);
+    void processUpdateLine(TQString line);
 
 private slots:
-    void itemExecuted(QListViewItem *item);
+    void itemExecuted(TQListViewItem *item);
     
 private:
-    void updateItem(const QString &filename, Cervisia::EntryStatus status, bool isdir);
+    void updateItem(const TQString &filename, Cervisia::EntryStatus status, bool isdir);
     void rememberSelection(bool recursive);
     void syncSelection();
     void markUpdated(bool laststage, bool success);
@@ -96,12 +96,12 @@ private:
 
     Filter filt;
     Action act;
-    QPtrList<QListViewItem> relevantSelection;
+    TQPtrList<TQListViewItem> relevantSelection;
 
-    QColor m_conflictColor;
-    QColor m_localChangeColor;
-    QColor m_remoteChangeColor;
-    QColor m_notInCvsColor;
+    TQColor m_conflictColor;
+    TQColor m_localChangeColor;
+    TQColor m_remoteChangeColor;
+    TQColor m_notInCvsColor;
 
     /**
      * \c true iff unfoldTree() is active (is needed by UpdateDirItem::setOpen()).

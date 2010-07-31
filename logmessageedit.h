@@ -35,13 +35,13 @@ class LogMessageEdit : public KTextEdit, public KCompletionBase
     Q_OBJECT
 
 public:
-    explicit LogMessageEdit(QWidget* parent);
+    explicit LogMessageEdit(TQWidget* parent);
 
-    virtual void setCompletedText(const QString& match);
-    virtual void setCompletedItems(const QStringList& items);
+    virtual void setCompletedText(const TQString& match);
+    virtual void setCompletedItems(const TQStringList& items);
 
 protected:
-    void keyPressEvent(QKeyEvent* event);
+    void keyPressEvent(TQKeyEvent* event);
 
 private slots:
     void stopCompletion();

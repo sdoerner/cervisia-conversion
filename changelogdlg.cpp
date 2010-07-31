@@ -21,8 +21,8 @@
 
 #include "changelogdlg.h"
 
-#include <qfile.h>
-#include <qtextstream.h>
+#include <tqfile.h>
+#include <tqtextstream.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -31,16 +31,16 @@
 #include "misc.h"
 
 
-static inline QString DateStringISO8601()
+static inline TQString DateStringISO8601()
 {
-    return QDate::currentDate().toString(Qt::ISODate);
+    return TQDate::currentDate().toString(Qt::ISODate);
 }
 
 
 ChangeLogDialog::Options *ChangeLogDialog::options = 0;
 
 
-ChangeLogDialog::ChangeLogDialog(KConfig& cfg, QWidget *parent, const char *name)
+ChangeLogDialog::ChangeLogDialog(KConfig& cfg, TQWidget *parent, const char *name)
     : KDialogBase(parent, name, true, i18n("Edit ChangeLog"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
@@ -51,16 +51,16 @@ ChangeLogDialog::ChangeLogDialog(KConfig& cfg, QWidget *parent, const char *name
     edit->setFont(cfg.readFontEntry("ChangeLogFont"));
 
     edit->setFocus();
-    edit->setWordWrap(QTextEdit::NoWrap);
-    edit->setTextFormat(QTextEdit::PlainText);
+    edit->setWordWrap(TQTextEdit::NoWrap);
+    edit->setTextFormat(TQTextEdit::PlainText);
     edit->setCheckSpellingEnabled(true);
-    QFontMetrics const fm(edit->fontMetrics());
+    TQFontMetrics const fm(edit->fontMetrics());
     edit->setMinimumSize(fm.width('0') * 80,
                          fm.lineSpacing() * 20);
 
     setMainWidget(edit);
 
-    QSize size = configDialogSize(partConfig, "ChangeLogDialog");
+    TQSize size = configDialogSize(partConfig, "ChangeLogDialog");
     resize(size);
 }
 
@@ -74,7 +74,7 @@ ChangeLogDialog::~ChangeLogDialog()
 void ChangeLogDialog::slotOk()
 {
     // Write changelog
-    QFile f(fname);
+    TQFile f(fname);
     if (!f.open(IO_ReadWrite))
     {
         KMessageBox::sorry(this,
@@ -83,7 +83,7 @@ void ChangeLogDialog::slotOk()
         return;
     }
 
-    QTextStream stream(&f);
+    TQTextStream stream(&f);
     stream << edit->text();
     f.close();
 
@@ -91,11 +91,11 @@ void ChangeLogDialog::slotOk()
 }
 
 
-bool ChangeLogDialog::readFile(const QString &filename)
+bool ChangeLogDialog::readFile(const TQString &filename)
 {
     fname = filename;
 
-    if (!QFile::exists(filename))
+    if (!TQFile::exists(filename))
         {
             if (KMessageBox::warningContinueCancel(this,
                                          i18n("A ChangeLog file does not exist. Create one?"),
@@ -105,7 +105,7 @@ bool ChangeLogDialog::readFile(const QString &filename)
         }
     else
         {
-            QFile f(filename);
+            TQFile f(filename);
             if (!f.open(IO_ReadWrite))
                 {
                     KMessageBox::sorry(this,
@@ -113,13 +113,13 @@ bool ChangeLogDialog::readFile(const QString &filename)
                                        "Cervisia");
                     return false;
                 }
-            QTextStream stream(&f);
+            TQTextStream stream(&f);
             edit->setText(stream.read());
             f.close();
         }
 
     KConfigGroupSaver cs(&partConfig, "General");
-    const QString username = partConfig.readEntry("Username", Cervisia::UserName());
+    const TQString username = partConfig.readEntry("Username", Cervisia::UserName());
 
     edit->insertParagraph("", 0);
     edit->insertParagraph("\t* ", 0);
@@ -131,13 +131,13 @@ bool ChangeLogDialog::readFile(const QString &filename)
 }
 
 
-QString ChangeLogDialog::message()
+TQString ChangeLogDialog::message()
 {
     int no = 0;
     // Find first line which begins with non-whitespace
     while (no < edit->lines())
         {
-            QString str = edit->text(no);
+            TQString str = edit->text(no);
             if (!str.isEmpty() && !str[0].isSpace())
                 break;
             ++no;
@@ -146,17 +146,17 @@ QString ChangeLogDialog::message()
     // Skip empty lines
     while (no < edit->lines())
         {
-            QString str = edit->text(no);
+            TQString str = edit->text(no);
             if( str.isEmpty() || str == " " )
                 break;
             ++no;
         }
-    QString res;
+    TQString res;
     // Use all lines until one which begins with non-whitespace
     // Remove tabs or 8 whitespace at beginning of each line
     while (no < edit->lines())
         {
-            QString str = edit->text(no);
+            TQString str = edit->text(no);
             if (!str.isEmpty() && !str[0].isSpace())
                 break;
             if (!str.isEmpty() && str[0] == '\t')

@@ -41,11 +41,11 @@ public:
     enum ActionType { Create, Delete };
     
     TagDialog( ActionType action, CvsService_stub* service,
-               QWidget *parent=0, const char *name=0 );
+               TQWidget *parent=0, const char *name=0 );
 
     bool branchTag() const;
     bool forceTag() const;
-    QString tag() const;
+    TQString tag() const;
 
 protected:
     virtual void slotOk();
@@ -57,10 +57,10 @@ private:
     ActionType act;
     CvsService_stub* cvsService;
     
-    QCheckBox *branchtag_button;
-    QCheckBox *forcetag_button;
-    QLineEdit *tag_edit;
-    QComboBox *tag_combo;
+    TQCheckBox *branchtag_button;
+    TQCheckBox *forcetag_button;
+    TQLineEdit *tag_edit;
+    TQComboBox *tag_combo;
 };
 
 }

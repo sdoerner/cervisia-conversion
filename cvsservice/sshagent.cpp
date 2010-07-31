@@ -20,7 +20,7 @@
 
 #include "sshagent.h"
 
-#include <qregexp.h>
+#include <tqregexp.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -32,12 +32,12 @@
 // initialize static member variables
 bool    SshAgent::m_isRunning  = false;
 bool    SshAgent::m_isOurAgent = false;
-QString SshAgent::m_authSock   = QString::null;
-QString SshAgent::m_pid        = QString::null;
+TQString SshAgent::m_authSock   = TQString::null;
+TQString SshAgent::m_pid        = TQString::null;
 
 
-SshAgent::SshAgent(QObject* parent, const char* name)
-    : QObject(parent, name)
+SshAgent::SshAgent(TQObject* parent, const char* name)
+    : TQObject(parent, name)
 {
 }
 
@@ -61,11 +61,11 @@ bool SshAgent::querySshAgent()
         kdDebug(8051) << "SshAgent::querySshAgent(): ssh-agent already exists"
                       << endl;
 
-        m_pid = QString::fromLocal8Bit(pid);
+        m_pid = TQString::fromLocal8Bit(pid);
 
         char* sock = ::getenv("SSH_AUTH_SOCK");
         if( sock )
-            m_authSock = QString::fromLocal8Bit(sock);
+            m_authSock = TQString::fromLocal8Bit(sock);
 
         m_isOurAgent = false;
         m_isRunning  = true;
@@ -99,10 +99,10 @@ bool SshAgent::addSshIdentities()
 
     proc << "ssh-add";
 
-    connect(&proc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(&proc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect(&proc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+            TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(&proc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+            TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)));
 
     proc.start(KProcess::DontCare, KProcess::AllOutput);
 
@@ -137,14 +137,14 @@ void SshAgent::slotProcessExited(KProcess*)
 {
     kdDebug(8051) << "SshAgent::slotProcessExited(): ENTER" << endl;
 
-    QRegExp cshPidRx("setenv SSH_AGENT_PID (\\d*);");
-    QRegExp cshSockRx("setenv SSH_AUTH_SOCK (.*);");
+    TQRegExp cshPidRx("setenv SSH_AGENT_PID (\\d*);");
+    TQRegExp cshSockRx("setenv SSH_AUTH_SOCK (.*);");
 
-    QRegExp bashPidRx("SSH_AGENT_PID=(\\d*).*");
-    QRegExp bashSockRx("SSH_AUTH_SOCK=(.*\\.\\d*);.*");
+    TQRegExp bashPidRx("SSH_AGENT_PID=(\\d*).*");
+    TQRegExp bashSockRx("SSH_AUTH_SOCK=(.*\\.\\d*);.*");
 
-    QStringList::Iterator it  = m_outputLines.begin();
-    QStringList::Iterator end = m_outputLines.end();
+    TQStringList::Iterator it  = m_outputLines.begin();
+    TQStringList::Iterator end = m_outputLines.end();
     for( ; it != end; ++it )
     {
         if( m_pid.isEmpty() )
@@ -191,8 +191,8 @@ void SshAgent::slotReceivedStdout(KProcess* proc, char* buffer, int buflen)
 {
     Q_UNUSED(proc);
 
-    QString output = QString::fromLocal8Bit(buffer, buflen);
-    m_outputLines += QStringList::split("\n", output);
+    TQString output = TQString::fromLocal8Bit(buffer, buflen);
+    m_outputLines += TQStringList::split("\n", output);
 
     kdDebug(8051) << "SshAgent::slotReceivedStdout(): output = " << output << endl;
 }
@@ -202,8 +202,8 @@ void SshAgent::slotReceivedStderr(KProcess* proc, char* buffer, int buflen)
 {
     Q_UNUSED(proc);
 
-    QString output = QString::fromLocal8Bit(buffer, buflen);
-    m_outputLines += QStringList::split("\n", output);
+    TQString output = TQString::fromLocal8Bit(buffer, buflen);
+    m_outputLines += TQStringList::split("\n", output);
 
     kdDebug(8051) << "SshAgent::slotReceivedStderr(): output = " << output << endl;
 }
@@ -217,12 +217,12 @@ bool SshAgent::startSshAgent()
 
     proc << "ssh-agent";
 
-    connect(&proc, SIGNAL(processExited(KProcess*)),
-            SLOT(slotProcessExited(KProcess*)));
-    connect(&proc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(&proc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            SLOT(slotReceivedStderr(KProcess*, char*, int)) );
+    connect(&proc, TQT_SIGNAL(processExited(KProcess*)),
+            TQT_SLOT(slotProcessExited(KProcess*)));
+    connect(&proc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+            TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(&proc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+            TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)) );
 
     proc.start(KProcess::NotifyOnExit, KProcess::All);
 

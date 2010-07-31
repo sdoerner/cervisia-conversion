@@ -19,8 +19,8 @@
 
 #include "watchersdlg.h"
 
-#include <qlayout.h>
-#include <qtable.h>
+#include <tqlayout.h>
+#include <tqtable.h>
 #include <kconfig.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -30,18 +30,18 @@
 #include "progressdlg.h"
 
 
-WatchersDialog::WatchersDialog(KConfig& cfg, QWidget* parent, const char* name)
-    : KDialogBase(parent, name, false, QString::null,
+WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, false, TQString::null,
                   Close, ButtonCode(0), true)
     , partConfig(cfg)
 {
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    table = new QTable(mainWidget, "watchersTable");
+    table = new TQTable(mainWidget, "watchersTable");
     table->setNumCols(5);
-    table->setSelectionMode(QTable::NoSelection);
+    table->setSelectionMode(TQTable::NoSelection);
     table->setColumnMovingEnabled(false);
     table->setRowMovingEnabled(false);
     table->setReadOnly(true);
@@ -50,7 +50,7 @@ WatchersDialog::WatchersDialog(KConfig& cfg, QWidget* parent, const char* name)
     table->verticalHeader()->hide();
     table->setLeftMargin(0);
     
-    QHeader* header = table->horizontalHeader();
+    TQHeader* header = table->horizontalHeader();
     header->setLabel(0, i18n("File"));
     header->setLabel(1, i18n("Watcher"));
     header->setLabel(2, i18n("Edit"));
@@ -61,7 +61,7 @@ WatchersDialog::WatchersDialog(KConfig& cfg, QWidget* parent, const char* name)
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(partConfig, "WatchersDialog");
+    TQSize size = configDialogSize(partConfig, "WatchersDialog");
     resize(size);
 }
 
@@ -73,7 +73,7 @@ WatchersDialog::~WatchersDialog()
 
 
 bool WatchersDialog::parseWatchers(CvsService_stub* cvsService, 
-                                   const QStringList& files)
+                                   const TQStringList& files)
 {
     setCaption(i18n("CVS Watchers"));
 
@@ -85,12 +85,12 @@ bool WatchersDialog::parseWatchers(CvsService_stub* cvsService,
     if( !dlg.execute() )
         return false;
 
-    QString line;
+    TQString line;
     int numRows = 0;
     while( dlg.getLine(line) )
     {
         // parse the output line        
-        QStringList list = splitLine(line);
+        TQStringList list = splitLine(line);
 
         // ignore empty lines and unknown files
         if( list.isEmpty() || list[0] == "?" )
@@ -102,15 +102,15 @@ bool WatchersDialog::parseWatchers(CvsService_stub* cvsService,
         table->setText(numRows, 0, list[0]);
         table->setText(numRows, 1, list[1]);
 
-        QCheckTableItem* item = new QCheckTableItem(table, "");
+        TQCheckTableItem* item = new TQCheckTableItem(table, "");
         item->setChecked(list.contains("edit"));
         table->setItem(numRows, 2, item);
 
-        item = new QCheckTableItem(table, "");
+        item = new TQCheckTableItem(table, "");
         item->setChecked(list.contains("unedit"));
         table->setItem(numRows, 3, item);
 
-        item = new QCheckTableItem(table, "");
+        item = new TQCheckTableItem(table, "");
         item->setChecked(list.contains("commit"));
         table->setItem(numRows, 4, item);
 

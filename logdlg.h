@@ -25,7 +25,7 @@
 
 #include "loginfo.h"
 
-#include <qptrlist.h>
+#include <tqptrlist.h>
 
 
 class LogListView;
@@ -43,9 +43,9 @@ class CvsService_stub;
 class LogDialogTagInfo
 {
 public:
-    QString rev;
-    QString tag;
-    QString branchpoint;
+    TQString rev;
+    TQString tag;
+    TQString branchpoint;
 };
 
 
@@ -54,11 +54,11 @@ class LogDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    explicit LogDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
+    explicit LogDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
 
     virtual ~LogDialog();
 
-    bool parseCvsLog(CvsService_stub* service, const QString& fileName);
+    bool parseCvsLog(CvsService_stub* service, const TQString& fileName);
 
 protected slots:
     void slotOk();
@@ -68,30 +68,30 @@ private slots:
     void findClicked();
     void diffClicked();
     void annotateClicked();
-    void revisionSelected(QString rev, bool rmb);
+    void revisionSelected(TQString rev, bool rmb);
     void tagASelected(int n);
     void tagBSelected(int n);
-    void tabChanged(QWidget* w);
+    void tabChanged(TQWidget* w);
 
 private:
     void tagSelected(LogDialogTagInfo* tag, bool rmb);
     void updateButtons();
 
-    QString filename;
-    QPtrList<Cervisia::LogInfo> items;
-    QPtrList<LogDialogTagInfo> tags;
-    QString selectionA;
-    QString selectionB;
+    TQString filename;
+    TQPtrList<Cervisia::LogInfo> items;
+    TQPtrList<LogDialogTagInfo> tags;
+    TQString selectionA;
+    TQString selectionB;
     LogTreeView *tree;
     LogListView *list;
     LogPlainView *plain;
-    QTabWidget *tabWidget;
-    QLabel *revbox[2];
-    QLabel *authorbox[2];
-    QLabel *datebox[2];
-    QTextEdit *commentbox[2];
-    QTextEdit *tagsbox[2];
-    QComboBox *tagcombo[2];
+    TQTabWidget *tabWidget;
+    TQLabel *revbox[2];
+    TQLabel *authorbox[2];
+    TQLabel *datebox[2];
+    TQTextEdit *commentbox[2];
+    TQTextEdit *tagsbox[2];
+    TQComboBox *tagcombo[2];
 
     CvsService_stub* cvsService;
     KConfig&         partConfig;

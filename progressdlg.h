@@ -34,17 +34,17 @@ class ProgressDialog : public KDialogBase, public DCOPObject
     Q_OBJECT
 
 public:
-    ProgressDialog(QWidget* parent, const QString& heading, const DCOPRef& job,
-                   const QString& errorIndicator, const QString& caption = "");
+    ProgressDialog(TQWidget* parent, const TQString& heading, const DCOPRef& job,
+                   const TQString& errorIndicator, const TQString& caption = "");
     ~ProgressDialog();
 
     bool execute();
-    bool getLine(QString& line);
-    QStringList getOutput() const;
+    bool getLine(TQString& line);
+    TQStringList getOutput() const;
 
 k_dcop:
-    void slotReceivedOutputNonGui(QString buffer);
-    void slotReceivedOutput(QString buffer);
+    void slotReceivedOutputNonGui(TQString buffer);
+    void slotReceivedOutput(TQString buffer);
     void slotJobExited(bool normalExit, int status);
 
 protected slots:
@@ -54,7 +54,7 @@ private slots:
     void slotTimeoutOccurred();
 
 private:
-    void setupGui(const QString& heading);
+    void setupGui(const TQString& heading);
     void stopNonGuiPart();
     void startGuiPart();
     void processOutput();

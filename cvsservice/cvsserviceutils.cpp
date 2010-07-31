@@ -20,17 +20,17 @@
 
 #include "cvsserviceutils.h"
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
 #include <kprocess.h>
 
 
-QString CvsServiceUtils::joinFileList(const QStringList& files)
+TQString CvsServiceUtils::joinFileList(const TQStringList& files)
 {
-    QString result;
+    TQString result;
     
-    QStringList::ConstIterator it  = files.begin();
-    QStringList::ConstIterator end = files.end();
+    TQStringList::ConstIterator it  = files.begin();
+    TQStringList::ConstIterator end = files.end();
     
     for( ; it != end; ++it )
     {

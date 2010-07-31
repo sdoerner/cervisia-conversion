@@ -20,65 +20,65 @@
 
 #include "watchdlg.h"
 
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
+#include <tqbuttongroup.h>
+#include <tqcheckbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqradiobutton.h>
 #include <klocale.h>
 
 
-WatchDialog::WatchDialog(ActionType action, QWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, QString::null,
+WatchDialog::WatchDialog(ActionType action, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString::null,
                   Ok | Cancel | Help, Ok, true)
 {
     setCaption( (action==Add)? i18n("CVS Watch Add") : i18n("CVS Watch Remove") );
 
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    QLabel *textlabel = new QLabel
+    TQLabel *textlabel = new QLabel
 	( (action==Add)? i18n("Add watches for the following events:")
           :  i18n("Remove watches for the following events:"), mainWidget );
     layout->addWidget(textlabel, 0);
 
-    all_button = new QRadioButton(i18n("&All"), mainWidget);
+    all_button = new TQRadioButton(i18n("&All"), mainWidget);
     all_button->setFocus();
     all_button->setChecked(true);
     layout->addWidget(all_button);
     
-    only_button = new QRadioButton(i18n("&Only:"), mainWidget);
+    only_button = new TQRadioButton(i18n("&Only:"), mainWidget);
     layout->addWidget(only_button);
 
-    QGridLayout *eventslayout = new QGridLayout(layout);
+    TQGridLayout *eventslayout = new TQGridLayout(layout);
     eventslayout->addColSpacing(0, 20);
     eventslayout->setColStretch(0, 0);
     eventslayout->setColStretch(1, 1);
     
-    commitbox = new QCheckBox(i18n("&Commits"), mainWidget);
+    commitbox = new TQCheckBox(i18n("&Commits"), mainWidget);
     commitbox->setEnabled(false);
     eventslayout->addWidget(commitbox, 0, 1);
     
-    editbox = new QCheckBox(i18n("&Edits"), mainWidget);
+    editbox = new TQCheckBox(i18n("&Edits"), mainWidget);
     editbox->setEnabled(false);
     eventslayout->addWidget(editbox, 1, 1);
 
-    uneditbox = new QCheckBox(i18n("&Unedits"), mainWidget);
+    uneditbox = new TQCheckBox(i18n("&Unedits"), mainWidget);
     uneditbox->setEnabled(false);
     eventslayout->addWidget(uneditbox, 2, 1);
 
-    QButtonGroup* group = new QButtonGroup(mainWidget);
+    TQButtonGroup* group = new TQButtonGroup(mainWidget);
     group->hide();
     group->insert(all_button);
     group->insert(only_button);
 
-    connect( only_button, SIGNAL(toggled(bool)),
-             commitbox, SLOT(setEnabled(bool)) );
-    connect( only_button, SIGNAL(toggled(bool)),
-             editbox, SLOT(setEnabled(bool)) );
-    connect( only_button, SIGNAL(toggled(bool)),
-             uneditbox, SLOT(setEnabled(bool)) );
+    connect( only_button, TQT_SIGNAL(toggled(bool)),
+             commitbox, TQT_SLOT(setEnabled(bool)) );
+    connect( only_button, TQT_SIGNAL(toggled(bool)),
+             editbox, TQT_SLOT(setEnabled(bool)) );
+    connect( only_button, TQT_SIGNAL(toggled(bool)),
+             uneditbox, TQT_SLOT(setEnabled(bool)) );
 
     setHelp("watches");
 }

@@ -21,8 +21,8 @@
 
 #include "protocolview.h"
 
-#include <qdir.h>
-#include <qpopupmenu.h>
+#include <tqdir.h>
+#include <tqpopupmenu.h>
 #include <dcopref.h>
 #include <kconfig.h>
 #include <klocale.h>
@@ -32,8 +32,8 @@
 #include "cvsjob_stub.h"
 
 
-ProtocolView::ProtocolView(const QCString& appId, QWidget *parent, const char *name)
-    : QTextEdit(parent, name)
+ProtocolView::ProtocolView(const TQCString& appId, TQWidget *parent, const char *name)
+    : TQTextEdit(parent, name)
     , job(0)
     , m_isUpdateJob(false)
 {
@@ -47,11 +47,11 @@ ProtocolView::ProtocolView(const QCString& appId, QWidget *parent, const char *n
     setFont(config->readFontEntry("ProtocolFont"));
 
     config->setGroup("Colors");
-    QColor defaultColor = QColor(255, 130, 130);
+    TQColor defaultColor = TQColor(255, 130, 130);
     conflictColor=config->readColorEntry("Conflict",&defaultColor);
-    defaultColor=QColor(130, 130, 255);
+    defaultColor=TQColor(130, 130, 255);
     localChangeColor=config->readColorEntry("LocalChange",&defaultColor);
-    defaultColor=QColor(70, 210, 70);
+    defaultColor=TQColor(70, 210, 70);
     remoteChangeColor=config->readColorEntry("RemoteChange",&defaultColor);
 
     // create a DCOP stub for the non-concurrent cvs job
@@ -60,10 +60,10 @@ ProtocolView::ProtocolView(const QCString& appId, QWidget *parent, const char *n
     // establish connections to the signals of the cvs job
     connectDCOPSignal(job->app(), job->obj(), "jobExited(bool, int)",
                       "slotJobExited(bool, int)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
+    connectDCOPSignal(job->app(), job->obj(), "receivedStdout(TQString)",
+                      "slotReceivedOutput(TQString)", true);
+    connectDCOPSignal(job->app(), job->obj(), "receivedStderr(TQString)",
+                      "slotReceivedOutput(TQString)", true);
 }
 
 
@@ -78,24 +78,24 @@ bool ProtocolView::startJob(bool isUpdateJob)
     m_isUpdateJob = isUpdateJob;
 
     // get command line and add it to output buffer
-    QString cmdLine = job->cvsCommand();
+    TQString cmdLine = job->cvsCommand();
     buf += cmdLine;
     buf += '\n';
     processOutput();
 
     // disconnect 3rd party slots from our signals
-    disconnect( SIGNAL(receivedLine(QString)) );
-    disconnect( SIGNAL(jobFinished(bool, int)) );
+    disconnect( TQT_SIGNAL(receivedLine(TQString)) );
+    disconnect( TQT_SIGNAL(jobFinished(bool, int)) );
 
     return job->execute();
 }
 
 
-QPopupMenu* ProtocolView::createPopupMenu(const QPoint &pos)
+TQPopupMenu* ProtocolView::createPopupMenu(const TQPoint &pos)
 {
-    QPopupMenu* menu = QTextEdit::createPopupMenu(pos);
+    TQPopupMenu* menu = TQTextEdit::createPopupMenu(pos);
 
-    int id = menu->insertItem(i18n("Clear"), this, SLOT( clear() ), 0, -1, 0);
+    int id = menu->insertItem(i18n("Clear"), this, TQT_SLOT( clear() ), 0, -1, 0);
 
     if( length() == 0 )
         menu->setItemEnabled(id, false);
@@ -110,7 +110,7 @@ void ProtocolView::cancelJob()
 }
 
 
-void ProtocolView::slotReceivedOutput(QString buffer)
+void ProtocolView::slotReceivedOutput(TQString buffer)
 {
     buf += buffer;
     processOutput();
@@ -119,7 +119,7 @@ void ProtocolView::slotReceivedOutput(QString buffer)
 
 void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
 {
-    QString msg;
+    TQString msg;
 
     if( normalExit )
     {
@@ -144,7 +144,7 @@ void ProtocolView::processOutput()
     int pos;
     while ( (pos = buf.find('\n')) != -1)
 	{
-	    QString line = buf.left(pos);
+	    TQString line = buf.left(pos);
 	    if (!line.isEmpty())
                 {
 		    appendLine(line);
@@ -155,11 +155,11 @@ void ProtocolView::processOutput()
 }
 
 
-void ProtocolView::appendLine(const QString &line)
+void ProtocolView::appendLine(const TQString &line)
 {
     // Escape output line, so that html tags in commit
     // messages aren't interpreted
-    const QString escapedLine = QStyleSheet::escape(line);
+    const TQString escapedLine = TQStyleSheet::escape(line);
 
     // When we don't get the output from an update job then
     // just add it to the text edit.
@@ -169,7 +169,7 @@ void ProtocolView::appendLine(const QString &line)
         return;
     }
 
-    QColor color;
+    TQColor color;
     // Colors are the same as in UpdateViewItem::paintCell()
     if (line.startsWith("C "))
         color = conflictColor;
@@ -180,7 +180,7 @@ void ProtocolView::appendLine(const QString &line)
         color = remoteChangeColor;
 
     append(color.isValid()
-           ? QString("<font color=\"%1\"><b>%2</b></font>").arg(color.name())
+           ? TQString("<font color=\"%1\"><b>%2</b></font>").arg(color.name())
                                                            .arg(escapedLine)
            : escapedLine);
 }

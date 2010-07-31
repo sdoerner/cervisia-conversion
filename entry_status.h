@@ -55,7 +55,7 @@ enum EntryStatus
  *
  * @return The translated string.
  */
-QString toString(EntryStatus entryStatus);
+TQString toString(EntryStatus entryStatus);
 
 
 } // namespace Cervisia

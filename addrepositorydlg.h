@@ -35,19 +35,19 @@ class AddRepositoryDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    AddRepositoryDialog(KConfig& cfg, const QString& repo, QWidget* parent = 0,
+    AddRepositoryDialog(KConfig& cfg, const TQString& repo, TQWidget* parent = 0,
                          const char* name = 0);
     virtual ~AddRepositoryDialog();
 
-    void setRepository(const QString& repo);
-    void setRsh(const QString& rsh);
-    void setServer(const QString& server);
+    void setRepository(const TQString& repo);
+    void setRsh(const TQString& rsh);
+    void setServer(const TQString& server);
     void setCompression(int compression);
     void setRetrieveCvsignoreFile(bool enabled);
     
-    QString repository() const;
-    QString rsh() const;
-    QString server() const;
+    TQString repository() const;
+    TQString rsh() const;
+    TQString server() const;
     int compression() const;
     bool retrieveCvsignoreFile() const;
 
@@ -59,8 +59,8 @@ private:
     KLineEdit*    repo_edit;
     KLineEdit*    rsh_edit;
     KLineEdit*    server_edit;
-    QCheckBox*    m_useDifferentCompression;
-    QCheckBox*    m_retrieveCvsignoreFile;
+    TQCheckBox*    m_useDifferentCompression;
+    TQCheckBox*    m_retrieveCvsignoreFile;
     KIntNumInput* m_compressionLevel;
     KConfig&      partConfig;
 };

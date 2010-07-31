@@ -20,12 +20,12 @@
 
 #include "updatedlg.h"
 
-#include <qbuttongroup.h>
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qstyle.h>
+#include <tqbuttongroup.h>
+#include <tqcombobox.h>
+#include <tqlayout.h>
+#include <tqpushbutton.h>
+#include <tqradiobutton.h>
+#include <tqstyle.h>
 #include <klineedit.h>
 #include <klocale.h>
 
@@ -34,65 +34,65 @@
 
 
 UpdateDialog::UpdateDialog(CvsService_stub* service,
-                           QWidget *parent, const char *name)
+                           TQWidget *parent, const char *name)
     : KDialogBase(parent, name, true, i18n("CVS Update"),
                   Ok | Cancel, Ok, true),
       cvsService(service)
 {
     int const iComboBoxMinWidth(40 * fontMetrics().width('0'));
-    int const iWidgetIndent(style().pixelMetric(QStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
+    int const iWidgetIndent(style().pixelMetric(TQStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
 
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    bybranch_button = new QRadioButton(i18n("Update to &branch: "), mainWidget);
+    bybranch_button = new TQRadioButton(i18n("Update to &branch: "), mainWidget);
     bybranch_button->setChecked(true);
     layout->addWidget(bybranch_button);
 
-    branch_combo = new QComboBox(true, mainWidget);
+    branch_combo = new TQComboBox(true, mainWidget);
     branch_combo->setMinimumWidth(iComboBoxMinWidth);
     
-    branch_button = new QPushButton(i18n("Fetch &List"), mainWidget);
-    connect( branch_button, SIGNAL(clicked()),
-             this, SLOT(branchButtonClicked()) );
+    branch_button = new TQPushButton(i18n("Fetch &List"), mainWidget);
+    connect( branch_button, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(branchButtonClicked()) );
             
-    QBoxLayout *branchedit_layout = new QHBoxLayout(layout);
+    TQBoxLayout *branchedit_layout = new TQHBoxLayout(layout);
     branchedit_layout->addSpacing(iWidgetIndent);
     branchedit_layout->addWidget(branch_combo);
     branchedit_layout->addWidget(branch_button);
     
-    bytag_button = new QRadioButton(i18n("Update to &tag: "), mainWidget);
+    bytag_button = new TQRadioButton(i18n("Update to &tag: "), mainWidget);
     layout->addWidget(bytag_button);
 
-    tag_combo = new QComboBox(true, mainWidget);
+    tag_combo = new TQComboBox(true, mainWidget);
     tag_combo->setMinimumWidth(iComboBoxMinWidth);
     
-    tag_button = new QPushButton(i18n("Fetch L&ist"), mainWidget);
-    connect( tag_button, SIGNAL(clicked()),
-             this, SLOT(tagButtonClicked()) );
+    tag_button = new TQPushButton(i18n("Fetch L&ist"), mainWidget);
+    connect( tag_button, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(tagButtonClicked()) );
             
-    QBoxLayout *tagedit_layout = new QHBoxLayout(layout);
+    TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
     tagedit_layout->addSpacing(iWidgetIndent);
     tagedit_layout->addWidget(tag_combo);
     tagedit_layout->addWidget(tag_button);
     
-    bydate_button = new QRadioButton(i18n("Update to &date ('yyyy-mm-dd'):"), mainWidget);
+    bydate_button = new TQRadioButton(i18n("Update to &date ('yyyy-mm-dd'):"), mainWidget);
     layout->addWidget(bydate_button);
 
     date_edit = new KLineEdit(mainWidget);
 
-    QBoxLayout *dateedit_layout = new QHBoxLayout(layout);
+    TQBoxLayout *dateedit_layout = new TQHBoxLayout(layout);
     dateedit_layout->addSpacing(iWidgetIndent);
     dateedit_layout->addWidget(date_edit);
 
-    QButtonGroup* group = new QButtonGroup(mainWidget);
+    TQButtonGroup* group = new TQButtonGroup(mainWidget);
     group->hide();
     group->insert(bytag_button);
     group->insert(bybranch_button);
     group->insert(bydate_button);
-    connect( group, SIGNAL(clicked(int)),
-             this, SLOT(toggled()) );
+    connect( group, TQT_SIGNAL(clicked(int)),
+             this, TQT_SLOT(toggled()) );
 
     // dis-/enable the widgets
     toggled();
@@ -105,7 +105,7 @@ bool UpdateDialog::byTag() const
 }
 
 
-QString UpdateDialog::tag() const
+TQString UpdateDialog::tag() const
 {
     return bybranch_button->isChecked()
         ? branch_combo->currentText()
@@ -113,7 +113,7 @@ QString UpdateDialog::tag() const
 }
 
 
-QString UpdateDialog::date() const
+TQString UpdateDialog::date() const
 {
     return date_edit->text();
 }

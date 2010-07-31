@@ -23,9 +23,9 @@
 #define LOGTREE_H
 
 
-#include <qptrlist.h>
+#include <tqptrlist.h>
 
-#include <qtable.h>
+#include <tqtable.h>
 
 
 class LogTreeItem;
@@ -37,8 +37,8 @@ struct LogInfo;
 }
 
 
-typedef QPtrList<LogTreeItem> LogTreeItemList;
-typedef QPtrList<LogTreeConnection> LogTreeConnectionList;
+typedef TQPtrList<LogTreeItem> LogTreeItemList;
+typedef TQPtrList<LogTreeConnection> LogTreeConnectionList;
 
 
 class LogTreeView : public QTable
@@ -46,34 +46,34 @@ class LogTreeView : public QTable
     Q_OBJECT
 
 public:
-    explicit LogTreeView( QWidget *parent=0, const char *name=0 );
+    explicit LogTreeView( TQWidget *parent=0, const char *name=0 );
 
     void addRevision(const Cervisia::LogInfo& logInfo);
-    void setSelectedPair(QString selectionA, QString selectionB);
+    void setSelectedPair(TQString selectionA, TQString selectionB);
     void collectConnections();
     void recomputeCellSizes();
-    virtual void paintCell(QPainter *p, int row, int col, const QRect& cr,
-                           bool selected, const QColorGroup& cg);
+    virtual void paintCell(TQPainter *p, int row, int col, const TQRect& cr,
+                           bool selected, const TQColorGroup& cg);
 
-    virtual QSize sizeHint() const;
+    virtual TQSize sizeHint() const;
     
-    virtual QString text(int row, int col) const;
+    virtual TQString text(int row, int col) const;
 
 signals:
-    void revisionClicked(QString rev, bool rmb);
+    void revisionClicked(TQString rev, bool rmb);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *e);
+    virtual void contentsMousePressEvent(TQMouseEvent *e);
 
 private slots:
 
-    void slotQueryToolTip(const QPoint&, QRect&, QString&);
+    void slotQueryToolTip(const TQPoint&, TQRect&, TQString&);
 
 private:
-    QSize computeSize(const Cervisia::LogInfo&, int* = 0, int* = 0) const;
-    void paintRevisionCell(QPainter *p, int row, int col, const Cervisia::LogInfo& logInfo,
+    TQSize computeSize(const Cervisia::LogInfo&, int* = 0, int* = 0) const;
+    void paintRevisionCell(TQPainter *p, int row, int col, const Cervisia::LogInfo& logInfo,
                            bool followed, bool branched, bool selected);
-    void paintConnector(QPainter *p, int row, int col, bool followed, bool branched);
+    void paintConnector(TQPainter *p, int row, int col, bool followed, bool branched);
 
     LogTreeItemList items;
     LogTreeConnectionList connections;

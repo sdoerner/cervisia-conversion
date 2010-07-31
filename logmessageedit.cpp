@@ -22,11 +22,11 @@
 #include "logmessageedit.h"
 using Cervisia::LogMessageEdit;
 
-#include <qtextstream.h>
+#include <tqtextstream.h>
 #include <kaccel.h>
 
 
-LogMessageEdit::LogMessageEdit(QWidget* parent)
+LogMessageEdit::LogMessageEdit(TQWidget* parent)
     : KTextEdit(parent)
     , KCompletionBase()
     , m_completing(false)
@@ -36,18 +36,18 @@ LogMessageEdit::LogMessageEdit(QWidget* parent)
     completionObject();
 
     // a mouse click stops the completion process
-    connect( this, SIGNAL(clicked(int, int)), SLOT(stopCompletion()) );
+    connect( this, TQT_SIGNAL(clicked(int, int)), TQT_SLOT(stopCompletion()) );
 }
 
 
-void LogMessageEdit::setCompletedText(const QString& match)
+void LogMessageEdit::setCompletedText(const TQString& match)
 {
     int para, index;
     getCursorPosition(&para, &index);
 
-    QString paragraphText = text(para);
+    TQString paragraphText = text(para);
     int length = index - m_completionStartPos;
-    QString word = match.right(match.length() - length);
+    TQString word = match.right(match.length() - length);
 
     insert(word);
 
@@ -62,12 +62,12 @@ void LogMessageEdit::setCompletedText(const QString& match)
 }
 
 
-void LogMessageEdit::setCompletedItems(const QStringList&)
+void LogMessageEdit::setCompletedItems(const TQStringList&)
 {
 }
 
 
-void LogMessageEdit::keyPressEvent(QKeyEvent* event)
+void LogMessageEdit::keyPressEvent(TQKeyEvent* event)
 {
     bool noModifier = (event->state() == NoButton ||
                        event->state() == ShiftButton ||
@@ -75,7 +75,7 @@ void LogMessageEdit::keyPressEvent(QKeyEvent* event)
 
     if( noModifier )
     {
-        QString keycode = event->text();
+        TQString keycode = event->text();
         if( !keycode.isEmpty() && keycode.unicode()->isPrint() )
         {
             KTextEdit::keyPressEvent(event);
@@ -155,16 +155,16 @@ void LogMessageEdit::tryCompletion()
     int para, index;
     getCursorPosition(&para, &index);
 
-    QString paragraphText = text(para);
+    TQString paragraphText = text(para);
     if( paragraphText.at(index).isSpace() )
     {
         if( !m_completing )
             m_completionStartPos = paragraphText.findRev(' ', index-1) + 1;
 
         int length = index - m_completionStartPos;
-        QString word = paragraphText.mid(m_completionStartPos, length);
+        TQString word = paragraphText.mid(m_completionStartPos, length);
 
-        QString match = compObj()->makeCompletion(word);
+        TQString match = compObj()->makeCompletion(word);
         if( !match.isNull() && match != word )
         {
             setCompletedText(match);
@@ -184,15 +184,15 @@ void LogMessageEdit::rotateMatches(KeyBindingType type)
     if( completionObj && m_completing &&
         (type == PrevCompletionMatch || type == NextCompletionMatch) )
     {
-        QString match = (type == PrevCompletionMatch) ? completionObj->previousMatch()
+        TQString match = (type == PrevCompletionMatch) ? completionObj->previousMatch()
                                                       : completionObj->nextMatch();
 
         int para, index;
         getCursorPosition(&para, &index);
 
-        QString paragraphText = text(para);
+        TQString paragraphText = text(para);
 
-        QString word = paragraphText.mid(m_completionStartPos, index - m_completionStartPos);
+        TQString word = paragraphText.mid(m_completionStartPos, index - m_completionStartPos);
 
         if( match.isNull() || match == word )
             return;

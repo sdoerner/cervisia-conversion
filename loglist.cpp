@@ -20,8 +20,8 @@
 
 #include "loglist.h"
 
-#include <qapplication.h>
-#include <qkeycode.h>
+#include <tqapplication.h>
+#include <tqkeycode.h>
 #include <klocale.h>
 
 #include "loginfo.h"
@@ -35,19 +35,19 @@ public:
 
     enum { Revision, Author, Date, Branch, Comment, Tags };
 
-    LogListViewItem(QListView* list, const Cervisia::LogInfo& logInfo);
+    LogListViewItem(TQListView* list, const Cervisia::LogInfo& logInfo);
 
-    virtual int compare(QListViewItem* i, int col, bool) const;
+    virtual int compare(TQListViewItem* i, int col, bool) const;
 
 private:
-    static QString truncateLine(const QString &s);
+    static TQString truncateLine(const TQString &s);
 
     Cervisia::LogInfo m_logInfo;
     friend class LogListView;
 };
 
 
-LogListViewItem::LogListViewItem(QListView* list, const Cervisia::LogInfo& logInfo)
+LogListViewItem::LogListViewItem(TQListView* list, const Cervisia::LogInfo& logInfo)
     : KListViewItem(list),
       m_logInfo(logInfo)
 {
@@ -69,15 +69,15 @@ LogListViewItem::LogListViewItem(QListView* list, const Cervisia::LogInfo& logIn
 
     setText(Tags, logInfo.tagsToString(Cervisia::TagInfo::Tag,
                                        Cervisia::LogInfo::NoTagType,
-                                       QString::fromLatin1(", ")));
+                                       TQString::fromLatin1(", ")));
 }
 
 
-QString LogListViewItem::truncateLine(const QString &s)
+TQString LogListViewItem::truncateLine(const TQString &s)
 {
     int pos;
 
-    QString res = s.simplifyWhiteSpace();
+    TQString res = s.simplifyWhiteSpace();
     if ( (pos = res.find('\n')) != -1 )
         res = res.left(pos) + "...";
 
@@ -85,7 +85,7 @@ QString LogListViewItem::truncateLine(const QString &s)
 }
 
 
-int LogListViewItem::compare(QListViewItem* i, int col, bool ascending) const
+int LogListViewItem::compare(TQListViewItem* i, int col, bool ascending) const
 {
     const LogListViewItem* item = static_cast<LogListViewItem*>(i);
 
@@ -99,14 +99,14 @@ int LogListViewItem::compare(QListViewItem* i, int col, bool ascending) const
         iResult = ::compare(m_logInfo.m_dateTime, item->m_logInfo.m_dateTime);
         break;
     default:
-        iResult = QListViewItem::compare(i, col, ascending);
+        iResult = TQListViewItem::compare(i, col, ascending);
     }
 
     return iResult;
 }
 
 
-LogListView::LogListView(KConfig& cfg, QWidget *parent, const char *name)
+LogListView::LogListView(KConfig& cfg, TQWidget *parent, const char *name)
     : KListView(parent, name)
     , partConfig(cfg)
 {
@@ -124,20 +124,20 @@ LogListView::LogListView(KConfig& cfg, QWidget *parent, const char *name)
 
     Cervisia::ToolTip* toolTip = new Cervisia::ToolTip(viewport());
 
-    connect(toolTip, SIGNAL(queryToolTip(const QPoint&, QRect&, QString&)),
-            this, SLOT(slotQueryToolTip(const QPoint&, QRect&, QString&)));
+    connect(toolTip, TQT_SIGNAL(queryToolTip(const TQPoint&, TQRect&, TQString&)),
+            this, TQT_SLOT(slotQueryToolTip(const TQPoint&, TQRect&, TQString&)));
 
     // without this restoreLayout() can't change the column widths
     for (int i = 0; i < columns(); ++i)
         setColumnWidthMode(i, Manual);
 
-    restoreLayout(&partConfig, QString::fromLatin1("LogList view"));
+    restoreLayout(&partConfig, TQString::fromLatin1("LogList view"));
 }
 
 
 LogListView::~LogListView()
 {
-    saveLayout(&partConfig, QString::fromLatin1("LogList view"));
+    saveLayout(&partConfig, TQString::fromLatin1("LogList view"));
 }
 
 
@@ -147,9 +147,9 @@ void LogListView::addRevision(const Cervisia::LogInfo& logInfo)
 }
 
 
-void LogListView::setSelectedPair(const QString &selectionA, const QString &selectionB)
+void LogListView::setSelectedPair(const TQString &selectionA, const TQString &selectionB)
 {
-    for ( QListViewItem *item = firstChild(); item;
+    for ( TQListViewItem *item = firstChild(); item;
 	  item = item->nextSibling() )
 	{
             LogListViewItem *i = static_cast<LogListViewItem*>(item);
@@ -158,7 +158,7 @@ void LogListView::setSelectedPair(const QString &selectionA, const QString &sele
         }
 }
 
-void LogListView::contentsMousePressEvent(QMouseEvent *e)
+void LogListView::contentsMousePressEvent(TQMouseEvent *e)
 {
     // Retrieve selected item
     const LogListViewItem* selItem
@@ -167,7 +167,7 @@ void LogListView::contentsMousePressEvent(QMouseEvent *e)
         return;
         
     // Retrieve revision
-    const QString revision = selItem->text(LogListViewItem::Revision);   
+    const TQString revision = selItem->text(LogListViewItem::Revision);   
     
     if ( e->button() == LeftButton )
     {
@@ -182,7 +182,7 @@ void LogListView::contentsMousePressEvent(QMouseEvent *e)
 }
 
 
-void LogListView::keyPressEvent(QKeyEvent *e)
+void LogListView::keyPressEvent(TQKeyEvent *e)
 {
     switch (e->key()) {
     case Key_A:
@@ -203,9 +203,9 @@ void LogListView::keyPressEvent(QKeyEvent *e)
     case Key_Next:
     case Key_Prior:
         if (e->state() == 0)
-             QListView::keyPressEvent(e);
+             TQListView::keyPressEvent(e);
         else
-            QApplication::postEvent(this, new QKeyEvent(QEvent::KeyPress, e->key(), e->ascii(), 0));
+            TQApplication::postEvent(this, new TQKeyEvent(TQEvent::KeyPress, e->key(), e->ascii(), 0));
         break;
     default:
         // Ignore Key_Enter, Key_Return
@@ -214,9 +214,9 @@ void LogListView::keyPressEvent(QKeyEvent *e)
 }
 
 
-void LogListView::slotQueryToolTip(const QPoint& viewportPos,
-                                   QRect&        viewportRect,
-                                   QString&      text)
+void LogListView::slotQueryToolTip(const TQPoint& viewportPos,
+                                   TQRect&        viewportRect,
+                                   TQString&      text)
 {
     if (const LogListViewItem* item = static_cast<LogListViewItem*>(itemAt(viewportPos)))
     {

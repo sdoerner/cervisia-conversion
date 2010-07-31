@@ -21,12 +21,12 @@
 
 #include "checkoutdlg.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdir.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <tqcheckbox.h>
+#include <tqcombobox.h>
+#include <tqdir.h>
+#include <tqlayout.h>
+#include <tqlabel.h>
+#include <tqpushbutton.h>
 #include <kprocess.h>
 #include <kfiledialog.h>
 #include <klineedit.h>
@@ -43,9 +43,9 @@ using Cervisia::IsValidTag;
 
 
 CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
-                               ActionType action, QWidget* parent,
+                               ActionType action, TQWidget* parent,
                                const char* name)
-    : KDialogBase(parent, name, true, QString::null,
+    : KDialogBase(parent, name, true, TQString::null,
                   Ok | Cancel | Help, Ok, true)
     , act(action)
     , partConfig(cfg)
@@ -53,91 +53,91 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
 {
     setCaption( (action==Checkout)? i18n("CVS Checkout") : i18n("CVS Import") );
 
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout* layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout* layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    QGridLayout* grid = new QGridLayout(layout);
+    TQGridLayout* grid = new TQGridLayout(layout);
     grid->setColStretch(0, 1);
     grid->setColStretch(1, 20);
     for( int i = 0; i < ((action==Checkout)? 4 : 10); ++i )
         grid->setRowStretch(i, 0);
 
-    repo_combo = new QComboBox(true, mainWidget);
+    repo_combo = new TQComboBox(true, mainWidget);
     repo_combo->setFocus();
     // make sure combobox is smaller than the screen
-    repo_combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    repo_combo->setSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed);
     grid->addWidget(repo_combo, 0, 1);
 
-    QLabel* repo_label = new QLabel(repo_combo, i18n("&Repository:"), mainWidget);
+    TQLabel* repo_label = new TQLabel(repo_combo, i18n("&Repository:"), mainWidget);
     grid->addWidget(repo_label, 0, 0, AlignLeft | AlignVCenter);
 
     if( action == Import )
     {
         module_edit = new KLineEdit(mainWidget);
         grid->addWidget(module_edit, 1, 1);
-        QLabel* module_label = new QLabel(module_edit, i18n("&Module:"), mainWidget);
+        TQLabel* module_label = new TQLabel(module_edit, i18n("&Module:"), mainWidget);
         grid->addWidget(module_label, 1, 0, AlignLeft | AlignVCenter);
     }
     else
     {
-        module_combo = new QComboBox(true, mainWidget);
+        module_combo = new TQComboBox(true, mainWidget);
 
-        QPushButton* module_button = new QPushButton(i18n("Fetch &List"), mainWidget);
-        connect( module_button, SIGNAL(clicked()),
-                 this, SLOT(moduleButtonClicked()) );
+        TQPushButton* module_button = new TQPushButton(i18n("Fetch &List"), mainWidget);
+        connect( module_button, TQT_SIGNAL(clicked()),
+                 this, TQT_SLOT(moduleButtonClicked()) );
 
-        QBoxLayout* module_layout = new QHBoxLayout();
+        TQBoxLayout* module_layout = new TQHBoxLayout();
         grid->addLayout(module_layout, 1, 1);
         module_layout->addWidget(module_combo, 10);
         module_layout->addWidget(module_button, 0, AlignVCenter);
 
-        QLabel* module_label = new QLabel(module_combo, i18n("&Module:"), mainWidget);
+        TQLabel* module_label = new TQLabel(module_combo, i18n("&Module:"), mainWidget);
         grid->addWidget(module_label, 1, 0, AlignLeft | AlignVCenter);
 
-        branchCombo = new QComboBox(true, mainWidget);
+        branchCombo = new TQComboBox(true, mainWidget);
 
-        QPushButton* branchButton = new QPushButton(i18n("Fetch &List"), mainWidget);
-        connect( branchButton, SIGNAL(clicked()),
-                 this, SLOT(branchButtonClicked()) );
+        TQPushButton* branchButton = new TQPushButton(i18n("Fetch &List"), mainWidget);
+        connect( branchButton, TQT_SIGNAL(clicked()),
+                 this, TQT_SLOT(branchButtonClicked()) );
 
-        QBoxLayout* branchLayout = new QHBoxLayout();
+        TQBoxLayout* branchLayout = new TQHBoxLayout();
         grid->addLayout(branchLayout, 2, 1);
         branchLayout->addWidget(branchCombo, 10);
         branchLayout->addWidget(branchButton, 0, AlignVCenter);
 
-        QLabel* branch_label = new QLabel(branchCombo, i18n("&Branch tag:"), 
+        TQLabel* branch_label = new TQLabel(branchCombo, i18n("&Branch tag:"), 
                                           mainWidget);
         grid->addWidget(branch_label, 2, 0, AlignLeft | AlignVCenter);
 
-        connect( branchCombo, SIGNAL( textChanged( const QString&)),
-                 this, SLOT( branchTextChanged() ));
+        connect( branchCombo, TQT_SIGNAL( textChanged( const TQString&)),
+                 this, TQT_SLOT( branchTextChanged() ));
 
-        recursive_box = new QCheckBox(i18n("Re&cursive checkout"), mainWidget);
+        recursive_box = new TQCheckBox(i18n("Re&cursive checkout"), mainWidget);
         grid->addMultiCellWidget(recursive_box, 6, 6, 0, 1);
     }
 
     workdir_edit = new KLineEdit(mainWidget);
-    workdir_edit->setText(QDir::homeDirPath());
+    workdir_edit->setText(TQDir::homeDirPath());
     workdir_edit->setMinimumWidth(fontMetrics().width('X') * 40);
     
     KURLCompletion* comp = new KURLCompletion();
     workdir_edit->setCompletionObject(comp);
     workdir_edit->setAutoDeleteCompletionObject(true);
-    connect( workdir_edit, SIGNAL(returnPressed(const QString&)),
-             comp, SLOT(addItem(const QString&)) );
+    connect( workdir_edit, TQT_SIGNAL(returnPressed(const TQString&)),
+             comp, TQT_SLOT(addItem(const TQString&)) );
 
-    QPushButton* dir_button = new QPushButton("...", mainWidget);
-    connect( dir_button, SIGNAL(clicked()),
-             this, SLOT(dirButtonClicked()) );
+    TQPushButton* dir_button = new TQPushButton("...", mainWidget);
+    connect( dir_button, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(dirButtonClicked()) );
     dir_button->setFixedWidth(30);
 
-    QBoxLayout* workdir_layout = new QHBoxLayout();
+    TQBoxLayout* workdir_layout = new TQHBoxLayout();
     grid->addLayout(workdir_layout, (action==Import)? 2 : 3, 1);
     workdir_layout->addWidget(workdir_edit, 10);
     workdir_layout->addWidget(dir_button, 0, AlignVCenter);
 
-    QLabel* workdir_label = new QLabel(workdir_edit, i18n("Working &folder:"), 
+    TQLabel* workdir_label = new TQLabel(workdir_edit, i18n("Working &folder:"), 
                                        mainWidget);
     grid->addWidget(workdir_label, (action==Import)? 2 : 3, 0, AlignLeft | AlignVCenter);
 
@@ -146,35 +146,35 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
         vendortag_edit = new KLineEdit(mainWidget);
         grid->addWidget(vendortag_edit, 3, 1);
 
-        QLabel* vendortag_label = new QLabel(vendortag_edit, i18n("&Vendor tag:"), 
+        TQLabel* vendortag_label = new TQLabel(vendortag_edit, i18n("&Vendor tag:"), 
                                              mainWidget);
         grid->addWidget(vendortag_label, 3, 0, AlignLeft | AlignVCenter);
 
         releasetag_edit = new KLineEdit(mainWidget);
         grid->addWidget(releasetag_edit, 4, 1);
 
-        QLabel* releasetag_label = new QLabel(releasetag_edit, i18n("&Release tag:"),
+        TQLabel* releasetag_label = new TQLabel(releasetag_edit, i18n("&Release tag:"),
                                               mainWidget);
         grid->addWidget(releasetag_label, 4, 0, AlignLeft | AlignVCenter);
 
         ignore_edit = new KLineEdit(mainWidget);
         grid->addWidget(ignore_edit, 5, 1);
 
-        QLabel* ignore_label = new QLabel(ignore_edit, i18n("&Ignore files:"), 
+        TQLabel* ignore_label = new TQLabel(ignore_edit, i18n("&Ignore files:"), 
                                           mainWidget);
         grid->addWidget(ignore_label, 5, 0, AlignLeft | AlignVCenter);
 
         comment_edit = new KLineEdit(mainWidget);
         grid->addWidget(comment_edit, 6, 1);
 
-        QLabel* comment_label = new QLabel(comment_edit, i18n("&Comment:"), 
+        TQLabel* comment_label = new TQLabel(comment_edit, i18n("&Comment:"), 
                                            mainWidget);
         grid->addWidget(comment_label, 6, 0, AlignLeft | AlignVCenter);
 
-        binary_box = new QCheckBox(i18n("Import as &binaries"), mainWidget);
+        binary_box = new TQCheckBox(i18n("Import as &binaries"), mainWidget);
         grid->addMultiCellWidget(binary_box, 7, 7, 0, 1);
 
-        m_useModificationTimeBox = new QCheckBox(
+        m_useModificationTimeBox = new TQCheckBox(
                 i18n("Use file's modification time as time of import"), mainWidget);
         grid->addMultiCellWidget(m_useModificationTimeBox, 8, 8, 0, 1);
     }
@@ -183,20 +183,20 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
         alias_edit = new KLineEdit(mainWidget);
         grid->addWidget(alias_edit, 4, 1);
 
-        QLabel* alias_label = new QLabel(alias_edit, i18n("Chec&k out as:"), mainWidget);
+        TQLabel* alias_label = new TQLabel(alias_edit, i18n("Chec&k out as:"), mainWidget);
         grid->addWidget(alias_label, 4, 0, AlignLeft | AlignVCenter);
 
-        export_box = new QCheckBox(i18n("Ex&port only"), mainWidget);
+        export_box = new TQCheckBox(i18n("Ex&port only"), mainWidget);
         grid->addMultiCellWidget(export_box, 5, 5, 0, 1);
     }
 
-    QStringList list1 = Repositories::readCvsPassFile();
-    QStringList::ConstIterator it1;
+    TQStringList list1 = Repositories::readCvsPassFile();
+    TQStringList::ConstIterator it1;
     for (it1 = list1.begin(); it1 != list1.end(); ++it1)
         repo_combo->insertItem(*it1);
 
-    QStringList list2 = Repositories::readConfigFile();
-    QStringList::ConstIterator it2;
+    TQStringList list2 = Repositories::readConfigFile();
+    TQStringList::ConstIterator it2;
     for (it2 = list2.begin(); it2 != list2.end(); ++it2)
         if (!list1.contains(*it2))
             repo_combo->insertItem(*it2);
@@ -207,54 +207,54 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
 }
 
 
-QString CheckoutDialog::workingDirectory() const
+TQString CheckoutDialog::workingDirectory() const
 {
     return workdir_edit->text();
 }
 
 
-QString CheckoutDialog::repository() const
+TQString CheckoutDialog::repository() const
 {
     return repo_combo->currentText();
 }
 
 
-QString CheckoutDialog::module() const
+TQString CheckoutDialog::module() const
 {
     return act==Import? module_edit->text() : module_combo->currentText();
 }
 
 
-QString CheckoutDialog::branch() const
+TQString CheckoutDialog::branch() const
 {
     return branchCombo->currentText();
 }
 
 
-QString CheckoutDialog::vendorTag() const
+TQString CheckoutDialog::vendorTag() const
 {
     return vendortag_edit->text();
 }
 
 
-QString CheckoutDialog::releaseTag() const
+TQString CheckoutDialog::releaseTag() const
 {
     return releasetag_edit->text();
 }
 
 
-QString CheckoutDialog::ignoreFiles() const
+TQString CheckoutDialog::ignoreFiles() const
 {
     return ignore_edit->text();
 }
 
 
-QString CheckoutDialog::comment() const
+TQString CheckoutDialog::comment() const
 {
     return comment_edit->text();
 }
 
-QString CheckoutDialog::alias() const
+TQString CheckoutDialog::alias() const
 {
     return alias_edit->text();
 }
@@ -284,7 +284,7 @@ bool CheckoutDialog::recursive() const
 
 void CheckoutDialog::slotOk()
 {
-    QFileInfo fi(workingDirectory());
+    TQFileInfo fi(workingDirectory());
     if (!fi.exists() || !fi.isDir())
     {
         KMessageBox::information(this, i18n("Please choose an existing working folder."));
@@ -330,7 +330,7 @@ void CheckoutDialog::slotOk()
 
 void CheckoutDialog::dirButtonClicked()
 {
-    QString dir = KFileDialog::getExistingDirectory(workdir_edit->text());
+    TQString dir = KFileDialog::getExistingDirectory(workdir_edit->text());
     if (!dir.isEmpty())
         workdir_edit->setText(dir);
 }
@@ -347,7 +347,7 @@ void CheckoutDialog::moduleButtonClicked()
         return;
 
     module_combo->clear();
-    QString str;
+    TQString str;
     while (dlg.getLine(str))
     {
         if (str.left(12) == "Unknown host")
@@ -358,7 +358,7 @@ void CheckoutDialog::moduleButtonClicked()
             pos = str.find('\t');
         if (pos == -1)
             pos = str.length();
-        QString module( str.left(pos).stripWhiteSpace() );
+        TQString module( str.left(pos).stripWhiteSpace() );
         if ( !module.isEmpty() )
             module_combo->insertItem(module);
     }
@@ -367,7 +367,7 @@ void CheckoutDialog::moduleButtonClicked()
 
 void CheckoutDialog::branchButtonClicked()
 {
-    QStringList branchTagList;
+    TQStringList branchTagList;
 
     if( repository().isEmpty() )
     {
@@ -386,12 +386,12 @@ void CheckoutDialog::branchButtonClicked()
     if( !cvsService->ok() )
         return;
 
-    ProgressDialog dlg(this, "Remote Log", cvsJob, QString::null, 
+    ProgressDialog dlg(this, "Remote Log", cvsJob, TQString::null, 
                        i18n("CVS Remote Log"));
     if( !dlg.execute() )
         return;
 
-    QString line;
+    TQString line;
     while( dlg.getLine(line) )
     {
         int colonPos;
@@ -401,7 +401,7 @@ void CheckoutDialog::branchButtonClicked()
         if( (colonPos = line.find(':', 1)) < 0 )
            continue;
 
-        const QString tag  = line.mid(1, colonPos - 1);
+        const TQString tag  = line.mid(1, colonPos - 1);
         if( !branchTagList.contains(tag) )
             branchTagList.push_back(tag);
     }

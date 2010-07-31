@@ -21,7 +21,7 @@
 #define CERVISIA_ENTRY_STATUS_CHANGE_H
 
 
-#include <qstring.h>
+#include <tqstring.h>
 
 #include "entry_status.h"
 
@@ -39,7 +39,7 @@ struct EntryStatusChange
     /**
      * The name of the changed entry (including the path inside the repository / working copy).
      */
-    QString m_name;
+    TQString m_name;
 
     /**
      * The new status of the entry.

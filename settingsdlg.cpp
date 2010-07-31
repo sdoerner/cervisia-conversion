@@ -20,16 +20,16 @@
 
 #include "settingsdlg.h"
 
-#include <qapplication.h>
-#include <qcheckbox.h>
-#include <qgrid.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qvbox.h>
-#include <qwidgetlist.h>
-#include <qhbuttongroup.h>
-#include <qradiobutton.h>
+#include <tqapplication.h>
+#include <tqcheckbox.h>
+#include <tqgrid.h>
+#include <tqgroupbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqvbox.h>
+#include <tqwidgetlist.h>
+#include <tqhbuttongroup.h>
+#include <tqradiobutton.h>
 #include <kbuttonbox.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
@@ -49,27 +49,27 @@
 namespace
 {
     // helper method to load icons for configuration pages
-    inline QPixmap LoadIcon(const char* iconName)
+    inline TQPixmap LoadIcon(const char* iconName)
     {
         KIconLoader* loader = KGlobal::instance()->iconLoader();
-        return loader->loadIcon(QString::fromLatin1(iconName), KIcon::NoGroup,
+        return loader->loadIcon(TQString::fromLatin1(iconName), KIcon::NoGroup,
                                  KIcon::SizeMedium);
     }
 }
 
 
-FontButton::FontButton( const QString &text, QWidget *parent, const char *name )
-    : QPushButton(text, parent, name)
+FontButton::FontButton( const TQString &text, TQWidget *parent, const char *name )
+    : TQPushButton(text, parent, name)
 {
-    connect( this, SIGNAL(clicked()), this, SLOT(chooseFont()) );
+    connect( this, TQT_SIGNAL(clicked()), this, TQT_SLOT(chooseFont()) );
 }
 
 
 void FontButton::chooseFont()
 {
-    QFont newFont(font());
+    TQFont newFont(font());
 
-    if (KFontDialog::getFont(newFont, false, this) == QDialog::Rejected)
+    if (KFontDialog::getFont(newFont, false, this) == TQDialog::Rejected)
         return;
 
     setFont(newFont);
@@ -77,7 +77,7 @@ void FontButton::chooseFont()
 }
 
 
-SettingsDialog::SettingsDialog( KConfig *conf, QWidget *parent, const char *name )
+SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *parent, const char *name )
     : KDialogBase(KDialogBase::IconList, i18n("Configure Cervisia"),
       KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help,
       KDialogBase::Ok,
@@ -204,10 +204,10 @@ void SettingsDialog::writeSettings()
     CervisiaSettings::setDiffDeleteColor(m_diffDeleteButton->color());
 
     // I'm not yet sure whether this is a hack or not :-)
-    QWidgetListIt it(*QApplication::allWidgets());
+    TQWidgetListIt it(*TQApplication::allWidgets());
     for (; it.current(); ++it)
         {
-            QWidget *w = it.current();
+            TQWidget *w = it.current();
             if (w->inherits("ProtocolView"))
                 w->setFont(m_protocolFontBox->font());
             if (w->inherits("AnnotateView"))
@@ -234,11 +234,11 @@ void SettingsDialog::done(int res)
  */
 void SettingsDialog::addGeneralPage()
 {
-    QFrame* generalPage = addPage(i18n("General"), QString::null,
+    TQFrame* generalPage = addPage(i18n("General"), TQString::null,
                                   LoadIcon("misc"));
-    QVBoxLayout* layout = new QVBoxLayout(generalPage, 0, KDialog::spacingHint());
+    TQVBoxLayout* layout = new TQVBoxLayout(generalPage, 0, KDialog::spacingHint());
 
-    QLabel *usernamelabel = new QLabel( i18n("&User name for the change log editor:"), generalPage );
+    TQLabel *usernamelabel = new TQLabel( i18n("&User name for the change log editor:"), generalPage );
     usernameedit = new KLineEdit(generalPage);
     usernameedit->setFocus();
     usernamelabel->setBuddy(usernameedit);
@@ -246,7 +246,7 @@ void SettingsDialog::addGeneralPage()
     layout->addWidget(usernamelabel);
     layout->addWidget(usernameedit);
 
-    QLabel *cvspathlabel = new QLabel( i18n("&Path to CVS executable, or 'cvs':"), generalPage );
+    TQLabel *cvspathlabel = new TQLabel( i18n("&Path to CVS executable, or 'cvs':"), generalPage );
     cvspathedit = new KURLRequester(generalPage);
     cvspathlabel->setBuddy(cvspathedit);
 
@@ -262,29 +262,29 @@ void SettingsDialog::addGeneralPage()
  */
 void SettingsDialog::addDiffPage()
 {
-    QGrid *diffPage = addGridPage(2, QGrid::Horizontal, i18n("Diff Viewer"),
-                                  QString::null, LoadIcon("vcs_diff"));
+    TQGrid *diffPage = addGridPage(2, TQGrid::Horizontal, i18n("Diff Viewer"),
+                                  TQString::null, LoadIcon("vcs_diff"));
 
-    QLabel *contextlabel = new QLabel( i18n("&Number of context lines in diff dialog:"), diffPage );
+    TQLabel *contextlabel = new TQLabel( i18n("&Number of context lines in diff dialog:"), diffPage );
     contextedit = new KIntNumInput( 0, diffPage );
     contextedit->setRange(0, 65535, 1, false);
     contextlabel->setBuddy(contextedit);
 
-    QLabel *diffoptlabel = new QLabel(i18n("Additional &options for cvs diff:"), diffPage);
+    TQLabel *diffoptlabel = new TQLabel(i18n("Additional &options for cvs diff:"), diffPage);
     diffoptedit = new KLineEdit(diffPage);
     diffoptlabel->setBuddy(diffoptedit);
 
-    QLabel *tabwidthlabel = new QLabel(i18n("Tab &width in diff dialog:"), diffPage);
+    TQLabel *tabwidthlabel = new TQLabel(i18n("Tab &width in diff dialog:"), diffPage);
     tabwidthedit = new KIntNumInput(0, diffPage);
     tabwidthedit->setRange(1, 16, 1, false);
     tabwidthlabel->setBuddy(tabwidthedit);
 
-    QLabel *extdifflabel = new QLabel(i18n("External diff &frontend:"), diffPage);
+    TQLabel *extdifflabel = new TQLabel(i18n("External diff &frontend:"), diffPage);
     extdiffedit = new KURLRequester(diffPage);
     extdifflabel->setBuddy(extdiffedit);
 
     // dummy widget to take up the vertical space
-    new QWidget(diffPage);
+    new TQWidget(diffPage);
 }
 
 
@@ -293,16 +293,16 @@ void SettingsDialog::addDiffPage()
  */
 void SettingsDialog::addStatusPage()
 {
-    QVBox* statusPage = addVBoxPage(i18n("Status"), QString::null,
+    TQVBox* statusPage = addVBoxPage(i18n("Status"), TQString::null,
                                     LoadIcon("fork"));
 
-    remotestatusbox = new QCheckBox(i18n("When opening a sandbox from a &remote repository,\n"
+    remotestatusbox = new TQCheckBox(i18n("When opening a sandbox from a &remote repository,\n"
                                          "start a File->Status command automatically"), statusPage);
-    localstatusbox = new QCheckBox(i18n("When opening a sandbox from a &local repository,\n"
+    localstatusbox = new TQCheckBox(i18n("When opening a sandbox from a &local repository,\n"
                                         "start a File->Status command automatically"), statusPage);
 
     // dummy widget to take up the vertical space
-    new QWidget(statusPage);
+    new TQWidget(statusPage);
 }
 
 
@@ -311,7 +311,7 @@ void SettingsDialog::addStatusPage()
  */
 void SettingsDialog::addAdvancedPage()
 {
-    QVBox* frame = addVBoxPage(i18n("Advanced"), QString::null,
+    TQVBox* frame = addVBoxPage(i18n("Advanced"), TQString::null,
                                LoadIcon("configure"));
 
     m_advancedPage = new AdvancedPage(frame);
@@ -325,10 +325,10 @@ void SettingsDialog::addAdvancedPage()
  */
 void SettingsDialog::addLookAndFeelPage()
 {
-    QVBox* lookPage = addVBoxPage(i18n("Appearance"), QString::null,
+    TQVBox* lookPage = addVBoxPage(i18n("Appearance"), TQString::null,
                                   LoadIcon("looknfeel"));
 
-    QGroupBox* fontGroupBox = new QGroupBox(4, Qt::Vertical, i18n("Fonts"),
+    TQGroupBox* fontGroupBox = new TQGroupBox(4, Qt::Vertical, i18n("Fonts"),
                                             lookPage);
     fontGroupBox->setInsideSpacing(KDialog::spacingHint());
 
@@ -341,40 +341,40 @@ void SettingsDialog::addLookAndFeelPage()
     m_changelogFontBox = new FontButton(i18n("Font for ChangeLog View..."),
                                         fontGroupBox);
 
-    QGroupBox* colorGroupBox = new QGroupBox(4, Qt::Horizontal,
+    TQGroupBox* colorGroupBox = new TQGroupBox(4, Qt::Horizontal,
                                              i18n("Colors"), lookPage);
     colorGroupBox->setColumns(4);
     colorGroupBox->setInsideSpacing(KDialog::spacingHint());
 
-    QLabel* conflictLabel = new QLabel(i18n("Conflict:"), colorGroupBox);
+    TQLabel* conflictLabel = new TQLabel(i18n("Conflict:"), colorGroupBox);
     m_conflictButton      = new KColorButton(colorGroupBox);
     conflictLabel->setBuddy(m_conflictButton);
 
-    QLabel* diffChangeLabel = new QLabel(i18n("Diff change:"), colorGroupBox);
+    TQLabel* diffChangeLabel = new TQLabel(i18n("Diff change:"), colorGroupBox);
     m_diffChangeButton      = new KColorButton(colorGroupBox);
     diffChangeLabel->setBuddy(m_diffChangeButton);
 
-    QLabel* localChangeLabel = new QLabel(i18n("Local change:"), colorGroupBox);
+    TQLabel* localChangeLabel = new TQLabel(i18n("Local change:"), colorGroupBox);
     m_localChangeButton      = new KColorButton(colorGroupBox);
     localChangeLabel->setBuddy(m_localChangeButton);
 
-    QLabel* diffInsertLabel = new QLabel(i18n("Diff insertion:"), colorGroupBox);
+    TQLabel* diffInsertLabel = new TQLabel(i18n("Diff insertion:"), colorGroupBox);
     m_diffInsertButton      = new KColorButton(colorGroupBox);
     diffInsertLabel->setBuddy(m_diffInsertButton);
 
-    QLabel* remoteChangeLabel = new QLabel(i18n("Remote change:"), colorGroupBox);
+    TQLabel* remoteChangeLabel = new TQLabel(i18n("Remote change:"), colorGroupBox);
     m_remoteChangeButton      = new KColorButton(colorGroupBox);
     remoteChangeLabel->setBuddy( m_remoteChangeButton );
 
-    QLabel* diffDeleteLabel = new QLabel(i18n("Diff deletion:"), colorGroupBox);
+    TQLabel* diffDeleteLabel = new TQLabel(i18n("Diff deletion:"), colorGroupBox);
     m_diffDeleteButton      = new KColorButton(colorGroupBox);
     diffDeleteLabel->setBuddy(m_diffDeleteButton);
 
-    QLabel* notInCvsLabel = new QLabel(i18n("Not in cvs:"), colorGroupBox);
+    TQLabel* notInCvsLabel = new TQLabel(i18n("Not in cvs:"), colorGroupBox);
     m_notInCvsButton      = new KColorButton(colorGroupBox);
     notInCvsLabel->setBuddy(m_notInCvsButton);
 
-    m_splitterBox = new QCheckBox(i18n("Split main window &horizontally"), lookPage);
+    m_splitterBox = new TQCheckBox(i18n("Split main window &horizontally"), lookPage);
 }
 
 #include "settingsdlg.moc"

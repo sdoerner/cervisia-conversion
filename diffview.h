@@ -24,18 +24,18 @@
 
 #include "qttableview.h"
 
-#include <qptrcollection.h>
-#include <qptrlist.h>
+#include <tqptrcollection.h>
+#include <tqptrlist.h>
 
 
 class KConfig;
 class DiffViewItem;
 
 
-class DiffViewItemList : public QPtrList<DiffViewItem>
+class DiffViewItemList : public TQPtrList<DiffViewItem>
 {
 protected:
-    virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2);
+    virtual int compareItems(TQPtrCollection::Item item1, TQPtrCollection::Item item2);
 };
 
 
@@ -47,7 +47,7 @@ public:
     enum DiffType { Change, Insert, Delete, Neutral, Unchanged, Separator };
 
     DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-              QWidget *parent=0, const char *name=0 );
+              TQWidget *parent=0, const char *name=0 );
 
     void setPartner(DiffView *other);
 
@@ -60,23 +60,23 @@ public:
     void prior()
         { setTopCell(topCell()-viewHeight()/cellHeight()); }
 
-    void addLine(const QString &line, DiffType type, int no=-1);
-    QString stringAtLine(int lineno);
+    void addLine(const TQString &line, DiffType type, int no=-1);
+    TQString stringAtLine(int lineno);
     void setCenterLine(int lineno);
     void setInverted(int lineno, bool inverted);
     int count();
     void removeAtOffset(int offset);
-    void insertAtOffset(const QString &line, DiffType type, int offset);
+    void insertAtOffset(const TQString &line, DiffType type, int offset);
     void setCenterOffset(int offset);
-    QString stringAtOffset(int offset);
-    QByteArray compressedContent();
+    TQString stringAtOffset(int offset);
+    TQByteArray compressedContent();
 
-    virtual void setFont(const QFont &font);
+    virtual void setFont(const TQFont &font);
     virtual int cellWidth(int col);
-    virtual QSize sizeHint() const;
-    virtual void paintCell(QPainter *p, int row, int col);
-    virtual void wheelEvent(QWheelEvent *);
-    const QScrollBar *scrollBar() const
+    virtual TQSize sizeHint() const;
+    virtual void paintCell(TQPainter *p, int row, int col);
+    virtual void wheelEvent(TQWheelEvent *);
+    const TQScrollBar *scrollBar() const
         { return verticalScrollBar(); }
 
 protected slots:
@@ -92,9 +92,9 @@ private:
     DiffView *partner;
     static const int BORDER;
 
-    QColor diffChangeColor;
-    QColor diffInsertColor;
-    QColor diffDeleteColor;
+    TQColor diffChangeColor;
+    TQColor diffInsertColor;
+    TQColor diffDeleteColor;
 
     int m_tabWidth;
     KConfig& partConfig;
@@ -106,22 +106,22 @@ class DiffZoomWidget : public QFrame
     Q_OBJECT
 
 public:
-    DiffZoomWidget(KConfig& cfg, QWidget *parent=0, const char *name=0);
+    DiffZoomWidget(KConfig& cfg, TQWidget *parent=0, const char *name=0);
     ~DiffZoomWidget();
 
     void setDiffView(DiffView *view);
-    QSize sizeHint() const;
+    TQSize sizeHint() const;
 
 protected:
-    void paintEvent(QPaintEvent *);
-    bool eventFilter(QObject *, QEvent *e);
+    void paintEvent(TQPaintEvent *);
+    bool eventFilter(TQObject *, TQEvent *e);
 
 private:
     DiffView *diffview;
 
-    QColor diffChangeColor;
-    QColor diffInsertColor;
-    QColor diffDeleteColor;
+    TQColor diffChangeColor;
+    TQColor diffInsertColor;
+    TQColor diffDeleteColor;
 };
 
 #endif

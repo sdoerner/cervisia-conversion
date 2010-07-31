@@ -19,7 +19,7 @@
 #ifndef EDITWITHMENU_H
 #define EDITWITHMENU_H
 
-#include <qobject.h>
+#include <tqobject.h>
 #include <ktrader.h>
 #include <kurl.h>
 
@@ -35,15 +35,15 @@ class EditWithMenu : public QObject
     Q_OBJECT
 
 public:
-    EditWithMenu(const KURL& url, QWidget* parent);
-    QPopupMenu* menu();
+    EditWithMenu(const KURL& url, TQWidget* parent);
+    TQPopupMenu* menu();
 
 private slots:
     void itemActivated(int);
 
 private:
     KTrader::OfferList m_offers;
-    QPopupMenu*        m_menu;
+    TQPopupMenu*        m_menu;
     KURL               m_url;
 };
 

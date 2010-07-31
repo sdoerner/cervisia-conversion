@@ -19,7 +19,7 @@
 
 #include "entry_status.h"
 
-#include <qstring.h>
+#include <tqstring.h>
 
 #include <klocale.h>
 
@@ -28,9 +28,9 @@ namespace Cervisia
 {
 
 
-QString toString(EntryStatus entryStatus)
+TQString toString(EntryStatus entryStatus)
 {
-    QString result;
+    TQString result;
     switch (entryStatus)
     {
     case LocallyModified:

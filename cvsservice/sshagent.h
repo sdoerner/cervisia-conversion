@@ -21,9 +21,9 @@
 #ifndef SSHAGENT_H
 #define SSHAGENT_H
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
 
 class KProcess;
 
@@ -33,7 +33,7 @@ class SshAgent : public QObject
     Q_OBJECT
 
 public:
-    SshAgent(QObject* parent = 0, const char* name = 0);
+    SshAgent(TQObject* parent = 0, const char* name = 0);
     ~SshAgent();
 
     bool querySshAgent();
@@ -41,8 +41,8 @@ public:
     void killSshAgent();
 
     bool isRunning() const { return m_isRunning; }
-    QString pid() const { return m_pid; }
-    QString authSock() const { return m_authSock; }
+    TQString pid() const { return m_pid; }
+    TQString authSock() const { return m_authSock; }
 
 private slots:
     void slotProcessExited(KProcess*);
@@ -52,12 +52,12 @@ private slots:
 private:
     bool startSshAgent();
 
-    QStringList    m_outputLines;
+    TQStringList    m_outputLines;
 
     static bool    m_isRunning;
     static bool    m_isOurAgent;
-    static QString m_authSock;
-    static QString m_pid;
+    static TQString m_authSock;
+    static TQString m_pid;
 };
 
 

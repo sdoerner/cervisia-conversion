@@ -35,12 +35,12 @@ class AddRemoveDialog : public KDialogBase
 public:
     enum ActionType { Add, AddBinary, Remove };
 
-    explicit AddRemoveDialog(ActionType action, QWidget* parent=0, const char* name=0);
+    explicit AddRemoveDialog(ActionType action, TQWidget* parent=0, const char* name=0);
 
-    void setFileList(const QStringList& files);
+    void setFileList(const TQStringList& files);
 
 private:
-    QListBox* m_listBox;
+    TQListBox* m_listBox;
 };
 
 #endif

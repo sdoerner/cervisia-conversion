@@ -35,14 +35,14 @@ class GlobalIgnoreList : public IgnoreListBase
 public:
     GlobalIgnoreList();
 
-    virtual bool matches(const QFileInfo* fi) const;
+    virtual bool matches(const TQFileInfo* fi) const;
     
     void retrieveServerIgnoreList(CvsService_stub* cvsService,
-                                  const QString& repository);
+                                  const TQString& repository);
 
 private:
     void setup();
-    virtual void addEntry(const QString& entry);
+    virtual void addEntry(const TQString& entry);
 
     static StringMatcher m_stringMatcher;
     static bool          m_isInitialized;

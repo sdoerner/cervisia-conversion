@@ -31,23 +31,23 @@ class KConfig;
 class ChangeLogDialog : public KDialogBase
 {
 public:
-    explicit ChangeLogDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
+    explicit ChangeLogDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
 
     virtual ~ChangeLogDialog();
 
-    bool readFile(const QString &fileName);
-    QString message();
+    bool readFile(const TQString &fileName);
+    TQString message();
 
 protected:
     virtual void slotOk();
 
 private:
     struct Options {
-        QSize size;
+        TQSize size;
     };
     static Options *options;
 
-    QString fname;
+    TQString fname;
     KTextEdit *edit;
     KConfig&   partConfig;
 };

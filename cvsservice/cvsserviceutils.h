@@ -29,10 +29,10 @@ namespace CvsServiceUtils
 {
 
 /**
- * Joins a list of file names to one QString and quotes
+ * Joins a list of file names to one TQString and quotes
  * each name properly for usage with KProcess.
  */
-QString joinFileList(const QStringList& files);
+TQString joinFileList(const TQStringList& files);
 
 }
 

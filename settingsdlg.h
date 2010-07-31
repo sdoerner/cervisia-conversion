@@ -22,7 +22,7 @@
 #define SETTINGSDLG_H
 
 
-#include <qpushbutton.h>
+#include <tqpushbutton.h>
 #include <kdialogbase.h>
 
 
@@ -40,7 +40,7 @@ class FontButton : public QPushButton
     Q_OBJECT
 
 public:
-    FontButton( const QString &text, QWidget *parent=0, const char *name=0 );
+    FontButton( const TQString &text, TQWidget *parent=0, const char *name=0 );
 
 private slots:
     void chooseFont();
@@ -52,7 +52,7 @@ class SettingsDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    SettingsDialog( KConfig *conf, QWidget *parent=0, const char *name=0 );
+    SettingsDialog( KConfig *conf, TQWidget *parent=0, const char *name=0 );
     virtual ~SettingsDialog();
 
 protected slots:
@@ -75,8 +75,8 @@ private:
     KLineEdit *usernameedit;
     KLineEdit *diffoptedit;
     KURLRequester *extdiffedit;
-    QCheckBox *remotestatusbox;
-    QCheckBox *localstatusbox;
+    TQCheckBox *remotestatusbox;
+    TQCheckBox *localstatusbox;
     FontButton*   m_protocolFontBox;
     FontButton*   m_annotateFontBox;
     FontButton*   m_diffFontBox;
@@ -90,7 +90,7 @@ private:
     KColorButton* m_diffInsertButton;
     KColorButton* m_diffDeleteButton;
 
-    QCheckBox*    m_splitterBox;
+    TQCheckBox*    m_splitterBox;
     AdvancedPage* m_advancedPage;
 
     KConfig* serviceConfig;

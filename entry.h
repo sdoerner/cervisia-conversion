@@ -21,8 +21,8 @@
 #define CERVISIA_ENTRY_H
 
 
-#include <qdatetime.h>
-#include <qstring.h>
+#include <tqdatetime.h>
+#include <tqstring.h>
 
 #include "entry_status.h"
 
@@ -50,7 +50,7 @@ struct Entry
     /**
      * The name of this entry (without path).
      */
-    QString m_name;
+    TQString m_name;
 
     /**
      * The type of this entry.
@@ -65,17 +65,17 @@ struct Entry
     /**
      * The revision of this entry.
      */
-    QString m_revision;
+    TQString m_revision;
 
     /**
      * The modification date/time of this entry (in user's local time).
      */
-    QDateTime m_dateTime;
+    TQDateTime m_dateTime;
 
     /**
      * The tag/branch of this entry.
      */
-    QString m_tag;
+    TQString m_tag;
 };
 
 

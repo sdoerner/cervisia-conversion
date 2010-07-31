@@ -19,14 +19,14 @@
 
 #include "diffdlg.h"
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qkeycode.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
+#include <tqpushbutton.h>
+#include <tqcheckbox.h>
+#include <tqcombobox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqkeycode.h>
+#include <tqfileinfo.h>
+#include <tqregexp.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -41,19 +41,19 @@
 #include "diffview.h"
 
 
-DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool modal)
-    : KDialogBase(parent, name, modal, QString::null,
+DiffDialog::DiffDialog(KConfig& cfg, TQWidget *parent, const char *name, bool modal)
+    : KDialogBase(parent, name, modal, TQString::null,
                   Close | Help | User1, Close, true, KStdGuiItem::saveAs())
     , partConfig(cfg)
 {
     items.setAutoDelete(true);
     markeditem = -1;
 
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    QGridLayout *pairlayout = new QGridLayout(layout);
+    TQGridLayout *pairlayout = new TQGridLayout(layout);
     pairlayout->setRowStretch(0, 0);
     pairlayout->setRowStretch(1, 1);
     pairlayout->setColStretch(1, 0);
@@ -61,10 +61,10 @@ DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool mod
     pairlayout->setColStretch(0, 10);
     pairlayout->setColStretch(2, 10);
 
-    revlabel1 = new QLabel(mainWidget);
+    revlabel1 = new TQLabel(mainWidget);
     pairlayout->addWidget(revlabel1, 0, 0);
 
-    revlabel2 = new QLabel(mainWidget);
+    revlabel2 = new TQLabel(mainWidget);
     pairlayout->addWidget(revlabel2, 0, 2);
 
     diff1 = new DiffView(cfg, true, false, mainWidget);
@@ -79,29 +79,29 @@ DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool mod
     diff1->setPartner(diff2);
     diff2->setPartner(diff1);
 
-    syncbox = new QCheckBox(i18n("Synchronize scroll bars"), mainWidget);
+    syncbox = new TQCheckBox(i18n("Synchronize scroll bars"), mainWidget);
     syncbox->setChecked(true);
-    connect( syncbox, SIGNAL(toggled(bool)),
-	     this, SLOT(toggleSynchronize(bool)) );
+    connect( syncbox, TQT_SIGNAL(toggled(bool)),
+	     this, TQT_SLOT(toggleSynchronize(bool)) );
 
-    itemscombo = new QComboBox(mainWidget);
-    itemscombo->insertItem(QString::null);
-    connect( itemscombo, SIGNAL(activated(int)),
-             this, SLOT(comboActivated(int)) );
+    itemscombo = new TQComboBox(mainWidget);
+    itemscombo->insertItem(TQString::null);
+    connect( itemscombo, TQT_SIGNAL(activated(int)),
+             this, TQT_SLOT(comboActivated(int)) );
 
-    nofnlabel = new QLabel(mainWidget);
+    nofnlabel = new TQLabel(mainWidget);
     // avoids auto resize when the text is changed
     nofnlabel->setMinimumWidth(fontMetrics().width(i18n("%1 differences").arg(10000)));
 
-    backbutton = new QPushButton(QString::fromLatin1("&<<"), mainWidget);
-    connect( backbutton, SIGNAL(clicked()), SLOT(backClicked()) );
+    backbutton = new TQPushButton(TQString::fromLatin1("&<<"), mainWidget);
+    connect( backbutton, TQT_SIGNAL(clicked()), TQT_SLOT(backClicked()) );
 
-    forwbutton = new QPushButton(QString::fromLatin1("&>>"), mainWidget);
-    connect( forwbutton, SIGNAL(clicked()), SLOT(forwClicked()) );
+    forwbutton = new TQPushButton(TQString::fromLatin1("&>>"), mainWidget);
+    connect( forwbutton, TQT_SIGNAL(clicked()), TQT_SLOT(forwClicked()) );
 
-    connect( this, SIGNAL(user1Clicked()), SLOT(saveAsClicked()) );
+    connect( this, TQT_SIGNAL(user1Clicked()), TQT_SLOT(saveAsClicked()) );
 
-    QBoxLayout *buttonlayout = new QHBoxLayout(layout);
+    TQBoxLayout *buttonlayout = new TQHBoxLayout(layout);
     buttonlayout->addWidget(syncbox, 0);
     buttonlayout->addStretch(4);
     buttonlayout->addWidget(itemscombo);
@@ -115,7 +115,7 @@ DiffDialog::DiffDialog(KConfig& cfg, QWidget *parent, const char *name, bool mod
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(partConfig, "DiffDialog");
+    TQSize size = configDialogSize(partConfig, "DiffDialog");
     resize(size);
 
     KConfigGroupSaver cs(&partConfig, "DiffDialog");
@@ -132,7 +132,7 @@ DiffDialog::~DiffDialog()
 }
 
 
-void DiffDialog::keyPressEvent(QKeyEvent *e)
+void DiffDialog::keyPressEvent(TQKeyEvent *e)
 {
     switch (e->key())
 	{
@@ -171,9 +171,9 @@ void DiffDialog::comboActivated(int index)
 }
 
 
-static void interpretRegion(QString line, int *linenoA, int *linenoB)
+static void interpretRegion(TQString line, int *linenoA, int *linenoB)
 {
-    QRegExp region( "^@@ -([0-9]+),([0-9]+) \\+([0-9]+),([0-9]+) @@.*$" );
+    TQRegExp region( "^@@ -([0-9]+),([0-9]+) \\+([0-9]+),([0-9]+) @@.*$" );
 
     if (!region.exactMatch(line))
         return;
@@ -183,24 +183,24 @@ static void interpretRegion(QString line, int *linenoA, int *linenoB)
 }
 
 
-static QString regionAsString(int linenoA, int linecountA, int linenoB, int linecountB)
+static TQString regionAsString(int linenoA, int linecountA, int linenoB, int linecountB)
 {
     int lineendA = linenoA+linecountA-1;
     int lineendB = linenoB+linecountB-1;
-    QString res;
+    TQString res;
     if (linecountB == 0)
-        res = QString("%1,%2d%3").arg(linenoA).arg(lineendA).arg(linenoB-1);
+        res = TQString("%1,%2d%3").arg(linenoA).arg(lineendA).arg(linenoB-1);
     else if (linecountA == 0)
-        res = QString("%1a%2,%3").arg(linenoA-1).arg(linenoB).arg(lineendB);
+        res = TQString("%1a%2,%3").arg(linenoA-1).arg(linenoB).arg(lineendB);
     else if (linenoA == lineendA)
         if (linenoB == lineendB)
-            res = QString("%1c%2").arg(linenoA).arg(linenoB);
+            res = TQString("%1c%2").arg(linenoA).arg(linenoB);
         else
-            res = QString("%1c%2,%3").arg(linenoA).arg(linenoB).arg(lineendB);
+            res = TQString("%1c%2,%3").arg(linenoA).arg(linenoB).arg(lineendB);
     else if (linenoB == lineendB)
-        res = QString("%1,%2c%3").arg(linenoA).arg(lineendA).arg(linenoB);
+        res = TQString("%1,%2c%3").arg(linenoA).arg(lineendA).arg(linenoB);
     else
-        res = QString("%1,%2c%3,%4").arg(linenoA).arg(lineendA).arg(linenoB).arg(lineendB);
+        res = TQString("%1,%2c%3,%4").arg(linenoA).arg(lineendA).arg(linenoB).arg(lineendB);
 
     return res;
 
@@ -216,10 +216,10 @@ public:
 };
 
 
-bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
-                              const QString &revA, const QString &revB)
+bool DiffDialog::parseCvsDiff(CvsService_stub* service, const TQString& fileName,
+                              const TQString &revA, const TQString &revB)
 {
-    QStringList linesA, linesB;
+    TQStringList linesA, linesB;
     int linenoA, linenoB;
 
     setCaption(i18n("CVS Diff: %1").arg(fileName));
@@ -238,14 +238,14 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
     // place, but this design at least makes the handling trans-
     // parent for the calling routines
 
-    QString extdiff = partConfig.readPathEntry("ExternalDiff");
+    TQString extdiff = partConfig.readPathEntry("ExternalDiff");
     if (!extdiff.isEmpty())
         {
             callExternalDiff(extdiff, service, fileName, revA, revB);
             return false;
         }
 
-    const QString diffOptions   = partConfig.readEntry("DiffOptions");
+    const TQString diffOptions   = partConfig.readEntry("DiffOptions");
     const unsigned contextLines = partConfig.readUnsignedNumEntry("ContextLines", 65535);
 
     DCOPRef job = service->diff(fileName, revA, revB, diffOptions, contextLines);
@@ -259,7 +259,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
     // remember diff output for "save as" action
     m_diffOutput = dlg.getOutput();
 
-    QString line;
+    TQString line;
     while ( dlg.getLine(line) && !line.startsWith("+++"))
         ;
 
@@ -278,7 +278,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
         if (line.length() < 1)
             continue;
 
-        QChar marker = line[0];
+        TQChar marker = line[0];
         line.remove(0, 1);
 
         if (marker == '-')
@@ -312,7 +312,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const QString& fileName,
 
 
 void DiffDialog::newDiffHunk(int& linenoA, int& linenoB,
-                             const QStringList& linesA, const QStringList& linesB)
+                             const TQStringList& linesA, const TQStringList& linesB)
 {
     DiffItem *item = new DiffItem;
     item->linenoA    = linenoA+1;
@@ -321,12 +321,12 @@ void DiffDialog::newDiffHunk(int& linenoA, int& linenoB,
     item->linecountB = linesB.count();
     items.append(item);
 
-    const QString region = regionAsString(linenoA+1, linesA.count(),
+    const TQString region = regionAsString(linenoA+1, linesA.count(),
                                           linenoB+1, linesB.count());
     itemscombo->insertItem(region);
 
-    QStringList::ConstIterator itA = linesA.begin();
-    QStringList::ConstIterator itB = linesB.begin();
+    TQStringList::ConstIterator itA = linesA.begin();
+    TQStringList::ConstIterator itB = linesB.begin();
     while (itA != linesA.end() || itB != linesB.end())
     {
         if (itA != linesA.end())
@@ -351,22 +351,22 @@ void DiffDialog::newDiffHunk(int& linenoA, int& linenoB,
 }
 
 
-void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* service,
-                                  const QString& fileName, const QString &revA,
-                                  const QString &revB)
+void DiffDialog::callExternalDiff(const TQString& extdiff, CvsService_stub* service,
+                                  const TQString& fileName, const TQString &revA,
+                                  const TQString &revB)
 {
-    QString extcmdline = extdiff;
+    TQString extcmdline = extdiff;
     extcmdline += " ";
 
-    // create suffix for temporary file (used QFileInfo to remove path from file name)
-    const QString suffix = "-" + QFileInfo(fileName).fileName();
+    // create suffix for temporary file (used TQFileInfo to remove path from file name)
+    const TQString suffix = "-" + TQFileInfo(fileName).fileName();
 
     DCOPRef job;
     if (!revA.isEmpty() && !revB.isEmpty())
     {
         // We're comparing two revisions
-        QString revAFilename = tempFileName(suffix+QString("-")+revA);
-        QString revBFilename = tempFileName(suffix+QString("-")+revB);
+        TQString revAFilename = tempFileName(suffix+TQString("-")+revA);
+        TQString revBFilename = tempFileName(suffix+TQString("-")+revB);
 
         // download the files for revision A and B
         job = service->downloadRevision(fileName, revA, revAFilename,
@@ -381,14 +381,14 @@ void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* servi
     else
     {
         // We're comparing to a file, and perhaps one revision
-        QString revAFilename = tempFileName(suffix+QString("-")+revA);
+        TQString revAFilename = tempFileName(suffix+TQString("-")+revA);
         job = service->downloadRevision(fileName, revA, revAFilename);
         if( !service->ok() )
             return;
 
         extcmdline += KProcess::quote(revAFilename);
         extcmdline += " ";
-        extcmdline += KProcess::quote(QFileInfo(fileName).absFilePath());
+        extcmdline += KProcess::quote(TQFileInfo(fileName).absFilePath());
     }
 
     ProgressDialog dlg(this, "Diff", job, "diff");
@@ -406,7 +406,7 @@ void DiffDialog::callExternalDiff(const QString& extdiff, CvsService_stub* servi
 
 void DiffDialog::updateNofN()
 {
-    QString str;
+    TQString str;
     if (markeditem >= 0)
 	str = i18n("%1 of %2").arg(markeditem+1).arg(items.count());
     else
@@ -477,14 +477,14 @@ void DiffDialog::forwClicked()
 
 void DiffDialog::saveAsClicked()
 {
-    QString fileName = KFileDialog::getSaveFileName(QString::null, QString::null, this);
+    TQString fileName = KFileDialog::getSaveFileName(TQString::null, TQString::null, this);
     if( fileName.isEmpty() )
         return;
 
     if( !Cervisia::CheckOverwrite(fileName, this) )
         return;
 
-    QFile f(fileName);
+    TQFile f(fileName);
     if( !f.open(IO_WriteOnly) )
     {
         KMessageBox::sorry(this,
@@ -493,8 +493,8 @@ void DiffDialog::saveAsClicked()
         return;
     }
 
-    QTextStream ts(&f);
-    QStringList::Iterator it = m_diffOutput.begin();
+    TQTextStream ts(&f);
+    TQStringList::Iterator it = m_diffOutput.begin();
     for( ; it != m_diffOutput.end(); ++it )
         ts << *it << "\n";
 

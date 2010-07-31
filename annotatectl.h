@@ -20,7 +20,7 @@
 #ifndef ANNOTATECTL_H
 #define ANNOTATECTL_H
 
-#include <qstring.h>
+#include <tqstring.h>
 
 class AnnotateDialog;
 class CvsService_stub;
@@ -33,7 +33,7 @@ public:
     AnnotateController(AnnotateDialog* dialog, CvsService_stub* cvsService);
     ~AnnotateController();
 
-    void showDialog(const QString& fileName, const QString& revision = QString::null);
+    void showDialog(const TQString& fileName, const TQString& revision = TQString::null);
 
 private:
     struct Private;

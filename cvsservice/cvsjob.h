@@ -21,33 +21,33 @@
 #ifndef CVSJOB_H
 #define CVSJOB_H
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <tqobject.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
 #include <dcopobject.h>
 
 class KProcess;
 
 
-class KDE_EXPORT CvsJob : public QObject, public DCOPObject
+class KDE_EXPORT CvsJob : public TQObject, public DCOPObject
 {
     Q_OBJECT
     K_DCOP
 
 public:
     explicit CvsJob(unsigned jobNum);
-    explicit CvsJob(const QString& objId);
+    explicit CvsJob(const TQString& objId);
     virtual ~CvsJob();
 
     void clearCvsCommand();
-    void setRSH(const QString& rsh);
-    void setServer(const QString& server);
-    void setDirectory(const QString& directory);
+    void setRSH(const TQString& rsh);
+    void setServer(const TQString& server);
+    void setDirectory(const TQString& directory);
 
-    CvsJob& operator<<(const QString& arg);
+    CvsJob& operator<<(const TQString& arg);
     CvsJob& operator<<(const char* arg);
-    CvsJob& operator<<(const QCString& arg);
-    CvsJob& operator<<(const QStringList& args);
+    CvsJob& operator<<(const TQCString& arg);
+    CvsJob& operator<<(const TQStringList& args);
 
 k_dcop:
     bool execute();
@@ -60,14 +60,14 @@ k_dcop:
      *
      * @return The current cvs command. Can be null if not set.
      */
-    QString cvsCommand() const;
+    TQString cvsCommand() const;
 
-    QStringList output() const;
+    TQStringList output() const;
 
 k_dcop_signals:
     void jobExited(bool normalExit, int status);
-    void receivedStdout(const QString& buffer);
-    void receivedStderr(const QString& buffer);
+    void receivedStdout(const TQString& buffer);
+    void receivedStderr(const TQString& buffer);
 
 private slots:
     void slotProcessExited();

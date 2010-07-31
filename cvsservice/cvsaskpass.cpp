@@ -18,7 +18,7 @@
  *
  */
 
-#include <qregexp.h>
+#include <tqregexp.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -56,8 +56,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char** argv)
         return 1;
 
     // parse repository name from the passed argument
-    QString prompt = KCmdLineArgs::parsedArgs()->arg(0);
-    QRegExp rx("(.*@.*)'s password:");
+    TQString prompt = KCmdLineArgs::parsedArgs()->arg(0);
+    TQRegExp rx("(.*@.*)'s password:");
     int pos = rx.search(prompt);
 
     KPasswordDialog dlg(KPasswordDialog::Password, false, 0);

@@ -19,52 +19,52 @@
 #include "patchoptiondlg.h"
 using Cervisia::PatchOptionDialog;
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
+#include <tqcheckbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqradiobutton.h>
+#include <tqvbuttongroup.h>
 #include <knuminput.h>
 #include <klocale.h>
 
 
-PatchOptionDialog::PatchOptionDialog(QWidget* parent, const char* name)
-    : KDialogBase(parent, name, true/*modal*/, QString::null,
+PatchOptionDialog::PatchOptionDialog(TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, true/*modal*/, TQString::null,
                   Ok | Cancel | Help, Ok, true/*separator*/)
 {
-    QFrame* mainWidget = makeMainWidget();
-    QBoxLayout* topLayout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQFrame* mainWidget = makeMainWidget();
+    TQBoxLayout* topLayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    m_formatBtnGroup = new QVButtonGroup(i18n("Output Format"), mainWidget, "");
+    m_formatBtnGroup = new TQVButtonGroup(i18n("Output Format"), mainWidget, "");
     topLayout->addWidget(m_formatBtnGroup);
 
-    connect(m_formatBtnGroup, SIGNAL(clicked(int)),
-            this,             SLOT(formatChanged(int)));
+    connect(m_formatBtnGroup, TQT_SIGNAL(clicked(int)),
+            this,             TQT_SLOT(formatChanged(int)));
 
-    new QRadioButton(i18n( "Context" ), m_formatBtnGroup);
-    new QRadioButton(i18n( "Normal" ), m_formatBtnGroup);
-    QRadioButton* unifiedFormatBtn = new QRadioButton(i18n( "Unified" ), m_formatBtnGroup);
+    new TQRadioButton(i18n( "Context" ), m_formatBtnGroup);
+    new TQRadioButton(i18n( "Normal" ), m_formatBtnGroup);
+    TQRadioButton* unifiedFormatBtn = new TQRadioButton(i18n( "Unified" ), m_formatBtnGroup);
     unifiedFormatBtn->setChecked(true);
 
-    QLabel* contextLinesLbl = new QLabel(i18n("&Number of context lines:"),
+    TQLabel* contextLinesLbl = new TQLabel(i18n("&Number of context lines:"),
                                          mainWidget);
     m_contextLines = new KIntNumInput(3, mainWidget);
     m_contextLines->setRange(2, 65535, 1, false);
     contextLinesLbl->setBuddy(m_contextLines);
 
-    QBoxLayout* contextLinesLayout = new QHBoxLayout(topLayout);
+    TQBoxLayout* contextLinesLayout = new TQHBoxLayout(topLayout);
     contextLinesLayout->addWidget(contextLinesLbl);
     contextLinesLayout->addWidget(m_contextLines);
 
-    QVButtonGroup* ignoreBtnGroup = new QVButtonGroup(i18n("Ignore Options"), mainWidget);
+    TQVButtonGroup* ignoreBtnGroup = new TQVButtonGroup(i18n("Ignore Options"), mainWidget);
     topLayout->addWidget(ignoreBtnGroup);
 
-    m_blankLineChk = new QCheckBox(i18n("Ignore added or removed empty lines"),
+    m_blankLineChk = new TQCheckBox(i18n("Ignore added or removed empty lines"),
                                    ignoreBtnGroup);
-    m_spaceChangeChk = new QCheckBox(i18n("Ignore changes in the amount of whitespace"),
+    m_spaceChangeChk = new TQCheckBox(i18n("Ignore changes in the amount of whitespace"),
                                      ignoreBtnGroup);
-    m_allSpaceChk = new QCheckBox(i18n("Ignore all whitespace"), ignoreBtnGroup);
-    m_caseChangesChk = new QCheckBox(i18n("Ignore changes in case"), ignoreBtnGroup);
+    m_allSpaceChk = new TQCheckBox(i18n("Ignore all whitespace"), ignoreBtnGroup);
+    m_caseChangesChk = new TQCheckBox(i18n("Ignore changes in case"), ignoreBtnGroup);
 }
 
 
@@ -73,9 +73,9 @@ PatchOptionDialog::~PatchOptionDialog()
 }
 
 
-QString PatchOptionDialog::diffOptions() const
+TQString PatchOptionDialog::diffOptions() const
 {
-    QString options;
+    TQString options;
 
     if( m_blankLineChk->isChecked() )
         options += " -B ";
@@ -93,13 +93,13 @@ QString PatchOptionDialog::diffOptions() const
 }
 
 
-QString PatchOptionDialog::formatOption() const
+TQString PatchOptionDialog::formatOption() const
 {
     switch( m_formatBtnGroup->selectedId() )
     {
-        case 0: return "-C " + QString::number(m_contextLines->value());
+        case 0: return "-C " + TQString::number(m_contextLines->value());
         case 1: return "";
-        case 2: return "-U " + QString::number(m_contextLines->value());
+        case 2: return "-U " + TQString::number(m_contextLines->value());
     }
 
     return "";

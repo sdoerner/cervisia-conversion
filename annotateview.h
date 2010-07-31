@@ -22,7 +22,7 @@
 #define ANNOTATEVIEW_H
 
 
-#include <qlistview.h>
+#include <tqlistview.h>
 
 
 class KConfig;
@@ -40,16 +40,16 @@ class AnnotateView : public QListView
 
 public:
 
-    explicit AnnotateView( KConfig &cfg, QWidget *parent=0, const char *name=0 );
+    explicit AnnotateView( KConfig &cfg, TQWidget *parent=0, const char *name=0 );
 
-    void addLine(const Cervisia::LogInfo& logInfo, const QString& content,
+    void addLine(const Cervisia::LogInfo& logInfo, const TQString& content,
                  bool odd);
 
-    virtual QSize sizeHint() const;
+    virtual TQSize sizeHint() const;
 
 private slots:
 
-    void slotQueryToolTip(const QPoint&, QRect&, QString&);
+    void slotQueryToolTip(const TQPoint&, TQRect&, TQString&);
 };
 
 

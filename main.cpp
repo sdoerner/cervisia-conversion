@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-#include <qfileinfo.h>
+#include <tqfileinfo.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -38,12 +38,12 @@
 #include "version.h"
 
 
-static CvsService_stub* StartDCOPService(const QString& directory)
+static CvsService_stub* StartDCOPService(const TQString& directory)
 {
     // start the cvs DCOP service
-    QString error;
-    QCString appId;
-    if( KApplication::startServiceByDesktopName("cvsservice", QStringList(),
+    TQString error;
+    TQCString appId;
+    if( KApplication::startServiceByDesktopName("cvsservice", TQStringList(),
                                                 &error, &appId) )
     {
         std::cerr << "Starting cvsservice failed with message: "
@@ -53,14 +53,14 @@ static CvsService_stub* StartDCOPService(const QString& directory)
 
     DCOPRef repository(appId, "CvsRepository");
 
-    repository.call("setWorkingCopy(QString)", directory);
+    repository.call("setWorkingCopy(TQString)", directory);
 
     // create a reference to the service
     return new CvsService_stub(appId, "CvsService");
 }
 
 
-static int ShowResolveDialog(const QString& fileName)
+static int ShowResolveDialog(const TQString& fileName)
 {
     KConfig* config = new KConfig("cervisiapartrc");
 
@@ -79,15 +79,15 @@ static int ShowResolveDialog(const QString& fileName)
 }
 
 
-static int ShowLogDialog(const QString& fileName)
+static int ShowLogDialog(const TQString& fileName)
 {
     KConfig* config = new KConfig("cervisiapartrc");
     LogDialog* dlg = new LogDialog(*config);
     kapp->setMainWidget(dlg);
 
     // get directory for file
-    const QFileInfo fi(fileName);
-    QString directory = fi.dirPath(true);
+    const TQFileInfo fi(fileName);
+    TQString directory = fi.dirPath(true);
 
     // start the cvs DCOP service
     CvsService_stub* cvsService = StartDCOPService(directory);
@@ -109,15 +109,15 @@ static int ShowLogDialog(const QString& fileName)
 }
 
 
-static int ShowAnnotateDialog(const QString& fileName)
+static int ShowAnnotateDialog(const TQString& fileName)
 {
     KConfig* config = new KConfig("cervisiapartrc");
     AnnotateDialog* dlg = new AnnotateDialog(*config);
     kapp->setMainWidget(dlg);
 
     // get directory for file
-    const QFileInfo fi(fileName);
-    QString directory = fi.dirPath(true);
+    const TQFileInfo fi(fileName);
+    TQString directory = fi.dirPath(true);
 
     // start the cvs DCOP service
     CvsService_stub* cvsService = StartDCOPService(directory);
@@ -169,17 +169,17 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KApplication app;
 
-    QString resolvefile = KCmdLineArgs::parsedArgs()->getOption("resolve");
+    TQString resolvefile = KCmdLineArgs::parsedArgs()->getOption("resolve");
     if (!resolvefile.isEmpty())
         return ShowResolveDialog(resolvefile);
 
     // is command line option 'show log dialog' specified?
-    QString logFile = KCmdLineArgs::parsedArgs()->getOption("log");
+    TQString logFile = KCmdLineArgs::parsedArgs()->getOption("log");
     if( !logFile.isEmpty() )
         return ShowLogDialog(logFile);
 
     // is command line option 'show annotation dialog' specified?
-    QString annotateFile = KCmdLineArgs::parsedArgs()->getOption("annotate");
+    TQString annotateFile = KCmdLineArgs::parsedArgs()->getOption("annotate");
     if( !annotateFile.isEmpty() )
         return ShowAnnotateDialog(annotateFile);
 

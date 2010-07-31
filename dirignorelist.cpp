@@ -19,18 +19,18 @@
 #include "dirignorelist.h"
 using namespace Cervisia;
 
-#include <qfileinfo.h>
+#include <tqfileinfo.h>
 
 
-DirIgnoreList::DirIgnoreList(const QString& path)
+DirIgnoreList::DirIgnoreList(const TQString& path)
 {
     addEntriesFromFile(path + "/.cvsignore");
 }
 
 
-void DirIgnoreList::addEntry(const QString& entry)
+void DirIgnoreList::addEntry(const TQString& entry)
 {
-    if (entry != QChar('!'))
+    if (entry != TQChar('!'))
     {
         m_stringMatcher.add(entry);
     }
@@ -41,7 +41,7 @@ void DirIgnoreList::addEntry(const QString& entry)
 }
 
 
-bool DirIgnoreList::matches(const QFileInfo* fi) const
+bool DirIgnoreList::matches(const TQFileInfo* fi) const
 {  
     return m_stringMatcher.match(fi->fileName());
 }

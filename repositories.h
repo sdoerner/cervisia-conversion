@@ -25,8 +25,8 @@
 class Repositories
 {
 public:
-    static QStringList readCvsPassFile();
-    static QStringList readConfigFile();
+    static TQStringList readCvsPassFile();
+    static TQStringList readConfigFile();
 };
 
 

@@ -21,9 +21,9 @@
 #define CERVISIA_LOGINFO_H
 
 
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qvaluelist.h>
+#include <tqdatetime.h>
+#include <tqstring.h>
+#include <tqvaluelist.h>
 
 
 namespace Cervisia
@@ -58,7 +58,7 @@ struct TagInfo
         Tag      = 1 << 2
     };
 
-    explicit TagInfo(const QString& name = QString::null, Type type = Tag);
+    explicit TagInfo(const TQString& name = TQString::null, Type type = Tag);
 
     /**
      * @param prefixWithType prefix the string with the type of the tag
@@ -66,17 +66,17 @@ struct TagInfo
      *
      * @return tag as string.
      */
-    QString toString(bool prefixWithType = true) const;
+    TQString toString(bool prefixWithType = true) const;
 
     /**
      * @return type of tag as string.
      */
-    QString typeToString() const;
+    TQString typeToString() const;
 
     /**
      * The name of the tag.
      */
-    QString m_name;
+    TQString m_name;
 
     /**
      * The type of the tag.
@@ -91,14 +91,14 @@ struct TagInfo
  */
 struct LogInfo
 {
-    typedef QValueList<TagInfo> TTagInfoSeq;
+    typedef TQValueList<TagInfo> TTagInfoSeq;
 
     /**
      * @param showTime show commit time in tooltip.
      *
      * @return rich text formatted tooltip text.
      */
-    QString createToolTipText(bool showTime = true) const;
+    TQString createToolTipText(bool showTime = true) const;
 
     /**
      * Calls KLocale::formatDateTime() to create a formatted string.
@@ -108,7 +108,7 @@ struct LogInfo
      *
      * @return The date/time formatted to the user's locale's conventions.
      */
-    QString dateTimeToString(bool showTime = true, bool shortFormat = true) const;
+    TQString dateTimeToString(bool showTime = true, bool shortFormat = true) const;
 
     enum
     {
@@ -126,29 +126,29 @@ struct LogInfo
      *
      * @return string of joined tags.
      */
-    QString tagsToString(unsigned int types = AllTagTypes,
+    TQString tagsToString(unsigned int types = AllTagTypes,
                          unsigned int prefixWithType = AllTagTypes,
-                         const QString& separator = QString(QChar('\n'))) const;
+                         const TQString& separator = TQString(TQChar('\n'))) const;
 
     /**
      * The revision of this entry.
      */
-    QString m_revision;
+    TQString m_revision;
 
     /**
      * The author who committed.
      */
-    QString m_author;
+    TQString m_author;
 
     /**
      * The commit message.
      */
-    QString m_comment;
+    TQString m_comment;
 
     /**
      * The date/time of the commit.
      */
-    QDateTime m_dateTime;
+    TQDateTime m_dateTime;
 
     /**
      * Sequence of tags of this entry.

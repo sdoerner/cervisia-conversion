@@ -31,14 +31,14 @@ class CvsService_stub;
 class WatchersDialog : public KDialogBase
 {
 public:
-    explicit WatchersDialog(KConfig& cfg, QWidget* parent = 0,
+    explicit WatchersDialog(KConfig& cfg, TQWidget* parent = 0,
                             const char* name = 0);
     virtual ~WatchersDialog();
 
-    bool parseWatchers(CvsService_stub* cvsService, const QStringList& files);
+    bool parseWatchers(CvsService_stub* cvsService, const TQStringList& files);
 
 private:
-    QTable*  table;
+    TQTable*  table;
     KConfig& partConfig;
 };
 

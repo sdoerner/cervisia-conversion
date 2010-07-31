@@ -39,11 +39,11 @@ class AnnotateDialog : public KDialogBase
 {
 public:
 
-    explicit AnnotateDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
+    explicit AnnotateDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
 
     virtual ~AnnotateDialog();
 
-    void addLine(const Cervisia::LogInfo& logInfo, const QString& content,
+    void addLine(const Cervisia::LogInfo& logInfo, const TQString& content,
                  bool odd);
 
 private:

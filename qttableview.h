@@ -16,7 +16,7 @@
 #define QTTABLEVIEW_H
 
 #ifndef QT_H
-#include "qframe.h"
+#include "tqframe.h"
 #endif // QT_H
 
 #ifndef QT_NO_QTTABLEVIEW
@@ -29,16 +29,16 @@ class QtTableView : public QFrame
 {
     Q_OBJECT
 public:
-    virtual void setBackgroundColor( const QColor & );
-    virtual void setPalette( const QPalette & );
+    virtual void setBackgroundColor( const TQColor & );
+    virtual void setPalette( const TQPalette & );
     void	show();
 
     void	repaint( bool erase=TRUE );
     void	repaint( int x, int y, int w, int h, bool erase=TRUE );
-    void	repaint( const QRect &, bool erase=TRUE );
+    void	repaint( const TQRect &, bool erase=TRUE );
 
 protected:
-    QtTableView( QWidget *parent=0, const char *name=0, WFlags f=0 );
+    QtTableView( TQWidget *parent=0, const char *name=0, WFlags f=0 );
    ~QtTableView();
 
     int		numRows()	const;
@@ -87,8 +87,8 @@ protected:
     bool	rowIsVisible( int row ) const;
     bool	colIsVisible( int col ) const;
 
-    QScrollBar *verticalScrollBar() const;
-    QScrollBar *horizontalScrollBar() const;
+    TQScrollBar *verticalScrollBar() const;
+    TQScrollBar *horizontalScrollBar() const;
 
 private slots:
     void	horSbValue( int );
@@ -99,12 +99,12 @@ private slots:
     void	verSbSlidingDone();
 
 protected:
-    virtual void paintCell( QPainter *, int row, int col ) = 0;
-    virtual void setupPainter( QPainter * );
+    virtual void paintCell( TQPainter *, int row, int col ) = 0;
+    virtual void setupPainter( TQPainter * );
 
-    void	paintEvent( QPaintEvent * );
-    void	resizeEvent( QResizeEvent * );
-    virtual void wheelEvent( QWheelEvent *e );
+    void	paintEvent( TQPaintEvent * );
+    void	resizeEvent( TQResizeEvent * );
+    virtual void wheelEvent( TQWheelEvent *e );
 
     int		findRow( int yPos ) const;
     int		findCol( int xPos ) const;
@@ -165,8 +165,8 @@ private:
     uint	tFlags;
     QRect	cellUpdateR;
 
-    QScrollBar *vScrollBar;
-    QScrollBar *hScrollBar;
+    TQScrollBar *vScrollBar;
+    TQScrollBar *hScrollBar;
     QCornerSquare *cornerSquare;
 
 private:	// Disabled copy constructor and operator=
@@ -231,7 +231,7 @@ inline uint QtTableView::tableFlags() const
 inline bool QtTableView::testTableFlags( uint f ) const
 { return (tFlags & f) != 0; }
 
-inline QRect QtTableView::cellUpdateRect() const
+inline TQRect QtTableView::cellUpdateRect() const
 { return cellUpdateR; }
 
 inline bool QtTableView::autoUpdate() const
@@ -240,7 +240,7 @@ inline bool QtTableView::autoUpdate() const
 inline void QtTableView::repaint( bool erase )
 { repaint( 0, 0, width(), height(), erase ); }
 
-inline void QtTableView::repaint( const QRect &r, bool erase )
+inline void QtTableView::repaint( const TQRect &r, bool erase )
 { repaint( r.x(), r.y(), r.width(), r.height(), erase ); }
 
 inline void QtTableView::updateScrollBars()

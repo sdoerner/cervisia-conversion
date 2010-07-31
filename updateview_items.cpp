@@ -22,9 +22,9 @@
 
 #include <cassert>
 
-#include <qdir.h>
-#include <qpainter.h>
-#include <qregexp.h>
+#include <tqdir.h>
+#include <tqpainter.h>
+#include <tqregexp.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -47,9 +47,9 @@ using Cervisia::EntryStatus;
 // ------------------------------------------------------------------------------
 
 
-QString UpdateItem::dirPath() const
+TQString UpdateItem::dirPath() const
 {
-    QString path;
+    TQString path;
 
     const UpdateItem* item = static_cast<UpdateItem*>(parent());
     while (item)
@@ -57,7 +57,7 @@ QString UpdateItem::dirPath() const
         const UpdateItem* parentItem = static_cast<UpdateItem*>(item->parent());
         if (parentItem)
         {
-            path.prepend(item->m_entry.m_name + QDir::separator());
+            path.prepend(item->m_entry.m_name + TQDir::separator());
         }
 
         item = parentItem;
@@ -67,10 +67,10 @@ QString UpdateItem::dirPath() const
 }
 
 
-QString UpdateItem::filePath() const
+TQString UpdateItem::filePath() const
 {
     // the filePath of the root item is '.'
-    return parent() ? dirPath() + m_entry.m_name : QChar('.');
+    return parent() ? dirPath() + m_entry.m_name : TQChar('.');
 }
 
 
@@ -102,7 +102,7 @@ UpdateDirItem::UpdateDirItem(UpdateView* parent,
 /**
  * Update the status of an item; if it doesn't exist yet, create new one
  */
-void UpdateDirItem::updateChildItem(const QString& name,
+void UpdateDirItem::updateChildItem(const TQString& name,
                                     EntryStatus status,
                                     bool isdir)
 {
@@ -154,7 +154,7 @@ void UpdateDirItem::updateEntriesItem(const Entry& entry,
             }
             fileItem->setRevTag(entry.m_revision, entry.m_tag);
             fileItem->setDate(entry.m_dateTime);
-            fileItem->setPixmap(0, isBinary ? SmallIcon("binary") : QPixmap());
+            fileItem->setPixmap(0, isBinary ? SmallIcon("binary") : TQPixmap());
         }
         return;
     }
@@ -169,8 +169,8 @@ void UpdateDirItem::updateEntriesItem(const Entry& entry,
 
 void UpdateDirItem::scanDirectory()
 {
-    const QString& path(filePath());
-    if (!QFile::exists(path))
+    const TQString& path(filePath());
+    if (!TQFile::exists(path))
         return;
 
     const CvsDir dir(path);
@@ -243,24 +243,24 @@ UpdateItem* UpdateDirItem::insertItem(UpdateItem* item)
 }
 
 
-UpdateItem* UpdateDirItem::findItem(const QString& name) const
+UpdateItem* UpdateDirItem::findItem(const TQString& name) const
 {
     const TMapItemsByName::const_iterator it = m_itemsByName.find(name);
 
     return (it != m_itemsByName.end()) ? *it : 0;
 }
 
-// Qt-3.3.8 changed the parsing in QDateTime::fromString() but introduced
+// Qt-3.3.8 changed the parsing in TQDateTime::fromString() but introduced
 // a bug which leads to the problem that days with 1 digit will incorrectly being
 // parsed as day 0 - which is invalid.
 // workaround with the implementation from Qt-3.3.6
-QDateTime parseDateTime(const QString &s)
+TQDateTime parseDateTime(const TQString &s)
 {
         static const char * const qt_shortMonthNames[] = {
 	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-	QString monthName( s.mid( 4, 3 ) );
+	TQString monthName( s.mid( 4, 3 ) );
 	int month = -1;
 	// Assume that English monthnames are the default
 	for ( int i = 0; i < 12; ++i ) {
@@ -272,30 +272,30 @@ QDateTime parseDateTime(const QString &s)
 	// If English names can't be found, search the localized ones
 	if ( month == -1 ) {
 	    for ( int i = 1; i <= 12; ++i ) {
-		if ( monthName == QDate::shortMonthName( i ) ) {
+		if ( monthName == TQDate::shortMonthName( i ) ) {
 		    month = i;
 		    break;
 		}
 	    }
 	}
 	if ( month < 1 || month > 12 ) {
-	    qWarning( "QDateTime::fromString: Parameter out of range" );
-	    QDateTime dt;
+	    qWarning( "TQDateTime::fromString: Parameter out of range" );
+	    TQDateTime dt;
 	    return dt;
 	}
 	int day = s.mid( 8, 2 ).simplifyWhiteSpace().toInt();
 	int year = s.right( 4 ).toInt();
-	QDate date( year, month, day );
-	QTime time;
+	TQDate date( year, month, day );
+	TQTime time;
 	int hour, minute, second;
-	int pivot = s.find( QRegExp(QString::fromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
+	int pivot = s.find( TQRegExp(TQString::fromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
 	if ( pivot != -1 ) {
 	    hour = s.mid( pivot, 2 ).toInt();
 	    minute = s.mid( pivot+3, 2 ).toInt();
 	    second = s.mid( pivot+6, 2 ).toInt();
 	    time.setHMS( hour, minute, second );
 	}
-	return QDateTime( date, time );
+	return TQDateTime( date, time );
 }
 
 // Format of the CVS/Entries file:
@@ -303,15 +303,15 @@ QDateTime parseDateTime(const QString &s)
 
 void UpdateDirItem::syncWithEntries()
 {
-    const QString path(filePath() + QDir::separator());
+    const TQString path(filePath() + TQDir::separator());
 
-    QFile f(path + "CVS/Entries");
+    TQFile f(path + "CVS/Entries");
     if( f.open(IO_ReadOnly) )
     {
-        QTextStream stream(&f);
+        TQTextStream stream(&f);
         while( !stream.eof() )
         {
-            QString line = stream.readLine();
+            TQString line = stream.readLine();
 
             Cervisia::Entry entry;
 
@@ -332,15 +332,15 @@ void UpdateDirItem::syncWithEntries()
             }
             else
             {
-                QString rev(line.section('/', 2, 2));
-                const QString timestamp(line.section('/', 3, 3));
-                const QString options(line.section('/', 4, 4));
+                TQString rev(line.section('/', 2, 2));
+                const TQString timestamp(line.section('/', 3, 3));
+                const TQString options(line.section('/', 4, 4));
                 entry.m_tag = line.section('/', 5, 5);
 
                 const bool isBinary(options.find("-kb") >= 0);
 
                 // file date in local time
-                entry.m_dateTime = QFileInfo(path + entry.m_name).lastModified();
+                entry.m_dateTime = TQFileInfo(path + entry.m_name).lastModified();
 
                 if( rev == "0" )
                     entry.m_status = Cervisia::LocallyAdded;
@@ -356,9 +356,9 @@ void UpdateDirItem::syncWithEntries()
                 else
                 {
                     // workaround Qt-3.3.8 bug with our own function (see function above)
-                    // const QDateTime date(QDateTime::fromString(timestamp)); // UTC Time
-                    const QDateTime date(parseDateTime(timestamp)); // UTC Time
-                    QDateTime fileDateUTC;
+                    // const TQDateTime date(TQDateTime::fromString(timestamp)); // UTC Time
+                    const TQDateTime date(parseDateTime(timestamp)); // UTC Time
+                    TQDateTime fileDateUTC;
                     fileDateUTC.setTime_t(entry.m_dateTime.toTime_t(), Qt::UTC);
                     if (date != fileDateUTC)
                         entry.m_status = Cervisia::LocallyModified;
@@ -378,7 +378,7 @@ void UpdateDirItem::syncWithEntries()
  */
 void UpdateDirItem::syncWithDirectory()
 {
-    QDir dir(filePath());
+    TQDir dir(filePath());
 
     for (TMapItemsByName::iterator it(m_itemsByName.begin()),
                                    itEnd(m_itemsByName.end());
@@ -393,7 +393,7 @@ void UpdateDirItem::syncWithDirectory()
             if (!dir.exists(it.key()))
             {
                 fileItem->setStatus(Cervisia::Removed);
-                fileItem->setRevTag(QString::null, QString::null);
+                fileItem->setRevTag(TQString::null, TQString::null);
             }
         }
     }
@@ -460,11 +460,11 @@ void UpdateDirItem::setOpen(bool open)
             view->setFilter(view->filter());
     }
 
-    QListViewItem::setOpen(open);
+    TQListViewItem::setOpen(open);
 }
 
 
-int UpdateDirItem::compare(QListViewItem* i,
+int UpdateDirItem::compare(TQListViewItem* i,
                            int /*column*/,
                            bool bAscending) const
 {
@@ -479,9 +479,9 @@ int UpdateDirItem::compare(QListViewItem* i,
 }
 
 
-QString UpdateDirItem::text(int column) const
+TQString UpdateDirItem::text(int column) const
 {
-    QString result;
+    TQString result;
     if (column == Name)
         result = entry().m_name;
 
@@ -541,7 +541,7 @@ bool UpdateFileItem::applyFilter(UpdateView::Filter filter)
 }
 
 
-void UpdateFileItem::setRevTag(const QString& rev, const QString& tag)
+void UpdateFileItem::setRevTag(const TQString& rev, const TQString& tag)
 {
     m_entry.m_revision = rev;
 
@@ -549,13 +549,13 @@ void UpdateFileItem::setRevTag(const QString& rev, const QString& tag)
         && tag[8] == '.' && tag[11] == '.' && tag[14] == '.'
         && tag[17] == '.')
     {
-        const QDate tagDate(tag.mid(1, 4).toInt(),
+        const TQDate tagDate(tag.mid(1, 4).toInt(),
                             tag.mid(6, 2).toInt(),
                             tag.mid(9, 2).toInt());
-        const QTime tagTime(tag.mid(12, 2).toInt(),
+        const TQTime tagTime(tag.mid(12, 2).toInt(),
                             tag.mid(15, 2).toInt(),
                             tag.mid(18, 2).toInt());
-        const QDateTime tagDateTimeUtc(tagDate, tagTime);
+        const TQDateTime tagDateTimeUtc(tagDate, tagTime);
 
         if (tagDateTimeUtc.isValid())
         {
@@ -565,11 +565,11 @@ void UpdateFileItem::setRevTag(const QString& rev, const QString& tag)
             // Compute the difference between UTC and local timezone for this
             // tag date.
             const unsigned int dateTimeInSeconds(tagDateTimeUtc.toTime_t());
-            QDateTime dateTime;
+            TQDateTime dateTime;
             dateTime.setTime_t(dateTimeInSeconds, Qt::UTC);
             const int localUtcOffset(dateTime.secsTo(tagDateTimeUtc));
 
-            const QDateTime tagDateTimeLocal(tagDateTimeUtc.addSecs(localUtcOffset));
+            const TQDateTime tagDateTimeLocal(tagDateTimeUtc.addSecs(localUtcOffset));
 
             m_entry.m_tag = KGlobal::locale()->formatDateTime(tagDateTimeLocal);
         }
@@ -589,7 +589,7 @@ void UpdateFileItem::setRevTag(const QString& rev, const QString& tag)
 }
 
 
-void UpdateFileItem::setDate(const QDateTime& date)
+void UpdateFileItem::setDate(const TQDateTime& date)
 {
     m_entry.m_dateTime = date;
 }
@@ -649,7 +649,7 @@ int UpdateFileItem::statusClass() const
 }
 
 
-int UpdateFileItem::compare(QListViewItem* i,
+int UpdateFileItem::compare(TQListViewItem* i,
                             int column,
                             bool bAscending) const
 {
@@ -687,9 +687,9 @@ int UpdateFileItem::compare(QListViewItem* i,
 }
 
 
-QString UpdateFileItem::text(int column) const
+TQString UpdateFileItem::text(int column) const
 {
-    QString result;
+    TQString result;
     switch (column)
     {
     case Name:
@@ -717,15 +717,15 @@ QString UpdateFileItem::text(int column) const
 }
 
 
-void UpdateFileItem::paintCell(QPainter *p,
-                               const QColorGroup &cg,
+void UpdateFileItem::paintCell(TQPainter *p,
+                               const TQColorGroup &cg,
                                int col,
                                int width,
                                int align)
 {
     const UpdateView* view(updateView());
 
-    QColor color;
+    TQColor color;
     switch (m_entry.m_status)
     {
     case Cervisia::Conflict:
@@ -752,17 +752,17 @@ void UpdateFileItem::paintCell(QPainter *p,
         break;
     }
 
-    const QFont oldFont(p->font());
-    QColorGroup mycg(cg);
+    const TQFont oldFont(p->font());
+    TQColorGroup mycg(cg);
     if (color.isValid() && color != KGlobalSettings::textColor())
     {
-        QFont myFont(oldFont);
+        TQFont myFont(oldFont);
         myFont.setBold(true);
         p->setFont(myFont);
-        mycg.setColor(QColorGroup::Text, color);
+        mycg.setColor(TQColorGroup::Text, color);
     }
 
-    QListViewItem::paintCell(p, mycg, col, width, align);
+    TQListViewItem::paintCell(p, mycg, col, width, align);
 
     if (color.isValid())
     {
@@ -775,7 +775,7 @@ void UpdateFileItem::paintCell(QPainter *p,
  * Finds or creates the UpdateDirItem with path \a dirPath. If \a dirPath
  * is "." \a rootItem is returned.
  */
-UpdateDirItem* findOrCreateDirItem(const QString& dirPath,
+UpdateDirItem* findOrCreateDirItem(const TQString& dirPath,
                                    UpdateDirItem* rootItem)
 {
     assert(!dirPath.isEmpty());
@@ -783,14 +783,14 @@ UpdateDirItem* findOrCreateDirItem(const QString& dirPath,
 
     UpdateDirItem* dirItem(rootItem);
 
-    if (dirPath != QChar('.'))
+    if (dirPath != TQChar('.'))
     {
-        const QStringList& dirNames(QStringList::split('/', dirPath));
-        const QStringList::const_iterator itDirNameEnd(dirNames.end());
-        for (QStringList::const_iterator itDirName(dirNames.begin());
+        const TQStringList& dirNames(TQStringList::split('/', dirPath));
+        const TQStringList::const_iterator itDirNameEnd(dirNames.end());
+        for (TQStringList::const_iterator itDirName(dirNames.begin());
              itDirName != itDirNameEnd; ++itDirName)
         {
-            const QString& dirName(*itDirName);
+            const TQString& dirName(*itDirName);
 
             UpdateItem* item = dirItem->findItem(dirName);
             if (isFileItem(item))

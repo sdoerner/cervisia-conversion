@@ -21,7 +21,7 @@
 #define CERVISIA_STRINGMATCHER_H
 
 
-#include <qstringlist.h>
+#include <tqstringlist.h>
 
 
 namespace Cervisia
@@ -35,12 +35,12 @@ public:
     /**
      * @return \c true, if text matches one of the given patterns.
      */
-    bool match(const QString& text) const;
+    bool match(const TQString& text) const;
 
     /**
      * Adds pattern \a pattern.
      */
-    void add(const QString& pattern);
+    void add(const TQString& pattern);
 
     /**
      * Removes all patterns.
@@ -52,22 +52,22 @@ private:
     /**
      * The patterns which are tested in match().
      */
-    QStringList m_exactPatterns;
+    TQStringList m_exactPatterns;
 
     /**
      * The patterns which are tested in match().
      */
-    QStringList m_startPatterns;
+    TQStringList m_startPatterns;
 
     /**
      * The patterns which are tested in match().
      */
-    QStringList m_endPatterns;
+    TQStringList m_endPatterns;
 
     /**
      * The patterns which are tested in match().
      */
-    QValueList<QCString> m_generalPatterns;
+    TQValueList<TQCString> m_generalPatterns;
 };
 
 

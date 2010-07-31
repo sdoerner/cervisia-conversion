@@ -34,13 +34,13 @@ class CvsInitDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    CvsInitDialog(QWidget* parent = 0, const char* name = 0);
+    CvsInitDialog(TQWidget* parent = 0, const char* name = 0);
 
-    QString directory() const;
+    TQString directory() const;
    
 private slots:
     void dirButtonClicked();
-    void lineEditTextChanged(const QString& text);
+    void lineEditTextChanged(const TQString& text);
 
 private:   
     KLineEdit* m_directoryEdit;

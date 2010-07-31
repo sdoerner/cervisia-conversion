@@ -25,7 +25,7 @@
 
 #include <kdialogbase.h>
 
-#include <qptrlist.h>
+#include <tqptrlist.h>
 #include "diffview.h"
 
 
@@ -42,13 +42,13 @@ class ResolveDialog : public KDialogBase
 public:
     enum ChooseType { ChA, ChB, ChAB, ChBA, ChEdit };
 
-    explicit ResolveDialog( KConfig& cfg, QWidget *parent=0, const char *name=0 );
+    explicit ResolveDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
     virtual ~ResolveDialog();
 
-    bool parseFile(const QString &name);
+    bool parseFile(const TQString &name);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *e);
+    virtual void keyPressEvent(TQKeyEvent *e);
 
 private slots:
     void backClicked();
@@ -66,27 +66,27 @@ private:
     void updateHighlight(int newitem);
     void choose(ChooseType ch);
     void chooseEdit();
-    void saveFile(const QString &name);
-    QString readFile();
-    void addToMergeAndVersionA(const QString& line, DiffView::DiffType type, 
+    void saveFile(const TQString &name);
+    TQString readFile();
+    void addToMergeAndVersionA(const TQString& line, DiffView::DiffType type, 
                                int& lineNo);
-    void addToVersionB(const QString& line, DiffView::DiffType type, int& lineNo);
+    void addToVersionB(const TQString& line, DiffView::DiffType type, int& lineNo);
     void updateMergedVersion(ResolveItem* item, ChooseType chosen);
-    QString contentVersionA(const ResolveItem *item);
-    QString contentVersionB(const ResolveItem *item);
+    TQString contentVersionA(const ResolveItem *item);
+    TQString contentVersionB(const ResolveItem *item);
     
-    QLabel *nofnlabel;
-    QPushButton *backbutton, *forwbutton;
-    QPushButton *abutton, *bbutton, *abbutton, *babutton, *editbutton;
+    TQLabel *nofnlabel;
+    TQPushButton *backbutton, *forwbutton;
+    TQPushButton *abutton, *bbutton, *abbutton, *babutton, *editbutton;
     DiffView *diff1, *diff2, *merge;
 
-    QPtrList<ResolveItem> items;
-    QString fname;
-    QTextCodec *fcodec;
+    TQPtrList<ResolveItem> items;
+    TQString fname;
+    TQTextCodec *fcodec;
     int markeditem;
     KConfig& partConfig;
     
-    QString    m_contentMergedVersion;
+    TQString    m_contentMergedVersion;
 };
 
 

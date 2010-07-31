@@ -19,7 +19,7 @@
 
 #include "loginfo.h"
 
-#include <qstylesheet.h>
+#include <tqstylesheet.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -29,19 +29,19 @@ namespace Cervisia
 {
 
 
-TagInfo::TagInfo(const QString& name, Type type)
+TagInfo::TagInfo(const TQString& name, Type type)
     : m_name(name),
       m_type(type)
 {
 }
 
 
-QString TagInfo::toString(bool prefixWithType) const
+TQString TagInfo::toString(bool prefixWithType) const
 {
-    QString text;
+    TQString text;
     if (prefixWithType)
     {
-        text += typeToString() + QString::fromLatin1(": ");
+        text += typeToString() + TQString::fromLatin1(": ");
     }
     text += m_name;
 
@@ -49,9 +49,9 @@ QString TagInfo::toString(bool prefixWithType) const
 }
 
 
-QString TagInfo::typeToString() const
+TQString TagInfo::typeToString() const
 {
-    QString text;
+    TQString text;
     switch (m_type)
     {
     case Branch:
@@ -69,41 +69,41 @@ QString TagInfo::typeToString() const
 }
 
 
-QString LogInfo::createToolTipText(bool showTime) const
+TQString LogInfo::createToolTipText(bool showTime) const
 {
-    QString text(QString::fromLatin1("<nobr><b>"));
-    text += QStyleSheet::escape(m_revision);
-    text += QString::fromLatin1("</b>&nbsp;&nbsp;");
-    text += QStyleSheet::escape(m_author);
-    text += QString::fromLatin1("&nbsp;&nbsp;<b>");
-    text += QStyleSheet::escape(dateTimeToString(showTime));
-    text += QString::fromLatin1("</b></nobr>");
+    TQString text(TQString::fromLatin1("<nobr><b>"));
+    text += TQStyleSheet::escape(m_revision);
+    text += TQString::fromLatin1("</b>&nbsp;&nbsp;");
+    text += TQStyleSheet::escape(m_author);
+    text += TQString::fromLatin1("&nbsp;&nbsp;<b>");
+    text += TQStyleSheet::escape(dateTimeToString(showTime));
+    text += TQString::fromLatin1("</b></nobr>");
 
     if (!m_comment.isEmpty())
     {
-        text += QString::fromLatin1("<pre>");
-        text += QStyleSheet::escape(m_comment);
-        text += QString::fromLatin1("</pre>");
+        text += TQString::fromLatin1("<pre>");
+        text += TQStyleSheet::escape(m_comment);
+        text += TQString::fromLatin1("</pre>");
     }
 
     if (!m_tags.isEmpty())
     {
-        text += QString::fromLatin1("<i>");
+        text += TQString::fromLatin1("<i>");
         for (TTagInfoSeq::const_iterator it = m_tags.begin();
              it != m_tags.end(); ++it)
         {
             if (it != m_tags.begin() || m_comment.isEmpty())
-                text += QString::fromLatin1("<br>");
-            text += QStyleSheet::escape((*it).toString());
+                text += TQString::fromLatin1("<br>");
+            text += TQStyleSheet::escape((*it).toString());
         }
-        text += QString::fromLatin1("</i>");
+        text += TQString::fromLatin1("</i>");
     }
 
     return text;
 }
 
 
-QString LogInfo::dateTimeToString(bool showTime, bool shortFormat) const
+TQString LogInfo::dateTimeToString(bool showTime, bool shortFormat) const
 {
     if( showTime )
         return KGlobal::locale()->formatDateTime(m_dateTime, shortFormat);
@@ -112,11 +112,11 @@ QString LogInfo::dateTimeToString(bool showTime, bool shortFormat) const
 }
 
 
-QString LogInfo::tagsToString(unsigned int types,
+TQString LogInfo::tagsToString(unsigned int types,
                               unsigned int prefixWithType,
-                              const QString& separator) const
+                              const TQString& separator) const
 {
-    QString text;
+    TQString text;
     for (TTagInfoSeq::const_iterator it = m_tags.begin();
          it != m_tags.end(); ++it)
     {

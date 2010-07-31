@@ -23,8 +23,8 @@
 #include "annotateview.h"
 
 
-AnnotateDialog::AnnotateDialog(KConfig& cfg, QWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, QString::null,
+AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString::null,
                   Close | Help, Close, true)
     , partConfig(cfg)
 {
@@ -35,7 +35,7 @@ AnnotateDialog::AnnotateDialog(KConfig& cfg, QWidget *parent, const char *name)
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(partConfig, "AnnotateDialog");
+    TQSize size = configDialogSize(partConfig, "AnnotateDialog");
     resize(size);
 }
 
@@ -47,7 +47,7 @@ AnnotateDialog::~AnnotateDialog()
 
 
 void AnnotateDialog::addLine(const Cervisia::LogInfo& logInfo,
-                             const QString& content, bool odd)
+                             const TQString& content, bool odd)
 {
     annotate->addLine(logInfo, content, odd);
 }

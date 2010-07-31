@@ -36,40 +36,40 @@ namespace Cervisia
 /**
  * Verifies that the passed tag name is a valid cvs tag.
  */
-bool IsValidTag(const QString& tag);
+bool IsValidTag(const TQString& tag);
 
 /**
  * Returns the user name (real name + mail address) for the changelog entry.
  */
-QString UserName();
+TQString UserName();
 
 /**
  * This method makes sure that the cvsroot specification for a pserver repository has
  * always the form:
  *  :pserver:[user]@[host]:[port][path]
  */
-QString NormalizeRepository(const QString& repository);
+TQString NormalizeRepository(const TQString& repository);
 
-bool CheckOverwrite(const QString& fileName, QWidget* parent=0);
+bool CheckOverwrite(const TQString& fileName, TQWidget* parent=0);
 
 }
 
 
-QString joinLine(const QStringList &list);
-QStringList splitLine(QString, char delim=' ');
+TQString joinLine(const TQStringList &list);
+TQStringList splitLine(TQString, char delim=' ');
 
-QString tempFileName(const QString& suffix);
+TQString tempFileName(const TQString& suffix);
 void cleanupTempFiles();
 
-const QStringList fetchBranches(CvsService_stub* cvsService, QWidget* parent);
-const QStringList fetchTags(CvsService_stub* cvsService, QWidget* parent);
+const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* parent);
+const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* parent);
 
 /**
  * Compares two revision numbers.
  *
  * @return -1 / 0 / 1 if rev1 is < / == / > rev2
  */
-int compareRevisions(const QString& rev1, const QString& rev2);
+int compareRevisions(const TQString& rev1, const TQString& rev2);
 
 
 /**

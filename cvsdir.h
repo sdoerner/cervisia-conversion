@@ -21,13 +21,13 @@
 #ifndef CVSDIR_H
 #define CVSDIR_H
 
-#include <qdir.h>
+#include <tqdir.h>
 
 
 class CvsDir : public QDir
 {
 public:
-    explicit CvsDir(const QString &path);
+    explicit CvsDir(const TQString &path);
 
     const QFileInfoList *entryInfoList() const;
 

@@ -19,9 +19,9 @@
 
 #include "logplainview.h"
 
-#include <qregexp.h>
-#include <qstringlist.h>
-#include <qstylesheet.h>
+#include <tqregexp.h>
+#include <tqstringlist.h>
+#include <tqstylesheet.h>
 #include <kfind.h>
 #include <kfinddialog.h>
 #include <klocale.h>
@@ -31,7 +31,7 @@
 using namespace Cervisia;
 
 
-LogPlainView::LogPlainView(QWidget* parent, const char* name)
+LogPlainView::LogPlainView(TQWidget* parent, const char* name)
     : KTextBrowser(parent, name)
     , m_find(0)
     , m_findPos(0)
@@ -48,76 +48,76 @@ LogPlainView::~LogPlainView()
 
 void LogPlainView::addRevision(const LogInfo& logInfo)
 {
-    setTextFormat(QStyleSheet::RichText);
+    setTextFormat(TQStyleSheet::RichText);
 
     // assemble revision information lines
-    QString logEntry;
+    TQString logEntry;
 
-    logEntry += "<b>" + i18n("revision %1").arg(QStyleSheet::escape(logInfo.m_revision)) +
+    logEntry += "<b>" + i18n("revision %1").arg(TQStyleSheet::escape(logInfo.m_revision)) +
                 "</b>";
-    logEntry += " &nbsp;[<a href=\"revA#" + QStyleSheet::escape(logInfo.m_revision) + "\">" +
+    logEntry += " &nbsp;[<a href=\"revA#" + TQStyleSheet::escape(logInfo.m_revision) + "\">" +
                 i18n("Select for revision A") +
                 "</a>]";
-    logEntry += " [<a href=\"revB#" + QStyleSheet::escape(logInfo.m_revision) + "\">" +
+    logEntry += " [<a href=\"revB#" + TQStyleSheet::escape(logInfo.m_revision) + "\">" +
                 i18n("Select for revision B") +
                 "</a>]<br>";
     logEntry += "<i>" +
-                i18n("date: %1; author: %2").arg(QStyleSheet::escape(logInfo.dateTimeToString()))
-                                            .arg(QStyleSheet::escape(logInfo.m_author)) +
+                i18n("date: %1; author: %2").arg(TQStyleSheet::escape(logInfo.dateTimeToString()))
+                                            .arg(TQStyleSheet::escape(logInfo.m_author)) +
                 "</i>";
 
     append(logEntry);
 
-    setTextFormat(QStyleSheet::PlainText);
+    setTextFormat(TQStyleSheet::PlainText);
 
-    const QChar newline('\n');
+    const TQChar newline('\n');
 
     // split comment in separate lines
-    QStringList lines = QStringList::split(newline, logInfo.m_comment, true);
+    TQStringList lines = TQStringList::split(newline, logInfo.m_comment, true);
 
     append(newline);
-    QStringList::Iterator it  = lines.begin();
-    QStringList::Iterator end = lines.end();
+    TQStringList::Iterator it  = lines.begin();
+    TQStringList::Iterator end = lines.end();
     for( ; it != end; ++it )
     {
-        append((*it).isEmpty() ? QString(newline) : *it);
+        append((*it).isEmpty() ? TQString(newline) : *it);
     }
     append(newline);
 
-    setTextFormat(QStyleSheet::RichText);
+    setTextFormat(TQStyleSheet::RichText);
 
     for( LogInfo::TTagInfoSeq::const_iterator it = logInfo.m_tags.begin();
          it != logInfo.m_tags.end(); ++it )
     {
-        append("<i>" + QStyleSheet::escape((*it).toString()) + "</i>");
+        append("<i>" + TQStyleSheet::escape((*it).toString()) + "</i>");
     }
 
     // add an empty line when we had tags or branches
     if( !logInfo.m_tags.empty() )
     {
-        setTextFormat(QStyleSheet::PlainText);
+        setTextFormat(TQStyleSheet::PlainText);
         append(newline);
     }
 
     // add horizontal line
-    setTextFormat(QStyleSheet::RichText);
+    setTextFormat(TQStyleSheet::RichText);
     append("<hr>");
 }
 
 
-void LogPlainView::searchText(int options, const QString& pattern)
+void LogPlainView::searchText(int options, const TQString& pattern)
 {
     m_find = new KFind(pattern, options, this);
 
-    connect(m_find, SIGNAL(highlight(const QString&, int, int)),
-            this, SLOT(searchHighlight(const QString&, int, int)));
-    connect(m_find, SIGNAL(findNext()),
-           this, SLOT(findNext()));
+    connect(m_find, TQT_SIGNAL(highlight(const TQString&, int, int)),
+            this, TQT_SLOT(searchHighlight(const TQString&, int, int)));
+    connect(m_find, TQT_SIGNAL(findNext()),
+           this, TQT_SLOT(findNext()));
 
     m_findPos = 0;
     if( options & KFindDialog::FromCursor )
     {
-        const QPoint pos(contentsX(), contentsY());
+        const TQPoint pos(contentsX(), contentsY());
         m_findPos = paragraphAt(pos);
     }
 
@@ -133,8 +133,8 @@ void LogPlainView::scrollToTop()
 
 void LogPlainView::findNext()
 {
-    static const QRegExp breakLineTag("<br[^>]*>");
-    static const QRegExp htmlTags("<[^>]*>");
+    static const TQRegExp breakLineTag("<br[^>]*>");
+    static const TQRegExp htmlTags("<[^>]*>");
 
     KFind::Result res = KFind::NoMatch;
 
@@ -142,7 +142,7 @@ void LogPlainView::findNext()
     {
         if( m_find->needData() )
         {
-            QString richText = text(m_findPos);
+            TQString richText = text(m_findPos);
 
             // replace <br/> with '\n'
             richText.replace(breakLineTag, "\n");
@@ -181,14 +181,14 @@ void LogPlainView::findNext()
 }
 
 
-void LogPlainView::searchHighlight(const QString& text, int index, int length)
+void LogPlainView::searchHighlight(const TQString& text, int index, int length)
 {
     Q_UNUSED(text);
     setSelection(m_findPos, index, m_findPos, index + length);
 }
 
 
-void LogPlainView::setSource(const QString& name)
+void LogPlainView::setSource(const TQString& name)
 {
     if( name.isEmpty() )
         return;

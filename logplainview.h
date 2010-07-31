@@ -36,23 +36,23 @@ class LogPlainView : public KTextBrowser
     Q_OBJECT
 
 public:
-    explicit LogPlainView(QWidget* parent = 0, const char* name = 0);
+    explicit LogPlainView(TQWidget* parent = 0, const char* name = 0);
     ~LogPlainView();
 
     void addRevision(const Cervisia::LogInfo& logInfo);
 
-    void searchText(int options, const QString& pattern);
+    void searchText(int options, const TQString& pattern);
 
 signals:
-    void revisionClicked(QString rev, bool rmb);
+    void revisionClicked(TQString rev, bool rmb);
 
 public slots:
     void scrollToTop();
     void findNext();
-    void searchHighlight(const QString& text, int index, int length);
+    void searchHighlight(const TQString& text, int index, int length);
 
 protected:                     
-    virtual void setSource(const QString& name);
+    virtual void setSource(const TQString& name);
     
 private:
     KFind* m_find;

@@ -19,9 +19,9 @@
 
 
 #include <stdlib.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qtextstream.h>
+#include <tqfile.h>
+#include <tqdir.h>
+#include <tqtextstream.h>
 #include <kapplication.h>
 #include <kconfig.h>
 
@@ -29,15 +29,15 @@
 #include "cervisiapart.h"
 
 
-static QString fileNameCvs()
+static TQString fileNameCvs()
 {
-    return QDir::homeDirPath() + "/.cvspass";
+    return TQDir::homeDirPath() + "/.cvspass";
 }
 
 
-static QString fileNameCvsnt()
+static TQString fileNameCvsnt()
 {
-    return QDir::homeDirPath() + "/.cvs/cvspass";
+    return TQDir::homeDirPath() + "/.cvs/cvspass";
 }
 
 
@@ -47,18 +47,18 @@ static QString fileNameCvsnt()
 // new .cvspass format (since cvs 1.11.1):
 //    /1 user@host:port/path Aencoded_password
 //
-static QStringList readCvsPassFile()
+static TQStringList readCvsPassFile()
 {
-    QStringList list;
+    TQStringList list;
 
-    QFile f(fileNameCvs());
+    TQFile f(fileNameCvs());
     if (f.open(IO_ReadOnly))
         {
-            QTextStream stream(&f);
+            TQTextStream stream(&f);
 	    while (!stream.eof())
 		{
 		    int pos;
-		    QString line = stream.readLine();
+		    TQString line = stream.readLine();
 		    if ( (pos = line.find(' ')) != -1)
 		    {
 			if (line[0] != '/')	// old format
@@ -76,17 +76,17 @@ static QStringList readCvsPassFile()
 // .cvs/cvspass format
 //    user@host:port/path=Aencoded_password
 //
-static QStringList readCvsntPassFile()
+static TQStringList readCvsntPassFile()
 {
-    QStringList list;
+    TQStringList list;
 
-    QFile file(fileNameCvsnt());
+    TQFile file(fileNameCvsnt());
     if (file.open(IO_ReadOnly))
     {
-        QTextStream stream(&file);
+        TQTextStream stream(&file);
         while (!stream.atEnd())
         {
-            const QString line(stream.readLine());
+            const TQString line(stream.readLine());
 
             const int pos(line.find("=A"));
             if (pos >= 0)
@@ -98,18 +98,18 @@ static QStringList readCvsntPassFile()
 }
 
 
-QStringList Repositories::readCvsPassFile()
+TQStringList Repositories::readCvsPassFile()
 {
-    return (QFileInfo(fileNameCvs()).lastModified()
-            < QFileInfo(fileNameCvsnt()).lastModified())
+    return (TQFileInfo(fileNameCvs()).lastModified()
+            < TQFileInfo(fileNameCvsnt()).lastModified())
         ? readCvsntPassFile()
         : ::readCvsPassFile();
 }
 
 
-QStringList Repositories::readConfigFile()
+TQStringList Repositories::readConfigFile()
 {
-    QStringList list;
+    TQStringList list;
     
     KConfig *config = CervisiaPart::config();
     config->setGroup("Repositories");

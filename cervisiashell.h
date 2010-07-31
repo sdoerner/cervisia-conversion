@@ -60,7 +60,7 @@ private:
     void writeSettings();
 
     KParts::ReadOnlyPart* m_part;
-    QString               m_lastOpenDir;
+    TQString               m_lastOpenDir;
 };
 
 

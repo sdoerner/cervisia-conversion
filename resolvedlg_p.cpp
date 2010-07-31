@@ -22,8 +22,8 @@ using namespace Cervisia;
 #include <ktextedit.h>
 
 
-ResolveEditorDialog::ResolveEditorDialog(KConfig& cfg, QWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, QString::null,
+ResolveEditorDialog::ResolveEditorDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString::null,
                   Ok | Cancel, Ok, true)
     , m_partConfig(cfg)
 {
@@ -32,11 +32,11 @@ ResolveEditorDialog::ResolveEditorDialog(KConfig& cfg, QWidget *parent, const ch
 
     setMainWidget(m_edit);
 
-    QFontMetrics const fm(fontMetrics());
+    TQFontMetrics const fm(fontMetrics());
     setMinimumSize(fm.width('0') * 120,
                    fm.lineSpacing() * 40);
 
-    QSize size = configDialogSize(m_partConfig, "ResolveEditDialog");
+    TQSize size = configDialogSize(m_partConfig, "ResolveEditDialog");
     resize(size);
 }
 
@@ -47,13 +47,13 @@ ResolveEditorDialog::~ResolveEditorDialog()
 }
 
 
-void ResolveEditorDialog::setContent(const QString& text)
+void ResolveEditorDialog::setContent(const TQString& text)
 {
     m_edit->setText(text);
 }
 
 
-QString ResolveEditorDialog::content() const
+TQString ResolveEditorDialog::content() const
 {
     return m_edit->text();
 }

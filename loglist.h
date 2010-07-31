@@ -41,22 +41,22 @@ class LogListView : public KListView
     Q_OBJECT
     
 public:
-    explicit LogListView( KConfig& cfg, QWidget *parent=0, const char *name=0 );
+    explicit LogListView( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
     virtual ~LogListView();
     
     void addRevision(const Cervisia::LogInfo& logInfo);
-    void setSelectedPair(const QString &selectionA, const QString &selectionB);
+    void setSelectedPair(const TQString &selectionA, const TQString &selectionB);
 
 signals:
-    void revisionClicked(QString rev, bool rmb);
+    void revisionClicked(TQString rev, bool rmb);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *e);
-    virtual void keyPressEvent(QKeyEvent *e);
+    virtual void contentsMousePressEvent(TQMouseEvent *e);
+    virtual void keyPressEvent(TQKeyEvent *e);
 
 private slots:
 
-    void slotQueryToolTip(const QPoint&, QRect&, QString&);
+    void slotQueryToolTip(const TQPoint&, TQRect&, TQString&);
 
 private:
 

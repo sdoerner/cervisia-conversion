@@ -21,7 +21,7 @@
 #ifndef DIFFDLG_H
 #define DIFFDLG_H
 
-#include <qptrlist.h>
+#include <tqptrlist.h>
 #include <kdialogbase.h>
 
 
@@ -40,16 +40,16 @@ class DiffDialog : public KDialogBase
 
 public:
 
-    explicit DiffDialog( KConfig& config, QWidget *parent=0, const char *name=0, 
+    explicit DiffDialog( KConfig& config, TQWidget *parent=0, const char *name=0, 
                          bool modal=false );
 
     virtual ~DiffDialog();
 
-    bool parseCvsDiff(CvsService_stub* service, const QString &fileName, 
-                      const QString &revA, const QString &revB);
+    bool parseCvsDiff(CvsService_stub* service, const TQString &fileName, 
+                      const TQString &revA, const TQString &revB);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *e);
+    virtual void keyPressEvent(TQKeyEvent *e);
 
 private slots:
     void toggleSynchronize(bool b);
@@ -59,24 +59,24 @@ private slots:
     void saveAsClicked();
 
 private:
-    void newDiffHunk(int& linenoA, int& linenoB, const QStringList& linesA,
-                     const QStringList& linesB);
-    void callExternalDiff(const QString& extdiff, CvsService_stub* service, 
-                          const QString& fileName, const QString& revA, 
-                          const QString& revB);
+    void newDiffHunk(int& linenoA, int& linenoB, const TQStringList& linesA,
+                     const TQStringList& linesB);
+    void callExternalDiff(const TQString& extdiff, CvsService_stub* service, 
+                          const TQString& fileName, const TQString& revA, 
+                          const TQString& revB);
     void updateNofN();
     void updateHighlight(int newitem);
 
-    QLabel *revlabel1, *revlabel2, *nofnlabel;
-    QCheckBox *syncbox;
-    QComboBox *itemscombo;
-    QPushButton *backbutton, *forwbutton;
+    TQLabel *revlabel1, *revlabel2, *nofnlabel;
+    TQCheckBox *syncbox;
+    TQComboBox *itemscombo;
+    TQPushButton *backbutton, *forwbutton;
     DiffView *diff1, *diff2;
 
-    QPtrList<DiffItem> items;
+    TQPtrList<DiffItem> items;
     int markeditem;
     KConfig& partConfig;
-    QStringList m_diffOutput;
+    TQStringList m_diffOutput;
 };
 
 #endif

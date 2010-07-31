@@ -21,8 +21,8 @@
 #define CERVISIA_TOOLTIP_H
 
 
-#include <qobject.h>
-#include <qtooltip.h>
+#include <tqobject.h>
+#include <tqtooltip.h>
 
 
 namespace Cervisia
@@ -30,11 +30,11 @@ namespace Cervisia
 
 
 /**
- * This class extends QToolTip:
+ * This class extends TQToolTip:
  * - no more need to subclass just connect to the signal queryToolTip()
  * - truncate too large tooltip texts.
  */
-class ToolTip : public QObject, public QToolTip
+class ToolTip : public TQObject, public QToolTip
 {
     Q_OBJECT
 
@@ -42,10 +42,10 @@ public:
 
     /**
      * @param widget The widget you want to add tooltips to. It's also used as
-     * parent for the QObject. So you don't have to free an instance of this
+     * parent for the TQObject. So you don't have to free an instance of this
      * class yourself.
      */
-    explicit ToolTip(QWidget* widget);
+    explicit ToolTip(TQWidget* widget);
 
 signals:
 
@@ -61,11 +61,11 @@ signals:
      *
      * @param text The tooltip text.
      */
-    void queryToolTip(const QPoint& pos, QRect& rect, QString& text);
+    void queryToolTip(const TQPoint& pos, TQRect& rect, TQString& text);
 
 protected:
 
-    virtual void maybeTip(const QPoint&);
+    virtual void maybeTip(const TQPoint&);
 };
 
 

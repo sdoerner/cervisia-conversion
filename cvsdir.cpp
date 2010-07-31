@@ -25,16 +25,16 @@
 using namespace Cervisia;
 
 
-CvsDir::CvsDir(const QString &path)
-    : QDir( path, 0, QDir::Name,
-            QDir::All | QDir::Hidden | QDir::NoSymLinks )
+CvsDir::CvsDir(const TQString &path)
+    : TQDir( path, 0, TQDir::Name,
+            TQDir::All | TQDir::Hidden | TQDir::NoSymLinks )
 {}
 
 
 const QFileInfoList *CvsDir::entryInfoList() const
 {
     DirIgnoreList ignorelist(absPath());
-    const QFileInfoList *fulllist = QDir::entryInfoList();
+    const QFileInfoList *fulllist = TQDir::entryInfoList();
     if (!fulllist)
         return 0;
     

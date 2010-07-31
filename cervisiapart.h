@@ -55,8 +55,8 @@ class CervisiaPart : public KParts::ReadOnlyPart
     Q_OBJECT
 
 public:
-    CervisiaPart( QWidget *parentWidget, const char *widgetName,
-                  QObject *parent, const char *name=0, const QStringList& args = QStringList());
+    CervisiaPart( TQWidget *parentWidget, const char *widgetName,
+                  TQObject *parent, const char *name=0, const TQStringList& args = TQStringList());
     virtual ~CervisiaPart();
 
     /**
@@ -64,7 +64,7 @@ public:
      */
     static KConfig *config();
 
-    QString sandBox() const { return sandbox; }
+    TQString sandBox() const { return sandbox; }
 
     static KAboutData* createAboutData();
 
@@ -73,9 +73,9 @@ public slots:
     virtual bool openFile() { return true; }
     virtual bool openURL( const KURL & );
 
-    void openFile(QString filename);
-    void openFiles(const QStringList &filenames);
-    void popupRequested(KListView*, QListViewItem*, const QPoint&);
+    void openFile(TQString filename);
+    void openFiles(const TQStringList &filenames);
+    void popupRequested(KListView*, TQListViewItem*, const TQPoint&);
     void updateActions();
 
     void aboutCervisia();
@@ -156,25 +156,25 @@ private:
     void readSettings();
     void writeSettings();
 
-    bool openSandbox(const QString &dirname);
-    void updateSandbox(const QString &extraopt = QString::null);
+    bool openSandbox(const TQString &dirname);
+    void updateSandbox(const TQString &extraopt = TQString::null);
     void addOrRemove(AddRemoveDialog::ActionType action);
     void addOrRemoveWatch(WatchDialog::ActionType action);
     void createOrDeleteTag(Cervisia::TagDialog::ActionType action);
-    void showJobStart(const QString &command);
-    void showDiff(const QString& revision);
+    void showJobStart(const TQString &command);
+    void showDiff(const TQString& revision);
     void setFilter();
 
     UpdateView *update;
     ProtocolView *protocol;
     bool hasRunningJob;
-    QSplitter *splitter;
+    TQSplitter *splitter;
 
-    QString sandbox;
-    QString repository;
+    TQString sandbox;
+    TQString repository;
 
-    QString changelogstr;
-    QStringList recentCommits;
+    TQString changelogstr;
+    TQStringList recentCommits;
     bool opt_hideFiles, opt_hideUpToDate, opt_hideRemoved, opt_hideNotInCVS, opt_hideEmptyDirectories;
     bool opt_createDirs, opt_pruneDirs;
     bool opt_updateRecursive, opt_commitRecursive, opt_doCVSEdit;
@@ -185,7 +185,7 @@ private:
     CvsService_stub*            cvsService;
     KParts::StatusBarExtension* m_statusBar;
     CervisiaBrowserExtension*   m_browserExt;
-    QLabel*                     filterLabel;
+    TQLabel*                     filterLabel;
 
     int                         m_editWithId;
     Cervisia::EditWithMenu*     m_currentEditMenu;

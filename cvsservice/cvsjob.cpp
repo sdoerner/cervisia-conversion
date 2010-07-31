@@ -20,7 +20,7 @@
 
 #include "cvsjob.h"
 
-#include <qfile.h>
+#include <tqfile.h>
 #include <kdebug.h>
 #include <kprocess.h>
 
@@ -37,26 +37,26 @@ struct CvsJob::Private
     ~Private() { delete childproc; }
 
     KProcess*   childproc;
-    QString     server;
-    QString     rsh;
-    QString     directory;
+    TQString     server;
+    TQString     rsh;
+    TQString     directory;
     bool        isRunning;
-    QStringList outputLines;
+    TQStringList outputLines;
 };
 
 
 CvsJob::CvsJob(unsigned jobNum)
-    : QObject()
+    : TQObject()
     , DCOPObject()
     , d(new Private)
 {
-    QString objId("CvsJob" + QString::number(jobNum));
+    TQString objId("CvsJob" + TQString::number(jobNum));
     setObjId(objId.local8Bit());
 }
 
 
-CvsJob::CvsJob(const QString& objId)
-    : QObject()
+CvsJob::CvsJob(const TQString& objId)
+    : TQObject()
     , DCOPObject()
     , d(new Private)
 {
@@ -76,19 +76,19 @@ void CvsJob::clearCvsCommand()
 }
 
 
-void CvsJob::setRSH(const QString& rsh)
+void CvsJob::setRSH(const TQString& rsh)
 {
     d->rsh = rsh;
 }
 
 
-void CvsJob::setServer(const QString& server)
+void CvsJob::setServer(const TQString& server)
 {
     d->server = server;
 }
 
 
-void CvsJob::setDirectory(const QString& directory)
+void CvsJob::setDirectory(const TQString& directory)
 {
     d->directory = directory;
 }
@@ -100,7 +100,7 @@ bool CvsJob::isRunning() const
 }
 
 
-CvsJob& CvsJob::operator<<(const QString& arg)
+CvsJob& CvsJob::operator<<(const TQString& arg)
 {
     *d->childproc << arg;
     return *this;
@@ -114,39 +114,39 @@ CvsJob& CvsJob::operator<<(const char* arg)
 }
 
 
-CvsJob& CvsJob::operator<<(const QCString& arg)
+CvsJob& CvsJob::operator<<(const TQCString& arg)
 {
     *d->childproc << arg;
     return *this;
 }
 
 
-CvsJob& CvsJob::operator<<(const QStringList& args)
+CvsJob& CvsJob::operator<<(const TQStringList& args)
 {
     *d->childproc << args;
     return *this;
 }
 
 
-QString CvsJob::cvsCommand() const
+TQString CvsJob::cvsCommand() const
 {
-    QString command;
+    TQString command;
 
-    const QValueList<QCString>& args(d->childproc->args());
-    for (QValueList<QCString>::const_iterator it = args.begin(), itEnd = args.end();
+    const TQValueList<TQCString>& args(d->childproc->args());
+    for (TQValueList<TQCString>::const_iterator it = args.begin(), itEnd = args.end();
          it != itEnd; ++it)
     {
         if (!command.isEmpty())
             command += ' ';
 
-        command += QFile::decodeName(*it);
+        command += TQFile::decodeName(*it);
     }
 
     return command;
 }
 
 
-QStringList CvsJob::output() const
+TQStringList CvsJob::output() const
 {
     return d->outputLines;
 }
@@ -176,12 +176,12 @@ bool CvsJob::execute()
     if( !d->directory.isEmpty() )
         d->childproc->setWorkingDirectory(d->directory);
 
-    connect(d->childproc, SIGNAL(processExited(KProcess*)),
-        SLOT(slotProcessExited()));
-    connect(d->childproc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-        SLOT(slotReceivedStdout(KProcess*, char*, int)));
-    connect(d->childproc, SIGNAL(receivedStderr(KProcess*, char*, int)),
-        SLOT(slotReceivedStderr(KProcess*, char*, int)) );
+    connect(d->childproc, TQT_SIGNAL(processExited(KProcess*)),
+        TQT_SLOT(slotProcessExited()));
+    connect(d->childproc, TQT_SIGNAL(receivedStdout(KProcess*, char*, int)),
+        TQT_SLOT(slotReceivedStdout(KProcess*, char*, int)));
+    connect(d->childproc, TQT_SIGNAL(receivedStderr(KProcess*, char*, int)),
+        TQT_SLOT(slotReceivedStderr(KProcess*, char*, int)) );
 
     kdDebug(8051) << "Execute cvs command: " << cvsCommand() << endl;
 
@@ -212,10 +212,10 @@ void CvsJob::slotReceivedStdout(KProcess* proc, char* buffer, int buflen)
 {
     Q_UNUSED(proc);
 
-    QString output = QString::fromLocal8Bit(buffer, buflen);
+    TQString output = TQString::fromLocal8Bit(buffer, buflen);
 
     // accumulate output
-    d->outputLines += QStringList::split("\n", output);
+    d->outputLines += TQStringList::split("\n", output);
 
     emit receivedStdout(output);
 }
@@ -225,10 +225,10 @@ void CvsJob::slotReceivedStderr(KProcess* proc, char* buffer, int buflen)
 {
     Q_UNUSED(proc);
 
-    QString output = QString::fromLocal8Bit(buffer, buflen);
+    TQString output = TQString::fromLocal8Bit(buffer, buflen);
 
     // accumulate output
-    d->outputLines += QStringList::split("\n", output);
+    d->outputLines += TQStringList::split("\n", output);
 
     emit receivedStderr(output);
 }

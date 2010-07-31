@@ -36,22 +36,22 @@ class PatchOptionDialog : public KDialogBase
     Q_OBJECT
     
 public:
-    explicit PatchOptionDialog(QWidget* parent = 0, const char* name = 0);
+    explicit PatchOptionDialog(TQWidget* parent = 0, const char* name = 0);
     virtual ~PatchOptionDialog();
     
-    QString diffOptions() const;
-    QString formatOption() const;
+    TQString diffOptions() const;
+    TQString formatOption() const;
 
 private slots:
     void formatChanged(int buttonId);
        
 private:
-    QVButtonGroup* m_formatBtnGroup;
+    TQVButtonGroup* m_formatBtnGroup;
     KIntNumInput*  m_contextLines;
-    QCheckBox*     m_blankLineChk;
-    QCheckBox*     m_allSpaceChk;
-    QCheckBox*     m_spaceChangeChk;
-    QCheckBox*     m_caseChangesChk;
+    TQCheckBox*     m_blankLineChk;
+    TQCheckBox*     m_allSpaceChk;
+    TQCheckBox*     m_spaceChangeChk;
+    TQCheckBox*     m_caseChangesChk;
 };
 
 

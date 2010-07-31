@@ -40,17 +40,17 @@ public:
     enum ActionType { Checkout, Import };
     
     CheckoutDialog( KConfig& cfg, CvsService_stub* service, ActionType action,
-                    QWidget *parent=0, const char *name=0 );
+                    TQWidget *parent=0, const char *name=0 );
 
-    QString workingDirectory() const;
-    QString repository() const;
-    QString module() const;
-    QString branch() const;
-    QString vendorTag() const;
-    QString releaseTag() const;
-    QString ignoreFiles() const;
-    QString comment() const;
-    QString alias() const;
+    TQString workingDirectory() const;
+    TQString repository() const;
+    TQString module() const;
+    TQString branch() const;
+    TQString vendorTag() const;
+    TQString releaseTag() const;
+    TQString ignoreFiles() const;
+    TQString comment() const;
+    TQString alias() const;
     bool importBinary() const;
     bool useModificationTime() const;
     bool exportOnly() const;
@@ -69,12 +69,12 @@ private:
     void saveUserInput();
     void restoreUserInput();
     
-    QComboBox *repo_combo, *module_combo, *branchCombo;
+    TQComboBox *repo_combo, *module_combo, *branchCombo;
     KLineEdit *module_edit, *workdir_edit;
     KLineEdit *comment_edit;
     KLineEdit *vendortag_edit, *releasetag_edit, *ignore_edit, *alias_edit;
-    QCheckBox *binary_box, *export_box, *recursive_box;
-    QCheckBox* m_useModificationTimeBox;
+    TQCheckBox *binary_box, *export_box, *recursive_box;
+    TQCheckBox* m_useModificationTimeBox;
     ActionType act;
     KConfig&   partConfig;
 

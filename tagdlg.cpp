@@ -20,12 +20,12 @@
 
 #include "tagdlg.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <tqcheckbox.h>
+#include <tqcombobox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqlineedit.h>
+#include <tqpushbutton.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -35,8 +35,8 @@
 using Cervisia::TagDialog;
 
 TagDialog::TagDialog(ActionType action, CvsService_stub* service,
-                     QWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, QString::null,
+                     TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString::null,
                   Ok | Cancel | Help, Ok, true),
       act(action),
       cvsService(service),
@@ -45,43 +45,43 @@ TagDialog::TagDialog(ActionType action, CvsService_stub* service,
 {
     setCaption( (action==Delete)? i18n("CVS Delete Tag") : i18n("CVS Tag") );
 
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     if (action == Delete)
         {
-            tag_combo = new QComboBox(true, mainWidget);
+            tag_combo = new TQComboBox(true, mainWidget);
             tag_combo->setFocus();
             tag_combo->setMinimumWidth(fontMetrics().width('0') * 30);
 
-            QLabel *tag_label = new QLabel(tag_combo, i18n("&Name of tag:"), mainWidget);
+            TQLabel *tag_label = new TQLabel(tag_combo, i18n("&Name of tag:"), mainWidget);
 
-            QPushButton *tag_button = new QPushButton(i18n("Fetch &List"), mainWidget);
-            connect( tag_button, SIGNAL(clicked()),
-                     this, SLOT(tagButtonClicked()) );
+            TQPushButton *tag_button = new TQPushButton(i18n("Fetch &List"), mainWidget);
+            connect( tag_button, TQT_SIGNAL(clicked()),
+                     this, TQT_SLOT(tagButtonClicked()) );
 
-            QBoxLayout *tagedit_layout = new QHBoxLayout(layout);
+            TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
             tagedit_layout->addWidget(tag_label);
             tagedit_layout->addWidget(tag_combo);
             tagedit_layout->addWidget(tag_button);
         }
     else
         {
-            tag_edit = new QLineEdit(mainWidget);
+            tag_edit = new TQLineEdit(mainWidget);
             tag_edit->setFocus();
             tag_edit->setMinimumWidth(fontMetrics().width('0') * 30);
 
-            QLabel *tag_label = new QLabel(tag_edit, i18n("&Name of tag:"), mainWidget);
+            TQLabel *tag_label = new TQLabel(tag_edit, i18n("&Name of tag:"), mainWidget);
 
-            QBoxLayout *tagedit_layout = new QHBoxLayout(layout);
+            TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
             tagedit_layout->addWidget(tag_label);
             tagedit_layout->addWidget(tag_edit);
 
-            branchtag_button = new QCheckBox(i18n("Create &branch with this tag"), mainWidget);
+            branchtag_button = new TQCheckBox(i18n("Create &branch with this tag"), mainWidget);
             layout->addWidget(branchtag_button);
 
-            forcetag_button = new QCheckBox(i18n("&Force tag creation even if tag already exists"), mainWidget);
+            forcetag_button = new TQCheckBox(i18n("&Force tag creation even if tag already exists"), mainWidget);
             layout->addWidget(forcetag_button);
 	}
 
@@ -101,7 +101,7 @@ bool TagDialog::forceTag() const
 }
 
 
-QString TagDialog::tag() const
+TQString TagDialog::tag() const
 {
     return act==Delete? tag_combo->currentText() : tag_edit->text();
 }
@@ -109,7 +109,7 @@ QString TagDialog::tag() const
 
 void TagDialog::slotOk()
 {
-    QString const str(tag());
+    TQString const str(tag());
 
     if (str.isEmpty())
     {

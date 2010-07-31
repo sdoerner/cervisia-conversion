@@ -20,11 +20,11 @@
 
 #include "historydlg.h"
 
-#include <qcheckbox.h>
-#include <qdatetime.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
+#include <tqcheckbox.h>
+#include <tqdatetime.h>
+#include <tqlayout.h>
+#include <tqpushbutton.h>
+#include <tqregexp.h>
 #include <kconfig.h>
 #include <klineedit.h>
 #include <klistview.h>
@@ -36,14 +36,14 @@
 #include "progressdlg.h"
 
 
-static QDateTime parseDate(const QString& date, const QString& _time, const QString& offset)
+static TQDateTime parseDate(const TQString& date, const TQString& _time, const TQString& offset)
 {
     // cvs history only prints hh:mm but parseDateISO8601 needs hh:mm:ss
-    QString time(_time);
+    TQString time(_time);
     if( time.contains(':') == 1 )
         time += ":00";
 
-    QDateTime dateTime;
+    TQDateTime dateTime;
     dateTime.setTime_t(KRFCDate::parseDateISO8601(date + 'T' + time + offset));
 
     return dateTime;
@@ -56,13 +56,13 @@ public:
 
     enum { Date, Event, Author, Revision, File, Path };
 
-    HistoryItem(QListView *parent, const QDateTime& date)
-        : QListViewItem(parent), m_date(date)
+    HistoryItem(TQListView *parent, const TQDateTime& date)
+        : TQListViewItem(parent), m_date(date)
     {}
 
-    virtual int compare(QListViewItem* i, int col, bool) const;
+    virtual int compare(TQListViewItem* i, int col, bool) const;
 
-    virtual QString text(int col) const;
+    virtual TQString text(int col) const;
 
     bool isCommit();
     bool isCheckout();
@@ -71,11 +71,11 @@ public:
 
 private:
 
-    const QDateTime m_date;
+    const TQDateTime m_date;
 };
 
 
-int HistoryItem::compare(QListViewItem* i, int col, bool ascending) const
+int HistoryItem::compare(TQListViewItem* i, int col, bool ascending) const
 {
     const HistoryItem* pItem = static_cast<HistoryItem*>(i);
 
@@ -89,23 +89,23 @@ int HistoryItem::compare(QListViewItem* i, int col, bool ascending) const
         iResult = ::compareRevisions(text(Revision), pItem->text(Revision));
         break;
     default:
-        iResult = QListViewItem::compare(i, col, ascending);
+        iResult = TQListViewItem::compare(i, col, ascending);
     }
 
     return iResult;
 }
 
 
-QString HistoryItem::text(int col) const
+TQString HistoryItem::text(int col) const
 {
-    QString sText;
+    TQString sText;
     switch (col)
     {
     case Date:
         sText = KGlobal::locale()->formatDateTime(m_date);
         break;
     default:
-        sText = QListViewItem::text(col);
+        sText = TQListViewItem::text(col);
     }
 
     return sText;
@@ -138,17 +138,17 @@ bool HistoryItem::isOther()
 }
 
 
-HistoryDialog::HistoryDialog(KConfig& cfg, QWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, QString::null,
+HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString::null,
                   Close | Help, ButtonCode(0), true)
     , partConfig(cfg)
 {
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     listview = new KListView(mainWidget);
-    listview->setSelectionMode(QListView::NoSelection);
+    listview->setSelectionMode(TQListView::NoSelection);
     listview->setAllColumnsShowFocus(true);
     listview->setShowSortIndicator(true);
     listview->setSorting(HistoryItem::Date, false);
@@ -161,23 +161,23 @@ HistoryDialog::HistoryDialog(KConfig& cfg, QWidget *parent, const char *name)
     listview->setFocus();
     layout->addWidget(listview, 1);
 
-    commit_box = new QCheckBox(i18n("Show c&ommit events"), mainWidget);
+    commit_box = new TQCheckBox(i18n("Show c&ommit events"), mainWidget);
     commit_box->setChecked(true);
 
-    checkout_box = new QCheckBox(i18n("Show ch&eckout events"), mainWidget);
+    checkout_box = new TQCheckBox(i18n("Show ch&eckout events"), mainWidget);
     checkout_box->setChecked(true);
 
-    tag_box = new QCheckBox(i18n("Show &tag events"), mainWidget);
+    tag_box = new TQCheckBox(i18n("Show &tag events"), mainWidget);
     tag_box->setChecked(true);
 
-    other_box = new QCheckBox(i18n("Show &other events"), mainWidget);
+    other_box = new TQCheckBox(i18n("Show &other events"), mainWidget);
     other_box->setChecked(true);
 
-    onlyuser_box = new QCheckBox(i18n("Only &user:"), mainWidget);
+    onlyuser_box = new TQCheckBox(i18n("Only &user:"), mainWidget);
 
-    onlyfilenames_box = new QCheckBox(i18n("Only &filenames matching:"), mainWidget);
+    onlyfilenames_box = new TQCheckBox(i18n("Only &filenames matching:"), mainWidget);
 
-    onlydirnames_box = new QCheckBox(i18n("Only &folders matching:"), mainWidget);
+    onlydirnames_box = new TQCheckBox(i18n("Only &folders matching:"), mainWidget);
 
     user_edit = new KLineEdit(mainWidget);
     user_edit->setEnabled(false);
@@ -188,34 +188,34 @@ HistoryDialog::HistoryDialog(KConfig& cfg, QWidget *parent, const char *name)
     dirname_edit = new KLineEdit(mainWidget);
     dirname_edit->setEnabled(false);
 
-    connect( onlyuser_box, SIGNAL(toggled(bool)),
-             this, SLOT(toggled(bool)) );
-    connect( onlyfilenames_box, SIGNAL(toggled(bool)),
-             this,  SLOT(toggled(bool)) );
-    connect( onlydirnames_box, SIGNAL(toggled(bool)),
-             this, SLOT(toggled(bool)) );
-    connect( commit_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( checkout_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( tag_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( other_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( onlyuser_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( onlyfilenames_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( onlydirnames_box, SIGNAL(toggled(bool)),
-             this, SLOT(choiceChanged()) );
-    connect( user_edit, SIGNAL(returnPressed()),
-             this, SLOT(choiceChanged()) );
-    connect( filename_edit, SIGNAL(returnPressed()),
-             this, SLOT(choiceChanged()) );
-    connect( dirname_edit, SIGNAL(returnPressed()),
-             this, SLOT(choiceChanged()) );
+    connect( onlyuser_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(toggled(bool)) );
+    connect( onlyfilenames_box, TQT_SIGNAL(toggled(bool)),
+             this,  TQT_SLOT(toggled(bool)) );
+    connect( onlydirnames_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(toggled(bool)) );
+    connect( commit_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( checkout_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( tag_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( other_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( onlyuser_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( onlyfilenames_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( onlydirnames_box, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( user_edit, TQT_SIGNAL(returnPressed()),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( filename_edit, TQT_SIGNAL(returnPressed()),
+             this, TQT_SLOT(choiceChanged()) );
+    connect( dirname_edit, TQT_SIGNAL(returnPressed()),
+             this, TQT_SLOT(choiceChanged()) );
 
-    QGridLayout *grid = new QGridLayout(layout);
+    TQGridLayout *grid = new TQGridLayout(layout);
     grid->setColStretch(0, 1);
     grid->setColStretch(1, 0);
     grid->setColStretch(2, 4);
@@ -239,14 +239,14 @@ HistoryDialog::HistoryDialog(KConfig& cfg, QWidget *parent, const char *name)
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(partConfig, "HistoryDialog");
+    TQSize size = configDialogSize(partConfig, "HistoryDialog");
     resize(size);
 
     // without this restoreLayout() can't change the column widths
     for (int i = 0; i < listview->columns(); ++i)
-        listview->setColumnWidthMode(i, QListView::Manual);
+        listview->setColumnWidthMode(i, TQListView::Manual);
 
-    listview->restoreLayout(&partConfig, QString::fromLatin1("HistoryListView"));
+    listview->restoreLayout(&partConfig, TQString::fromLatin1("HistoryListView"));
 }
 
 
@@ -254,15 +254,15 @@ HistoryDialog::~HistoryDialog()
 {
     saveDialogSize(partConfig, "HistoryDialog");
 
-    listview->saveLayout(&partConfig, QString::fromLatin1("HistoryListView"));
+    listview->saveLayout(&partConfig, TQString::fromLatin1("HistoryListView"));
 }
 
 
 void HistoryDialog::choiceChanged()
 {
-    const QString author(user_edit->text());
-    const QRegExp fileMatcher(filename_edit->text(), true, true);
-    const QRegExp pathMatcher(dirname_edit->text(), true, true);
+    const TQString author(user_edit->text());
+    const TQRegExp fileMatcher(filename_edit->text(), true, true);
+    const TQRegExp pathMatcher(dirname_edit->text(), true, true);
 
     const bool showCommitEvents(commit_box->isChecked());
     const bool showCheckoutEvents(checkout_box->isChecked());
@@ -272,7 +272,7 @@ void HistoryDialog::choiceChanged()
     const bool filterByFile(onlyfilenames_box->isChecked() && !fileMatcher.isEmpty());
     const bool filterByPath(onlydirnames_box->isChecked() && !pathMatcher.isEmpty());
 
-    QListViewItemIterator it(listview);
+    TQListViewItemIterator it(listview);
     for (; it.current(); ++it)
         {
             HistoryItem *item = static_cast<HistoryItem*>(it.current());
@@ -320,15 +320,15 @@ bool HistoryDialog::parseHistory(CvsService_stub* cvsService)
     if( !dlg.execute() )
         return false;
 
-    QString line;
+    TQString line;
     while( dlg.getLine(line) )
     {
-        const QStringList list(splitLine(line));
+        const TQStringList list(splitLine(line));
         const int listSize(list.size());
         if( listSize < 6)
             continue;
 
-        QString cmd = list[0];
+        TQString cmd = list[0];
         if( cmd.length() != 1 )
             continue;
 
@@ -349,7 +349,7 @@ bool HistoryDialog::parseHistory(CvsService_stub* cvsService)
         if( ncol != (int)list.count() )
             continue;
 
-        QString event;
+        TQString event;
         switch( cmd_code )
         {
             case 'O': event = i18n("Checkout ");         break;
@@ -366,7 +366,7 @@ bool HistoryDialog::parseHistory(CvsService_stub* cvsService)
             default:  event = i18n("Unknown ");
         }
 
-        const QDateTime date(parseDate(list[1], list[2], list[3]));
+        const TQDateTime date(parseDate(list[1], list[2], list[3]));
 
         HistoryItem *item = new HistoryItem(listview, date);
         item->setText(HistoryItem::Event, event);

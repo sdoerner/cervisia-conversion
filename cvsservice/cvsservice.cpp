@@ -20,8 +20,8 @@
 
 #include "cvsservice.h"
 
-#include <qintdict.h>
-#include <qstring.h>
+#include <tqintdict.h>
+#include <tqstring.h>
 
 #include <dcopref.h>
 #include <dcopclient.h>
@@ -54,11 +54,11 @@ struct CvsService::Private
 
     CvsJob*               singleCvsJob;   // non-concurrent cvs job, like update or commit
     DCOPRef               singleJobRef;   // DCOP reference to non-concurrent cvs job
-    QIntDict<CvsJob>      cvsJobs;        // concurrent cvs jobs, like diff or annotate
-    QIntDict<CvsLoginJob> loginJobs;
+    TQIntDict<CvsJob>      cvsJobs;        // concurrent cvs jobs, like diff or annotate
+    TQIntDict<CvsLoginJob> loginJobs;
     unsigned              lastJobId;
 
-    QCString              appId;          // cache the DCOP clients app id
+    TQCString              appId;          // cache the DCOP clients app id
 
     Repository*           repository;
 
@@ -111,7 +111,7 @@ CvsService::~CvsService()
 }
 
 
-DCOPRef CvsService::add(const QStringList& files, bool isBinary)
+DCOPRef CvsService::add(const TQStringList& files, bool isBinary)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -131,7 +131,7 @@ DCOPRef CvsService::add(const QStringList& files, bool isBinary)
 }
 
 
-DCOPRef CvsService::addWatch(const QStringList& files, int events)
+DCOPRef CvsService::addWatch(const TQStringList& files, int events)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -157,7 +157,7 @@ DCOPRef CvsService::addWatch(const QStringList& files, int events)
 }
 
 
-DCOPRef CvsService::annotate(const QString& fileName, const QString& revision)
+DCOPRef CvsService::annotate(const TQString& fileName, const TQString& revision)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -167,8 +167,8 @@ DCOPRef CvsService::annotate(const QString& fileName, const QString& revision)
 
     // assemble the command line
     // (cvs log [FILE] && cvs annotate [-r rev] [FILE])
-    QString quotedName = KProcess::quote(fileName);
-    QString cvsClient  = d->repository->cvsClient();
+    TQString quotedName = KProcess::quote(fileName);
+    TQString cvsClient  = d->repository->cvsClient();
 
     *job << "(" << cvsClient << "log" << quotedName << "&&"
          << cvsClient << "annotate";
@@ -186,8 +186,8 @@ DCOPRef CvsService::annotate(const QString& fileName, const QString& revision)
 }
 
 
-DCOPRef CvsService::checkout(const QString& workingDir, const QString& repository,
-                             const QString& module, const QString& tag, 
+DCOPRef CvsService::checkout(const TQString& workingDir, const TQString& repository,
+                             const TQString& module, const TQString& tag, 
                              bool pruneDirs)
 {
     if( d->hasRunningJob() )
@@ -216,9 +216,9 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
 }
 
 
-DCOPRef CvsService::checkout(const QString& workingDir, const QString& repository,
-                             const QString& module, const QString& tag, 
-                             bool pruneDirs, const QString& alias, bool exportOnly)
+DCOPRef CvsService::checkout(const TQString& workingDir, const TQString& repository,
+                             const TQString& module, const TQString& tag, 
+                             bool pruneDirs, const TQString& alias, bool exportOnly)
 {
     if( d->hasRunningJob() )
         return DCOPRef();
@@ -251,9 +251,9 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
     return d->setupNonConcurrentJob(&repo);
 }
 
-DCOPRef CvsService::checkout(const QString& workingDir, const QString& repository,
-                             const QString& module, const QString& tag, 
-                             bool pruneDirs, const QString& alias, bool exportOnly,
+DCOPRef CvsService::checkout(const TQString& workingDir, const TQString& repository,
+                             const TQString& module, const TQString& tag, 
+                             bool pruneDirs, const TQString& alias, bool exportOnly,
                              bool recursive)
 {
     if( d->hasRunningJob() )
@@ -290,7 +290,7 @@ DCOPRef CvsService::checkout(const QString& workingDir, const QString& repositor
     return d->setupNonConcurrentJob(&repo);
 }
 
-DCOPRef CvsService::commit(const QStringList& files, const QString& commitMessage,
+DCOPRef CvsService::commit(const TQStringList& files, const TQString& commitMessage,
                            bool recursive)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
@@ -312,7 +312,7 @@ DCOPRef CvsService::commit(const QStringList& files, const QString& commitMessag
 }
 
 
-DCOPRef CvsService::createRepository(const QString& repository)
+DCOPRef CvsService::createRepository(const TQString& repository)
 {
     if( d->hasRunningJob() )
         return DCOPRef();
@@ -330,7 +330,7 @@ DCOPRef CvsService::createRepository(const QString& repository)
 }
 
 
-DCOPRef CvsService::createTag(const QStringList& files, const QString& tag,
+DCOPRef CvsService::createTag(const TQStringList& files, const TQString& tag,
                               bool branch, bool force)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
@@ -355,7 +355,7 @@ DCOPRef CvsService::createTag(const QStringList& files, const QString& tag,
 }
 
 
-DCOPRef CvsService::deleteTag(const QStringList& files, const QString& tag,
+DCOPRef CvsService::deleteTag(const TQStringList& files, const TQString& tag,
                               bool branch, bool force)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
@@ -380,8 +380,8 @@ DCOPRef CvsService::deleteTag(const QStringList& files, const QString& tag,
 }
 
 
-DCOPRef CvsService::downloadCvsIgnoreFile(const QString& repository,
-                                          const QString& outputFile)
+DCOPRef CvsService::downloadCvsIgnoreFile(const TQString& repository,
+                                          const TQString& outputFile)
 {
     Repository repo(repository);
 
@@ -399,9 +399,9 @@ DCOPRef CvsService::downloadCvsIgnoreFile(const QString& repository,
 }
 
 
-DCOPRef CvsService::downloadRevision(const QString& fileName,
-                                     const QString& revision,
-                                     const QString& outputFile)
+DCOPRef CvsService::downloadRevision(const TQString& fileName,
+                                     const TQString& revision,
+                                     const TQString& outputFile)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -423,11 +423,11 @@ DCOPRef CvsService::downloadRevision(const QString& fileName,
 }
 
 
-DCOPRef CvsService::downloadRevision(const QString& fileName,
-                                     const QString& revA,
-                                     const QString& outputFileA,
-                                     const QString& revB,
-                                     const QString& outputFileB)
+DCOPRef CvsService::downloadRevision(const TQString& fileName,
+                                     const TQString& revA,
+                                     const TQString& outputFileA,
+                                     const TQString& revB,
+                                     const TQString& outputFileB)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -450,19 +450,19 @@ DCOPRef CvsService::downloadRevision(const QString& fileName,
 }
 
 
-DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
-                         const QString& revB, const QString& diffOptions,
+DCOPRef CvsService::diff(const TQString& fileName, const TQString& revA,
+                         const TQString& revB, const TQString& diffOptions,
                          unsigned contextLines)
 {
     // cvs diff [DIFFOPTIONS] -U CONTEXTLINES [-r REVA] {-r REVB] [FILE]
-    QString format = "-U" + QString::number(contextLines);
+    TQString format = "-U" + TQString::number(contextLines);
     return diff(fileName, revA, revB, diffOptions, format);
 }
 
 
-DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
-                         const QString& revB, const QString& diffOptions,
-                         const QString& format)
+DCOPRef CvsService::diff(const TQString& fileName, const TQString& revA,
+                         const TQString& revB, const TQString& diffOptions,
+                         const TQString& format)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -488,7 +488,7 @@ DCOPRef CvsService::diff(const QString& fileName, const QString& revA,
 }
 
 
-DCOPRef CvsService::edit(const QStringList& files)
+DCOPRef CvsService::edit(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -504,7 +504,7 @@ DCOPRef CvsService::edit(const QStringList& files)
 }
 
 
-DCOPRef CvsService::editors(const QStringList& files)
+DCOPRef CvsService::editors(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -537,10 +537,10 @@ DCOPRef CvsService::history()
 }
 
 
-DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
-                           const QString& module, const QString& ignoreList,
-                           const QString& comment, const QString& vendorTag,
-                           const QString& releaseTag, bool importAsBinary)
+DCOPRef CvsService::import(const TQString& workingDir, const TQString& repository,
+                           const TQString& module, const TQString& ignoreList,
+                           const TQString& comment, const TQString& vendorTag,
+                           const TQString& releaseTag, bool importAsBinary)
 {
     if( d->hasRunningJob() )
         return DCOPRef();
@@ -558,11 +558,11 @@ DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
     if( importAsBinary )
         *d->singleCvsJob << "-kb";
         
-    const QString ignore = ignoreList.stripWhiteSpace();
+    const TQString ignore = ignoreList.stripWhiteSpace();
     if( !ignore.isEmpty() )
         *d->singleCvsJob << "-I" << KProcess::quote(ignore);
 
-    QString logMessage = comment.stripWhiteSpace();
+    TQString logMessage = comment.stripWhiteSpace();
     logMessage.prepend("\"");
     logMessage.append("\"");
     *d->singleCvsJob << "-m" << logMessage;
@@ -573,10 +573,10 @@ DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
 }
 
 
-DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
-                           const QString& module, const QString& ignoreList,
-                           const QString& comment, const QString& vendorTag,
-                           const QString& releaseTag, bool importAsBinary,
+DCOPRef CvsService::import(const TQString& workingDir, const TQString& repository,
+                           const TQString& module, const TQString& ignoreList,
+                           const TQString& comment, const TQString& vendorTag,
+                           const TQString& releaseTag, bool importAsBinary,
                            bool useModificationTime)
 {
     if( d->hasRunningJob() )
@@ -598,11 +598,11 @@ DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
     if( useModificationTime )
         *d->singleCvsJob << "-d";
 
-    const QString ignore = ignoreList.stripWhiteSpace();
+    const TQString ignore = ignoreList.stripWhiteSpace();
     if( !ignore.isEmpty() )
         *d->singleCvsJob << "-I" << KProcess::quote(ignore);
 
-    QString logMessage = comment.stripWhiteSpace();
+    TQString logMessage = comment.stripWhiteSpace();
     logMessage.prepend("\"");
     logMessage.append("\"");
     *d->singleCvsJob << "-m" << logMessage;
@@ -613,7 +613,7 @@ DCOPRef CvsService::import(const QString& workingDir, const QString& repository,
 }
 
 
-DCOPRef CvsService::lock(const QStringList& files)
+DCOPRef CvsService::lock(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -629,7 +629,7 @@ DCOPRef CvsService::lock(const QStringList& files)
 }
 
 
-DCOPRef CvsService::log(const QString& fileName)
+DCOPRef CvsService::log(const TQString& fileName)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -646,7 +646,7 @@ DCOPRef CvsService::log(const QString& fileName)
 }
 
 
-DCOPRef CvsService::login(const QString& repository)
+DCOPRef CvsService::login(const TQString& repository)
 {
     if( repository.isEmpty() )
         return DCOPRef();
@@ -672,7 +672,7 @@ DCOPRef CvsService::login(const QString& repository)
 }
 
 
-DCOPRef CvsService::logout(const QString& repository)
+DCOPRef CvsService::logout(const TQString& repository)
 {
     if( repository.isEmpty() )
         return DCOPRef();
@@ -704,7 +704,7 @@ DCOPRef CvsService::makePatch()
 }
 
 
-DCOPRef CvsService::makePatch(const QString& diffOptions, const QString& format)
+DCOPRef CvsService::makePatch(const TQString& diffOptions, const TQString& format)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -722,7 +722,7 @@ DCOPRef CvsService::makePatch(const QString& diffOptions, const QString& format)
 }
 
 
-DCOPRef CvsService::moduleList(const QString& repository)
+DCOPRef CvsService::moduleList(const TQString& repository)
 {
     Repository repo(repository);
 
@@ -745,7 +745,7 @@ DCOPRef CvsService::moduleList(const QString& repository)
 }
 
 
-DCOPRef CvsService::remove(const QStringList& files, bool recursive)
+DCOPRef CvsService::remove(const TQStringList& files, bool recursive)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -765,7 +765,7 @@ DCOPRef CvsService::remove(const QStringList& files, bool recursive)
 }
 
 
-DCOPRef CvsService::removeWatch(const QStringList& files, int events)
+DCOPRef CvsService::removeWatch(const TQStringList& files, int events)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -791,7 +791,7 @@ DCOPRef CvsService::removeWatch(const QStringList& files, int events)
 }
 
 
-DCOPRef CvsService::rlog(const QString& repository, const QString& module, 
+DCOPRef CvsService::rlog(const TQString& repository, const TQString& module, 
                          bool recursive)
 {
     Repository repo(repository);
@@ -819,7 +819,7 @@ DCOPRef CvsService::rlog(const QString& repository, const QString& module,
 }
 
 
-DCOPRef CvsService::simulateUpdate(const QStringList& files, bool recursive,
+DCOPRef CvsService::simulateUpdate(const TQStringList& files, bool recursive,
                                    bool createDirs, bool pruneDirs)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
@@ -846,7 +846,7 @@ DCOPRef CvsService::simulateUpdate(const QStringList& files, bool recursive,
 }
 
 
-DCOPRef CvsService::status(const QStringList& files, bool recursive, bool tagInfo)
+DCOPRef CvsService::status(const TQStringList& files, bool recursive, bool tagInfo)
 {
     if( !d->hasWorkingCopy() )
         return DCOPRef();
@@ -871,7 +871,7 @@ DCOPRef CvsService::status(const QStringList& files, bool recursive, bool tagInf
 }
 
 
-DCOPRef CvsService::unedit(const QStringList& files)
+DCOPRef CvsService::unedit(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -888,7 +888,7 @@ DCOPRef CvsService::unedit(const QStringList& files)
 }
 
 
-DCOPRef CvsService::unlock(const QStringList& files)
+DCOPRef CvsService::unlock(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -904,8 +904,8 @@ DCOPRef CvsService::unlock(const QStringList& files)
 }
 
 
-DCOPRef CvsService::update(const QStringList& files, bool recursive,
-                           bool createDirs, bool pruneDirs, const QString& extraOpt)
+DCOPRef CvsService::update(const TQStringList& files, bool recursive,
+                           bool createDirs, bool pruneDirs, const TQString& extraOpt)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();
@@ -932,7 +932,7 @@ DCOPRef CvsService::update(const QStringList& files, bool recursive,
 }
 
 
-DCOPRef CvsService::watchers(const QStringList& files)
+DCOPRef CvsService::watchers(const TQStringList& files)
 {
     if( !d->hasWorkingCopy() || d->hasRunningJob() )
         return DCOPRef();

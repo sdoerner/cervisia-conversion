@@ -32,14 +32,14 @@ class IgnoreListBase
 public:
     virtual ~IgnoreListBase() {}
     
-    virtual bool matches(const QFileInfo* fi) const = 0;
+    virtual bool matches(const TQFileInfo* fi) const = 0;
 
 protected:
-    void addEntriesFromString(const QString& str);
-    void addEntriesFromFile(const QString& name);
+    void addEntriesFromString(const TQString& str);
+    void addEntriesFromFile(const TQString& name);
 
 private:
-    virtual void addEntry(const QString& entry) = 0;
+    virtual void addEntry(const TQString& entry) = 0;
 };
 
 

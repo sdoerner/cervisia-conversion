@@ -38,11 +38,11 @@ class UpdateDialog : public KDialogBase
 
 public:
     UpdateDialog( CvsService_stub* service,
-                  QWidget *parent=0, const char *name=0 );
+                  TQWidget *parent=0, const char *name=0 );
 
     bool byTag() const;
-    QString tag() const;
-    QString date() const;
+    TQString tag() const;
+    TQString date() const;
 
 private slots:
     void toggled();
@@ -52,9 +52,9 @@ private slots:
 private:
     CvsService_stub* cvsService;
     
-    QRadioButton *bytag_button, *bybranch_button, *bydate_button;
-    QComboBox *tag_combo, *branch_combo;
-    QPushButton *tag_button, *branch_button;
+    TQRadioButton *bytag_button, *bybranch_button, *bydate_button;
+    TQComboBox *tag_combo, *branch_combo;
+    TQPushButton *tag_button, *branch_button;
     KLineEdit *date_edit;
 };
 

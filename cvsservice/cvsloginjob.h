@@ -21,8 +21,8 @@
 #ifndef CVSLOGINJOB_H
 #define CVSLOGINJOB_H
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
 #include <dcopobject.h>
 
 #include <kdesu/process.h>
@@ -36,22 +36,22 @@ public:
     explicit CvsLoginJob(unsigned jobNum);
     virtual ~CvsLoginJob();
 
-    void setServer(const QString& server);
+    void setServer(const TQString& server);
 
-    void setCvsClient(const QCString& cvsClient);
-    void setRepository(const QCString& repository);
+    void setCvsClient(const TQCString& cvsClient);
+    void setRepository(const TQCString& repository);
 
 k_dcop:
     bool execute();
-    QStringList output();
+    TQStringList output();
 
 private:
     PtyProcess*    m_Proc;
-    QString        m_Server;
-    QString        m_Rsh;
-    QCString       m_CvsClient;
+    TQString        m_Server;
+    TQString        m_Rsh;
+    TQCString       m_CvsClient;
     QCStringList   m_Arguments;
-    QStringList    m_output;
+    TQStringList    m_output;
 };
 
 

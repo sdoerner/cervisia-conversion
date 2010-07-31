@@ -22,9 +22,9 @@
 
 #include <set>
 
-#include <qapplication.h>
-#include <qfileinfo.h>
-#include <qptrstack.h>
+#include <tqapplication.h>
+#include <tqfileinfo.h>
+#include <tqptrstack.h>
 #include <kconfig.h>
 #include <klocale.h>
 
@@ -38,7 +38,7 @@ using Cervisia::Entry;
 using Cervisia::EntryStatus;
 
 
-UpdateView::UpdateView(KConfig& partConfig, QWidget *parent, const char *name)
+UpdateView::UpdateView(KConfig& partConfig, TQWidget *parent, const char *name)
     : KListView(parent, name),
       m_partConfig(partConfig),
       m_unfoldingTree(false)
@@ -56,22 +56,22 @@ UpdateView::UpdateView(KConfig& partConfig, QWidget *parent, const char *name)
 
     setFilter(NoFilter);
 
-    connect( this, SIGNAL(doubleClicked(QListViewItem*)),
-             this, SLOT(itemExecuted(QListViewItem*)) );
-    connect( this, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(itemExecuted(QListViewItem*)) );
+    connect( this, TQT_SIGNAL(doubleClicked(TQListViewItem*)),
+             this, TQT_SLOT(itemExecuted(TQListViewItem*)) );
+    connect( this, TQT_SIGNAL(returnPressed(TQListViewItem*)),
+             this, TQT_SLOT(itemExecuted(TQListViewItem*)) );
 
     // without this restoreLayout() can't change the column widths
     for (int col = 0; col < columns(); ++col)
-        setColumnWidthMode(col, QListView::Manual);
+        setColumnWidthMode(col, TQListView::Manual);
 
-    restoreLayout(&m_partConfig, QString::fromLatin1("UpdateView"));
+    restoreLayout(&m_partConfig, TQString::fromLatin1("UpdateView"));
 }
 
 
 UpdateView::~UpdateView()
 {
-    saveLayout(&m_partConfig, QString::fromLatin1("UpdateView"));
+    saveLayout(&m_partConfig, TQString::fromLatin1("UpdateView"));
 }
 
 
@@ -98,18 +98,18 @@ UpdateView::Filter UpdateView::filter() const
 // returns true iff exactly one UpdateFileItem is selected
 bool UpdateView::hasSingleSelection() const
 {
-    const QPtrList<QListViewItem>& listSelectedItems(selectedItems());
+    const TQPtrList<TQListViewItem>& listSelectedItems(selectedItems());
 
     return (listSelectedItems.count() == 1) && isFileItem(listSelectedItems.getFirst());
 }
 
 
-void UpdateView::getSingleSelection(QString *filename, QString *revision) const
+void UpdateView::getSingleSelection(TQString *filename, TQString *revision) const
 {
-    const QPtrList<QListViewItem>& listSelectedItems(selectedItems());
+    const TQPtrList<TQListViewItem>& listSelectedItems(selectedItems());
 
-    QString tmpFileName;
-    QString tmpRevision;
+    TQString tmpFileName;
+    TQString tmpRevision;
     if ((listSelectedItems.count() == 1) && isFileItem(listSelectedItems.getFirst()))
     {
         UpdateFileItem* fileItem(static_cast<UpdateFileItem*>(listSelectedItems.getFirst()));
@@ -123,12 +123,12 @@ void UpdateView::getSingleSelection(QString *filename, QString *revision) const
 }
 
 
-QStringList UpdateView::multipleSelection() const
+TQStringList UpdateView::multipleSelection() const
 {
-    QStringList res;
+    TQStringList res;
 
-    const QPtrList<QListViewItem>& listSelectedItems(selectedItems());
-    for (QPtrListIterator<QListViewItem> it(listSelectedItems);
+    const TQPtrList<TQListViewItem>& listSelectedItems(selectedItems());
+    for (TQPtrListIterator<TQListViewItem> it(listSelectedItems);
          it.current() != 0; ++it)
     {
         if ((*it)->isVisible())
@@ -139,15 +139,15 @@ QStringList UpdateView::multipleSelection() const
 }
 
 
-QStringList UpdateView::fileSelection() const
+TQStringList UpdateView::fileSelection() const
 {
-    QStringList res;
+    TQStringList res;
 
-    const QPtrList<QListViewItem>& listSelectedItems(selectedItems());
-    for (QPtrListIterator<QListViewItem> it(listSelectedItems);
+    const TQPtrList<TQListViewItem>& listSelectedItems(selectedItems());
+    for (TQPtrListIterator<TQListViewItem> it(listSelectedItems);
          it.current() != 0; ++it)
     {
-        QListViewItem* item(*it);
+        TQListViewItem* item(*it);
 
         if (isFileItem(item) && item->isVisible())
             res.append(static_cast<UpdateFileItem*>(item)->filePath());
@@ -157,25 +157,25 @@ QStringList UpdateView::fileSelection() const
 }
 
 
-const QColor& UpdateView::conflictColor() const
+const TQColor& UpdateView::conflictColor() const
 {
     return m_conflictColor;
 }
 
 
-const QColor& UpdateView::localChangeColor() const
+const TQColor& UpdateView::localChangeColor() const
 {
     return m_localChangeColor;
 }
 
 
-const QColor& UpdateView::remoteChangeColor() const
+const TQColor& UpdateView::remoteChangeColor() const
 {
     return m_remoteChangeColor;
 }
 
 
-const QColor& UpdateView::notInCvsColor() const
+const TQColor& UpdateView::notInCvsColor() const
 {
     return m_notInCvsColor;
 }
@@ -188,8 +188,8 @@ bool UpdateView::isUnfoldingTree() const
 
 
 // updates internal data
-void UpdateView::replaceItem(QListViewItem* oldItem,
-                             QListViewItem* newItem)
+void UpdateView::replaceItem(TQListViewItem* oldItem,
+                             TQListViewItem* newItem)
 {
     const int index(relevantSelection.find(oldItem));
     if (index >= 0)
@@ -199,15 +199,15 @@ void UpdateView::replaceItem(QListViewItem* oldItem,
 
 void UpdateView::unfoldSelectedFolders()
 {
-    QApplication::setOverrideCursor(waitCursor);
+    TQApplication::setOverrideCursor(waitCursor);
 
     int previousDepth = 0;
     bool isUnfolded = false;
 
-    QStringList selection = multipleSelection();
+    TQStringList selection = multipleSelection();
 
     // setup name of selected folder
-    QString selectedItem = selection.first();
+    TQString selectedItem = selection.first();
     if( selectedItem.contains('/') )
         selectedItem.remove(0, selectedItem.findRev('/')+1);
 
@@ -215,8 +215,8 @@ void UpdateView::unfoldSelectedFolders()
     const bool updatesEnabled = isUpdatesEnabled();
     setUpdatesEnabled(false);
 
-    QListViewItemIterator it(this);
-    while( QListViewItem* item = it.current() )
+    TQListViewItemIterator it(this);
+    while( TQListViewItem* item = it.current() )
     {
         if( isDirItem(item) )
         {
@@ -275,13 +275,13 @@ void UpdateView::unfoldSelectedFolders()
     setUpdatesEnabled(updatesEnabled);
     triggerUpdate();
 
-    QApplication::restoreOverrideCursor();
+    TQApplication::restoreOverrideCursor();
 }
 
 
 void UpdateView::unfoldTree()
 {
-    QApplication::setOverrideCursor(waitCursor);
+    TQApplication::setOverrideCursor(waitCursor);
 
     m_unfoldingTree = true;
 
@@ -289,8 +289,8 @@ void UpdateView::unfoldTree()
 
     setUpdatesEnabled(false);
 
-    QListViewItemIterator it(this);
-    while (QListViewItem* item = it.current())
+    TQListViewItemIterator it(this);
+    while (TQListViewItem* item = it.current())
     {
         if (isDirItem(item))
         {
@@ -323,14 +323,14 @@ void UpdateView::unfoldTree()
 
     m_unfoldingTree = false;
 
-    QApplication::restoreOverrideCursor();
+    TQApplication::restoreOverrideCursor();
 }
 
 
 void UpdateView::foldTree()
 {
-    QListViewItemIterator it(this);
-    while (QListViewItem* item = it.current())
+    TQListViewItemIterator it(this);
+    while (TQListViewItem* item = it.current())
     {
         // don't close the top level directory
         if (isDirItem(item) && item->parent())
@@ -345,7 +345,7 @@ void UpdateView::foldTree()
  * Clear the tree view and insert the directory dirname
  * into it as the new root item
  */
-void UpdateView::openDirectory(const QString& dirName)
+void UpdateView::openDirectory(const TQString& dirName)
 {
     clear();
 
@@ -411,11 +411,11 @@ void UpdateView::finishJob(bool normalExit, int exitStatus)
  */
 void UpdateView::markUpdated(bool laststage, bool success)
 {
-    QPtrListIterator<QListViewItem> it(relevantSelection);
+    TQPtrListIterator<TQListViewItem> it(relevantSelection);
     for ( ; it.current(); ++it)
         if (isDirItem(it.current()))
             {
-                for (QListViewItem *item = it.current()->firstChild(); item;
+                for (TQListViewItem *item = it.current()->firstChild(); item;
                      item = item->nextSibling() )
                     if (isFileItem(item))
                         {
@@ -436,10 +436,10 @@ void UpdateView::markUpdated(bool laststage, bool success)
  */
 void UpdateView::rememberSelection(bool recursive)
 {
-    std::set<QListViewItem*> setItems;
-    for (QListViewItemIterator it(this); it.current(); ++it)
+    std::set<TQListViewItem*> setItems;
+    for (TQListViewItemIterator it(this); it.current(); ++it)
     {
-        QListViewItem* item(it.current());
+        TQListViewItem* item(it.current());
 
         // if this item is selected and if it was not inserted already
         // and if we work recursive and if it is a dir item then insert
@@ -450,8 +450,8 @@ void UpdateView::rememberSelection(bool recursive)
             && recursive
             && isDirItem(item))
         {
-            QPtrStack<QListViewItem> s;
-            for (QListViewItem* childItem = item->firstChild(); childItem;
+            TQPtrStack<TQListViewItem> s;
+            for (TQListViewItem* childItem = item->firstChild(); childItem;
                  childItem = childItem->nextSibling() ? childItem->nextSibling() : s.pop())
             {
                 // if this item is a dir item and if it is was not
@@ -459,7 +459,7 @@ void UpdateView::rememberSelection(bool recursive)
                 // DON'T CHANGE TESTING ORDER
                 if (isDirItem(childItem) && setItems.insert(childItem).second)
                 {
-                    if (QListViewItem* childChildItem = childItem->firstChild())
+                    if (TQListViewItem* childChildItem = childItem->firstChild())
                         s.push(childChildItem);
                 }
             }
@@ -468,14 +468,14 @@ void UpdateView::rememberSelection(bool recursive)
 
     // Copy the set to the list
     relevantSelection.clear();
-    std::set<QListViewItem*>::const_iterator const itItemEnd = setItems.end();
-    for (std::set<QListViewItem*>::const_iterator itItem = setItems.begin();
+    std::set<TQListViewItem*>::const_iterator const itItemEnd = setItems.end();
+    for (std::set<TQListViewItem*>::const_iterator itItem = setItems.begin();
          itItem != itItemEnd; ++itItem)
         relevantSelection.append(*itItem);
 
 #if 0
     DEBUGOUT("Relevant:");
-    QPtrListIterator<QListViewItem> it44(relevantSelection);
+    TQPtrListIterator<TQListViewItem> it44(relevantSelection);
     for (; it44.current(); ++it44)
         DEBUGOUT("  " << (*it44)->text(UpdateFileItem::File));
     DEBUGOUT("End");
@@ -492,22 +492,22 @@ void UpdateView::syncSelection()
     // compute all directories which are selected or contain a selected file
     // (in recursive mode this includes all sub directories)
     std::set<UpdateDirItem*> setDirItems;
-    for (QPtrListIterator<QListViewItem> itItem(relevantSelection);
+    for (TQPtrListIterator<TQListViewItem> itItem(relevantSelection);
          itItem.current(); ++itItem)
     {
-        QListViewItem* item(itItem.current());
+        TQListViewItem* item(itItem.current());
 
         UpdateDirItem* dirItem(0);
         if (isDirItem(item))
             dirItem = static_cast<UpdateDirItem*>(item);
-        else if (QListViewItem* parentItem = item->parent())
+        else if (TQListViewItem* parentItem = item->parent())
             dirItem = static_cast<UpdateDirItem*>(parentItem);
 
         if (dirItem)
             setDirItems.insert(dirItem);
     }
 
-    QApplication::setOverrideCursor(waitCursor);
+    TQApplication::setOverrideCursor(waitCursor);
 
     std::set<UpdateDirItem*>::const_iterator const itDirItemEnd = setDirItems.end();
     for (std::set<UpdateDirItem*>::const_iterator itDirItem = setDirItems.begin();
@@ -521,7 +521,7 @@ void UpdateView::syncSelection()
         qApp->processEvents();
     }
 
-    QApplication::restoreOverrideCursor();
+    TQApplication::restoreOverrideCursor();
 }
 
 
@@ -534,13 +534,13 @@ void UpdateView::updateColors()
     KConfigGroupSaver cs(&m_partConfig, "Colors");
     m_partConfig.setGroup("Colors");
 
-    QColor defaultColor = QColor(255, 130, 130);
+    TQColor defaultColor = TQColor(255, 130, 130);
     m_conflictColor = m_partConfig.readColorEntry("Conflict", &defaultColor);
 
-    defaultColor = QColor(130, 130, 255);
+    defaultColor = TQColor(130, 130, 255);
     m_localChangeColor = m_partConfig.readColorEntry("LocalChange", &defaultColor);
 
-    defaultColor = QColor(70, 210, 70);
+    defaultColor = TQColor(70, 210, 70);
     m_remoteChangeColor = m_partConfig.readColorEntry("RemoteChange", &defaultColor);
 
     m_notInCvsColor = CervisiaSettings::notInCvsColor();
@@ -552,7 +552,7 @@ void UpdateView::updateColors()
  * is true, it is assumed that the output is from a command
  * 'cvs update -n', i.e. cvs actually changes no files.
  */
-void UpdateView::processUpdateLine(QString str)
+void UpdateView::processUpdateLine(TQString str)
 {
     if (str.length() > 2 && str[1] == ' ')
     {
@@ -586,8 +586,8 @@ void UpdateView::processUpdateLine(QString str)
         updateItem(str.mid(2), status, false);
     }
 
-    const QString removedFileStart(QString::fromLatin1("cvs server: "));
-    const QString removedFileEnd(QString::fromLatin1(" is no longer in the repository"));
+    const TQString removedFileStart(TQString::fromLatin1("cvs server: "));
+    const TQString removedFileEnd(TQString::fromLatin1(" is no longer in the repository"));
     if (str.startsWith(removedFileStart) && str.endsWith(removedFileEnd))
     {
     }
@@ -600,12 +600,12 @@ void UpdateView::processUpdateLine(QString str)
 }
 
 
-void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool isdir)
+void UpdateView::updateItem(const TQString& filePath, EntryStatus status, bool isdir)
 {
-    if (isdir && filePath == QChar('.'))
+    if (isdir && filePath == TQChar('.'))
         return;
 
-    const QFileInfo fileInfo(filePath);
+    const TQFileInfo fileInfo(filePath);
 
     UpdateDirItem* rootItem = static_cast<UpdateDirItem*>(firstChild());
     UpdateDirItem* dirItem = findOrCreateDirItem(fileInfo.dirPath(), rootItem);
@@ -614,7 +614,7 @@ void UpdateView::updateItem(const QString& filePath, EntryStatus status, bool is
 }
 
 
-void UpdateView::itemExecuted(QListViewItem *item)
+void UpdateView::itemExecuted(TQListViewItem *item)
 {
     if (isFileItem(item))
         emit fileOpened(static_cast<UpdateFileItem*>(item)->filePath());

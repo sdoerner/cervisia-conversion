@@ -19,8 +19,8 @@
 
 #include "annotateview.h"
 
-#include <qheader.h>
-#include <qpainter.h>
+#include <tqheader.h>
+#include <tqpainter.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
@@ -37,16 +37,16 @@ public:
     enum { LineNumberColumn, AuthorColumn, ContentColumn };
 
     AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
-                     const QString &content, bool odd, int linenumber);
+                     const TQString &content, bool odd, int linenumber);
 
-    virtual int compare(QListViewItem *item, int col, bool ascending) const;
-    virtual int width(const QFontMetrics &, const QListView *, int col) const;
-    virtual QString text(int col) const;
-    virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
+    virtual int compare(TQListViewItem *item, int col, bool ascending) const;
+    virtual int width(const TQFontMetrics &, const TQListView *, int col) const;
+    virtual TQString text(int col) const;
+    virtual void paintCell(TQPainter *, const TQColorGroup &, int, int, int);
 
 private:
     LogInfo m_logInfo;
-    QString m_content;
+    TQString m_content;
     bool    m_odd;
     int     m_lineNumber;
     friend class AnnotateView;
@@ -59,8 +59,8 @@ const int AnnotateViewItem::BORDER = 4;
 
 
 AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
-                                   const QString &content, bool odd, int linenumber)
-    : QListViewItem(parent)
+                                   const TQString &content, bool odd, int linenumber)
+    : TQListViewItem(parent)
     , m_logInfo(logInfo)
     , m_content(content)
     , m_odd(odd)
@@ -68,7 +68,7 @@ AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
 {}
 
 
-int AnnotateViewItem::compare(QListViewItem *item, int, bool) const
+int AnnotateViewItem::compare(TQListViewItem *item, int, bool) const
 {
     int linenum1 = m_lineNumber;
     int linenum2 = static_cast<AnnotateViewItem*>(item)->m_lineNumber;
@@ -77,30 +77,30 @@ int AnnotateViewItem::compare(QListViewItem *item, int, bool) const
 }
 
 
-QString AnnotateViewItem::text(int col) const
+TQString AnnotateViewItem::text(int col) const
 {
     switch (col)
     {
     case LineNumberColumn:
-        return QString::number(m_lineNumber);
+        return TQString::number(m_lineNumber);
     case AuthorColumn:
         if( m_logInfo.m_author.isNull() )
-            return QString::null;
+            return TQString::null;
         else
-            return (m_logInfo.m_author + QChar(' ') + m_logInfo.m_revision);
+            return (m_logInfo.m_author + TQChar(' ') + m_logInfo.m_revision);
     case ContentColumn:
         return m_content;
     default:
         ;
     };
 
-    return QString::null;
+    return TQString::null;
 }
 
 
-void AnnotateViewItem::paintCell(QPainter *p, const QColorGroup &, int col, int width, int align)
+void AnnotateViewItem::paintCell(TQPainter *p, const TQColorGroup &, int col, int width, int align)
 {
-    QColor backgroundColor;
+    TQColor backgroundColor;
 
     switch (col)
     {
@@ -117,7 +117,7 @@ void AnnotateViewItem::paintCell(QPainter *p, const QColorGroup &, int col, int 
 
     p->fillRect(0, 0, width, height(), backgroundColor);
 
-    QString str = text(col);
+    TQString str = text(col);
     if (str.isEmpty())
         return;
 
@@ -129,7 +129,7 @@ void AnnotateViewItem::paintCell(QPainter *p, const QColorGroup &, int col, int 
 
 
 
-int AnnotateViewItem::width(const QFontMetrics &fm, const QListView *, int col) const
+int AnnotateViewItem::width(const TQFontMetrics &fm, const TQListView *, int col) const
 {
     return fm.width(text(col)) + 2*BORDER;
 }
@@ -137,30 +137,30 @@ int AnnotateViewItem::width(const QFontMetrics &fm, const QListView *, int col) 
 
 /*!
   @todo The dummy column (remaining space eater) doesn't work
-  caused by a bug in QHeader::adjustHeaderSize() in Qt <= 3.0.4.
+  caused by a bug in TQHeader::adjustHeaderSize() in Qt <= 3.0.4.
 */
 
-AnnotateView::AnnotateView(KConfig &cfg, QWidget *parent, const char *name)
-    : QListView(parent, name, WRepaintNoErase | WResizeNoErase)
+AnnotateView::AnnotateView(KConfig &cfg, TQWidget *parent, const char *name)
+    : TQListView(parent, name, WRepaintNoErase | WResizeNoErase)
 {
-    setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    setFrameStyle(TQFrame::WinPanel | TQFrame::Sunken);
     setAllColumnsShowFocus(true);
     setShowToolTips(false);
     setSelectionMode(NoSelection);
     header()->hide();
     //    setResizeMode(LastColumn);
 
-    addColumn(QString::null);
-    addColumn(QString::null);
-    addColumn(QString::null);
+    addColumn(TQString::null);
+    addColumn(TQString::null);
+    addColumn(TQString::null);
 
     setSorting(AnnotateViewItem::LineNumberColumn);
     setColumnAlignment(AnnotateViewItem::LineNumberColumn, Qt::AlignRight);
 
     ToolTip* toolTip = new ToolTip(viewport());
 
-    connect(toolTip, SIGNAL(queryToolTip(const QPoint&, QRect&, QString&)),
-            this, SLOT(slotQueryToolTip(const QPoint&, QRect&, QString&)));
+    connect(toolTip, TQT_SIGNAL(queryToolTip(const TQPoint&, TQRect&, TQString&)),
+            this, TQT_SLOT(slotQueryToolTip(const TQPoint&, TQRect&, TQString&)));
 
     KConfigGroupSaver cs(&cfg, "LookAndFeel");
     setFont(cfg.readFontEntry("AnnotateFont"));
@@ -168,23 +168,23 @@ AnnotateView::AnnotateView(KConfig &cfg, QWidget *parent, const char *name)
 
 
 
-void AnnotateView::addLine(const LogInfo& logInfo, const QString& content,
+void AnnotateView::addLine(const LogInfo& logInfo, const TQString& content,
                            bool odd)
 {
     new AnnotateViewItem(this, logInfo, content, odd, childCount()+1);
 }
 
 
-QSize AnnotateView::sizeHint() const
+TQSize AnnotateView::sizeHint() const
 {
-    QFontMetrics fm(fontMetrics());
-    return QSize(100 * fm.width("0"), 10 * fm.lineSpacing());
+    TQFontMetrics fm(fontMetrics());
+    return TQSize(100 * fm.width("0"), 10 * fm.lineSpacing());
 }
 
 
-void AnnotateView::slotQueryToolTip(const QPoint& viewportPos,
-                                    QRect&        viewportRect,
-                                    QString&      text)
+void AnnotateView::slotQueryToolTip(const TQPoint& viewportPos,
+                                    TQRect&        viewportRect,
+                                    TQString&      text)
 {
     if (const AnnotateViewItem* item = static_cast<AnnotateViewItem*>(itemAt(viewportPos)))
     {

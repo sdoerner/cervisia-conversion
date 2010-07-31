@@ -25,10 +25,10 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qstringlist.h>
+#include <tqfile.h>
+#include <tqfileinfo.h>
+#include <tqregexp.h>
+#include <tqstringlist.h>
 #include <kconfig.h>
 #include <kemailsettings.h>
 #include <klocale.h>
@@ -43,14 +43,14 @@
 
 // These regular expression parts aren't useful to check the validity of the
 // CVSROOT specification. They are just used to extract the different parts of it.
-static const QString userNameRegExp("([a-z0-9_][a-z0-9_-.]*)?");
-static const QString passwordRegExp("(:[^@]+)?");
-static const QString hostNameRegExp("([^:/@]+)");
-static const QString portRegExp("(:(\\d*))?");
-static const QString pathRegExp("(/.*)");
+static const TQString userNameRegExp("([a-z0-9_][a-z0-9_-.]*)?");
+static const TQString passwordRegExp("(:[^@]+)?");
+static const TQString hostNameRegExp("([^:/@]+)");
+static const TQString portRegExp("(:(\\d*))?");
+static const TQString pathRegExp("(/.*)");
 
 
-static int FindWhiteSpace(const QString& str, int index)
+static int FindWhiteSpace(const TQString& str, int index)
 {
     const int length = str.length();
 
@@ -60,10 +60,10 @@ static int FindWhiteSpace(const QString& str, int index)
     if( index < 0 || index >= length )
         return -1;
 
-    const QChar* const startPos = str.unicode();
-    const QChar* const endPos   = startPos + length;
+    const TQChar* const startPos = str.unicode();
+    const TQChar* const endPos   = startPos + length;
 
-    const QChar* pos = startPos + index;
+    const TQChar* pos = startPos + index;
     while( pos < endPos && !pos->isSpace() )
         ++pos;
 
@@ -72,21 +72,21 @@ static int FindWhiteSpace(const QString& str, int index)
 }
 
 
-static const QStringList FetchBranchesAndTags(const QString& searchedType,
+static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
                                               CvsService_stub* cvsService,
-                                              QWidget* parent)
+                                              TQWidget* parent)
 {
-    QStringList branchOrTagList;
+    TQStringList branchOrTagList;
 
-    DCOPRef job = cvsService->status(QStringList(), true, true);
+    DCOPRef job = cvsService->status(TQStringList(), true, true);
     if( !cvsService->ok() )
         return branchOrTagList;
 
-    ProgressDialog dlg(parent, "Status", job, QString::null, i18n("CVS Status"));
+    ProgressDialog dlg(parent, "Status", job, TQString::null, i18n("CVS Status"));
 
     if( dlg.execute() )
     {
-        QString line;
+        TQString line;
         while( dlg.getLine(line) )
         {
             int wsPos, bracketPos, colonPos;
@@ -100,8 +100,8 @@ static const QStringList FetchBranchesAndTags(const QString& searchedType,
             if( (colonPos = line.find(':', bracketPos + 1)) < 0 )
                 continue;
 
-            const QString tag  = line.mid(1, wsPos - 1);
-            const QString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
+            const TQString tag  = line.mid(1, wsPos - 1);
+            const TQString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
             if( type == searchedType && !branchOrTagList.contains(tag) )
                 branchOrTagList.push_back(tag);
         }
@@ -113,9 +113,9 @@ static const QStringList FetchBranchesAndTags(const QString& searchedType,
 }
 
 
-bool Cervisia::IsValidTag(const QString& tag)
+bool Cervisia::IsValidTag(const TQString& tag)
 {
-    static const QString prohibitedChars("$,.:;@");
+    static const TQString prohibitedChars("$,.:;@");
 
     if( !isalpha(tag[0].latin1()) )
         return false;
@@ -130,19 +130,19 @@ bool Cervisia::IsValidTag(const QString& tag)
 }
 
 
-QString Cervisia::UserName()
+TQString Cervisia::UserName()
 {
     // 1. Try to retrieve the information from the control center settings
     KEMailSettings settings;
-    QString name  = settings.getSetting(KEMailSettings::RealName);
-    QString email = settings.getSetting(KEMailSettings::EmailAddress);
+    TQString name  = settings.getSetting(KEMailSettings::RealName);
+    TQString email = settings.getSetting(KEMailSettings::EmailAddress);
 
     if( name.isEmpty() || email.isEmpty() )
     {
         // 2. Try to retrieve the information from the system
         struct passwd* pw = getpwuid(getuid());
         if( !pw )
-            return QString::null;
+            return TQString::null;
 
         char hostname[512];
         hostname[0] = '\0';
@@ -150,12 +150,12 @@ QString Cervisia::UserName()
         if( !gethostname(hostname, sizeof(hostname)) )
             hostname[sizeof(hostname)-1] = '0';
 
-        name  = QString::fromLocal8Bit(pw->pw_gecos);
-        email = QString::fromLocal8Bit(pw->pw_name) + "@" +
-                QString::fromLocal8Bit(hostname);
+        name  = TQString::fromLocal8Bit(pw->pw_gecos);
+        email = TQString::fromLocal8Bit(pw->pw_name) + "@" +
+                TQString::fromLocal8Bit(hostname);
     }
 
-    QString result = name;
+    TQString result = name;
     result += "  <";
     result += email;
     result += ">";
@@ -164,17 +164,17 @@ QString Cervisia::UserName()
 }
 
 
-QString Cervisia::NormalizeRepository(const QString& repository)
+TQString Cervisia::NormalizeRepository(const TQString& repository)
 {
     // only :pserver: repositories
     if( !repository.startsWith(":pserver:") )
         return repository;
 
-    QRegExp rx(":pserver:(" + userNameRegExp + passwordRegExp + "@)?" +
+    TQRegExp rx(":pserver:(" + userNameRegExp + passwordRegExp + "@)?" +
                hostNameRegExp + portRegExp + pathRegExp);
 
     // extract username, hostname, port and path from CVSROOT
-    QString userName, hostName, port, path;
+    TQString userName, hostName, port, path;
     if( rx.search(repository) != -1 )
     {
         userName = rx.cap(2);
@@ -193,7 +193,7 @@ QString Cervisia::NormalizeRepository(const QString& repository)
         if( userName.isEmpty() )
             userName = KUser().loginName();
 
-        QString canonicalForm = ":pserver:" + userName + "@" + hostName +
+        TQString canonicalForm = ":pserver:" + userName + "@" + hostName +
                                 ":" + port + path;
 
         kdDebug() << "NormalizeRepository(): canonicalForm=" << canonicalForm
@@ -205,11 +205,11 @@ QString Cervisia::NormalizeRepository(const QString& repository)
 }
 
 
-bool Cervisia::CheckOverwrite(const QString& fileName, QWidget* parent)
+bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* parent)
 {
     bool result = true;
 
-    QFileInfo fi(fileName);
+    TQFileInfo fi(fileName);
 
     // does the file already exist?
     if( fi.exists() )
@@ -224,10 +224,10 @@ bool Cervisia::CheckOverwrite(const QString& fileName, QWidget* parent)
 }
 
 
-QString joinLine(const QStringList &list)
+TQString joinLine(const TQStringList &list)
 {
-    QString line;
-    for ( QStringList::ConstIterator it = list.begin();
+    TQString line;
+    for ( TQStringList::ConstIterator it = list.begin();
           it != list.end(); ++it )
     {
         line += KShellProcess::quote(*it);
@@ -241,11 +241,11 @@ QString joinLine(const QStringList &list)
 }
 
 
-// Should be replaceable by QStringList::split
-QStringList splitLine(QString line, char delim)
+// Should be replaceable by TQStringList::split
+TQStringList splitLine(TQString line, char delim)
 {
     int pos;
-    QStringList list;
+    TQStringList list;
 
     line = line.simplifyWhiteSpace();
     while ((pos = line.find(delim)) != -1)
@@ -259,46 +259,46 @@ QStringList splitLine(QString line, char delim)
 }
 
 
-const QStringList fetchBranches(CvsService_stub* cvsService, QWidget* parent)
+const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* parent)
 {
-    return FetchBranchesAndTags(QString::fromLatin1("branch"), cvsService,
+    return FetchBranchesAndTags(TQString::fromLatin1("branch"), cvsService,
                                 parent);
 }
 
 
-const QStringList fetchTags(CvsService_stub* cvsService, QWidget* parent)
+const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* parent)
 {
-    return FetchBranchesAndTags(QString::fromLatin1("revision"), cvsService,
+    return FetchBranchesAndTags(TQString::fromLatin1("revision"), cvsService,
                                 parent);
 }
 
 
-static QStringList *tempFiles = 0;
+static TQStringList *tempFiles = 0;
 
 void cleanupTempFiles()
 {
     if (tempFiles)
     {
-        QStringList::Iterator it;
+        TQStringList::Iterator it;
         for (it = tempFiles->begin(); it != tempFiles->end(); ++it)
-            QFile::remove(*it);
+            TQFile::remove(*it);
         delete tempFiles;
     }
 }
 
 
-QString tempFileName(const QString& suffix)
+TQString tempFileName(const TQString& suffix)
 {
     if (!tempFiles)
         tempFiles = new QStringList;
 
-    KTempFile f(QString::null, suffix);
+    KTempFile f(TQString::null, suffix);
     tempFiles->append(f.name());
     return f.name();
 }
 
 
-int compareRevisions(const QString& rev1, const QString& rev2)
+int compareRevisions(const TQString& rev1, const TQString& rev2)
 {
     const int length1(rev1.length());
     const int length2(rev2.length());

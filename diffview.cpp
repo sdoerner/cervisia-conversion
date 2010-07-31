@@ -20,11 +20,11 @@
 
 #include "diffview.h"
 
-#include <qpainter.h>
-#include <qscrollbar.h>
-#include <qpixmap.h>
-#include <qregexp.h>
-#include <qstyle.h>
+#include <tqpainter.h>
+#include <tqscrollbar.h>
+#include <tqpixmap.h>
+#include <tqregexp.h>
+#include <tqstyle.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -36,14 +36,14 @@
 class DiffViewItem
 {
 public:
-    QString line;
+    TQString line;
     DiffView::DiffType type;
     bool inverted;
     int no;
 };
 
 
-int DiffViewItemList::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+int DiffViewItemList::compareItems(TQPtrCollection::Item item1, TQPtrCollection::Item item2)
 {
     return (static_cast<DiffViewItem*>(item1)->no
             == static_cast<DiffViewItem*>(item2)->no)? 0 : 1;
@@ -54,7 +54,7 @@ const int DiffView::BORDER = 7;
 
 
 DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-                    QWidget *parent, const char *name )
+                    TQWidget *parent, const char *name )
     : QtTableView(parent, name, WRepaintNoErase)
     , partConfig(cfg)
 {
@@ -62,13 +62,13 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
     setNumCols( 1 + (withlinenos?1:0) + (withmarker?1:0) );
     setTableFlags( Tbl_autoVScrollBar|Tbl_autoHScrollBar|
                    Tbl_smoothVScrolling );
-    setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+    setFrameStyle( TQFrame::WinPanel | TQFrame::Sunken );
     setBackgroundMode( PaletteBase );
     setWFlags( WResizeNoErase );
 
     partConfig.setGroup("LookAndFeel");
     setFont(partConfig.readFontEntry("DiffFont"));
-    QFontMetrics fm(font());
+    TQFontMetrics fm(font());
     setCellHeight(fm.lineSpacing());
     setCellWidth(0);
     textwidth = 0;
@@ -81,19 +81,19 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
     marker = withmarker;
 
     partConfig.setGroup("Colors");
-    QColor defaultColor=QColor(237, 190, 190);
+    TQColor defaultColor=TQColor(237, 190, 190);
     diffChangeColor=partConfig.readColorEntry("DiffChange",&defaultColor);
-    defaultColor=QColor(190, 190, 237);
+    defaultColor=TQColor(190, 190, 237);
     diffInsertColor=partConfig.readColorEntry("DiffInsert",&defaultColor);
-    defaultColor=QColor(190, 237, 190);
+    defaultColor=TQColor(190, 237, 190);
     diffDeleteColor=partConfig.readColorEntry("DiffDelete",&defaultColor);
 }
 
 
-void DiffView::setFont(const QFont &font)
+void DiffView::setFont(const TQFont &font)
 {
     QtTableView::setFont(font);
-    QFontMetrics fm(font);
+    TQFontMetrics fm(font);
     setCellHeight(fm.lineSpacing());
 }
 
@@ -103,14 +103,14 @@ void DiffView::setPartner(DiffView *other)
     partner = other;
     if (partner)
     {
-        connect( verticalScrollBar(), SIGNAL(valueChanged(int)),
-                 SLOT(vertPositionChanged(int)) );
-        connect( verticalScrollBar(), SIGNAL(sliderMoved(int)),
-                 SLOT(vertPositionChanged(int)) );
-        connect( horizontalScrollBar(), SIGNAL(valueChanged(int)),
-                 SLOT(horzPositionChanged(int)) );
-        connect( horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-                 SLOT(horzPositionChanged(int)) );
+        connect( verticalScrollBar(), TQT_SIGNAL(valueChanged(int)),
+                 TQT_SLOT(vertPositionChanged(int)) );
+        connect( verticalScrollBar(), TQT_SIGNAL(sliderMoved(int)),
+                 TQT_SLOT(vertPositionChanged(int)) );
+        connect( horizontalScrollBar(), TQT_SIGNAL(valueChanged(int)),
+                 TQT_SLOT(horzPositionChanged(int)) );
+        connect( horizontalScrollBar(), TQT_SIGNAL(sliderMoved(int)),
+                 TQT_SLOT(horzPositionChanged(int)) );
     }
 }
 
@@ -137,7 +137,7 @@ void DiffView::removeAtOffset(int offset)
 }
 
 
-void DiffView::insertAtOffset(const QString &line, DiffType type, int offset)
+void DiffView::insertAtOffset(const TQString &line, DiffType type, int offset)
 {
     DiffViewItem *item = new DiffViewItem;
     item->line = line;
@@ -159,12 +159,12 @@ void DiffView::setCenterOffset(int offset)
 }
 
 
-void DiffView::addLine(const QString &line, DiffType type, int no)
+void DiffView::addLine(const TQString &line, DiffType type, int no)
 {
-    QFont f(font());
+    TQFont f(font());
     f.setBold(true);
-    QFontMetrics fmbold(f);
-    QFontMetrics fm(font());
+    TQFontMetrics fmbold(f);
+    TQFontMetrics fm(font());
 
 
     // calculate textwidth based on 'line' where tabs are expanded
@@ -172,9 +172,9 @@ void DiffView::addLine(const QString &line, DiffType type, int no)
     // *Please note*
     // For some fonts, e.g. "Clean", is fm.maxWidth() greater than
     // fmbold.maxWidth().
-    QString copy(line);
+    TQString copy(line);
     const int numTabs = copy.contains('\t', false);
-    copy.replace( QRegExp("\t"), "");
+    copy.replace( TQRegExp("\t"), "");
 
     const int tabSize   = m_tabWidth * QMAX(fm.maxWidth(), fmbold.maxWidth());
     const int copyWidth = QMAX(fm.width(copy), fmbold.width(copy));
@@ -190,7 +190,7 @@ void DiffView::addLine(const QString &line, DiffType type, int no)
 }
 
 
-QString DiffView::stringAtOffset(int offset)
+TQString DiffView::stringAtOffset(int offset)
 {
     if (offset >= (int)items.count())
     {
@@ -236,21 +236,21 @@ void DiffView::setCenterLine(int lineno)
 }
 
 
-QString DiffView::stringAtLine(int lineno)
+TQString DiffView::stringAtLine(int lineno)
 {
     int pos;
     if ( (pos = findLine(lineno)) != -1 )
         return items.at(pos)->line;
     else
-        return QString();
+        return TQString();
 }
 
 
-QByteArray DiffView::compressedContent()
+TQByteArray DiffView::compressedContent()
 {
-    QByteArray res(items.count());
+    TQByteArray res(items.count());
 
-    QPtrListIterator<DiffViewItem> it(items);
+    TQPtrListIterator<DiffViewItem> it(items);
     int i=0;
     for (; it.current(); ++it)
     {
@@ -273,12 +273,12 @@ int DiffView::cellWidth(int col)
 {
     if (col == 0 && linenos)
     {
-        QFontMetrics fm(font());
+        TQFontMetrics fm(font());
         return fm.width("10000");
     }
     else if (marker && (col == 0 || col == 1))
     {
-        QFontMetrics fm( fontMetrics() );
+        TQFontMetrics fm( fontMetrics() );
         return QMAX(QMAX( fm.width(i18n("Delete")),
                           fm.width(i18n("Insert"))),
                     fm.width(i18n("Change")))+2*BORDER;
@@ -293,16 +293,16 @@ int DiffView::cellWidth(int col)
 }
 
 
-QSize DiffView::sizeHint() const
+TQSize DiffView::sizeHint() const
 {
-    QFontMetrics fm(font());
-    return QSize( 4*fm.width("0123456789"), fm.lineSpacing()*8 );
+    TQFontMetrics fm(font());
+    return TQSize( 4*fm.width("0123456789"), fm.lineSpacing()*8 );
 }
 
 
-void DiffView::paintCell(QPainter *p, int row, int col)
+void DiffView::paintCell(TQPainter *p, int row, int col)
 {
-    QFontMetrics fm(font());
+    TQFontMetrics fm(font());
     p->setTabStops(m_tabWidth * fm.maxWidth());
 
     DiffViewItem *item = items.at(row);
@@ -310,13 +310,13 @@ void DiffView::paintCell(QPainter *p, int row, int col)
     int width = cellWidth(col);
     int height = cellHeight();
 
-    QColor backgroundColor;
+    TQColor backgroundColor;
     bool inverted;
     int align;
     int innerborder;
-    QString str;
+    TQString str;
 
-    QFont oldFont(p->font());
+    TQFont oldFont(p->font());
     if (item->type==Separator)
     {
         backgroundColor = KGlobalSettings::highlightColor();
@@ -326,7 +326,7 @@ void DiffView::paintCell(QPainter *p, int row, int col)
         innerborder = 0;
         if (col == (linenos?1:0) + (marker?1:0))
             str = item->line;
-        QFont f(oldFont);
+        TQFont f(oldFont);
         f.setBold(true);
         p->setFont(f);
     }
@@ -351,7 +351,7 @@ void DiffView::paintCell(QPainter *p, int row, int col)
         innerborder = BORDER;
         str = (item->type==Change)? i18n("Change")
             : (item->type==Insert)? i18n("Insert")
-            : (item->type==Delete)? i18n("Delete") : QString::null;
+            : (item->type==Delete)? i18n("Delete") : TQString::null;
     }
     else
     {
@@ -371,7 +371,7 @@ void DiffView::paintCell(QPainter *p, int row, int col)
     {
         p->setPen(backgroundColor);
         backgroundColor = KGlobalSettings::textColor();
-        QFont f(oldFont);
+        TQFont f(oldFont);
         f.setBold(true);
         p->setFont(f);
     }
@@ -382,23 +382,23 @@ void DiffView::paintCell(QPainter *p, int row, int col)
 }
 
 
-void DiffView::wheelEvent(QWheelEvent *e)
+void DiffView::wheelEvent(TQWheelEvent *e)
 {
-    QApplication::sendEvent(verticalScrollBar(), e);
+    TQApplication::sendEvent(verticalScrollBar(), e);
 }
 
 
-DiffZoomWidget::DiffZoomWidget(KConfig& cfg, QWidget *parent, const char *name)
-    : QFrame(parent, name)
+DiffZoomWidget::DiffZoomWidget(KConfig& cfg, TQWidget *parent, const char *name)
+    : TQFrame(parent, name)
 {
-    setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum ) );
+    setSizePolicy( TQSizePolicy( TQSizePolicy::Fixed, TQSizePolicy::Minimum ) );
 
     cfg.setGroup("Colors");
-    QColor defaultColor=QColor(237, 190, 190);
+    TQColor defaultColor=TQColor(237, 190, 190);
     diffChangeColor=cfg.readColorEntry("DiffChange",&defaultColor);
-    defaultColor=QColor(190, 190, 237);
+    defaultColor=TQColor(190, 190, 237);
     diffInsertColor=cfg.readColorEntry("DiffInsert",&defaultColor);
-    defaultColor=QColor(190, 237, 190);
+    defaultColor=TQColor(190, 237, 190);
     diffDeleteColor=cfg.readColorEntry("DiffDelete",&defaultColor);
 }
 
@@ -410,49 +410,49 @@ DiffZoomWidget::~DiffZoomWidget()
 void DiffZoomWidget::setDiffView(DiffView *view)
 {
     diffview = view;
-    QScrollBar *sb = const_cast<QScrollBar*>(diffview->scrollBar());
+    TQScrollBar *sb = const_cast<TQScrollBar*>(diffview->scrollBar());
     sb->installEventFilter(this);
 }
 
 
-QSize DiffZoomWidget::sizeHint() const
+TQSize DiffZoomWidget::sizeHint() const
 {
-    return QSize(25, style().pixelMetric(QStyle::PM_ScrollBarExtent, this));
+    return TQSize(25, style().pixelMetric(TQStyle::PM_ScrollBarExtent, this));
 }
 
 
-bool DiffZoomWidget::eventFilter(QObject *o, QEvent *e)
+bool DiffZoomWidget::eventFilter(TQObject *o, TQEvent *e)
 {
-    if (e->type() == QEvent::Show
-        || e->type() == QEvent::Hide
-        || e->type() == QEvent::Resize)
+    if (e->type() == TQEvent::Show
+        || e->type() == TQEvent::Hide
+        || e->type() == TQEvent::Resize)
         repaint();
 
-    return QFrame::eventFilter(o, e);
+    return TQFrame::eventFilter(o, e);
 }
 
 
-void DiffZoomWidget::paintEvent(QPaintEvent *)
+void DiffZoomWidget::paintEvent(TQPaintEvent *)
 {
-    const QScrollBar* scrollBar = diffview->scrollBar();
+    const TQScrollBar* scrollBar = diffview->scrollBar();
     if (!scrollBar)
         return;
 
     // only y and height are important
-    const QRect scrollBarGroove(scrollBar->isVisible()
-                                ? style().querySubControlMetrics(QStyle::CC_ScrollBar,
+    const TQRect scrollBarGroove(scrollBar->isVisible()
+                                ? style().querySubControlMetrics(TQStyle::CC_ScrollBar,
                                                                  scrollBar,
-                                                                 QStyle::SC_ScrollBarGroove)
+                                                                 TQStyle::SC_ScrollBarGroove)
                                 : rect());
 
     // draw rectangles at the positions of the differences
 
-    const QByteArray& lineTypes(diffview->compressedContent());
+    const TQByteArray& lineTypes(diffview->compressedContent());
 
-    QPixmap pixbuf(width(), scrollBarGroove.height());
+    TQPixmap pixbuf(width(), scrollBarGroove.height());
     pixbuf.fill(KGlobalSettings::baseColor());
 
-    QPainter p(&pixbuf, this);
+    TQPainter p(&pixbuf, this);
     if (const unsigned int numberOfLines = lineTypes.size())
     {
         const double scale(((double) scrollBarGroove.height()) / numberOfLines);
@@ -468,7 +468,7 @@ void DiffZoomWidget::paintEvent(QPaintEvent *)
             for (++index; index < numberOfLines && lineType == lineTypes[index]; ++index)
                 ;
 
-            QColor color;
+            TQColor color;
             switch (lineType)
             {
             case 'C':
@@ -491,7 +491,7 @@ void DiffZoomWidget::paintEvent(QPaintEvent *)
                 const int yPos2(qRound(index * scale));
                 const int areaHeight((yPos2 != yPos1) ? yPos2 - yPos1 : 1);
 
-                p.fillRect(0, yPos1, pixbuf.width(), areaHeight, QBrush(color));
+                p.fillRect(0, yPos1, pixbuf.width(), areaHeight, TQBrush(color));
             }
         }
     }

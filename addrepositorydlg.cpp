@@ -21,10 +21,10 @@
 
 #include "addrepositorydlg.h"
 
-#include <qcheckbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <tqcheckbox.h>
+#include <tqhbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
 
 #include <kconfig.h>
 #include <klineedit.h>
@@ -32,17 +32,17 @@
 #include <knuminput.h>
 
 
-AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const QString& repo, 
-                                         QWidget* parent, const char* name)
+AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const TQString& repo, 
+                                         TQWidget* parent, const char* name)
     : KDialogBase(parent, name, true, i18n("Add Repository"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
 {
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout* layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout* layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    QLabel* repo_label = new QLabel(i18n("&Repository:"), mainWidget);
+    TQLabel* repo_label = new TQLabel(i18n("&Repository:"), mainWidget);
     layout->addWidget(repo_label);
     
     repo_edit = new KLineEdit(mainWidget);
@@ -55,14 +55,14 @@ AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const QString& repo,
     }
     layout->addWidget(repo_edit);
     
-    QLabel* rsh_label = new QLabel(i18n("Use remote &shell (only for :ext: repositories):"), mainWidget);
+    TQLabel* rsh_label = new TQLabel(i18n("Use remote &shell (only for :ext: repositories):"), mainWidget);
     layout->addWidget(rsh_label);
     
     rsh_edit = new KLineEdit(mainWidget);
     rsh_label->setBuddy(rsh_edit);
     layout->addWidget(rsh_edit);
     
-    QLabel* server_label = new QLabel(i18n("Invoke this program on the server side:"),
+    TQLabel* server_label = new TQLabel(i18n("Invoke this program on the server side:"),
                                       mainWidget);
     layout->addWidget(server_label);
     
@@ -70,24 +70,24 @@ AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const QString& repo,
     server_label->setBuddy(server_edit);
     layout->addWidget(server_edit);
 
-    QHBox* compressionBox = new QHBox(mainWidget);
-    m_useDifferentCompression = new QCheckBox(i18n("Use different &compression level:"), compressionBox);
+    TQHBox* compressionBox = new TQHBox(mainWidget);
+    m_useDifferentCompression = new TQCheckBox(i18n("Use different &compression level:"), compressionBox);
     
     m_compressionLevel = new KIntNumInput(compressionBox);
     m_compressionLevel->setRange(0, 9, 1, false);
     layout->addWidget(compressionBox);
     
-    m_retrieveCvsignoreFile = new QCheckBox(i18n("Download cvsignore file from "
+    m_retrieveCvsignoreFile = new TQCheckBox(i18n("Download cvsignore file from "
                                             "server"), mainWidget);
     layout->addWidget(m_retrieveCvsignoreFile);
 
-    connect( repo_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(repoChanged()) );
-    connect( m_useDifferentCompression, SIGNAL(toggled(bool)),
-             this, SLOT(compressionToggled(bool)) );
+    connect( repo_edit, TQT_SIGNAL(textChanged(const TQString&)),
+             this, TQT_SLOT(repoChanged()) );
+    connect( m_useDifferentCompression, TQT_SIGNAL(toggled(bool)),
+             this, TQT_SLOT(compressionToggled(bool)) );
     repoChanged();
 
-    QSize size = configDialogSize(partConfig, "AddRepositoryDialog");
+    TQSize size = configDialogSize(partConfig, "AddRepositoryDialog");
     resize(size);
 }
 
@@ -98,13 +98,13 @@ AddRepositoryDialog::~AddRepositoryDialog()
 }
 
 
-void AddRepositoryDialog::setRsh(const QString& rsh)
+void AddRepositoryDialog::setRsh(const TQString& rsh)
 {
     rsh_edit->setText(rsh);
 }
 
 
-void AddRepositoryDialog::setServer(const QString& server)
+void AddRepositoryDialog::setServer(const TQString& server)
 {
     server_edit->setText(server);
 }
@@ -134,19 +134,19 @@ void AddRepositoryDialog::setRetrieveCvsignoreFile(bool enabled)
 }
 
 
-QString AddRepositoryDialog::repository() const
+TQString AddRepositoryDialog::repository() const
 {
     return repo_edit->text();
 }
 
 
-QString AddRepositoryDialog::rsh() const
+TQString AddRepositoryDialog::rsh() const
 {
     return rsh_edit->text();
 }
 
 
-QString AddRepositoryDialog::server() const
+TQString AddRepositoryDialog::server() const
 {
     return server_edit->text();
 }
@@ -167,7 +167,7 @@ bool AddRepositoryDialog::retrieveCvsignoreFile() const
 }
 
 
-void AddRepositoryDialog::setRepository(const QString& repo)
+void AddRepositoryDialog::setRepository(const TQString& repo)
 {
     setCaption(i18n("Repository Settings"));
 
@@ -178,7 +178,7 @@ void AddRepositoryDialog::setRepository(const QString& repo)
 
 void AddRepositoryDialog::repoChanged()
 {
-    QString repo = repository();
+    TQString repo = repository();
     rsh_edit->setEnabled((!repo.startsWith(":pserver:"))
                          && repo.contains(":"));
     m_useDifferentCompression->setEnabled(repo.contains(":"));

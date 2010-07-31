@@ -22,7 +22,7 @@
 #ifndef PROTOCOLVIEW_H
 #define PROTOCOLVIEW_H
 
-#include <qtextedit.h>
+#include <tqtextedit.h>
 #include <dcopobject.h>
 
 class QPoint;
@@ -30,26 +30,26 @@ class QPopupMenu;
 class CvsJob_stub;
 
 
-class ProtocolView : public QTextEdit, public DCOPObject
+class ProtocolView : public TQTextEdit, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
 
 public:
-    explicit ProtocolView(const QCString& appId, QWidget *parent=0, const char *name=0);
+    explicit ProtocolView(const TQCString& appId, TQWidget *parent=0, const char *name=0);
     ~ProtocolView();
 
     bool startJob(bool isUpdateJob = false);
 
 protected:
-    virtual QPopupMenu* createPopupMenu(const QPoint &pos);
+    virtual TQPopupMenu* createPopupMenu(const TQPoint &pos);
 
 k_dcop:
-    void slotReceivedOutput(QString buffer);
+    void slotReceivedOutput(TQString buffer);
     void slotJobExited(bool normalExit, int exitStatus);
 
 signals:
-    void receivedLine(QString line);
+    void receivedLine(TQString line);
     void jobFinished(bool normalExit, int exitStatus);
 
 private slots:
@@ -57,13 +57,13 @@ private slots:
 
 private:
     void processOutput();
-    void appendLine(const QString &line);
+    void appendLine(const TQString &line);
 
-    QString buf;
+    TQString buf;
 
-    QColor conflictColor;
-    QColor localChangeColor;
-    QColor remoteChangeColor;
+    TQColor conflictColor;
+    TQColor localChangeColor;
+    TQColor remoteChangeColor;
 
     CvsJob_stub* job;
 

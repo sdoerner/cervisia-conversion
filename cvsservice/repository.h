@@ -21,7 +21,7 @@
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
-#include <qobject.h>
+#include <tqobject.h>
 #include <dcopobject.h>
 
 class QString;
@@ -31,14 +31,14 @@ class QString;
  * Represents a local or remote cvs repository with
  * its repository-specific configuration data.
  */
-class KDE_EXPORT Repository : public QObject, public DCOPObject
+class KDE_EXPORT Repository : public TQObject, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
 
 public:
     Repository();
-    explicit Repository(const QString& repository);
+    explicit Repository(const TQString& repository);
     ~Repository();
 
     /**
@@ -47,11 +47,11 @@ public:
      *
      * @return A cvs command (including path).
      */
-    QString cvsClient() const;
+    TQString cvsClient() const;
 
     /**
      */
-    QString clientOnly() const;
+    TQString clientOnly() const;
     
     /**
      * Remote shell command line client which should be used to
@@ -60,7 +60,7 @@ public:
      *
      * @return The remote shell client. Can be null if not set.
      */
-    QString rsh() const;
+    TQString rsh() const;
 
     /**
      * Program to start on the server side when accessing a remote
@@ -68,7 +68,7 @@ public:
      *
      * @return The server program. Can be null if not set.
      */
-    QString server() const;
+    TQString server() const;
 
 k_dcop:
     /**
@@ -76,14 +76,14 @@ k_dcop:
      *
      * @param dirName path to the local working copy directory.
      */
-    bool setWorkingCopy(const QString& dirName);
+    bool setWorkingCopy(const TQString& dirName);
 
     /**
      * Path to the current working copy.
      *
      * @return The working copy directory. Can be null if not set.
      */
-    QString workingCopy() const;
+    TQString workingCopy() const;
 
     /**
      * Path and method to access the current cvs repository.
@@ -91,14 +91,14 @@ k_dcop:
      *
      * @return The path and method to access the cvs repository.
      */
-    QString location() const;
+    TQString location() const;
     
     /**
      */
     bool retrieveCvsignoreFile() const;
 
 private slots:
-    void slotConfigDirty(const QString& fileName);
+    void slotConfigDirty(const TQString& fileName);
 
 private:
     struct Private;

@@ -21,8 +21,8 @@
 
 #include "repositorydlg.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <tqlayout.h>
+#include <tqpushbutton.h>
 #include <kbuttonbox.h>
 #include <kconfig.h>
 #include <klistview.h>
@@ -40,25 +40,25 @@
 class RepositoryListItem : public KListViewItem
 {
 public:
-    RepositoryListItem(KListView* parent, const QString& repo, bool loggedin);
+    RepositoryListItem(KListView* parent, const TQString& repo, bool loggedin);
     
-    void setRsh(const QString& rsh);
-    void setServer(const QString& server) { m_server = server; }
+    void setRsh(const TQString& rsh);
+    void setServer(const TQString& server) { m_server = server; }
     void setCompression(int compression);
     void setIsLoggedIn(bool isLoggedIn);
     void setRetrieveCvsignore(bool retrieve) { m_retrieveCvsignore = retrieve; }
     
-    QString repository() const
+    TQString repository() const
     {
         return text(0);
     }
-    QString rsh() const
+    TQString rsh() const
     {
-        QString str = text(1);
+        TQString str = text(1);
         return (str.startsWith("ext (") ? str.mid(5, str.length()-6) 
-                                        : QString::null);
+                                        : TQString::null);
     }
-    QString server() const { return m_server; }
+    TQString server() const { return m_server; }
     int compression() const
     {
         bool ok; 
@@ -72,20 +72,20 @@ private:
     void changeLoginStatusColumn();
     
 private:
-    QString m_server;
+    TQString m_server;
     bool    m_isLoggedIn;
     bool    m_retrieveCvsignore;
 };
 
 
-static bool LoginNeeded(const QString& repository)
+static bool LoginNeeded(const TQString& repository)
 {
     return repository.startsWith(":pserver:") ||
            repository.startsWith(":sspi:");
 }
 
 
-RepositoryListItem::RepositoryListItem(KListView* parent, const QString& repo, 
+RepositoryListItem::RepositoryListItem(KListView* parent, const TQString& repo, 
                                        bool loggedin)
     : KListViewItem(parent)
     , m_isLoggedIn(loggedin)
@@ -96,10 +96,10 @@ RepositoryListItem::RepositoryListItem(KListView* parent, const QString& repo,
 }
 
 
-void RepositoryListItem::setRsh(const QString& rsh)
+void RepositoryListItem::setRsh(const TQString& rsh)
 {
-    QString repo = repository();
-    QString method;
+    TQString repo = repository();
+    TQString method;
 
     if( repo.startsWith(":pserver:") )
         method = "pserver";
@@ -124,7 +124,7 @@ void RepositoryListItem::setRsh(const QString& rsh)
 
 void RepositoryListItem::setCompression(int compression)
 {
-    QString compressionStr = (compression >= 0) ? QString::number(compression)
+    TQString compressionStr = (compression >= 0) ? TQString::number(compression)
                                                 : i18n("Default");
 
     setText(2, compressionStr);
@@ -141,7 +141,7 @@ void RepositoryListItem::setIsLoggedIn(bool isLoggedIn)
 
 void RepositoryListItem::changeLoginStatusColumn()
 {
-    QString loginStatus;
+    TQString loginStatus;
     
     if( LoginNeeded(repository()) )
         loginStatus = m_isLoggedIn ? i18n("Logged in") : i18n("Not logged in");
@@ -153,15 +153,15 @@ void RepositoryListItem::changeLoginStatusColumn()
 
 
 RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                                   QWidget* parent, const char* name)
+                                   TQWidget* parent, const char* name)
     : KDialogBase(parent, name, true, i18n("Configure Access to Repositories"),
                   Ok | Cancel | Help, Ok, true)
     , m_partConfig(cfg)
     , m_cvsService(cvsService)
 {
-    QFrame* mainWidget = makeMainWidget();
+    TQFrame* mainWidget = makeMainWidget();
 
-    QBoxLayout* hbox = new QHBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout* hbox = new TQHBoxLayout(mainWidget, 0, spacingHint());
 
     m_repoList = new KListView(mainWidget);
     hbox->addWidget(m_repoList, 10);
@@ -173,13 +173,13 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     m_repoList->addColumn(i18n("Status"));
     m_repoList->setFocus();
 
-    connect(m_repoList, SIGNAL(doubleClicked(QListViewItem*)),
-            this, SLOT(slotDoubleClicked(QListViewItem*)));
-    connect(m_repoList, SIGNAL(selectionChanged()),
-            this,       SLOT(slotSelectionChanged()));
+    connect(m_repoList, TQT_SIGNAL(doubleClicked(TQListViewItem*)),
+            this, TQT_SLOT(slotDoubleClicked(TQListViewItem*)));
+    connect(m_repoList, TQT_SIGNAL(selectionChanged()),
+            this,       TQT_SLOT(slotSelectionChanged()));
 
     KButtonBox* actionbox = new KButtonBox(mainWidget, KButtonBox::Vertical);
-    QPushButton* addbutton = actionbox->addButton(i18n("&Add..."));
+    TQPushButton* addbutton = actionbox->addButton(i18n("&Add..."));
     m_modifyButton = actionbox->addButton(i18n("&Modify..."));
     m_removeButton = actionbox->addButton(i18n("&Remove"));
     actionbox->addStretch();
@@ -192,16 +192,16 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     m_loginButton->setEnabled(false);
     m_logoutButton->setEnabled(false);
 
-    connect( addbutton, SIGNAL(clicked()),
-             this, SLOT(slotAddClicked()) );
-    connect( m_modifyButton, SIGNAL(clicked()),
-             this, SLOT(slotModifyClicked()) );
-    connect( m_removeButton, SIGNAL(clicked()),
-             this, SLOT(slotRemoveClicked()) );
-    connect( m_loginButton, SIGNAL(clicked()),
-             this, SLOT(slotLoginClicked()) );
-    connect( m_logoutButton, SIGNAL(clicked()),
-             this, SLOT(slotLogoutClicked()) );
+    connect( addbutton, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(slotAddClicked()) );
+    connect( m_modifyButton, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(slotModifyClicked()) );
+    connect( m_removeButton, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(slotRemoveClicked()) );
+    connect( m_loginButton, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(slotLoginClicked()) );
+    connect( m_logoutButton, TQT_SIGNAL(clicked()),
+             this, TQT_SLOT(slotLogoutClicked()) );
 
     // open cvs DCOP service configuration file
     m_serviceConfig = new KConfig("cvsservicerc");
@@ -209,7 +209,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     readCvsPassFile();
     readConfigFile();
 
-    if (QListViewItem* item = m_repoList->firstChild())
+    if (TQListViewItem* item = m_repoList->firstChild())
     {
         m_repoList->setCurrentItem(item);
         m_repoList->setSelected(item, true);
@@ -224,14 +224,14 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(m_partConfig, "RepositoryDialog");
+    TQSize size = configDialogSize(m_partConfig, "RepositoryDialog");
     resize(size);
 
     // without this restoreLayout() can't change the column widths
     for (int i = 0; i < m_repoList->columns(); ++i)
-        m_repoList->setColumnWidthMode(i, QListView::Manual);
+        m_repoList->setColumnWidthMode(i, TQListView::Manual);
 
-    m_repoList->restoreLayout(&m_partConfig, QString::fromLatin1("RepositoryListView"));
+    m_repoList->restoreLayout(&m_partConfig, TQString::fromLatin1("RepositoryListView"));
 }
 
 
@@ -239,7 +239,7 @@ RepositoryDialog::~RepositoryDialog()
 {
     saveDialogSize(m_partConfig, "RepositoryDialog");
 
-    m_repoList->saveLayout(&m_partConfig, QString::fromLatin1("RepositoryListView"));
+    m_repoList->saveLayout(&m_partConfig, TQString::fromLatin1("RepositoryListView"));
 
     delete m_serviceConfig;
 }
@@ -247,8 +247,8 @@ RepositoryDialog::~RepositoryDialog()
 
 void RepositoryDialog::readCvsPassFile()
 {
-    QStringList list = Repositories::readCvsPassFile();
-    QStringList::ConstIterator it;
+    TQStringList list = Repositories::readCvsPassFile();
+    TQStringList::ConstIterator it;
     for( it = list.begin(); it != list.end(); ++it )
         (void) new RepositoryListItem(m_repoList, (*it), true);
 }
@@ -256,14 +256,14 @@ void RepositoryDialog::readCvsPassFile()
 
 void RepositoryDialog::readConfigFile()
 {
-    QStringList list = Repositories::readConfigFile();
+    TQStringList list = Repositories::readConfigFile();
 
     // Sort out all list elements which are already in the list view
-    QListViewItem* item = m_repoList->firstChild();
+    TQListViewItem* item = m_repoList->firstChild();
     for( ; item; item = item->nextSibling() )
         list.remove(item->text(0));
 
-    QStringList::ConstIterator it;
+    TQStringList::ConstIterator it;
     for( it = list.begin(); it != list.end(); ++it )
         new RepositoryListItem(m_repoList, *it, false);
 
@@ -274,11 +274,11 @@ void RepositoryDialog::readConfigFile()
         RepositoryListItem* ritem = static_cast<RepositoryListItem*>(item);
 
         // read entries from cvs DCOP service configuration
-        m_serviceConfig->setGroup(QString::fromLatin1("Repository-") +
+        m_serviceConfig->setGroup(TQString::fromLatin1("Repository-") +
                                   ritem->repository());
 
-        QString rsh       = m_serviceConfig->readEntry("rsh", QString());
-        QString server    = m_serviceConfig->readEntry("cvs_server", QString());
+        TQString rsh       = m_serviceConfig->readEntry("rsh", TQString());
+        TQString server    = m_serviceConfig->readEntry("cvs_server", TQString());
         int compression   = m_serviceConfig->readNumEntry("Compression", -1);
         bool retrieveFile = m_serviceConfig->readBoolEntry("RetrieveCvsignore",
                                                            false);
@@ -294,8 +294,8 @@ void RepositoryDialog::readConfigFile()
 void RepositoryDialog::slotOk()
 {
     // Make list of repositories
-    QListViewItem* item;
-    QStringList list;
+    TQListViewItem* item;
+    TQStringList list;
     for( item = m_repoList->firstChild(); item; item = item->nextSibling() )
         list.append(item->text(0));
 
@@ -319,18 +319,18 @@ void RepositoryDialog::slotOk()
 
 void RepositoryDialog::slotAddClicked()
 {
-    AddRepositoryDialog dlg(m_partConfig, QString::null, this);
+    AddRepositoryDialog dlg(m_partConfig, TQString::null, this);
     // default compression level
     dlg.setCompression(-1);
     if( dlg.exec() )
     {
-        QString repo      = Cervisia::NormalizeRepository(dlg.repository());
-        QString rsh       = dlg.rsh();
-        QString server    = dlg.server();
+        TQString repo      = Cervisia::NormalizeRepository(dlg.repository());
+        TQString rsh       = dlg.rsh();
+        TQString server    = dlg.server();
         int compression   = dlg.compression();
         bool retrieveFile = dlg.retrieveCvsignoreFile();
 
-        QListViewItem* item = m_repoList->firstChild();
+        TQListViewItem* item = m_repoList->firstChild();
         for( ; item; item = item->nextSibling() )
             if( item->text(0) == repo )
             {
@@ -369,15 +369,15 @@ void RepositoryDialog::slotRemoveClicked()
 }
 
 
-void RepositoryDialog::slotDoubleClicked(QListViewItem* item)
+void RepositoryDialog::slotDoubleClicked(TQListViewItem* item)
 {
     if( !item )
         return;
 
     RepositoryListItem* ritem = static_cast<RepositoryListItem*>(item);
-    QString repo      = ritem->repository();
-    QString rsh       = ritem->rsh();
-    QString server    = ritem->server();
+    TQString repo      = ritem->repository();
+    TQString rsh       = ritem->rsh();
+    TQString server    = ritem->server();
     int compression   = ritem->compression();
     bool retrieveFile = ritem->retrieveCvsignore();
 
@@ -422,7 +422,7 @@ void RepositoryDialog::slotLoginClicked()
     bool success = job.call("execute()");
     if( !success )
     {
-        QStringList output = job.call("output()");
+        TQStringList output = job.call("output()");
         KMessageBox::detailedError(this, i18n("Login failed."), output.join("\n"));
         return;
     }
@@ -490,7 +490,7 @@ void RepositoryDialog::slotSelectionChanged()
 void RepositoryDialog::writeRepositoryData(RepositoryListItem* item)
 {
     // write entries to cvs DCOP service configuration
-    m_serviceConfig->setGroup(QString::fromLatin1("Repository-") +
+    m_serviceConfig->setGroup(TQString::fromLatin1("Repository-") +
                               item->repository());
 
     m_serviceConfig->writeEntry("rsh", item->rsh());

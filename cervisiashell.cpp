@@ -62,15 +62,15 @@ CervisiaShell::CervisiaShell( const char *name )
     // Magic needed for status texts
     //
     actionCollection()->setHighlightingEnabled(true);
-    connect( actionCollection(), SIGNAL( actionStatusText(const QString &) ),
-             statusBar(), SLOT( message(const QString &) ) );
-    connect( actionCollection(), SIGNAL( clearStatusText() ),
-             statusBar(), SLOT( clear() ) );
+    connect( actionCollection(), TQT_SIGNAL( actionStatusText(const TQString &) ),
+             statusBar(), TQT_SLOT( message(const TQString &) ) );
+    connect( actionCollection(), TQT_SIGNAL( clearStatusText() ),
+             statusBar(), TQT_SLOT( clear() ) );
     m_part->actionCollection()->setHighlightingEnabled(true);
-    connect( m_part->actionCollection(), SIGNAL( actionStatusText(const QString &) ),
-             statusBar(), SLOT( message(const QString &) ) );
-    connect( m_part->actionCollection(), SIGNAL( clearStatusText() ),
-             statusBar(), SLOT( clear() ) );
+    connect( m_part->actionCollection(), TQT_SIGNAL( actionStatusText(const TQString &) ),
+             statusBar(), TQT_SLOT( message(const TQString &) ) );
+    connect( m_part->actionCollection(), TQT_SIGNAL( clearStatusText() ),
+             statusBar(), TQT_SLOT( clear() ) );
 
     createGUI( m_part );
 
@@ -92,19 +92,19 @@ void CervisiaShell::setupActions()
 {
     setStandardToolBarMenuEnabled( true );
 
-    KAction *action = KStdAction::configureToolbars( this, SLOT(slotConfigureToolBars()),
+    KAction *action = KStdAction::configureToolbars( this, TQT_SLOT(slotConfigureToolBars()),
                                             actionCollection() );
-    QString hint = i18n("Allows you to configure the toolbar");
+    TQString hint = i18n("Allows you to configure the toolbar");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = KStdAction::keyBindings( this, SLOT(slotConfigureKeys()),
+    action = KStdAction::keyBindings( this, TQT_SLOT(slotConfigureKeys()),
                                       actionCollection() );
     hint = i18n("Allows you to customize the keybindings");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = KStdAction::quit( kapp, SLOT( quit() ), actionCollection() );
+    action = KStdAction::quit( kapp, TQT_SLOT( quit() ), actionCollection() );
     hint = i18n("Exits Cervisia");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
@@ -161,7 +161,7 @@ void CervisiaShell::slotConfigureToolBars()
 {
     saveMainWindowSettings( KGlobal::config(), autoSaveGroup() );
     KEditToolbar dlg( factory() );
-    connect(&dlg,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
+    connect(&dlg,TQT_SIGNAL(newToolbarConfig()),this,TQT_SLOT(slotNewToolbarConfig()));
     dlg.exec();
 }
 

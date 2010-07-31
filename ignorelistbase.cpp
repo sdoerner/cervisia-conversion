@@ -19,28 +19,28 @@
 #include "ignorelistbase.h"
 using namespace Cervisia;
 
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <tqfile.h>
+#include <tqstringlist.h>
+#include <tqtextstream.h>
 
 
-void IgnoreListBase::addEntriesFromString(const QString& str)
+void IgnoreListBase::addEntriesFromString(const TQString& str)
 {
-    QStringList entries = QStringList::split(' ', str);
-    for( QStringList::iterator it = entries.begin(); it != entries.end(); ++it )
+    TQStringList entries = TQStringList::split(' ', str);
+    for( TQStringList::iterator it = entries.begin(); it != entries.end(); ++it )
     {
         addEntry(*it);
     }
 }
 
 
-void IgnoreListBase::addEntriesFromFile(const QString& name)
+void IgnoreListBase::addEntriesFromFile(const TQString& name)
 {
-    QFile file(name);
+    TQFile file(name);
 
     if( file.open(IO_ReadOnly) )
     {
-        QTextStream stream(&file);
+        TQTextStream stream(&file);
         while( !stream.eof() )
         {
             addEntriesFromString(stream.readLine());

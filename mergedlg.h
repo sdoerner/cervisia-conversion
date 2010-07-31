@@ -37,12 +37,12 @@ class MergeDialog : public KDialogBase
 
 public:
     MergeDialog( CvsService_stub* service,
-                 QWidget *parent=0, const char *name=0 );
+                 TQWidget *parent=0, const char *name=0 );
 
     bool byBranch() const;
-    QString branch() const;
-    QString tag1() const;
-    QString tag2() const;
+    TQString branch() const;
+    TQString tag1() const;
+    TQString tag2() const;
 
 private slots:
     void toggled();
@@ -52,9 +52,9 @@ private slots:
 private:
     CvsService_stub* cvsService;
     
-    QRadioButton *bybranch_button, *bytags_button;
-    QComboBox *branch_combo, *tag1_combo, *tag2_combo;
-    QPushButton *tag_button, *branch_button;
+    TQRadioButton *bybranch_button, *bytags_button;
+    TQComboBox *branch_combo, *tag1_combo, *tag2_combo;
+    TQPushButton *tag_button, *branch_button;
 };
 
 #endif

@@ -34,7 +34,7 @@ ApplyFilterVisitor::ApplyFilterVisitor(UpdateView::Filter filter)
 
 void ApplyFilterVisitor::preVisit(UpdateDirItem* item)
 {
-    // as QListViewItem::setVisible() is recursive we have to make
+    // as TQListViewItem::setVisible() is recursive we have to make
     // this UpdateDirItem visible first and later we can make it invisible
     item->setVisible(true);
 
@@ -56,7 +56,7 @@ void ApplyFilterVisitor::postVisit(UpdateDirItem* item)
                        || !(m_filter & UpdateView::NoEmptyDirectories)
                        || !item->parent());
 
-    // only set invisible as QListViewItem::setVisible() is recursive
+    // only set invisible as TQListViewItem::setVisible() is recursive
     // and so maybe overrides the state applied by the filter
     if (visible)
     {

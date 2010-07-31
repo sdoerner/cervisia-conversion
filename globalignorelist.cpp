@@ -19,7 +19,7 @@
 #include "globalignorelist.h"
 using namespace Cervisia;
 
-#include <qdir.h>
+#include <tqdir.h>
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <stdlib.h> // for getenv()
@@ -39,14 +39,14 @@ GlobalIgnoreList::GlobalIgnoreList()
 }
 
 
-bool GlobalIgnoreList::matches(const QFileInfo* fi) const
+bool GlobalIgnoreList::matches(const TQFileInfo* fi) const
 {
     return m_stringMatcher.match(fi->fileName());
 }
 
 
 void GlobalIgnoreList::retrieveServerIgnoreList(CvsService_stub* cvsService,
-                                                const QString& repository)
+                                                const TQString& repository)
 {
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
@@ -68,9 +68,9 @@ void GlobalIgnoreList::retrieveServerIgnoreList(CvsService_stub* cvsService,
 }
 
 
-void GlobalIgnoreList::addEntry(const QString& entry)
+void GlobalIgnoreList::addEntry(const TQString& entry)
 {
-    if (entry != QChar('!'))
+    if (entry != TQChar('!'))
     {
         m_stringMatcher.add(entry);
     }
@@ -81,7 +81,7 @@ void GlobalIgnoreList::addEntry(const QString& entry)
         // Bug #89215:
         // Make sure '.' and '..' are always in the ignore list, so
         // UpdateDirItem::maybeScanDir() doesn't loop endlessly.
-        addEntriesFromString(QString::fromLatin1(". .."));
+        addEntriesFromString(TQString::fromLatin1(". .."));
     }
 }
 
@@ -92,9 +92,9 @@ void GlobalIgnoreList::setup()
 .nse_depinfo #* .#* cvslog.* ,* CVS CVS.adm .del-* *.a *.olb *.o *.obj\
 *.so *.Z *~ *.old *.elc *.ln *.bak *.BAK *.orig *.rej *.exe _$* *$";
     
-    addEntriesFromString(QString::fromLatin1(ignorestr));
-    addEntriesFromString(QString::fromLocal8Bit(::getenv("CVSIGNORE")));
-    addEntriesFromFile(QDir::homeDirPath() + "/.cvsignore");  
+    addEntriesFromString(TQString::fromLatin1(ignorestr));
+    addEntriesFromString(TQString::fromLocal8Bit(::getenv("CVSIGNORE")));
+    addEntriesFromFile(TQDir::homeDirPath() + "/.cvsignore");  
     
     m_isInitialized = true;
 }

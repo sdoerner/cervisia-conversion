@@ -33,12 +33,12 @@ namespace Cervisia
 class DirIgnoreList : public IgnoreListBase
 {
 public:
-    explicit DirIgnoreList(const QString& path);
+    explicit DirIgnoreList(const TQString& path);
 
-    virtual bool matches(const QFileInfo* fi) const;
+    virtual bool matches(const TQFileInfo* fi) const;
 
 private:
-    virtual void addEntry(const QString& entry);
+    virtual void addEntry(const TQString& entry);
 
     StringMatcher m_stringMatcher;
 };

@@ -19,12 +19,12 @@
 
 #include "progressdlg.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtimer.h>
-#include <qvbox.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqstring.h>
+#include <tqstringlist.h>
+#include <tqtimer.h>
+#include <tqvbox.h>
 
 #include <cvsjob_stub.h>
 #include <dcopref.h>
@@ -42,19 +42,19 @@ struct ProgressDialog::Private
     bool            hasError;
 
     CvsJob_stub*    cvsJob;
-    QString         buffer;
-    QString         errorId1, errorId2;
-    QStringList     output;
+    TQString         buffer;
+    TQString         errorId1, errorId2;
+    TQStringList     output;
 
-    QTimer*         timer;
+    TQTimer*         timer;
     KAnimWidget*    gear;
-    QListBox*       resultbox;
+    TQListBox*       resultbox;
 };
 
 
-ProgressDialog::ProgressDialog(QWidget* parent, const QString& heading,
-                               const DCOPRef& job, const QString& errorIndicator,
-                               const QString& caption)
+ProgressDialog::ProgressDialog(TQWidget* parent, const TQString& heading,
+                               const DCOPRef& job, const TQString& errorIndicator,
+                               const TQString& caption)
     : KDialogBase(parent, 0, true, caption, Cancel, Cancel, true)
     , DCOPObject()
     , d(new Private)
@@ -81,27 +81,27 @@ ProgressDialog::~ProgressDialog()
 }
 
 
-void ProgressDialog::setupGui(const QString& heading)
+void ProgressDialog::setupGui(const TQString& heading)
 {
-    QVBox* vbox = makeVBoxMainWidget();
+    TQVBox* vbox = makeVBoxMainWidget();
     vbox->setSpacing(10);
 
-    QWidget* headingBox = new QWidget(vbox);
-    QHBoxLayout* hboxLayout = new QHBoxLayout(headingBox);
+    TQWidget* headingBox = new TQWidget(vbox);
+    TQHBoxLayout* hboxLayout = new TQHBoxLayout(headingBox);
 
-    QLabel* textLabel = new QLabel(heading, headingBox);
+    TQLabel* textLabel = new TQLabel(heading, headingBox);
     textLabel->setMinimumWidth(textLabel->sizeHint().width());
     textLabel->setFixedHeight(textLabel->sizeHint().height());
     hboxLayout->addWidget(textLabel);
     hboxLayout->addStretch();
 
-    d->gear = new KAnimWidget(QString("kde"), 32, headingBox);
+    d->gear = new KAnimWidget(TQString("kde"), 32, headingBox);
     d->gear->setFixedSize(32, 32);
     hboxLayout->addWidget(d->gear);
 
-    d->resultbox = new QListBox(vbox);
-    d->resultbox->setSelectionMode(QListBox::NoSelection);
-    QFontMetrics fm(d->resultbox->fontMetrics());
+    d->resultbox = new TQListBox(vbox);
+    d->resultbox->setSelectionMode(TQListBox::NoSelection);
+    TQFontMetrics fm(d->resultbox->fontMetrics());
     d->resultbox->setMinimumSize(fm.width("0")*70, fm.lineSpacing()*8);
 
     resize(sizeHint());
@@ -111,37 +111,37 @@ void ProgressDialog::setupGui(const QString& heading)
 bool ProgressDialog::execute()
 {
     // get command line and display it
-    QString cmdLine = d->cvsJob->cvsCommand();
+    TQString cmdLine = d->cvsJob->cvsCommand();
     d->resultbox->insertItem(cmdLine);
 
     // establish connections to the signals of the cvs job
     connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "jobExited(bool, int)",
                       "slotJobExited(bool, int)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutputNonGui(QString)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutputNonGui(QString)", true);
+    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(TQString)",
+                      "slotReceivedOutputNonGui(TQString)", true);
+    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(TQString)",
+                      "slotReceivedOutputNonGui(TQString)", true);
 
     // we wait for 4 seconds (or the timeout set by the user) before we
     // force the dialog to show up
-    d->timer = new QTimer(this);
-    connect(d->timer, SIGNAL(timeout()), this, SLOT(slotTimeoutOccurred()));
+    d->timer = new TQTimer(this);
+    connect(d->timer, TQT_SIGNAL(timeout()), this, TQT_SLOT(slotTimeoutOccurred()));
     d->timer->start(CervisiaSettings::timeout(), true);
 
     bool started = d->cvsJob->execute();
     if( !started )
         return false;
 
-    QApplication::setOverrideCursor(waitCursor);
+    TQApplication::setOverrideCursor(waitCursor);
     kapp->enter_loop();
-    if (QApplication::overrideCursor())
-        QApplication::restoreOverrideCursor();
+    if (TQApplication::overrideCursor())
+        TQApplication::restoreOverrideCursor();
 
     return !d->isCancelled;
 }
 
 
-bool ProgressDialog::getLine(QString& line)
+bool ProgressDialog::getLine(TQString& line)
 {
     if( d->output.isEmpty() )
         return false;
@@ -153,13 +153,13 @@ bool ProgressDialog::getLine(QString& line)
 }
 
 
-QStringList ProgressDialog::getOutput() const
+TQStringList ProgressDialog::getOutput() const
 {
     return d->output;
 }
 
 
-void ProgressDialog::slotReceivedOutputNonGui(QString buffer)
+void ProgressDialog::slotReceivedOutputNonGui(TQString buffer)
 {
     d->buffer += buffer;
 
@@ -172,7 +172,7 @@ void ProgressDialog::slotReceivedOutputNonGui(QString buffer)
 }
 
 
-void ProgressDialog::slotReceivedOutput(QString buffer)
+void ProgressDialog::slotReceivedOutput(TQString buffer)
 {
     d->buffer += buffer;
     processOutput();
@@ -224,10 +224,10 @@ void ProgressDialog::stopNonGuiPart()
 {
     d->timer->stop();
 
-    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutputNonGui(QString)");
-    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutputNonGui(QString)");
+    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(TQString)",
+                      "slotReceivedOutputNonGui(TQString)");
+    disconnectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(TQString)",
+                      "slotReceivedOutputNonGui(TQString)");
 
     kapp->exit_loop();
 }
@@ -235,16 +235,16 @@ void ProgressDialog::stopNonGuiPart()
 
 void ProgressDialog::startGuiPart()
 {
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(QString)",
-                      "slotReceivedOutput(QString)", true);
-    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(QString)",
-                      "slotReceivedOutput(QString)", true);
+    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStdout(TQString)",
+                      "slotReceivedOutput(TQString)", true);
+    connectDCOPSignal(d->cvsJob->app(), d->cvsJob->obj(), "receivedStderr(TQString)",
+                      "slotReceivedOutput(TQString)", true);
 
     show();
     d->isShown = true;
 
     d->gear->start();
-    QApplication::restoreOverrideCursor();
+    TQApplication::restoreOverrideCursor();
     kapp->enter_loop();
 }
 
@@ -254,7 +254,7 @@ void ProgressDialog::processOutput()
     int pos;
     while( (pos = d->buffer.find('\n')) != -1 )
     {
-        QString item = d->buffer.left(pos);
+        TQString item = d->buffer.left(pos);
         if( item.startsWith(d->errorId1) ||
             item.startsWith(d->errorId2) ||
             item.startsWith("cvs [server aborted]:") )

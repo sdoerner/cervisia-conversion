@@ -19,8 +19,8 @@
 
 #include "annotatectl.h"
 
-#include <qdatetime.h>
-#include <qmap.h>
+#include <tqdatetime.h>
+#include <tqmap.h>
 
 #include <dcopref.h>
 #include <klocale.h>
@@ -36,14 +36,14 @@ using namespace Cervisia;
 
 struct AnnotateController::Private
 {
-    typedef QMap<QString, QString>  RevisionCommentMap;
+    typedef TQMap<TQString, TQString>  RevisionCommentMap;
     RevisionCommentMap  comments;                  // maps comment to a revision
 
     CvsService_stub*    cvsService;
     AnnotateDialog*     dialog;
     ProgressDialog*     progress;
 
-    bool execute(const QString& fileName, const QString& revision);
+    bool execute(const TQString& fileName, const TQString& revision);
     void parseCvsLogOutput();
     void parseCvsAnnotateOutput();
 };
@@ -65,7 +65,7 @@ AnnotateController::~AnnotateController()
 }
 
 
-void AnnotateController::showDialog(const QString& fileName, const QString& revision)
+void AnnotateController::showDialog(const TQString& fileName, const TQString& revision)
 {
     if( !d->execute(fileName, revision) )
     {
@@ -84,7 +84,7 @@ void AnnotateController::showDialog(const QString& fileName, const QString& revi
 }
 
 
-bool AnnotateController::Private::execute(const QString& fileName, const QString& revision)
+bool AnnotateController::Private::execute(const TQString& fileName, const TQString& revision)
 {
     DCOPRef job = cvsService->annotate(fileName, revision);
     if( !cvsService->ok() )
@@ -98,7 +98,7 @@ bool AnnotateController::Private::execute(const QString& fileName, const QString
 
 void AnnotateController::Private::parseCvsLogOutput()
 {
-    QString line, comment, rev;
+    TQString line, comment, rev;
 
     enum { Begin, Tags, Admin, Revision,
            Author, Branches, Comment, Finished } state;
@@ -140,7 +140,7 @@ void AnnotateController::Private::parseCvsLogOutput()
                 else if( line == "=============================================================================" )
                     state = Finished;
                 if( state == Comment )
-                    comment += QString("\n") + line;
+                    comment += TQString("\n") + line;
                 else
                     comments[rev] = comment;
                 break;
@@ -162,13 +162,13 @@ void AnnotateController::Private::parseCvsLogOutput()
 void AnnotateController::Private::parseCvsAnnotateOutput()
 {
     LogInfo logInfo;
-    QString rev, content, line;
-    QString oldRevision = "";
+    TQString rev, content, line;
+    TQString oldRevision = "";
     bool odd = false;
 
     while( progress->getLine(line) )
     {
-        QString dateString = line.mid(23, 9);
+        TQString dateString = line.mid(23, 9);
         if( !dateString.isEmpty() )
             logInfo.m_dateTime.setTime_t(KRFCDate::parseDate(dateString), Qt::UTC);
 
@@ -182,8 +182,8 @@ void AnnotateController::Private::parseCvsAnnotateOutput()
 
         if( rev == oldRevision )
         {
-            logInfo.m_author = QString::null;
-            rev = QString::null;
+            logInfo.m_author = TQString::null;
+            rev = TQString::null;
         }
         else
         {

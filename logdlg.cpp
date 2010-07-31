@@ -21,15 +21,15 @@
 
 #include "logdlg.h"
 
-#include <qcombobox.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qtextedit.h>
-#include <qwhatsthis.h>
+#include <tqcombobox.h>
+#include <tqfile.h>
+#include <tqfileinfo.h>
+#include <tqlabel.h>
+#include <tqlayout.h>
+#include <tqpushbutton.h>
+#include <tqtabwidget.h>
+#include <tqtextedit.h>
+#include <tqwhatsthis.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -57,8 +57,8 @@
 #include "patchoptiondlg.h"
 
 
-LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, QString::null,
+LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString::null,
                   Ok | Apply | Close | Help | User1 | User2 | User3, Close, true,
                   KGuiItem(i18n("&Annotate")),
                   KGuiItem(i18n("&Diff"), "vcs_diff"),
@@ -66,16 +66,16 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     , cvsService(0)
     , partConfig(cfg)
 {
-    QSplitter *splitter = new QSplitter(Qt::Vertical, this);
+    TQSplitter *splitter = new TQSplitter(Qt::Vertical, this);
     setMainWidget(splitter);
 
     tree = new LogTreeView(this);
-    connect( tree, SIGNAL(revisionClicked(QString,bool)),
-             this, SLOT(revisionSelected(QString,bool)) );
+    connect( tree, TQT_SIGNAL(revisionClicked(TQString,bool)),
+             this, TQT_SLOT(revisionSelected(TQString,bool)) );
 
-    QWidget* listWidget = new QWidget(this);
-    QVBoxLayout* listLayout = new QVBoxLayout(listWidget);
-    QHBoxLayout* searchLayout = new QHBoxLayout(listLayout);
+    TQWidget* listWidget = new TQWidget(this);
+    TQVBoxLayout* listLayout = new TQVBoxLayout(listWidget);
+    TQHBoxLayout* searchLayout = new TQHBoxLayout(listLayout);
     searchLayout->setMargin(KDialog::spacingHint());
     searchLayout->setSpacing(KDialog::spacingHint());
 
@@ -83,45 +83,45 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
     listLayout->addWidget(list, 1);
 
     KListViewSearchLine* searchLine = new KListViewSearchLine(listWidget, list);
-    QLabel* searchLabel = new QLabel(searchLine, i18n("S&earch:"), listWidget);
+    TQLabel* searchLabel = new TQLabel(searchLine, i18n("S&earch:"), listWidget);
     searchLayout->addWidget(searchLabel);
     searchLayout->addWidget(searchLine, 1);
 
-    connect( list, SIGNAL(revisionClicked(QString,bool)),
-             this, SLOT(revisionSelected(QString,bool)) );
+    connect( list, TQT_SIGNAL(revisionClicked(TQString,bool)),
+             this, TQT_SLOT(revisionSelected(TQString,bool)) );
 
     plain = new LogPlainView(this);
-    connect( plain, SIGNAL(revisionClicked(QString,bool)),
-             this, SLOT(revisionSelected(QString,bool)) );
+    connect( plain, TQT_SIGNAL(revisionClicked(TQString,bool)),
+             this, TQT_SLOT(revisionSelected(TQString,bool)) );
 
-    tabWidget = new QTabWidget(splitter);
+    tabWidget = new TQTabWidget(splitter);
     tabWidget->addTab(tree, i18n("&Tree"));
     tabWidget->addTab(listWidget, i18n("&List"));
     tabWidget->addTab(plain, i18n("CVS &Output"));
 
-    connect(tabWidget, SIGNAL(currentChanged(QWidget*)),
-            this, SLOT(tabChanged(QWidget*)));
+    connect(tabWidget, TQT_SIGNAL(currentChanged(TQWidget*)),
+            this, TQT_SLOT(tabChanged(TQWidget*)));
 
-    QWhatsThis::add(tree, i18n("Choose revision A by clicking with the left "
+    TQWhatsThis::add(tree, i18n("Choose revision A by clicking with the left "
                                "mouse button,\nrevision B by clicking with "
                                "the middle mouse button."));
 
     items.setAutoDelete(true);
     tags.setAutoDelete(true);
 
-    QWidget *mainWidget = new QWidget(splitter);
-    QBoxLayout *layout = new QVBoxLayout(mainWidget, 0, spacingHint());
+    TQWidget *mainWidget = new TQWidget(splitter);
+    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     for (int i = 0; i < 2; ++i)
     {
         if ( i == 1 )
         {
-            QFrame *frame = new QFrame(mainWidget);
-            frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+            TQFrame *frame = new TQFrame(mainWidget);
+            frame->setFrameStyle(TQFrame::HLine | TQFrame::Sunken);
             layout->addWidget(frame);
         }
 
-        QGridLayout *grid = new QGridLayout(layout);
+        TQGridLayout *grid = new TQGridLayout(layout);
         grid->setRowStretch(0, 0);
         grid->setRowStretch(1, 0);
         grid->setRowStretch(2, 1);
@@ -131,69 +131,69 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
         grid->setColStretch(3, 1);
         grid->setColStretch(4, 2);
 
-        QString versionident = (i==0)? i18n("Revision A:") : i18n("Revision B:");
-        QLabel *versionlabel = new QLabel(versionident, mainWidget);
+        TQString versionident = (i==0)? i18n("Revision A:") : i18n("Revision B:");
+        TQLabel *versionlabel = new TQLabel(versionident, mainWidget);
         grid->addWidget(versionlabel, 0, 0);
 
-        revbox[i] = new QLabel(mainWidget);
-        revbox[i]->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        revbox[i] = new TQLabel(mainWidget);
+        revbox[i]->setFrameStyle(TQFrame::Panel | TQFrame::Sunken);
         grid->addWidget(revbox[i], 0, 1, Qt::AlignVCenter);
 
-        QLabel *selectlabel = new QLabel(i18n("Select by tag:"), mainWidget);
+        TQLabel *selectlabel = new TQLabel(i18n("Select by tag:"), mainWidget);
         grid->addWidget(selectlabel, 0, 2);
 
-        tagcombo[i] = new QComboBox(mainWidget);
-        QFontMetrics fm(tagcombo[i]->fontMetrics());
+        tagcombo[i] = new TQComboBox(mainWidget);
+        TQFontMetrics fm(tagcombo[i]->fontMetrics());
         tagcombo[i]->setMinimumWidth(fm.width("X")*20);
         grid->addWidget(tagcombo[i], 0, 3);
 
-        QLabel *authorlabel = new QLabel(i18n("Author:"), mainWidget);
+        TQLabel *authorlabel = new TQLabel(i18n("Author:"), mainWidget);
         grid->addWidget(authorlabel, 1, 0);
 
-        authorbox[i] = new QLabel(mainWidget);
-        authorbox[i]->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        authorbox[i] = new TQLabel(mainWidget);
+        authorbox[i]->setFrameStyle(TQFrame::Panel | TQFrame::Sunken);
         grid->addWidget(authorbox[i], 1, 1);
 
-        QLabel *datelabel = new QLabel(i18n("Date:"), mainWidget);
+        TQLabel *datelabel = new TQLabel(i18n("Date:"), mainWidget);
         grid->addWidget(datelabel, 1, 2);
 
-        datebox[i] = new QLabel(mainWidget);
-        datebox[i]->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        datebox[i] = new TQLabel(mainWidget);
+        datebox[i]->setFrameStyle(TQFrame::Panel | TQFrame::Sunken);
         grid->addWidget(datebox[i], 1, 3);
 
-        QLabel *commentlabel = new QLabel(i18n("Comment/Tags:"), mainWidget);
+        TQLabel *commentlabel = new TQLabel(i18n("Comment/Tags:"), mainWidget);
         grid->addWidget(commentlabel, 2, 0);
 
-        commentbox[i] = new QTextEdit(mainWidget);
+        commentbox[i] = new TQTextEdit(mainWidget);
         commentbox[i]->setReadOnly(true);
         commentbox[i]->setTextFormat(Qt::PlainText);
         fm = commentbox[i]->fontMetrics();
         commentbox[i]->setMinimumHeight(2*fm.lineSpacing()+10);
         grid->addMultiCellWidget(commentbox[i], 2, 2, 1, 3);
 
-        tagsbox[i] = new QTextEdit(mainWidget);
+        tagsbox[i] = new TQTextEdit(mainWidget);
         tagsbox[i]->setReadOnly(true);
         tagsbox[i]->setMinimumHeight(2*fm.lineSpacing()+10);
         grid->addWidget(tagsbox[i], 2, 4);
     }
 
-    QWhatsThis::add(revbox[0], i18n("This revision is used when you click "
+    TQWhatsThis::add(revbox[0], i18n("This revision is used when you click "
                                     "Annotate.\nIt is also used as the first "
                                     "item of a Diff operation."));
-    QWhatsThis::add(revbox[1], i18n("This revision is used as the second "
+    TQWhatsThis::add(revbox[1], i18n("This revision is used as the second "
                                     "item of a Diff operation."));
 
-    connect( tagcombo[0], SIGNAL(activated(int)),
-             this, SLOT(tagASelected(int)) );
-    connect( tagcombo[1], SIGNAL(activated(int)),
-             this, SLOT(tagBSelected(int)) );
+    connect( tagcombo[0], TQT_SIGNAL(activated(int)),
+             this, TQT_SLOT(tagASelected(int)) );
+    connect( tagcombo[1], TQT_SIGNAL(activated(int)),
+             this, TQT_SLOT(tagBSelected(int)) );
 
-    connect( this, SIGNAL(user1Clicked()),
-             this, SLOT(annotateClicked()) );
-    connect( this, SIGNAL(user2Clicked()),
-             this, SLOT(diffClicked()) );
-    connect( this, SIGNAL(user3Clicked()),
-             this, SLOT(findClicked()) );
+    connect( this, TQT_SIGNAL(user1Clicked()),
+             this, TQT_SLOT(annotateClicked()) );
+    connect( this, TQT_SIGNAL(user2Clicked()),
+             this, TQT_SLOT(diffClicked()) );
+    connect( this, TQT_SIGNAL(user3Clicked()),
+             this, TQT_SLOT(findClicked()) );
 
     setButtonGuiItem(Ok, KGuiItem(i18n("to view something", "&View"),"fileopen"));
     setButtonGuiItem(Apply, KGuiItem(i18n("Create Patch...")));
@@ -201,7 +201,7 @@ LogDialog::LogDialog(KConfig& cfg, QWidget *parent, const char *name)
 
     setWFlags(Qt::WDestructiveClose | getWFlags());
 
-    QSize size = configDialogSize(partConfig, "LogDialog");
+    TQSize size = configDialogSize(partConfig, "LogDialog");
     resize(size);
 
     KConfigGroupSaver cs(&partConfig, "LogDialog");
@@ -220,9 +220,9 @@ LogDialog::~LogDialog()
 }
 
 
-bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
+bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
 {
-    QString rev;
+    TQString rev;
 
     Cervisia::LogInfo logInfo;
 
@@ -245,7 +245,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
 
     // process cvs log output
     state = Begin;
-    QString line;
+    TQString line;
     while( dlg.getLine(line) )
     {
         switch( state )
@@ -257,10 +257,10 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
             case Tags:
                 if( line[0] == '\t' )
                 {
-                    const QStringList strlist(splitLine(line, ':'));
+                    const TQStringList strlist(splitLine(line, ':'));
                     rev = strlist[1].simplifyWhiteSpace();
-                    const QString tag(strlist[0].simplifyWhiteSpace());
-                    QString branchpoint;
+                    const TQString tag(strlist[0].simplifyWhiteSpace());
+                    TQString branchpoint;
                     int pos1, pos2;
                     if( (pos2 = rev.findRev('.')) > 0 &&
                         (pos1 = rev.findRev('.', pos2-1)) > 0 &&
@@ -298,15 +298,15 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
                 break;
             case Author:
                 {
-                    QStringList strList = QStringList::split(";", line);
+                    TQStringList strList = TQStringList::split(";", line);
 
                     // convert date into ISO format (YYYY-MM-DDTHH:MM:SS)
                     int len = strList[0].length();
-                    QString dateTimeStr = strList[0].right(len-6); // remove 'date: '
+                    TQString dateTimeStr = strList[0].right(len-6); // remove 'date: '
                     dateTimeStr.replace('/', '-');
 
-                    QString date = dateTimeStr.section(' ', 0, 0);
-                    QString time = dateTimeStr.section(' ', 1, 1);
+                    TQString date = dateTimeStr.section(' ', 0, 0);
+                    TQString time = dateTimeStr.section(' ', 1, 1);
                     logInfo.m_dateTime.setTime_t(KRFCDate::parseDateISO8601(date + 'T' + time));
 
                     logInfo.m_author = strList[1].section(':', 1, 1).stripWhiteSpace();
@@ -335,7 +335,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
                 else
                 {
                     // Create tagcomment
-                    QString branchrev;
+                    TQString branchrev;
                     int pos1, pos2;
                     // 1.60.x.y => revision belongs to branch 1.60.0.x
                     if( (pos2 = rev.findRev('.')) > 0 &&
@@ -343,7 +343,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
                         branchrev = rev.left(pos2);
 
                     // Build Cervisia::TagInfo for logInfo
-                    QPtrListIterator<LogDialogTagInfo> it(tags);
+                    TQPtrListIterator<LogDialogTagInfo> it(tags);
                     for( ; it.current(); ++it )
                     {
                         if( rev == it.current()->rev )
@@ -380,12 +380,12 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const QString& fileName)
         }
     }
 
-    tagcombo[0]->insertItem(QString::null);
-    tagcombo[1]->insertItem(QString::null);
-    QPtrListIterator<LogDialogTagInfo> it(tags);
+    tagcombo[0]->insertItem(TQString::null);
+    tagcombo[1]->insertItem(TQString::null);
+    TQPtrListIterator<LogDialogTagInfo> it(tags);
     for( ; it.current(); ++it )
     {
-        QString str = it.current()->tag;
+        TQString str = it.current()->tag;
         if( !it.current()->branchpoint.isEmpty() )
             str += i18n(" (Branchpoint)");
         tagcombo[0]->insertItem(str);
@@ -412,15 +412,15 @@ void LogDialog::slotOk()
     }
 
     // retrieve the selected revision
-    QString revision;
+    TQString revision;
     if( !selectionA.isEmpty() )
         revision = selectionA;
     else
         revision = selectionB;
 
     // create a temporary file
-    const QString suffix("-" + revision + "-" + QFileInfo(filename).fileName());
-    const QString tempFileName(::tempFileName(suffix));
+    const TQString suffix("-" + revision + "-" + TQFileInfo(filename).fileName());
+    const TQString tempFileName(::tempFileName(suffix));
 
     // retrieve the file with the selected revision from cvs
     // and save the content into the temporary file
@@ -432,7 +432,7 @@ void LogDialog::slotOk()
     if( dlg.execute() )
     {
         // make file read-only
-        chmod(QFile::encodeName(tempFileName), 0400);
+        chmod(TQFile::encodeName(tempFileName), 0400);
 
         // open file in preferred editor
         KURL url;
@@ -456,8 +456,8 @@ void LogDialog::slotApply()
     if( optionDlg.exec() == KDialogBase::Rejected )
         return;
     
-    QString format      = optionDlg.formatOption();
-    QString diffOptions = optionDlg.diffOptions();
+    TQString format      = optionDlg.formatOption();
+    TQString diffOptions = optionDlg.diffOptions();
     
     DCOPRef job = cvsService->diff(filename, selectionA, selectionB, diffOptions,
                                    format);
@@ -468,14 +468,14 @@ void LogDialog::slotApply()
     if( !dlg.execute() )
         return;
 
-    QString fileName = KFileDialog::getSaveFileName();
+    TQString fileName = KFileDialog::getSaveFileName();
     if( fileName.isEmpty() )
         return;
 
     if( !Cervisia::CheckOverwrite(fileName) )
         return;
 
-    QFile f(fileName);
+    TQFile f(fileName);
     if( !f.open(IO_WriteOnly) )
     {
         KMessageBox::sorry(this,
@@ -484,8 +484,8 @@ void LogDialog::slotApply()
         return;
     }
 
-    QTextStream t(&f);
-    QString line;
+    TQTextStream t(&f);
+    TQString line;
     while( dlg.getLine(line) )
         t << line << '\n';
 
@@ -528,9 +528,9 @@ void LogDialog::annotateClicked()
 }
 
 
-void LogDialog::revisionSelected(QString rev, bool rmb)
+void LogDialog::revisionSelected(TQString rev, bool rmb)
 {
-    QPtrListIterator<Cervisia::LogInfo> it(items);
+    TQPtrListIterator<Cervisia::LogInfo> it(items);
     for (; it.current(); ++it)
         if (it.current()->m_revision == rev)
             {
@@ -607,7 +607,7 @@ void LogDialog::tagBSelected(int n)
 }
 
 
-void LogDialog::tabChanged(QWidget* w)
+void LogDialog::tabChanged(TQWidget* w)
 {
     bool isPlainView = (w == plain);
     showButton(User3, isPlainView);

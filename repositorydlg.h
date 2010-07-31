@@ -39,7 +39,7 @@ class RepositoryDialog : public KDialogBase
 
 public:
     RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                     QWidget* parent = 0, const char* name = 0);
+                     TQWidget* parent = 0, const char* name = 0);
     virtual ~RepositoryDialog();
 
     void readConfigFile();
@@ -52,7 +52,7 @@ private slots:
     void slotAddClicked();
     void slotModifyClicked();
     void slotRemoveClicked();
-    void slotDoubleClicked(QListViewItem *item);
+    void slotDoubleClicked(TQListViewItem *item);
     void slotLoginClicked();
     void slotLogoutClicked();
     void slotSelectionChanged();
@@ -65,10 +65,10 @@ private:
     CvsService_stub* m_cvsService;
     KConfig*         m_serviceConfig;
     KListView*       m_repoList;
-    QPushButton*     m_modifyButton;
-    QPushButton*     m_removeButton;
-    QPushButton*     m_loginButton;
-    QPushButton*     m_logoutButton;
+    TQPushButton*     m_modifyButton;
+    TQPushButton*     m_removeButton;
+    TQPushButton*     m_loginButton;
+    TQPushButton*     m_logoutButton;
 };
 
 #endif

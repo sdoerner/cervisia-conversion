@@ -22,9 +22,9 @@
 #define UPDATEVIEW_ITEMS_H
 
 
-#include <qdatetime.h>
-#include <qlistview.h>
-#include <qmap.h>
+#include <tqdatetime.h>
+#include <tqlistview.h>
+#include <tqmap.h>
 
 #include "entry.h"
 #include "updateview.h"
@@ -35,7 +35,7 @@ class UpdateFileItem;
 class Visitor;
 
 
-UpdateDirItem* findOrCreateDirItem(const QString&, UpdateDirItem*);
+UpdateDirItem* findOrCreateDirItem(const TQString&, UpdateDirItem*);
 
 
 class UpdateItem : public QListViewItem
@@ -43,19 +43,19 @@ class UpdateItem : public QListViewItem
 public:
 
     UpdateItem(UpdateView* parent, const Cervisia::Entry& entry)
-        : QListViewItem(parent), m_entry(entry) {}
+        : TQListViewItem(parent), m_entry(entry) {}
     UpdateItem(UpdateItem* parent, const Cervisia::Entry& entry)
-        : QListViewItem(parent), m_entry(entry) {}
+        : TQListViewItem(parent), m_entry(entry) {}
 
     const Cervisia::Entry& entry() const { return m_entry; }
 
     // Returns the path (relative to the repository).
-    // QString::null for the root item and its (direct) children.
-    // If it's not QString::null it ends with '/'.
-    QString dirPath() const;
+    // TQString::null for the root item and its (direct) children.
+    // If it's not TQString::null it ends with '/'.
+    TQString dirPath() const;
 
     // Returns the file name, including the path (relative to the repository)
-    QString filePath() const;
+    TQString filePath() const;
 
     virtual void accept(Visitor&) = 0;
 
@@ -78,13 +78,13 @@ public:
 
     void syncWithDirectory();
     void syncWithEntries();
-    void updateChildItem(const QString& name, Cervisia::EntryStatus status, bool isdir);
+    void updateChildItem(const TQString& name, Cervisia::EntryStatus status, bool isdir);
     void updateEntriesItem(const Cervisia::Entry& entry, bool isBinary);
 
     bool wasScanned() const { return m_opened; }
 
-    virtual int compare(QListViewItem* i, int col, bool) const;
-    virtual QString text(int col) const;
+    virtual int compare(TQListViewItem* i, int col, bool) const;
+    virtual TQString text(int col) const;
     virtual void setOpen(bool o);
     virtual int rtti() const { return RTTI; }
 
@@ -103,15 +103,15 @@ private:
 
     UpdateItem* insertItem(UpdateItem* item);
 
-    UpdateItem* findItem(const QString& name) const;
+    UpdateItem* findItem(const TQString& name) const;
 
-    typedef QMap<QString, UpdateItem*> TMapItemsByName;
+    typedef TQMap<TQString, UpdateItem*> TMapItemsByName;
 
     TMapItemsByName m_itemsByName;
 
     bool m_opened;
 
-    friend UpdateDirItem* findOrCreateDirItem(const QString&, UpdateDirItem*);
+    friend UpdateDirItem* findOrCreateDirItem(const TQString&, UpdateDirItem*);
 };
 
 
@@ -126,15 +126,15 @@ public:
     bool undefinedState() const
     { return m_undefined; }
 
-    virtual int compare(QListViewItem* i, int col, bool) const;
-    virtual QString text(int col) const;
-    virtual void paintCell(QPainter *p, const QColorGroup &cg,
+    virtual int compare(TQListViewItem* i, int col, bool) const;
+    virtual TQString text(int col) const;
+    virtual void paintCell(TQPainter *p, const TQColorGroup &cg,
                            int col, int width, int align);
     virtual int rtti() const { return RTTI; }
 
     void setStatus(Cervisia::EntryStatus status);
-    void setRevTag(const QString& rev, const QString& tag);
-    void setDate(const QDateTime& date);
+    void setRevTag(const TQString& rev, const TQString& tag);
+    void setDate(const TQDateTime& date);
     void setUndefinedState(bool b)
     { m_undefined = b; }
 
@@ -154,13 +154,13 @@ private:
 };
 
 
-inline bool isDirItem(const QListViewItem* item)
+inline bool isDirItem(const TQListViewItem* item)
 {
     return item && item->rtti() == UpdateDirItem::RTTI;
 }
 
 
-inline bool isFileItem(const QListViewItem* item)
+inline bool isFileItem(const TQListViewItem* item)
 {
     return item && item->rtti() == UpdateFileItem::RTTI;
 }

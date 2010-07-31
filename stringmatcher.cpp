@@ -28,27 +28,27 @@ namespace Cervisia
 {
 namespace
 {
-    const QChar asterix('*');
-    const QChar question('?');
+    const TQChar asterix('*');
+    const TQChar question('?');
 
-    inline bool isMetaCharacter(QChar c)
+    inline bool isMetaCharacter(TQChar c)
     {
         return c == asterix || c == question;
     }
 
 
-    unsigned int countMetaCharacters(const QString& text);
+    unsigned int countMetaCharacters(const TQString& text);
 }
 
 
-bool StringMatcher::match(const QString& text) const
+bool StringMatcher::match(const TQString& text) const
 {
     if (m_exactPatterns.find(text) != m_exactPatterns.end())
     {
         return true;
     }
 
-    for (QStringList::const_iterator it(m_startPatterns.begin()),
+    for (TQStringList::const_iterator it(m_startPatterns.begin()),
                                      itEnd(m_startPatterns.end());
          it != itEnd; ++it)
     {
@@ -58,7 +58,7 @@ bool StringMatcher::match(const QString& text) const
         }
     }
 
-    for (QStringList::const_iterator it(m_endPatterns.begin()),
+    for (TQStringList::const_iterator it(m_endPatterns.begin()),
                                      itEnd(m_endPatterns.end());
          it != itEnd; ++it)
     {
@@ -68,7 +68,7 @@ bool StringMatcher::match(const QString& text) const
         }
     }
 
-    for (QValueList<QCString>::const_iterator it(m_generalPatterns.begin()),
+    for (TQValueList<TQCString>::const_iterator it(m_generalPatterns.begin()),
                                               itEnd(m_generalPatterns.end());
          it != itEnd; ++it)
     {
@@ -82,7 +82,7 @@ bool StringMatcher::match(const QString& text) const
 }
 
 
-void StringMatcher::add(const QString& pattern)
+void StringMatcher::add(const TQString& pattern)
 {
     if (pattern.isEmpty())
     {
@@ -129,12 +129,12 @@ void StringMatcher::clear()
 
 namespace
 {
-unsigned int countMetaCharacters(const QString& text)
+unsigned int countMetaCharacters(const TQString& text)
 {
     unsigned int count(0);
 
-    const QChar* pos(text.unicode());
-    const QChar* posEnd(pos + text.length());
+    const TQChar* pos(text.unicode());
+    const TQChar* posEnd(pos + text.length());
     while (pos < posEnd)
     {
         count += isMetaCharacter(*pos++);

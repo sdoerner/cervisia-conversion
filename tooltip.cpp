@@ -22,27 +22,27 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 
-#include <qsimplerichtext.h>
+#include <tqsimplerichtext.h>
 
 
 namespace Cervisia
 {
 
 
-static QString truncateLines(const QString&, const QFontMetrics&, const QSize&);
-static QString truncateLines(const QString&, const QFont&, const QPoint&, const QRect&);
+static TQString truncateLines(const TQString&, const TQFontMetrics&, const TQSize&);
+static TQString truncateLines(const TQString&, const TQFont&, const TQPoint&, const TQRect&);
 
 
-ToolTip::ToolTip(QWidget* widget)
-    : QObject(widget), QToolTip(widget)
+ToolTip::ToolTip(TQWidget* widget)
+    : TQObject(widget), TQToolTip(widget)
 {
 }
 
 
-void ToolTip::maybeTip(const QPoint& pos)
+void ToolTip::maybeTip(const TQPoint& pos)
 {
-    QRect rect;
-    QString text;
+    TQRect rect;
+    TQString text;
     emit queryToolTip(pos, rect, text);
 
     if (rect.isValid() && !text.isEmpty())
@@ -59,11 +59,11 @@ void ToolTip::maybeTip(const QPoint& pos)
 // Primtive routine to truncate the text. size.width() is ignored, only
 // size.height() is used at the moment to keep it fast. It doesn't work
 // correct if text lines have different heights.
-QString truncateLines(const QString&      text,
-                      const QFontMetrics& fm,
-                      const QSize&        size)
+TQString truncateLines(const TQString&      text,
+                      const TQFontMetrics& fm,
+                      const TQSize&        size)
 {
-    const QChar newLine('\n');
+    const TQChar newLine('\n');
 
     const int lineSpacing(fm.lineSpacing());
     const int numberOfLines(text.contains(newLine) + 1);
@@ -72,7 +72,7 @@ QString truncateLines(const QString&      text,
     if (numberOfLines <= maxNumberOfLines)
         return text;
 
-    const QChar* unicode(text.unicode());
+    const TQChar* unicode(text.unicode());
     for (int count(maxNumberOfLines); count; ++unicode)
         if (*unicode == newLine)
             --count;
@@ -82,10 +82,10 @@ QString truncateLines(const QString&      text,
 
 
 // Truncate the tooltip's text if necessary
-QString truncateLines(const QString& text,
-                      const QFont&   font,
-                      const QPoint&  globalPos,
-                      const QRect&   desktopGeometry)
+TQString truncateLines(const TQString& text,
+                      const TQFont&   font,
+                      const TQPoint&  globalPos,
+                      const TQRect&   desktopGeometry)
 {
     // maximum size of the tooltip, - 10 just to be safe
     const int maxWidth(kMax(desktopGeometry.width() - globalPos.x(), globalPos.x())
@@ -94,13 +94,13 @@ QString truncateLines(const QString& text,
                        - desktopGeometry.top() - 10);
 
     // calculate the tooltip's size
-    const QSimpleRichText layoutedText(text, font);
+    const TQSimpleRichText layoutedText(text, font);
 
     // only if the tooltip's size is bigger in x- and y-direction the text must
     // be truncated otherwise the tip is moved to a position where it fits
     return  ((layoutedText.widthUsed() > maxWidth)
              && (layoutedText.height() > maxHeight))
-        ? truncateLines(text, QFontMetrics(font), QSize(maxWidth, maxHeight))
+        ? truncateLines(text, TQFontMetrics(font), TQSize(maxWidth, maxHeight))
         : text;
 }
 

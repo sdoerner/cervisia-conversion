@@ -22,7 +22,7 @@
 #ifndef COMMITDLG_H
 #define COMMITDLG_H
 
-#include <qstringlist.h>
+#include <tqstringlist.h>
 #include <kdialogbase.h>
 
 namespace Cervisia { class LogMessageEdit; }
@@ -39,40 +39,40 @@ class CommitDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    CommitDialog( KConfig& cfg, CvsService_stub* service, QWidget *parent=0, 
+    CommitDialog( KConfig& cfg, CvsService_stub* service, TQWidget *parent=0, 
                   const char *name=0 );
 
     virtual ~CommitDialog();
 
-    void setFileList(const QStringList &list);
-    QStringList fileList() const;
-    void setLogMessage(const QString &msg);
-    QString logMessage() const;
-    void setLogHistory(const QStringList &list);
+    void setFileList(const TQStringList &list);
+    TQStringList fileList() const;
+    void setLogMessage(const TQString &msg);
+    TQString logMessage() const;
+    void setLogHistory(const TQStringList &list);
 
 private slots:
     void comboActivated(int);
-    void fileSelected(QListViewItem* item);
+    void fileSelected(TQListViewItem* item);
     void fileHighlighted();
     void diffClicked();
     void useTemplateClicked();
 
 private:
-    void showDiffDialog(const QString& fileName);
+    void showDiffDialog(const TQString& fileName);
     void checkForTemplateFile();
     void addTemplateText();
     void removeTemplateText();
 
     KListView* m_fileList;
     Cervisia::LogMessageEdit* edit;
-    QComboBox *combo;
-    QStringList commits;
+    TQComboBox *combo;
+    TQStringList commits;
     int current_index;
-    QString current_text;
+    TQString current_text;
     int highlightedFile;
 
-    QCheckBox* m_useTemplateChk;
-    QString    m_templateText;
+    TQCheckBox* m_useTemplateChk;
+    TQString    m_templateText;
 
     KConfig&            partConfig;
     CvsService_stub*    cvsService;     // for diff dialog
