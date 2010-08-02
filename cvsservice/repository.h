@@ -24,7 +24,7 @@
 #include <tqobject.h>
 #include <dcopobject.h>
 
-class QString;
+class TQString;
 
 
 /**

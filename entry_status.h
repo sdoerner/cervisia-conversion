@@ -21,7 +21,7 @@
 #define CERVISIA_ENTRY_STATUS_H
 
 
-class QString;
+class TQString;
 
 
 namespace Cervisia

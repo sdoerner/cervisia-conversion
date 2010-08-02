@@ -56,7 +56,7 @@ AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* parent, const char
     // Add warning message to dialog when user wants to remove a file
     if (action==Remove)
     {
-        TQBoxLayout *warningLayout = new QHBoxLayout;
+        TQBoxLayout *warningLayout = new TQHBoxLayout;
 
         TQLabel *warningIcon = new TQLabel(mainWidget);
         KIconLoader *loader = kapp->iconLoader();

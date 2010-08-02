@@ -26,7 +26,7 @@
 #include <kdialogbase.h>
 
 
-class QCheckBox;
+class TQCheckBox;
 class KIntNumInput;
 class KLineEdit;
 class KConfig;

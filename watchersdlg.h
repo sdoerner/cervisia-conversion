@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 
-class QTable;
+class TQTable;
 class KConfig;
 class CvsService_stub;
 

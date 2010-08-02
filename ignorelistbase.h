@@ -19,8 +19,8 @@
 #ifndef CERVISIA_IGNORELISTBASE_H
 #define CERVISIA_IGNORELISTBASE_H
 
-class QFileInfo;
-class QString;
+class TQFileInfo;
+class TQString;
 
 
 namespace Cervisia

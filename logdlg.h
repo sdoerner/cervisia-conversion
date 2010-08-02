@@ -34,10 +34,10 @@ class LogPlainView;
 
 class KConfig;
 
-class QComboBox;
-class QLabel;
-class QTabWidget;
-class QTextEdit;
+class TQComboBox;
+class TQLabel;
+class TQTabWidget;
+class TQTextEdit;
 class CvsService_stub;
 
 class LogDialogTagInfo

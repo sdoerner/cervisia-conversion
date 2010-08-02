@@ -26,8 +26,8 @@
 #include <kdialogbase.h>
 
 
-class QListBox;
-class QStringList;
+class TQListBox;
+class TQStringList;
 
 
 class AddRemoveDialog : public KDialogBase

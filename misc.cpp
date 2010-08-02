@@ -290,7 +290,7 @@ void cleanupTempFiles()
 TQString tempFileName(const TQString& suffix)
 {
     if (!tempFiles)
-        tempFiles = new QStringList;
+        tempFiles = new TQStringList;
 
     KTempFile f(TQString::null, suffix);
     tempFiles->append(f.name());

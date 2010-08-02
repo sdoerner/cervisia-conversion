@@ -25,9 +25,9 @@
 #include <kdialogbase.h>
 
 
-class QComboBox;
-class QPushButton;
-class QRadioButton;
+class TQComboBox;
+class TQPushButton;
+class TQRadioButton;
 class KLineEdit;
 class CvsService_stub;
 

@@ -21,7 +21,7 @@
 
 #ifndef QT_NO_QTTABLEVIEW
 
-class QScrollBar;
+class TQScrollBar;
 class QCornerSquare;
 
 

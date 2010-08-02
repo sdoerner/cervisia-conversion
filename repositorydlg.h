@@ -25,8 +25,8 @@
 #include <kdialogbase.h>
 
 
-class QListViewItem;
-class QPushButton;
+class TQListViewItem;
+class TQPushButton;
 class KConfig;
 class KListView;
 class CvsService_stub;

@@ -23,7 +23,7 @@
 #include <ktrader.h>
 #include <kurl.h>
 
-class QPopupMenu;
+class TQPopupMenu;
 
 
 namespace Cervisia

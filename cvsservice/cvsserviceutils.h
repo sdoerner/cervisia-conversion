@@ -21,8 +21,8 @@
 #ifndef CVSSERVICE_UTILS_H
 #define CVSSERVICE_UTILS_H
 
-class QString;
-class QStringList;
+class TQString;
+class TQStringList;
 
 
 namespace CvsServiceUtils

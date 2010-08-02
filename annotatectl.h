@@ -24,7 +24,7 @@
 
 class AnnotateDialog;
 class CvsService_stub;
-class QWidget;
+class TQWidget;
 
 
 class AnnotateController

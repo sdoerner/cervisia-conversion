@@ -23,9 +23,9 @@
 #define MISC_H
 
 
-class QString;
-class QStringList;
-class QWidget;
+class TQString;
+class TQStringList;
+class TQWidget;
 class KConfig;
 class CvsService_stub;
 

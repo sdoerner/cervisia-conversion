@@ -27,8 +27,8 @@
 
 namespace Cervisia { class LogMessageEdit; }
 
-class QComboBox;
-class QCheckBox;
+class TQComboBox;
+class TQCheckBox;
 class KListView;
 class KConfig;
 class CvsService_stub;

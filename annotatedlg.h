@@ -26,7 +26,7 @@
 
 
 class AnnotateView;
-class QDate;
+class TQDate;
 class KConfig;
 
 namespace Cervisia

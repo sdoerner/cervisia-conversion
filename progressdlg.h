@@ -23,8 +23,8 @@
 #include <dcopobject.h>
 #include <kdialogbase.h>
 
-class QString;
-class QWidget;
+class TQString;
+class TQWidget;
 class DCOPRef;
 
 

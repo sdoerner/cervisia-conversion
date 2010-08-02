@@ -34,10 +34,10 @@
 #include "tagdlg.h"
 
 namespace Cervisia { class EditWithMenu; }
-class QLabel;
-class QListViewItem;
-class QSplitter;
-class QTimer;
+class TQLabel;
+class TQListViewItem;
+class TQSplitter;
+class TQTimer;
 class UpdateView;
 class ProtocolView;
 class KAboutData;

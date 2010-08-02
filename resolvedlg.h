@@ -29,8 +29,8 @@
 #include "diffview.h"
 
 
-class QLabel;
-class QTextCodec;
+class TQLabel;
+class TQTextCodec;
 class KConfig;
 class ResolveItem;
 

@@ -25,9 +25,9 @@
 #include <kdialogbase.h>
 
 
-class QLabel;
-class QCheckBox;
-class QComboBox;
+class TQLabel;
+class TQCheckBox;
+class TQComboBox;
 class KConfig;
 class DiffItem;
 class DiffView;

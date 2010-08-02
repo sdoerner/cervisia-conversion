@@ -22,7 +22,7 @@
 #include "ignorelistbase.h"
 #include "stringmatcher.h"
 
-class QFileInfo;
+class TQFileInfo;
 class CvsService_stub;
 
 

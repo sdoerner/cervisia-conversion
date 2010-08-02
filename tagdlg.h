@@ -25,9 +25,9 @@
 #include <kdialogbase.h>
 
 
-class QCheckBox;
-class QComboBox;
-class QLineEdit;
+class TQCheckBox;
+class TQComboBox;
+class TQLineEdit;
 class CvsService_stub;
 
 namespace Cervisia

@@ -25,7 +25,7 @@
 #include <dcopref.h>
 #include <dcopobject.h>
 
-class QString;
+class TQString;
 
 
 class KDE_EXPORT CvsService : public DCOPObject

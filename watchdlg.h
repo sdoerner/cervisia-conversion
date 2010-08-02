@@ -25,8 +25,8 @@
 #include <kdialogbase.h>
 
 
-class QRadioButton;
-class QCheckBox;
+class TQRadioButton;
+class TQCheckBox;
 
 
 class WatchDialog : public KDialogBase

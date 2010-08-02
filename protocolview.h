@@ -25,8 +25,8 @@
 #include <tqtextedit.h>
 #include <dcopobject.h>
 
-class QPoint;
-class QPopupMenu;
+class TQPoint;
+class TQPopupMenu;
 class CvsJob_stub;
 
 

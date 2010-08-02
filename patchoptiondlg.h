@@ -22,8 +22,8 @@
 
 #include <kdialogbase.h>
 
-class QCheckBox;
-class QVButtonGroup;
+class TQCheckBox;
+class TQVButtonGroup;
 class KIntNumInput;
 
 
