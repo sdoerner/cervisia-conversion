@@ -9,6 +9,8 @@
 #
 #################################################
 
+project( cervisia )
+
 add_subdirectory( cvsservice )
 add_subdirectory( pics )
 
@@ -94,3 +96,8 @@ tde_add_kdeinit_executable( cervisia AUTOMOC
     main.cpp cervisiashell.cpp
   LINK cervisia-static cvsservice-shared kutils-shared
 )
+
+
+##### install import cmake modules ###############
+
+tde_install_export( )
