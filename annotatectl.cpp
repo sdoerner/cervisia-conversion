@@ -79,7 +79,7 @@ void AnnotateController::showDialog(const TQString& fileName, const TQString& re
     // hide progress dialog
     delete d->progress; d->progress = 0;
 
-    d->dialog->setCaption(i18n("CVS Annotate: %1").arg(fileName));
+    d->dialog->setCaption(i18n("CVS Annotate: %1").tqarg(fileName));
     d->dialog->show();
 }
 
@@ -182,8 +182,8 @@ void AnnotateController::Private::parseCvsAnnotateOutput()
 
         if( rev == oldRevision )
         {
-            logInfo.m_author = TQString::null;
-            rev = TQString::null;
+            logInfo.m_author = TQString();
+            rev = TQString();
         }
         else
         {

@@ -47,14 +47,14 @@ void ApplyFilterVisitor::preVisit(UpdateDirItem* item)
 void ApplyFilterVisitor::postVisit(UpdateDirItem* item)
 {
     // a UpdateDirItem is visible if
-    // - it has visible children
+    // - it has visible tqchildren
     // - it is not opened
     // - empty directories are not hidden
-    // - it has no parent (top level item)
+    // - it has no tqparent (top level item)
     const bool visible(!m_invisibleDirItems.count(item)
                        || !item->wasScanned()
                        || !(m_filter & UpdateView::NoEmptyDirectories)
-                       || !item->parent());
+                       || !item->tqparent());
 
     // only set invisible as TQListViewItem::setVisible() is recursive
     // and so maybe overrides the state applied by the filter
@@ -81,7 +81,7 @@ void ApplyFilterVisitor::visit(UpdateFileItem* item)
 
 void ApplyFilterVisitor::markAllParentsAsVisible(UpdateItem* item)
 {
-    while ((item = static_cast<UpdateDirItem*>(item->parent())))
+    while ((item = static_cast<UpdateDirItem*>(item->tqparent())))
     {
         TItemSet::iterator it = m_invisibleDirItems.find(item);
         if (it != m_invisibleDirItems.end())
@@ -90,7 +90,7 @@ void ApplyFilterVisitor::markAllParentsAsVisible(UpdateItem* item)
         }
         else
         {
-            // if this item isn't in the map anymore all parents
+            // if this item isn't in the map anymore all tqparents
             // are already removed too
             break;
         }

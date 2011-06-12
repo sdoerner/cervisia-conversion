@@ -32,9 +32,10 @@ namespace Cervisia
 class CvsInitDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    CvsInitDialog(TQWidget* parent = 0, const char* name = 0);
+    CvsInitDialog(TQWidget* tqparent = 0, const char* name = 0);
 
     TQString directory() const;
    

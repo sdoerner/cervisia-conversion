@@ -35,12 +35,13 @@ class CvsService_stub;
 class CheckoutDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     enum ActionType { Checkout, Import };
     
     CheckoutDialog( KConfig& cfg, CvsService_stub* service, ActionType action,
-                    TQWidget *parent=0, const char *name=0 );
+                    TQWidget *tqparent=0, const char *name=0 );
 
     TQString workingDirectory() const;
     TQString repository() const;

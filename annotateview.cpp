@@ -31,12 +31,12 @@
 using namespace Cervisia;
 
 
-class AnnotateViewItem : public QListViewItem
+class AnnotateViewItem : public TQListViewItem
 {
 public:
     enum { LineNumberColumn, AuthorColumn, ContentColumn };
 
-    AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
+    AnnotateViewItem(AnnotateView *tqparent, const LogInfo& logInfo,
                      const TQString &content, bool odd, int linenumber);
 
     virtual int compare(TQListViewItem *item, int col, bool ascending) const;
@@ -58,9 +58,9 @@ private:
 const int AnnotateViewItem::BORDER = 4;
 
 
-AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
+AnnotateViewItem::AnnotateViewItem(AnnotateView *tqparent, const LogInfo& logInfo,
                                    const TQString &content, bool odd, int linenumber)
-    : TQListViewItem(parent)
+    : TQListViewItem(tqparent)
     , m_logInfo(logInfo)
     , m_content(content)
     , m_odd(odd)
@@ -85,7 +85,7 @@ TQString AnnotateViewItem::text(int col) const
         return TQString::number(m_lineNumber);
     case AuthorColumn:
         if( m_logInfo.m_author.isNull() )
-            return TQString::null;
+            return TQString();
         else
             return (m_logInfo.m_author + TQChar(' ') + m_logInfo.m_revision);
     case ContentColumn:
@@ -94,7 +94,7 @@ TQString AnnotateViewItem::text(int col) const
         ;
     };
 
-    return TQString::null;
+    return TQString();
 }
 
 
@@ -137,11 +137,11 @@ int AnnotateViewItem::width(const TQFontMetrics &fm, const TQListView *, int col
 
 /*!
   @todo The dummy column (remaining space eater) doesn't work
-  caused by a bug in TQHeader::adjustHeaderSize() in Qt <= 3.0.4.
+  caused by a bug in TQHeader::adjustHeaderSize() in TQt <= 3.0.4.
 */
 
-AnnotateView::AnnotateView(KConfig &cfg, TQWidget *parent, const char *name)
-    : TQListView(parent, name, WRepaintNoErase | WResizeNoErase)
+AnnotateView::AnnotateView(KConfig &cfg, TQWidget *tqparent, const char *name)
+    : TQListView(tqparent, name, WRepaintNoErase | WResizeNoErase)
 {
     setFrameStyle(TQFrame::WinPanel | TQFrame::Sunken);
     setAllColumnsShowFocus(true);
@@ -150,12 +150,12 @@ AnnotateView::AnnotateView(KConfig &cfg, TQWidget *parent, const char *name)
     header()->hide();
     //    setResizeMode(LastColumn);
 
-    addColumn(TQString::null);
-    addColumn(TQString::null);
-    addColumn(TQString::null);
+    addColumn(TQString());
+    addColumn(TQString());
+    addColumn(TQString());
 
     setSorting(AnnotateViewItem::LineNumberColumn);
-    setColumnAlignment(AnnotateViewItem::LineNumberColumn, Qt::AlignRight);
+    setColumnAlignment(AnnotateViewItem::LineNumberColumn, TQt::AlignRight);
 
     ToolTip* toolTip = new ToolTip(viewport());
 
@@ -175,7 +175,7 @@ void AnnotateView::addLine(const LogInfo& logInfo, const TQString& content,
 }
 
 
-TQSize AnnotateView::sizeHint() const
+TQSize AnnotateView::tqsizeHint() const
 {
     TQFontMetrics fm(fontMetrics());
     return TQSize(100 * fm.width("0"), 10 * fm.lineSpacing());
@@ -191,7 +191,7 @@ void AnnotateView::slotQueryToolTip(const TQPoint& viewportPos,
         const int column(header()->sectionAt(viewportPos.x()));
         if ((column == AnnotateViewItem::AuthorColumn) && !item->m_logInfo.m_author.isNull())
         {
-            viewportRect = itemRect(item);
+            viewportRect = tqitemRect(item);
             text = item->m_logInfo.createToolTipText(false);
         }
     }

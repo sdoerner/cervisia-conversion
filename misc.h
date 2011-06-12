@@ -50,7 +50,7 @@ TQString UserName();
  */
 TQString NormalizeRepository(const TQString& repository);
 
-bool CheckOverwrite(const TQString& fileName, TQWidget* parent=0);
+bool CheckOverwrite(const TQString& fileName, TQWidget* tqparent=0);
 
 }
 
@@ -61,8 +61,8 @@ TQStringList splitLine(TQString, char delim=' ');
 TQString tempFileName(const TQString& suffix);
 void cleanupTempFiles();
 
-const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* parent);
-const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* parent);
+const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* tqparent);
+const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* tqparent);
 
 /**
  * Compares two revision numbers.

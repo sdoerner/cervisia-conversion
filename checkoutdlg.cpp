@@ -43,9 +43,9 @@ using Cervisia::IsValidTag;
 
 
 CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
-                               ActionType action, TQWidget* parent,
+                               ActionType action, TQWidget* tqparent,
                                const char* name)
-    : KDialogBase(parent, name, true, TQString::null,
+    : KDialogBase(tqparent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true)
     , act(action)
     , partConfig(cfg)
@@ -55,9 +55,9 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout* layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout* tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    TQGridLayout* grid = new TQGridLayout(layout);
+    TQGridLayout* grid = new TQGridLayout(tqlayout);
     grid->setColStretch(0, 1);
     grid->setColStretch(1, 20);
     for( int i = 0; i < ((action==Checkout)? 4 : 10); ++i )
@@ -66,7 +66,7 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
     repo_combo = new TQComboBox(true, mainWidget);
     repo_combo->setFocus();
     // make sure combobox is smaller than the screen
-    repo_combo->setSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed);
+    repo_combo->tqsetSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed);
     grid->addWidget(repo_combo, 0, 1);
 
     TQLabel* repo_label = new TQLabel(repo_combo, i18n("&Repository:"), mainWidget);
@@ -198,7 +198,7 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
     TQStringList list2 = Repositories::readConfigFile();
     TQStringList::ConstIterator it2;
     for (it2 = list2.begin(); it2 != list2.end(); ++it2)
-        if (!list1.contains(*it2))
+        if (!list1.tqcontains(*it2))
             repo_combo->insertItem(*it2);
 
     setHelp((act == Import) ? "importing" : "checkingout");
@@ -353,9 +353,9 @@ void CheckoutDialog::moduleButtonClicked()
         if (str.left(12) == "Unknown host")
             continue;
 
-        int pos = str.find(' ');
+        int pos = str.tqfind(' ');
         if (pos == -1)
-            pos = str.find('\t');
+            pos = str.tqfind('\t');
         if (pos == -1)
             pos = str.length();
         TQString module( str.left(pos).stripWhiteSpace() );
@@ -386,7 +386,7 @@ void CheckoutDialog::branchButtonClicked()
     if( !cvsService->ok() )
         return;
 
-    ProgressDialog dlg(this, "Remote Log", cvsJob, TQString::null, 
+    ProgressDialog dlg(this, "Remote Log", cvsJob, TQString(), 
                        i18n("CVS Remote Log"));
     if( !dlg.execute() )
         return;
@@ -398,11 +398,11 @@ void CheckoutDialog::branchButtonClicked()
 
         if( line.isEmpty() || line[0] != '\t' )
             continue;
-        if( (colonPos = line.find(':', 1)) < 0 )
+        if( (colonPos = line.tqfind(':', 1)) < 0 )
            continue;
 
         const TQString tag  = line.mid(1, colonPos - 1);
-        if( !branchTagList.contains(tag) )
+        if( !branchTagList.tqcontains(tag) )
             branchTagList.push_back(tag);
     }
 

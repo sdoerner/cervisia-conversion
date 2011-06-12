@@ -35,8 +35,8 @@
 using Cervisia::TagDialog;
 
 TagDialog::TagDialog(ActionType action, CvsService_stub* service,
-                     TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, TQString::null,
+                     TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true),
       act(action),
       cvsService(service),
@@ -47,7 +47,7 @@ TagDialog::TagDialog(ActionType action, CvsService_stub* service,
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     if (action == Delete)
         {
@@ -61,7 +61,7 @@ TagDialog::TagDialog(ActionType action, CvsService_stub* service,
             connect( tag_button, TQT_SIGNAL(clicked()),
                      this, TQT_SLOT(tagButtonClicked()) );
 
-            TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
+            TQBoxLayout *tagedit_layout = new TQHBoxLayout(tqlayout);
             tagedit_layout->addWidget(tag_label);
             tagedit_layout->addWidget(tag_combo);
             tagedit_layout->addWidget(tag_button);
@@ -74,15 +74,15 @@ TagDialog::TagDialog(ActionType action, CvsService_stub* service,
 
             TQLabel *tag_label = new TQLabel(tag_edit, i18n("&Name of tag:"), mainWidget);
 
-            TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
+            TQBoxLayout *tagedit_layout = new TQHBoxLayout(tqlayout);
             tagedit_layout->addWidget(tag_label);
             tagedit_layout->addWidget(tag_edit);
 
             branchtag_button = new TQCheckBox(i18n("Create &branch with this tag"), mainWidget);
-            layout->addWidget(branchtag_button);
+            tqlayout->addWidget(branchtag_button);
 
             forcetag_button = new TQCheckBox(i18n("&Force tag creation even if tag already exists"), mainWidget);
-            layout->addWidget(forcetag_button);
+            tqlayout->addWidget(forcetag_button);
 	}
 
     setHelp("taggingbranching");

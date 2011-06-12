@@ -34,18 +34,19 @@ struct LogInfo;
 }
 
 
-class AnnotateView : public QListView
+class AnnotateView : public TQListView
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
 
-    explicit AnnotateView( KConfig &cfg, TQWidget *parent=0, const char *name=0 );
+    explicit AnnotateView( KConfig &cfg, TQWidget *tqparent=0, const char *name=0 );
 
     void addLine(const Cervisia::LogInfo& logInfo, const TQString& content,
                  bool odd);
 
-    virtual TQSize sizeHint() const;
+    virtual TQSize tqsizeHint() const;
 
 private slots:
 

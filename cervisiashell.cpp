@@ -43,7 +43,7 @@ CervisiaShell::CervisiaShell( const char *name )
     KLibFactory* factory = KLibLoader::self()->factory("libcervisiapart");
     if( factory )
     {
-        m_part = static_cast<KParts::ReadOnlyPart*>(factory->create(this,
+        m_part = static_cast<KParts::ReadOnlyPart*>(factory->create(TQT_TQOBJECT(this),
                                       "cervisiaview", "KParts::ReadOnlyPart"));
         if( m_part )
             setCentralWidget(m_part->widget());
@@ -92,19 +92,19 @@ void CervisiaShell::setupActions()
 {
     setStandardToolBarMenuEnabled( true );
 
-    KAction *action = KStdAction::configureToolbars( this, TQT_SLOT(slotConfigureToolBars()),
+    KAction *action = KStdAction::configureToolbars( TQT_TQOBJECT(this), TQT_SLOT(slotConfigureToolBars()),
                                             actionCollection() );
     TQString hint = i18n("Allows you to configure the toolbar");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = KStdAction::keyBindings( this, TQT_SLOT(slotConfigureKeys()),
+    action = KStdAction::keyBindings( TQT_TQOBJECT(this), TQT_SLOT(slotConfigureKeys()),
                                       actionCollection() );
     hint = i18n("Allows you to customize the keybindings");
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = KStdAction::quit( kapp, TQT_SLOT( quit() ), actionCollection() );
+    action = KStdAction::quit( TQT_TQOBJECT(kapp), TQT_SLOT( quit() ), actionCollection() );
     hint = i18n("Exits Cervisia");
     action->setToolTip( hint );
     action->setWhatsThis( hint );

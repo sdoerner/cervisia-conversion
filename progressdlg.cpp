@@ -52,10 +52,10 @@ struct ProgressDialog::Private
 };
 
 
-ProgressDialog::ProgressDialog(TQWidget* parent, const TQString& heading,
+ProgressDialog::ProgressDialog(TQWidget* tqparent, const TQString& heading,
                                const DCOPRef& job, const TQString& errorIndicator,
                                const TQString& caption)
-    : KDialogBase(parent, 0, true, caption, Cancel, Cancel, true)
+    : KDialogBase(tqparent, 0, true, caption, Cancel, Cancel, true)
     , DCOPObject()
     , d(new Private)
 {
@@ -90,8 +90,8 @@ void ProgressDialog::setupGui(const TQString& heading)
     TQHBoxLayout* hboxLayout = new TQHBoxLayout(headingBox);
 
     TQLabel* textLabel = new TQLabel(heading, headingBox);
-    textLabel->setMinimumWidth(textLabel->sizeHint().width());
-    textLabel->setFixedHeight(textLabel->sizeHint().height());
+    textLabel->setMinimumWidth(textLabel->tqsizeHint().width());
+    textLabel->setFixedHeight(textLabel->tqsizeHint().height());
     hboxLayout->addWidget(textLabel);
     hboxLayout->addStretch();
 
@@ -104,7 +104,7 @@ void ProgressDialog::setupGui(const TQString& heading)
     TQFontMetrics fm(d->resultbox->fontMetrics());
     d->resultbox->setMinimumSize(fm.width("0")*70, fm.lineSpacing()*8);
 
-    resize(sizeHint());
+    resize(tqsizeHint());
 }
 
 
@@ -252,7 +252,7 @@ void ProgressDialog::startGuiPart()
 void ProgressDialog::processOutput()
 {
     int pos;
-    while( (pos = d->buffer.find('\n')) != -1 )
+    while( (pos = d->buffer.tqfind('\n')) != -1 )
     {
         TQString item = d->buffer.left(pos);
         if( item.startsWith(d->errorId1) ||

@@ -1,45 +1,46 @@
 /**********************************************************************
 ** $Id$
 **
-** Definition of QtTableView class
+** Definition of TQtTableView class
 **
 ** Created : 941115
 **
 ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 **
-** This file contains a class moved out of the Qt GUI Toolkit API. It
+** This file contains a class moved out of the TQt GUI Toolkit API. It
 ** may be used, distributed and modified without limitation.
 **
 **********************************************************************/
 
-#ifndef QTTABLEVIEW_H
-#define QTTABLEVIEW_H
+#ifndef TQTTABLEVIEW_H
+#define TQTTABLEVIEW_H
 
-#ifndef QT_H
+#ifndef TQT_H
 #include "tqframe.h"
-#endif // QT_H
+#endif // TQT_H
 
-#ifndef QT_NO_QTTABLEVIEW
+#ifndef TQT_NO_TQTTABLEVIEW
 
 class TQScrollBar;
-class QCornerSquare;
+class TQCornerSquare;
 
 
-class QtTableView : public QFrame
+class TQtTableView : public TQFrame
 {
     Q_OBJECT
+  TQ_OBJECT
 public:
     virtual void setBackgroundColor( const TQColor & );
     virtual void setPalette( const TQPalette & );
     void	show();
 
-    void	repaint( bool erase=TRUE );
-    void	repaint( int x, int y, int w, int h, bool erase=TRUE );
-    void	repaint( const TQRect &, bool erase=TRUE );
+    void	tqrepaint( bool erase=TRUE );
+    void	tqrepaint( int x, int y, int w, int h, bool erase=TRUE );
+    void	tqrepaint( const TQRect &, bool erase=TRUE );
 
 protected:
-    QtTableView( TQWidget *parent=0, const char *name=0, WFlags f=0 );
-   ~QtTableView();
+    TQtTableView( TQWidget *tqparent=0, const char *name=0, WFlags f=0 );
+   ~TQtTableView();
 
     int		numRows()	const;
     virtual void setNumRows( int );
@@ -78,8 +79,8 @@ protected:
 
     void	updateCell( int row, int column, bool erase=TRUE );
 
-    QRect	cellUpdateRect() const;
-    QRect	viewRect()	 const;
+    TQRect	cellUpdateRect() const;
+    TQRect	viewRect()	 const;
 
     int		lastRowVisible() const;
     int		lastColVisible() const;
@@ -163,16 +164,16 @@ private:
     uint	inSbUpdate		: 1;
 
     uint	tFlags;
-    QRect	cellUpdateR;
+    TQRect	cellUpdateR;
 
     TQScrollBar *vScrollBar;
     TQScrollBar *hScrollBar;
-    QCornerSquare *cornerSquare;
+    TQCornerSquare *cornerSquare;
 
 private:	// Disabled copy constructor and operator=
-#if defined(Q_DISABLE_COPY)
-    QtTableView( const QtTableView & );
-    QtTableView &operator=( const QtTableView & );
+#if defined(TQ_DISABLE_COPY)
+    TQtTableView( const TQtTableView & );
+    TQtTableView &operator=( const TQtTableView & );
 #endif
 };
 
@@ -201,52 +202,52 @@ const uint Tbl_snapToVGrid	= 0x00010000;
 const uint Tbl_snapToGrid	= 0x00018000;
 
 
-inline int QtTableView::numRows() const
+inline int TQtTableView::numRows() const
 { return nRows; }
 
-inline int QtTableView::numCols() const
+inline int TQtTableView::numCols() const
 { return nCols; }
 
-inline int QtTableView::topCell() const
+inline int TQtTableView::topCell() const
 { return yCellOffs; }
 
-inline int QtTableView::leftCell() const
+inline int TQtTableView::leftCell() const
 { return xCellOffs; }
 
-inline int QtTableView::xOffset() const
+inline int TQtTableView::xOffset() const
 { return xOffs; }
 
-inline int QtTableView::yOffset() const
+inline int TQtTableView::yOffset() const
 { return yOffs; }
 
-inline int QtTableView::cellHeight() const
+inline int TQtTableView::cellHeight() const
 { return cellH; }
 
-inline int QtTableView::cellWidth() const
+inline int TQtTableView::cellWidth() const
 { return cellW; }
 
-inline uint QtTableView::tableFlags() const
+inline uint TQtTableView::tableFlags() const
 { return tFlags; }
 
-inline bool QtTableView::testTableFlags( uint f ) const
+inline bool TQtTableView::testTableFlags( uint f ) const
 { return (tFlags & f) != 0; }
 
-inline TQRect QtTableView::cellUpdateRect() const
+inline TQRect TQtTableView::cellUpdateRect() const
 { return cellUpdateR; }
 
-inline bool QtTableView::autoUpdate() const
+inline bool TQtTableView::autoUpdate() const
 { return isUpdatesEnabled(); }
 
-inline void QtTableView::repaint( bool erase )
-{ repaint( 0, 0, width(), height(), erase ); }
+inline void TQtTableView::tqrepaint( bool erase )
+{ tqrepaint( 0, 0, width(), height(), erase ); }
 
-inline void QtTableView::repaint( const TQRect &r, bool erase )
-{ repaint( r.x(), r.y(), r.width(), r.height(), erase ); }
+inline void TQtTableView::tqrepaint( const TQRect &r, bool erase )
+{ tqrepaint( r.x(), r.y(), r.width(), r.height(), erase ); }
 
-inline void QtTableView::updateScrollBars()
+inline void TQtTableView::updateScrollBars()
 { updateScrollBars( 0 ); }
 
 
-#endif // QT_NO_QTTABLEVIEW
+#endif // TQT_NO_TQTTABLEVIEW
 
-#endif // QTTABLEVIEW_H
+#endif // TQTTABLEVIEW_H

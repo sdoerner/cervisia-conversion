@@ -28,45 +28,45 @@
 #include <klocale.h>
 
 
-WatchDialog::WatchDialog(ActionType action, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, TQString::null,
+WatchDialog::WatchDialog(ActionType action, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true)
 {
     setCaption( (action==Add)? i18n("CVS Watch Add") : i18n("CVS Watch Remove") );
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    TQLabel *textlabel = new QLabel
+    TQLabel *textlabel = new TQLabel
 	( (action==Add)? i18n("Add watches for the following events:")
           :  i18n("Remove watches for the following events:"), mainWidget );
-    layout->addWidget(textlabel, 0);
+    tqlayout->addWidget(textlabel, 0);
 
     all_button = new TQRadioButton(i18n("&All"), mainWidget);
     all_button->setFocus();
     all_button->setChecked(true);
-    layout->addWidget(all_button);
+    tqlayout->addWidget(all_button);
     
     only_button = new TQRadioButton(i18n("&Only:"), mainWidget);
-    layout->addWidget(only_button);
+    tqlayout->addWidget(only_button);
 
-    TQGridLayout *eventslayout = new TQGridLayout(layout);
-    eventslayout->addColSpacing(0, 20);
-    eventslayout->setColStretch(0, 0);
-    eventslayout->setColStretch(1, 1);
+    TQGridLayout *eventstqlayout = new TQGridLayout(tqlayout);
+    eventstqlayout->addColSpacing(0, 20);
+    eventstqlayout->setColStretch(0, 0);
+    eventstqlayout->setColStretch(1, 1);
     
     commitbox = new TQCheckBox(i18n("&Commits"), mainWidget);
     commitbox->setEnabled(false);
-    eventslayout->addWidget(commitbox, 0, 1);
+    eventstqlayout->addWidget(commitbox, 0, 1);
     
     editbox = new TQCheckBox(i18n("&Edits"), mainWidget);
     editbox->setEnabled(false);
-    eventslayout->addWidget(editbox, 1, 1);
+    eventstqlayout->addWidget(editbox, 1, 1);
 
     uneditbox = new TQCheckBox(i18n("&Unedits"), mainWidget);
     uneditbox->setEnabled(false);
-    eventslayout->addWidget(uneditbox, 2, 1);
+    eventstqlayout->addWidget(uneditbox, 2, 1);
 
     TQButtonGroup* group = new TQButtonGroup(mainWidget);
     group->hide();

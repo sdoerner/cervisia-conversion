@@ -34,6 +34,7 @@ class KRecentFilesAction;
 class CervisiaShell : public KParts::MainWindow
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     CervisiaShell(const char* name=0);

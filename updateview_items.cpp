@@ -39,7 +39,7 @@
 
 
 using Cervisia::Entry;
-using Cervisia::EntryStatus;
+using Cervisia::EntrytqStatus;
 
 
 // ------------------------------------------------------------------------------
@@ -51,16 +51,16 @@ TQString UpdateItem::dirPath() const
 {
     TQString path;
 
-    const UpdateItem* item = static_cast<UpdateItem*>(parent());
+    const UpdateItem* item = static_cast<UpdateItem*>(tqparent());
     while (item)
     {
-        const UpdateItem* parentItem = static_cast<UpdateItem*>(item->parent());
-        if (parentItem)
+        const UpdateItem* tqparentItem = static_cast<UpdateItem*>(item->tqparent());
+        if (tqparentItem)
         {
             path.prepend(item->m_entry.m_name + TQDir::separator());
         }
 
-        item = parentItem;
+        item = tqparentItem;
     }
 
     return path;
@@ -70,7 +70,7 @@ TQString UpdateItem::dirPath() const
 TQString UpdateItem::filePath() const
 {
     // the filePath of the root item is '.'
-    return parent() ? dirPath() + m_entry.m_name : TQChar('.');
+    return tqparent() ? dirPath() + m_entry.m_name : TQChar('.');
 }
 
 
@@ -79,9 +79,9 @@ TQString UpdateItem::filePath() const
 // ------------------------------------------------------------------------------
 
 
-UpdateDirItem::UpdateDirItem(UpdateDirItem* parent,
+UpdateDirItem::UpdateDirItem(UpdateDirItem* tqparent,
                              const Entry& entry)
-    : UpdateItem(parent, entry),
+    : UpdateItem(tqparent, entry),
       m_opened(false)
 {
     setExpandable(true);
@@ -89,9 +89,9 @@ UpdateDirItem::UpdateDirItem(UpdateDirItem* parent,
 }
 
 
-UpdateDirItem::UpdateDirItem(UpdateView* parent,
+UpdateDirItem::UpdateDirItem(UpdateView* tqparent,
                              const Entry& entry)
-    : UpdateItem(parent, entry),
+    : UpdateItem(tqparent, entry),
       m_opened(false)
 {
     setExpandable(true);
@@ -103,7 +103,7 @@ UpdateDirItem::UpdateDirItem(UpdateView* parent,
  * Update the status of an item; if it doesn't exist yet, create new one
  */
 void UpdateDirItem::updateChildItem(const TQString& name,
-                                    EntryStatus status,
+                                    EntrytqStatus status,
                                     bool isdir)
 {
     if (UpdateItem* item = findItem(name))
@@ -111,7 +111,7 @@ void UpdateDirItem::updateChildItem(const TQString& name,
         if (isFileItem(item))
         {
             UpdateFileItem* fileItem = static_cast<UpdateFileItem*>(item);
-            fileItem->setStatus(status);
+            fileItem->settqStatus(status);
         }
         return;
     }
@@ -127,7 +127,7 @@ void UpdateDirItem::updateChildItem(const TQString& name,
     else
     {
         entry.m_type = Entry::File;
-        createFileItem(entry)->setStatus(status);
+        createFileItem(entry)->settqStatus(status);
     }
 }
 
@@ -150,7 +150,7 @@ void UpdateDirItem::updateEntriesItem(const Entry& entry,
                 entry.m_status == Cervisia::LocallyRemoved ||
                 entry.m_status == Cervisia::Conflict)
             {
-                fileItem->setStatus(entry.m_status);
+                fileItem->settqStatus(entry.m_status);
             }
             fileItem->setRevTag(entry.m_revision, entry.m_tag);
             fileItem->setDate(entry.m_dateTime);
@@ -175,10 +175,10 @@ void UpdateDirItem::scanDirectory()
 
     const CvsDir dir(path);
 
-    const QFileInfoList *files = dir.entryInfoList();
+    const TQFileInfoList *files = dir.entryInfoList();
     if (files)
     {
-        QFileInfoListIterator it(*files);
+        TQFileInfoListIterator it(*files);
         for (; it.current(); ++it)
         {
             Entry entry;
@@ -217,7 +217,7 @@ UpdateFileItem* UpdateDirItem::createFileItem(const Entry& entry)
 
 UpdateItem* UpdateDirItem::insertItem(UpdateItem* item)
 {
-    QPair<TMapItemsByName::iterator, bool> result
+    TQPair<TMapItemsByName::iterator, bool> result
         = m_itemsByName.insert(TMapItemsByName::value_type(item->entry().m_name, item));
     if (!result.second)
     {
@@ -245,15 +245,15 @@ UpdateItem* UpdateDirItem::insertItem(UpdateItem* item)
 
 UpdateItem* UpdateDirItem::findItem(const TQString& name) const
 {
-    const TMapItemsByName::const_iterator it = m_itemsByName.find(name);
+    const TMapItemsByName::const_iterator it = m_itemsByName.tqfind(name);
 
     return (it != m_itemsByName.end()) ? *it : 0;
 }
 
-// Qt-3.3.8 changed the parsing in TQDateTime::fromString() but introduced
+// TQt-3.3.8 changed the parsing in TQDateTime::fromString() but introduced
 // a bug which leads to the problem that days with 1 digit will incorrectly being
 // parsed as day 0 - which is invalid.
-// workaround with the implementation from Qt-3.3.6
+// workaround with the implementation from TQt-3.3.6
 TQDateTime parseDateTime(const TQString &s)
 {
         static const char * const qt_shortMonthNames[] = {
@@ -288,7 +288,7 @@ TQDateTime parseDateTime(const TQString &s)
 	TQDate date( year, month, day );
 	TQTime time;
 	int hour, minute, second;
-	int pivot = s.find( TQRegExp(TQString::fromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
+	int pivot = s.tqfind( TQRegExp(TQString::tqfromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
 	if ( pivot != -1 ) {
 	    hour = s.mid( pivot, 2 ).toInt();
 	    minute = s.mid( pivot+3, 2 ).toInt();
@@ -337,7 +337,7 @@ void UpdateDirItem::syncWithEntries()
                 const TQString options(line.section('/', 4, 4));
                 entry.m_tag = line.section('/', 5, 5);
 
-                const bool isBinary(options.find("-kb") >= 0);
+                const bool isBinary(options.tqfind("-kb") >= 0);
 
                 // file date in local time
                 entry.m_dateTime = TQFileInfo(path + entry.m_name).lastModified();
@@ -349,13 +349,13 @@ void UpdateDirItem::syncWithEntries()
                     entry.m_status = Cervisia::LocallyRemoved;
                     rev.remove(0, 1);
                 }
-                else if (timestamp.find('+') >= 0)
+                else if (timestamp.tqfind('+') >= 0)
                 {
                     entry.m_status = Cervisia::Conflict;
                 }
                 else
                 {
-                    // workaround Qt-3.3.8 bug with our own function (see function above)
+                    // workaround TQt-3.3.8 bug with our own function (see function above)
                     // const TQDateTime date(TQDateTime::fromString(timestamp)); // UTC Time
                     const TQDateTime date(parseDateTime(timestamp)); // UTC Time
                     TQDateTime fileDateUTC;
@@ -392,8 +392,8 @@ void UpdateDirItem::syncWithDirectory()
             // is file removed?
             if (!dir.exists(it.key()))
             {
-                fileItem->setStatus(Cervisia::Removed);
-                fileItem->setRevTag(TQString::null, TQString::null);
+                fileItem->settqStatus(Cervisia::Removed);
+                fileItem->setRevTag(TQString(), TQString());
             }
         }
     }
@@ -494,21 +494,21 @@ TQString UpdateDirItem::text(int column) const
 // ------------------------------------------------------------------------------
 
 
-UpdateFileItem::UpdateFileItem(UpdateDirItem* parent, const Entry& entry)
-    : UpdateItem(parent, entry),
+UpdateFileItem::UpdateFileItem(UpdateDirItem* tqparent, const Entry& entry)
+    : UpdateItem(tqparent, entry),
       m_undefined(false)
 {
 }
 
 
-void UpdateFileItem::setStatus(EntryStatus status)
+void UpdateFileItem::settqStatus(EntrytqStatus status)
 {
     if (status != m_entry.m_status)
     {
         m_entry.m_status = status;
         const bool visible(applyFilter(updateView()->filter()));
         if (visible)
-            repaint();
+            tqrepaint();
     }
     m_undefined = false;
 }
@@ -584,7 +584,7 @@ void UpdateFileItem::setRevTag(const TQString& rev, const TQString& tag)
     if (isVisible())
     {
         widthChanged();
-        repaint();
+        tqrepaint();
     }
 }
 
@@ -598,13 +598,13 @@ void UpdateFileItem::setDate(const TQDateTime& date)
 void UpdateFileItem::markUpdated(bool laststage,
                                  bool success)
 {
-    EntryStatus newstatus = m_entry.m_status;
+    EntrytqStatus newstatus = m_entry.m_status;
 
     if (laststage)
     {
         if (undefinedState() && m_entry.m_status != Cervisia::NotInCVS)
             newstatus = success? Cervisia::UpToDate : Cervisia::Unknown;
-        setStatus(newstatus);
+        settqStatus(newstatus);
     }
     else
         setUndefinedState(true);
@@ -668,7 +668,7 @@ int UpdateFileItem::compare(TQListViewItem* i,
     case MimeType:
         iResult = KMimeType::findByPath(entry().m_name)->comment().localeAwareCompare(KMimeType::findByPath(item->entry().m_name)->comment());
         break;
-    case Status:
+    case tqStatus:
         if ((iResult = ::compare(statusClass(), item->statusClass())) == 0)
             iResult = entry().m_name.localeAwareCompare(item->entry().m_name);
         break;
@@ -698,7 +698,7 @@ TQString UpdateFileItem::text(int column) const
     case MimeType:
 	result = KMimeType::findByPath(entry().m_name)->comment();
 	break;
-    case Status:
+    case tqStatus:
         result = toString(entry().m_status);
         break;
     case Revision:

@@ -41,7 +41,7 @@ TQString TagInfo::toString(bool prefixWithType) const
     TQString text;
     if (prefixWithType)
     {
-        text += typeToString() + TQString::fromLatin1(": ");
+        text += typeToString() + TQString::tqfromLatin1(": ");
     }
     text += m_name;
 
@@ -71,32 +71,32 @@ TQString TagInfo::typeToString() const
 
 TQString LogInfo::createToolTipText(bool showTime) const
 {
-    TQString text(TQString::fromLatin1("<nobr><b>"));
+    TQString text(TQString::tqfromLatin1("<nobr><b>"));
     text += TQStyleSheet::escape(m_revision);
-    text += TQString::fromLatin1("</b>&nbsp;&nbsp;");
+    text += TQString::tqfromLatin1("</b>&nbsp;&nbsp;");
     text += TQStyleSheet::escape(m_author);
-    text += TQString::fromLatin1("&nbsp;&nbsp;<b>");
+    text += TQString::tqfromLatin1("&nbsp;&nbsp;<b>");
     text += TQStyleSheet::escape(dateTimeToString(showTime));
-    text += TQString::fromLatin1("</b></nobr>");
+    text += TQString::tqfromLatin1("</b></nobr>");
 
     if (!m_comment.isEmpty())
     {
-        text += TQString::fromLatin1("<pre>");
+        text += TQString::tqfromLatin1("<pre>");
         text += TQStyleSheet::escape(m_comment);
-        text += TQString::fromLatin1("</pre>");
+        text += TQString::tqfromLatin1("</pre>");
     }
 
     if (!m_tags.isEmpty())
     {
-        text += TQString::fromLatin1("<i>");
+        text += TQString::tqfromLatin1("<i>");
         for (TTagInfoSeq::const_iterator it = m_tags.begin();
              it != m_tags.end(); ++it)
         {
             if (it != m_tags.begin() || m_comment.isEmpty())
-                text += TQString::fromLatin1("<br>");
+                text += TQString::tqfromLatin1("<br>");
             text += TQStyleSheet::escape((*it).toString());
         }
-        text += TQString::fromLatin1("</i>");
+        text += TQString::tqfromLatin1("</i>");
     }
 
     return text;

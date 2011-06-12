@@ -34,10 +34,11 @@ class CvsService_stub;
 class MergeDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     MergeDialog( CvsService_stub* service,
-                 TQWidget *parent=0, const char *name=0 );
+                 TQWidget *tqparent=0, const char *name=0 );
 
     bool byBranch() const;
     TQString branch() const;

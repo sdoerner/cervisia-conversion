@@ -31,7 +31,7 @@ class CvsService_stub;
 class WatchersDialog : public KDialogBase
 {
 public:
-    explicit WatchersDialog(KConfig& cfg, TQWidget* parent = 0,
+    explicit WatchersDialog(KConfig& cfg, TQWidget* tqparent = 0,
                             const char* name = 0);
     virtual ~WatchersDialog();
 

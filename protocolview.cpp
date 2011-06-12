@@ -32,15 +32,15 @@
 #include "cvsjob_stub.h"
 
 
-ProtocolView::ProtocolView(const TQCString& appId, TQWidget *parent, const char *name)
-    : TQTextEdit(parent, name)
+ProtocolView::ProtocolView(const TQCString& appId, TQWidget *tqparent, const char *name)
+    : TQTextEdit(tqparent, name)
     , job(0)
     , m_isUpdateJob(false)
 {
     setReadOnly(true);
     setUndoRedoEnabled(false);
     setTabChangesFocus(true);
-    setTextFormat(Qt::LogText);
+    setTextFormat(TQt::LogText);
 
     KConfig *config = CervisiaPart::config();
     config->setGroup("LookAndFeel");
@@ -124,7 +124,7 @@ void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
     if( normalExit )
     {
         if( exitStatus )
-            msg = i18n("[Exited with status %1]\n").arg(exitStatus);
+            msg = i18n("[Exited with status %1]\n").tqarg(exitStatus);
         else
             msg = i18n("[Finished]\n");
     }
@@ -142,7 +142,7 @@ void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
 void ProtocolView::processOutput()
 {
     int pos;
-    while ( (pos = buf.find('\n')) != -1)
+    while ( (pos = buf.tqfind('\n')) != -1)
 	{
 	    TQString line = buf.left(pos);
 	    if (!line.isEmpty())
@@ -180,8 +180,8 @@ void ProtocolView::appendLine(const TQString &line)
         color = remoteChangeColor;
 
     append(color.isValid()
-           ? TQString("<font color=\"%1\"><b>%2</b></font>").arg(color.name())
-                                                           .arg(escapedLine)
+           ? TQString("<font color=\"%1\"><b>%2</b></font>").tqarg(color.name())
+                                                           .tqarg(escapedLine)
            : escapedLine);
 }
 

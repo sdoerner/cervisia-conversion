@@ -43,7 +43,7 @@ struct Entry
     };
 
     /**
-     * Sets status to \a EntryStatus::Unknown and type to \a File.
+     * Sets status to \a EntrytqStatus::Unknown and type to \a File.
      */
     Entry();
 
@@ -60,7 +60,7 @@ struct Entry
     /**
      * The status of this entry.
      */
-    EntryStatus m_status;
+    EntrytqStatus m_status;
 
     /**
      * The revision of this entry.

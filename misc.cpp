@@ -60,7 +60,7 @@ static int FindWhiteSpace(const TQString& str, int index)
     if( index < 0 || index >= length )
         return -1;
 
-    const TQChar* const startPos = str.unicode();
+    const TQChar* const startPos = str.tqunicode();
     const TQChar* const endPos   = startPos + length;
 
     const TQChar* pos = startPos + index;
@@ -74,7 +74,7 @@ static int FindWhiteSpace(const TQString& str, int index)
 
 static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
                                               CvsService_stub* cvsService,
-                                              TQWidget* parent)
+                                              TQWidget* tqparent)
 {
     TQStringList branchOrTagList;
 
@@ -82,7 +82,7 @@ static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
     if( !cvsService->ok() )
         return branchOrTagList;
 
-    ProgressDialog dlg(parent, "Status", job, TQString::null, i18n("CVS Status"));
+    ProgressDialog dlg(tqparent, "tqStatus", job, TQString(), i18n("CVS tqStatus"));
 
     if( dlg.execute() )
     {
@@ -95,14 +95,14 @@ static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
                 continue;
             if( (wsPos = FindWhiteSpace(line, 2)) < 0 )
                 continue;
-            if( (bracketPos = line.find('(', wsPos + 1)) < 0 )
+            if( (bracketPos = line.tqfind('(', wsPos + 1)) < 0 )
                 continue;
-            if( (colonPos = line.find(':', bracketPos + 1)) < 0 )
+            if( (colonPos = line.tqfind(':', bracketPos + 1)) < 0 )
                 continue;
 
             const TQString tag  = line.mid(1, wsPos - 1);
             const TQString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
-            if( type == searchedType && !branchOrTagList.contains(tag) )
+            if( type == searchedType && !branchOrTagList.tqcontains(tag) )
                 branchOrTagList.push_back(tag);
         }
 
@@ -122,7 +122,7 @@ bool Cervisia::IsValidTag(const TQString& tag)
 
     for( uint i = 1; i < tag.length(); ++i )
     {
-        if( !isgraph(tag[i].latin1()) || prohibitedChars.contains(tag[i]) )
+        if( !isgraph(tag[i].latin1()) || prohibitedChars.tqcontains(tag[i]) )
                 return false;
     }
 
@@ -142,7 +142,7 @@ TQString Cervisia::UserName()
         // 2. Try to retrieve the information from the system
         struct passwd* pw = getpwuid(getuid());
         if( !pw )
-            return TQString::null;
+            return TQString();
 
         char hostname[512];
         hostname[0] = '\0';
@@ -205,7 +205,7 @@ TQString Cervisia::NormalizeRepository(const TQString& repository)
 }
 
 
-bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* parent)
+bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* tqparent)
 {
     bool result = true;
 
@@ -214,8 +214,8 @@ bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* parent)
     // does the file already exist?
     if( fi.exists() )
     {
-        result = (KMessageBox::warningContinueCancel(parent,
-                  i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?").arg(fileName),
+        result = (KMessageBox::warningContinueCancel(tqparent,
+                  i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?").tqarg(fileName),
                   i18n("Overwrite File?"),
                   KGuiItem(i18n("&Overwrite"), "filesave", i18n("Overwrite the file"))) == KMessageBox::Continue);
     }
@@ -248,7 +248,7 @@ TQStringList splitLine(TQString line, char delim)
     TQStringList list;
 
     line = line.simplifyWhiteSpace();
-    while ((pos = line.find(delim)) != -1)
+    while ((pos = line.tqfind(delim)) != -1)
     {
         list.append(line.left(pos));
         line = line.mid(pos+1, line.length()-pos-1);
@@ -259,17 +259,17 @@ TQStringList splitLine(TQString line, char delim)
 }
 
 
-const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* parent)
+const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* tqparent)
 {
-    return FetchBranchesAndTags(TQString::fromLatin1("branch"), cvsService,
-                                parent);
+    return FetchBranchesAndTags(TQString::tqfromLatin1("branch"), cvsService,
+                                tqparent);
 }
 
 
-const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* parent)
+const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* tqparent)
 {
-    return FetchBranchesAndTags(TQString::fromLatin1("revision"), cvsService,
-                                parent);
+    return FetchBranchesAndTags(TQString::tqfromLatin1("revision"), cvsService,
+                                tqparent);
 }
 
 
@@ -292,7 +292,7 @@ TQString tempFileName(const TQString& suffix)
     if (!tempFiles)
         tempFiles = new TQStringList;
 
-    KTempFile f(TQString::null, suffix);
+    KTempFile f(TQString(), suffix);
     tempFiles->append(f.name());
     return f.name();
 }
@@ -309,12 +309,12 @@ int compareRevisions(const TQString& rev1, const TQString& rev2)
     int startPos2(0);
     while (startPos1 < length1 && startPos2 < length2)
     {
-        int pos1(rev1.find('.', startPos1));
+        int pos1(rev1.tqfind('.', startPos1));
         if (pos1 < 0)
             pos1 = length1;
         const int partLength1(pos1 - startPos1);
 
-        int pos2(rev2.find('.', startPos2));
+        int pos2(rev2.tqfind('.', startPos2));
         if (pos2 < 0)
             pos2 = length2;
         const int partLength2(pos2 - startPos2);

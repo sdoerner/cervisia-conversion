@@ -49,8 +49,8 @@ void ToolTip::maybeTip(const TQPoint& pos)
     {
         text = truncateLines(text,
                              font(),
-                             parentWidget()->mapToGlobal(pos),
-                             KGlobalSettings::desktopGeometry(parentWidget()));
+                             tqparentWidget()->mapToGlobal(pos),
+                             KGlobalSettings::desktopGeometry(tqparentWidget()));
         tip(rect, text);
     }
 }
@@ -66,18 +66,18 @@ TQString truncateLines(const TQString&      text,
     const TQChar newLine('\n');
 
     const int lineSpacing(fm.lineSpacing());
-    const int numberOfLines(text.contains(newLine) + 1);
+    const int numberOfLines(text.tqcontains(newLine) + 1);
     const int maxNumberOfLines(size.height() / lineSpacing);
 
     if (numberOfLines <= maxNumberOfLines)
         return text;
 
-    const TQChar* unicode(text.unicode());
-    for (int count(maxNumberOfLines); count; ++unicode)
-        if (*unicode == newLine)
+    const TQChar* tqunicode(text.tqunicode());
+    for (int count(maxNumberOfLines); count; ++tqunicode)
+        if (*tqunicode == newLine)
             --count;
 
-    return text.left(unicode - text.unicode() - 1);
+    return text.left(tqunicode - text.tqunicode() - 1);
 }
 
 
@@ -94,12 +94,12 @@ TQString truncateLines(const TQString& text,
                        - desktopGeometry.top() - 10);
 
     // calculate the tooltip's size
-    const TQSimpleRichText layoutedText(text, font);
+    const TQSimpleRichText tqlayoutedText(text, font);
 
     // only if the tooltip's size is bigger in x- and y-direction the text must
     // be truncated otherwise the tip is moved to a position where it fits
-    return  ((layoutedText.widthUsed() > maxWidth)
-             && (layoutedText.height() > maxHeight))
+    return  ((tqlayoutedText.widthUsed() > maxWidth)
+             && (tqlayoutedText.height() > maxHeight))
         ? truncateLines(text, TQFontMetrics(font), TQSize(maxWidth, maxHeight))
         : text;
 }

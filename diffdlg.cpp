@@ -41,8 +41,8 @@
 #include "diffview.h"
 
 
-DiffDialog::DiffDialog(KConfig& cfg, TQWidget *parent, const char *name, bool modal)
-    : KDialogBase(parent, name, modal, TQString::null,
+DiffDialog::DiffDialog(KConfig& cfg, TQWidget *tqparent, const char *name, bool modal)
+    : KDialogBase(tqparent, name, modal, TQString(),
                   Close | Help | User1, Close, true, KStdGuiItem::saveAs())
     , partConfig(cfg)
 {
@@ -51,30 +51,30 @@ DiffDialog::DiffDialog(KConfig& cfg, TQWidget *parent, const char *name, bool mo
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    TQGridLayout *pairlayout = new TQGridLayout(layout);
-    pairlayout->setRowStretch(0, 0);
-    pairlayout->setRowStretch(1, 1);
-    pairlayout->setColStretch(1, 0);
-    pairlayout->addColSpacing(1, 16);
-    pairlayout->setColStretch(0, 10);
-    pairlayout->setColStretch(2, 10);
+    TQGridLayout *pairtqlayout = new TQGridLayout(tqlayout);
+    pairtqlayout->setRowStretch(0, 0);
+    pairtqlayout->setRowStretch(1, 1);
+    pairtqlayout->setColStretch(1, 0);
+    pairtqlayout->addColSpacing(1, 16);
+    pairtqlayout->setColStretch(0, 10);
+    pairtqlayout->setColStretch(2, 10);
 
     revlabel1 = new TQLabel(mainWidget);
-    pairlayout->addWidget(revlabel1, 0, 0);
+    pairtqlayout->addWidget(revlabel1, 0, 0);
 
     revlabel2 = new TQLabel(mainWidget);
-    pairlayout->addWidget(revlabel2, 0, 2);
+    pairtqlayout->addWidget(revlabel2, 0, 2);
 
     diff1 = new DiffView(cfg, true, false, mainWidget);
     diff2 = new DiffView(cfg, true, true, mainWidget);
     DiffZoomWidget *zoom = new DiffZoomWidget(cfg, mainWidget);
     zoom->setDiffView(diff2);
 
-    pairlayout->addWidget(diff1, 1, 0);
-    pairlayout->addWidget(zoom,  1, 1);
-    pairlayout->addWidget(diff2, 1, 2);
+    pairtqlayout->addWidget(diff1, 1, 0);
+    pairtqlayout->addWidget(zoom,  1, 1);
+    pairtqlayout->addWidget(diff2, 1, 2);
 
     diff1->setPartner(diff2);
     diff2->setPartner(diff1);
@@ -85,35 +85,35 @@ DiffDialog::DiffDialog(KConfig& cfg, TQWidget *parent, const char *name, bool mo
 	     this, TQT_SLOT(toggleSynchronize(bool)) );
 
     itemscombo = new TQComboBox(mainWidget);
-    itemscombo->insertItem(TQString::null);
+    itemscombo->insertItem(TQString());
     connect( itemscombo, TQT_SIGNAL(activated(int)),
              this, TQT_SLOT(comboActivated(int)) );
 
     nofnlabel = new TQLabel(mainWidget);
     // avoids auto resize when the text is changed
-    nofnlabel->setMinimumWidth(fontMetrics().width(i18n("%1 differences").arg(10000)));
+    nofnlabel->setMinimumWidth(fontMetrics().width(i18n("%1 differences").tqarg(10000)));
 
-    backbutton = new TQPushButton(TQString::fromLatin1("&<<"), mainWidget);
+    backbutton = new TQPushButton(TQString::tqfromLatin1("&<<"), mainWidget);
     connect( backbutton, TQT_SIGNAL(clicked()), TQT_SLOT(backClicked()) );
 
-    forwbutton = new TQPushButton(TQString::fromLatin1("&>>"), mainWidget);
+    forwbutton = new TQPushButton(TQString::tqfromLatin1("&>>"), mainWidget);
     connect( forwbutton, TQT_SIGNAL(clicked()), TQT_SLOT(forwClicked()) );
 
     connect( this, TQT_SIGNAL(user1Clicked()), TQT_SLOT(saveAsClicked()) );
 
-    TQBoxLayout *buttonlayout = new TQHBoxLayout(layout);
-    buttonlayout->addWidget(syncbox, 0);
-    buttonlayout->addStretch(4);
-    buttonlayout->addWidget(itemscombo);
-    buttonlayout->addStretch(1);
-    buttonlayout->addWidget(nofnlabel);
-    buttonlayout->addStretch(1);
-    buttonlayout->addWidget(backbutton);
-    buttonlayout->addWidget(forwbutton);
+    TQBoxLayout *buttontqlayout = new TQHBoxLayout(tqlayout);
+    buttontqlayout->addWidget(syncbox, 0);
+    buttontqlayout->addStretch(4);
+    buttontqlayout->addWidget(itemscombo);
+    buttontqlayout->addStretch(1);
+    buttontqlayout->addWidget(nofnlabel);
+    buttontqlayout->addStretch(1);
+    buttontqlayout->addWidget(backbutton);
+    buttontqlayout->addWidget(forwbutton);
 
     setHelp("diff");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "DiffDialog");
     resize(size);
@@ -189,18 +189,18 @@ static TQString regionAsString(int linenoA, int linecountA, int linenoB, int lin
     int lineendB = linenoB+linecountB-1;
     TQString res;
     if (linecountB == 0)
-        res = TQString("%1,%2d%3").arg(linenoA).arg(lineendA).arg(linenoB-1);
+        res = TQString("%1,%2d%3").tqarg(linenoA).tqarg(lineendA).tqarg(linenoB-1);
     else if (linecountA == 0)
-        res = TQString("%1a%2,%3").arg(linenoA-1).arg(linenoB).arg(lineendB);
+        res = TQString("%1a%2,%3").tqarg(linenoA-1).tqarg(linenoB).tqarg(lineendB);
     else if (linenoA == lineendA)
         if (linenoB == lineendB)
-            res = TQString("%1c%2").arg(linenoA).arg(linenoB);
+            res = TQString("%1c%2").tqarg(linenoA).tqarg(linenoB);
         else
-            res = TQString("%1c%2,%3").arg(linenoA).arg(linenoB).arg(lineendB);
+            res = TQString("%1c%2,%3").tqarg(linenoA).tqarg(linenoB).tqarg(lineendB);
     else if (linenoB == lineendB)
-        res = TQString("%1,%2c%3").arg(linenoA).arg(lineendA).arg(linenoB);
+        res = TQString("%1,%2c%3").tqarg(linenoA).tqarg(lineendA).tqarg(linenoB);
     else
-        res = TQString("%1,%2c%3,%4").arg(linenoA).arg(lineendA).arg(linenoB).arg(lineendB);
+        res = TQString("%1,%2c%3,%4").tqarg(linenoA).tqarg(lineendA).tqarg(linenoB).tqarg(lineendB);
 
     return res;
 
@@ -222,7 +222,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const TQString& fileName
     TQStringList linesA, linesB;
     int linenoA, linenoB;
 
-    setCaption(i18n("CVS Diff: %1").arg(fileName));
+    setCaption(i18n("CVS Diff: %1").tqarg(fileName));
     revlabel1->setText( revA.isEmpty()?
                         i18n("Repository:")
                         : i18n("Revision ")+revA+":" );
@@ -236,7 +236,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const TQString& fileName
     // front end, it is executed from here. Of course, in that
     // case this dialog wouldn't have to be created in the first
     // place, but this design at least makes the handling trans-
-    // parent for the calling routines
+    // tqparent for the calling routines
 
     TQString extdiff = partConfig.readPathEntry("ExternalDiff");
     if (!extdiff.isEmpty())
@@ -302,7 +302,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const TQString& fileName
     if (!linesA.isEmpty() || !linesB.isEmpty())
         newDiffHunk(linenoA, linenoB, linesA, linesB);
 
-    // sets the right size as there is no more auto resize in QComboBox
+    // sets the right size as there is no more auto resize in TQComboBox
     itemscombo->adjustSize();
 
     updateNofN();
@@ -408,9 +408,9 @@ void DiffDialog::updateNofN()
 {
     TQString str;
     if (markeditem >= 0)
-	str = i18n("%1 of %2").arg(markeditem+1).arg(items.count());
+	str = i18n("%1 of %2").tqarg(markeditem+1).tqarg(items.count());
     else
-	str = i18n("%1 differences").arg(items.count());
+	str = i18n("%1 differences").tqarg(items.count());
     nofnlabel->setText(str);
 
     itemscombo->setCurrentItem(markeditem==-2? 0 : markeditem+1);
@@ -443,8 +443,8 @@ void DiffDialog::updateHighlight(int newitem)
 	    diff1->setCenterLine(item->linenoA);
 	    diff2->setCenterLine(item->linenoB);
 	}
-    diff1->repaint();
-    diff2->repaint();
+    diff1->tqrepaint();
+    diff2->tqrepaint();
     updateNofN();
 }
 
@@ -477,7 +477,7 @@ void DiffDialog::forwClicked()
 
 void DiffDialog::saveAsClicked()
 {
-    TQString fileName = KFileDialog::getSaveFileName(TQString::null, TQString::null, this);
+    TQString fileName = KFileDialog::getSaveFileName(TQString(), TQString(), this);
     if( fileName.isEmpty() )
         return;
 

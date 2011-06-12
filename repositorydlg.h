@@ -36,10 +36,11 @@ class RepositoryListItem;
 class RepositoryDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                     TQWidget* parent = 0, const char* name = 0);
+                     TQWidget* tqparent = 0, const char* name = 0);
     virtual ~RepositoryDialog();
 
     void readConfigFile();
@@ -74,4 +75,4 @@ private:
 #endif
 
 
-// kate: space-indent on; indent-width 4; replace-tabs on;
+// kate: space-indent on; indent-width 4; tqreplace-tabs on;

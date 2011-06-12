@@ -34,21 +34,21 @@
 
 
 UpdateDialog::UpdateDialog(CvsService_stub* service,
-                           TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, i18n("CVS Update"),
+                           TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, i18n("CVS Update"),
                   Ok | Cancel, Ok, true),
       cvsService(service)
 {
     int const iComboBoxMinWidth(40 * fontMetrics().width('0'));
-    int const iWidgetIndent(style().pixelMetric(TQStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
+    int const iWidgetIndent(tqstyle().tqpixelMetric(TQStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     bybranch_button = new TQRadioButton(i18n("Update to &branch: "), mainWidget);
     bybranch_button->setChecked(true);
-    layout->addWidget(bybranch_button);
+    tqlayout->addWidget(bybranch_button);
 
     branch_combo = new TQComboBox(true, mainWidget);
     branch_combo->setMinimumWidth(iComboBoxMinWidth);
@@ -57,13 +57,13 @@ UpdateDialog::UpdateDialog(CvsService_stub* service,
     connect( branch_button, TQT_SIGNAL(clicked()),
              this, TQT_SLOT(branchButtonClicked()) );
             
-    TQBoxLayout *branchedit_layout = new TQHBoxLayout(layout);
+    TQBoxLayout *branchedit_layout = new TQHBoxLayout(tqlayout);
     branchedit_layout->addSpacing(iWidgetIndent);
     branchedit_layout->addWidget(branch_combo);
     branchedit_layout->addWidget(branch_button);
     
     bytag_button = new TQRadioButton(i18n("Update to &tag: "), mainWidget);
-    layout->addWidget(bytag_button);
+    tqlayout->addWidget(bytag_button);
 
     tag_combo = new TQComboBox(true, mainWidget);
     tag_combo->setMinimumWidth(iComboBoxMinWidth);
@@ -72,17 +72,17 @@ UpdateDialog::UpdateDialog(CvsService_stub* service,
     connect( tag_button, TQT_SIGNAL(clicked()),
              this, TQT_SLOT(tagButtonClicked()) );
             
-    TQBoxLayout *tagedit_layout = new TQHBoxLayout(layout);
+    TQBoxLayout *tagedit_layout = new TQHBoxLayout(tqlayout);
     tagedit_layout->addSpacing(iWidgetIndent);
     tagedit_layout->addWidget(tag_combo);
     tagedit_layout->addWidget(tag_button);
     
     bydate_button = new TQRadioButton(i18n("Update to &date ('yyyy-mm-dd'):"), mainWidget);
-    layout->addWidget(bydate_button);
+    tqlayout->addWidget(bydate_button);
 
     date_edit = new KLineEdit(mainWidget);
 
-    TQBoxLayout *dateedit_layout = new TQHBoxLayout(layout);
+    TQBoxLayout *dateedit_layout = new TQHBoxLayout(tqlayout);
     dateedit_layout->addSpacing(iWidgetIndent);
     dateedit_layout->addWidget(date_edit);
 

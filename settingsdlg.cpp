@@ -52,14 +52,14 @@ namespace
     inline TQPixmap LoadIcon(const char* iconName)
     {
         KIconLoader* loader = KGlobal::instance()->iconLoader();
-        return loader->loadIcon(TQString::fromLatin1(iconName), KIcon::NoGroup,
+        return loader->loadIcon(TQString::tqfromLatin1(iconName), KIcon::NoGroup,
                                  KIcon::SizeMedium);
     }
 }
 
 
-FontButton::FontButton( const TQString &text, TQWidget *parent, const char *name )
-    : TQPushButton(text, parent, name)
+FontButton::FontButton( const TQString &text, TQWidget *tqparent, const char *name )
+    : TQPushButton(text, tqparent, name)
 {
     connect( this, TQT_SIGNAL(clicked()), this, TQT_SLOT(chooseFont()) );
 }
@@ -73,15 +73,15 @@ void FontButton::chooseFont()
         return;
 
     setFont(newFont);
-    repaint(false);
+    tqrepaint(false);
 }
 
 
-SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *parent, const char *name )
+SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *tqparent, const char *name )
     : KDialogBase(KDialogBase::IconList, i18n("Configure Cervisia"),
       KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help,
       KDialogBase::Ok,
-      parent, name, true)
+      tqparent, name, true)
 {
     config = conf;
 
@@ -99,7 +99,7 @@ SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *parent, const char *nam
     addDiffPage();
 
     //
-    // Status Options
+    // tqStatus Options
     //
     addStatusPage();
 
@@ -204,7 +204,7 @@ void SettingsDialog::writeSettings()
     CervisiaSettings::setDiffDeleteColor(m_diffDeleteButton->color());
 
     // I'm not yet sure whether this is a hack or not :-)
-    TQWidgetListIt it(*TQApplication::allWidgets());
+    TQWidgetListIt it(*TQApplication::tqallWidgets());
     for (; it.current(); ++it)
         {
             TQWidget *w = it.current();
@@ -234,26 +234,26 @@ void SettingsDialog::done(int res)
  */
 void SettingsDialog::addGeneralPage()
 {
-    TQFrame* generalPage = addPage(i18n("General"), TQString::null,
+    TQFrame* generalPage = addPage(i18n("General"), TQString(),
                                   LoadIcon("misc"));
-    TQVBoxLayout* layout = new TQVBoxLayout(generalPage, 0, KDialog::spacingHint());
+    TQVBoxLayout* tqlayout = new TQVBoxLayout(generalPage, 0, KDialog::spacingHint());
 
     TQLabel *usernamelabel = new TQLabel( i18n("&User name for the change log editor:"), generalPage );
     usernameedit = new KLineEdit(generalPage);
     usernameedit->setFocus();
     usernamelabel->setBuddy(usernameedit);
 
-    layout->addWidget(usernamelabel);
-    layout->addWidget(usernameedit);
+    tqlayout->addWidget(usernamelabel);
+    tqlayout->addWidget(usernameedit);
 
     TQLabel *cvspathlabel = new TQLabel( i18n("&Path to CVS executable, or 'cvs':"), generalPage );
     cvspathedit = new KURLRequester(generalPage);
     cvspathlabel->setBuddy(cvspathedit);
 
-    layout->addWidget(cvspathlabel);
-    layout->addWidget(cvspathedit);
+    tqlayout->addWidget(cvspathlabel);
+    tqlayout->addWidget(cvspathedit);
 
-    layout->addStretch();
+    tqlayout->addStretch();
 }
 
 
@@ -262,8 +262,8 @@ void SettingsDialog::addGeneralPage()
  */
 void SettingsDialog::addDiffPage()
 {
-    TQGrid *diffPage = addGridPage(2, TQGrid::Horizontal, i18n("Diff Viewer"),
-                                  TQString::null, LoadIcon("vcs_diff"));
+    TQGrid *diffPage = addGridPage(2, Qt::Horizontal, i18n("Diff Viewer"),
+                                  TQString(), LoadIcon("vcs_diff"));
 
     TQLabel *contextlabel = new TQLabel( i18n("&Number of context lines in diff dialog:"), diffPage );
     contextedit = new KIntNumInput( 0, diffPage );
@@ -293,13 +293,13 @@ void SettingsDialog::addDiffPage()
  */
 void SettingsDialog::addStatusPage()
 {
-    TQVBox* statusPage = addVBoxPage(i18n("Status"), TQString::null,
+    TQVBox* statusPage = addVBoxPage(i18n("tqStatus"), TQString(),
                                     LoadIcon("fork"));
 
     remotestatusbox = new TQCheckBox(i18n("When opening a sandbox from a &remote repository,\n"
-                                         "start a File->Status command automatically"), statusPage);
+                                         "start a File->tqStatus command automatically"), statusPage);
     localstatusbox = new TQCheckBox(i18n("When opening a sandbox from a &local repository,\n"
-                                        "start a File->Status command automatically"), statusPage);
+                                        "start a File->tqStatus command automatically"), statusPage);
 
     // dummy widget to take up the vertical space
     new TQWidget(statusPage);
@@ -311,7 +311,7 @@ void SettingsDialog::addStatusPage()
  */
 void SettingsDialog::addAdvancedPage()
 {
-    TQVBox* frame = addVBoxPage(i18n("Advanced"), TQString::null,
+    TQVBox* frame = addVBoxPage(i18n("Advanced"), TQString(),
                                LoadIcon("configure"));
 
     m_advancedPage = new AdvancedPage(frame);
@@ -325,7 +325,7 @@ void SettingsDialog::addAdvancedPage()
  */
 void SettingsDialog::addLookAndFeelPage()
 {
-    TQVBox* lookPage = addVBoxPage(i18n("Appearance"), TQString::null,
+    TQVBox* lookPage = addVBoxPage(i18n("Appearance"), TQString(),
                                   LoadIcon("looknfeel"));
 
     TQGroupBox* fontGroupBox = new TQGroupBox(4, Qt::Vertical, i18n("Fonts"),
@@ -341,37 +341,37 @@ void SettingsDialog::addLookAndFeelPage()
     m_changelogFontBox = new FontButton(i18n("Font for ChangeLog View..."),
                                         fontGroupBox);
 
-    TQGroupBox* colorGroupBox = new TQGroupBox(4, Qt::Horizontal,
+    TQGroupBox* tqcolorGroupBox = new TQGroupBox(4, Qt::Horizontal,
                                              i18n("Colors"), lookPage);
-    colorGroupBox->setColumns(4);
-    colorGroupBox->setInsideSpacing(KDialog::spacingHint());
+    tqcolorGroupBox->setColumns(4);
+    tqcolorGroupBox->setInsideSpacing(KDialog::spacingHint());
 
-    TQLabel* conflictLabel = new TQLabel(i18n("Conflict:"), colorGroupBox);
-    m_conflictButton      = new KColorButton(colorGroupBox);
+    TQLabel* conflictLabel = new TQLabel(i18n("Conflict:"), tqcolorGroupBox);
+    m_conflictButton      = new KColorButton(tqcolorGroupBox);
     conflictLabel->setBuddy(m_conflictButton);
 
-    TQLabel* diffChangeLabel = new TQLabel(i18n("Diff change:"), colorGroupBox);
-    m_diffChangeButton      = new KColorButton(colorGroupBox);
+    TQLabel* diffChangeLabel = new TQLabel(i18n("Diff change:"), tqcolorGroupBox);
+    m_diffChangeButton      = new KColorButton(tqcolorGroupBox);
     diffChangeLabel->setBuddy(m_diffChangeButton);
 
-    TQLabel* localChangeLabel = new TQLabel(i18n("Local change:"), colorGroupBox);
-    m_localChangeButton      = new KColorButton(colorGroupBox);
+    TQLabel* localChangeLabel = new TQLabel(i18n("Local change:"), tqcolorGroupBox);
+    m_localChangeButton      = new KColorButton(tqcolorGroupBox);
     localChangeLabel->setBuddy(m_localChangeButton);
 
-    TQLabel* diffInsertLabel = new TQLabel(i18n("Diff insertion:"), colorGroupBox);
-    m_diffInsertButton      = new KColorButton(colorGroupBox);
+    TQLabel* diffInsertLabel = new TQLabel(i18n("Diff insertion:"), tqcolorGroupBox);
+    m_diffInsertButton      = new KColorButton(tqcolorGroupBox);
     diffInsertLabel->setBuddy(m_diffInsertButton);
 
-    TQLabel* remoteChangeLabel = new TQLabel(i18n("Remote change:"), colorGroupBox);
-    m_remoteChangeButton      = new KColorButton(colorGroupBox);
+    TQLabel* remoteChangeLabel = new TQLabel(i18n("Remote change:"), tqcolorGroupBox);
+    m_remoteChangeButton      = new KColorButton(tqcolorGroupBox);
     remoteChangeLabel->setBuddy( m_remoteChangeButton );
 
-    TQLabel* diffDeleteLabel = new TQLabel(i18n("Diff deletion:"), colorGroupBox);
-    m_diffDeleteButton      = new KColorButton(colorGroupBox);
+    TQLabel* diffDeleteLabel = new TQLabel(i18n("Diff deletion:"), tqcolorGroupBox);
+    m_diffDeleteButton      = new KColorButton(tqcolorGroupBox);
     diffDeleteLabel->setBuddy(m_diffDeleteButton);
 
-    TQLabel* notInCvsLabel = new TQLabel(i18n("Not in cvs:"), colorGroupBox);
-    m_notInCvsButton      = new KColorButton(colorGroupBox);
+    TQLabel* notInCvsLabel = new TQLabel(i18n("Not in cvs:"), tqcolorGroupBox);
+    m_notInCvsButton      = new KColorButton(tqcolorGroupBox);
     notInCvsLabel->setBuddy(m_notInCvsButton);
 
     m_splitterBox = new TQCheckBox(i18n("Split main window &horizontally"), lookPage);

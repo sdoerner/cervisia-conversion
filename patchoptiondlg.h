@@ -34,9 +34,10 @@ namespace Cervisia
 class PatchOptionDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
     
 public:
-    explicit PatchOptionDialog(TQWidget* parent = 0, const char* name = 0);
+    explicit PatchOptionDialog(TQWidget* tqparent = 0, const char* name = 0);
     virtual ~PatchOptionDialog();
     
     TQString diffOptions() const;

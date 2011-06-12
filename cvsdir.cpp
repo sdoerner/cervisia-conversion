@@ -31,16 +31,16 @@ CvsDir::CvsDir(const TQString &path)
 {}
 
 
-const QFileInfoList *CvsDir::entryInfoList() const
+const TQFileInfoList *CvsDir::entryInfoList() const
 {
     DirIgnoreList ignorelist(absPath());
-    const QFileInfoList *fulllist = TQDir::entryInfoList();
+    const TQFileInfoList *fulllist = TQDir::entryInfoList();
     if (!fulllist)
         return 0;
     
     entrylist.clear();
 
-    QFileInfoListIterator it(*fulllist);
+    TQFileInfoListIterator it(*fulllist);
     for (; it.current(); ++it)
         {
             if (!ignorelist.matches(it.current()) && !GlobalIgnoreList().matches(it.current()))

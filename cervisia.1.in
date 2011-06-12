@@ -10,7 +10,7 @@
 \fB\\$1\fR
 .PP
 ..
-.de Sp \" Vertical space (when we can't use .PP)
+.de Sp \"Qt::Vertical space (when we can't use .PP)
 .if t .sp .5v
 .if n .sp
 ..
@@ -144,7 +144,7 @@ Cervisia \- Graphical CVS frontend
          [\ \fB\-\-nocrashhandler\fR\ ]
          [\ \fB\-\-waitforwm\fR\ ]
          [\ \fB\-\-style\fR\ \fIstyle\fR\ ]
-         [\ \fB\-\-geometry\fR\ \fIgeometry\fR\ ]
+         [\ \fB\-\-tqgeometry\fR\ \fItqgeometry\fR\ ]
          [\ \fB\-\-resolve\fR\ \fIfilename\fR\ ]
          [\ \fB\-\-log\fR\ \fIfilename\fR\ ]
          [\ \fB\-\-annotate\fR\ \fIfilename\fR\ ]
@@ -193,9 +193,9 @@ Waits for a \s-1WM_NET\s0 compatible windowmanager
 .IP "\fB\-\-style\fR \fIstyle\fR" 4
 .IX Item "--style style"
 Sets the application \s-1GUI\s0 style
-.IP "\fB\-\-geometry\fR \fIgeometry\fR" 4
-.IX Item "--geometry geometry"
-Sets the geometry of the main window
+.IP "\fB\-\-tqgeometry\fR \fItqgeometry\fR" 4
+.IX Item "--tqgeometry tqgeometry"
+Sets the tqgeometry of the main window
 .SH "FILES"
 .IX Header "FILES"
 \&\fI_KDECONFDIR_/cervisiarc\fR \- global configuration file

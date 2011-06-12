@@ -28,10 +28,10 @@ namespace Cervisia
 {
 
 
-TQString toString(EntryStatus entryStatus)
+TQString toString(EntrytqStatus entrytqStatus)
 {
     TQString result;
-    switch (entryStatus)
+    switch (entrytqStatus)
     {
     case LocallyModified:
         result = i18n("Locally Modified");

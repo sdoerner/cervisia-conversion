@@ -80,9 +80,9 @@ using Cervisia::TagDialog;
 
 K_EXPORT_COMPONENT_FACTORY( libcervisiapart, CervisiaFactory )
 
-CervisiaPart::CervisiaPart( TQWidget *parentWidget, const char *widgetName,
-                            TQObject *parent, const char *name, const TQStringList& /*args*/ )
-    : KParts::ReadOnlyPart( parent, name )
+CervisiaPart::CervisiaPart( TQWidget *tqparentWidget, const char *widgetName,
+                            TQObject *tqparent, const char *name, const TQStringList& /*args*/ )
+    : KParts::ReadOnlyPart( tqparent, name )
     , hasRunningJob( false )
     , opt_hideFiles( false )
     , opt_hideUpToDate( false )
@@ -129,14 +129,14 @@ CervisiaPart::CervisiaPart( TQWidget *parentWidget, const char *widgetName,
     // an explaination
     if( cvsService )
     {
-        Orientation o = splitHorz ? TQSplitter::Vertical
-                                  : TQSplitter::Horizontal;
-        splitter = new TQSplitter(o, parentWidget, widgetName);
+        Qt::Orientation o = splitHorz ? Qt::Vertical
+                                  : Qt::Horizontal;
+        splitter = new TQSplitter(o, tqparentWidget, widgetName);
         // avoid PartManager's warning that Part's window can't handle focus
-        splitter->setFocusPolicy( TQWidget::StrongFocus );
+        splitter->setFocusPolicy( TQ_StrongFocus );
 
         update = new UpdateView(*config(), splitter);
-        update->setFocusPolicy( TQWidget::StrongFocus );
+        update->setFocusPolicy( TQ_StrongFocus );
         update->setFocus();
         connect( update, TQT_SIGNAL(contextMenu(KListView*, TQListViewItem*, const TQPoint&)),
                  this, TQT_SLOT(popupRequested(KListView*, TQListViewItem*, const TQPoint&)) );
@@ -144,14 +144,14 @@ CervisiaPart::CervisiaPart( TQWidget *parentWidget, const char *widgetName,
                  this, TQT_SLOT(openFile(TQString)) );
 
         protocol = new ProtocolView(appId, splitter);
-        protocol->setFocusPolicy( TQWidget::StrongFocus );
+        protocol->setFocusPolicy( TQ_StrongFocus );
 
         setWidget(splitter);
     }
     else
         setWidget(new TQLabel(i18n("This KPart is non-functional, because the "
                                   "cvs DCOP service could not be started."),
-                             parentWidget));
+                             tqparentWidget));
 
     if( cvsService )
     {
@@ -213,7 +213,7 @@ void CervisiaPart::slotSetupStatusBar()
 {
     // create the active filter indicator and add it to the statusbar
     filterLabel = new TQLabel("UR", m_statusBar->statusBar());
-    filterLabel->setFixedSize(filterLabel->sizeHint());
+    filterLabel->setFixedSize(filterLabel->tqsizeHint());
     filterLabel->setText("");
     TQToolTip::add(filterLabel,
                   i18n("F - All files are hidden, the tree shows only folders\n"
@@ -257,8 +257,8 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
-                          this, TQT_SLOT( slotStatus() ),
+    action = new KAction( i18n("&tqStatus"), "vcs_status", Key_F5,
+                          this, TQT_SLOT( slottqStatus() ),
                           actionCollection(), "file_status" );
     hint = i18n("Updates the status (cvs -n update) of the selected files and folders");
     action->setToolTip( hint );
@@ -322,7 +322,7 @@ void CervisiaPart::setupActions()
     // View Menu
     //
     action = new KAction( i18n("Stop"), "stop", Key_Escape,
-                          protocol, TQT_SLOT(cancelJob()),
+                          TQT_TQOBJECT(protocol), TQT_SLOT(cancelJob()),
                           actionCollection(), "stop_job" );
     action->setEnabled( false );
     hint = i18n("Stops any running sub-processes");
@@ -649,7 +649,7 @@ void CervisiaPart::popupRequested(KListView*, TQListViewItem* item, const TQPoin
         if( isFileItem(item) )
         {
             // remove old 'Edit with...' menu
-            if( m_editWithId && popup->findItem(m_editWithId) != 0 )
+            if( m_editWithId && popup->tqfindItem(m_editWithId) != 0 )
             {
                 popup->removeItem(m_editWithId);
                 delete m_currentEditMenu; 
@@ -726,7 +726,7 @@ void CervisiaPart::aboutCervisia()
                           "GNU General Public License for more details.\n"
                           "See the ChangeLog file for a list of contributors."));
     TQMessageBox::about(0, i18n("About Cervisia"),
-                       aboutstr.arg(CERVISIA_VERSION).arg(KDE_VERSION_STRING));
+                       aboutstr.tqarg(CERVISIA_VERSION).tqarg(KDE_VERSION_STRING));
 }
 
 
@@ -856,7 +856,7 @@ void CervisiaPart::slotUpdate()
 }
 
 
-void CervisiaPart::slotStatus()
+void CervisiaPart::slottqStatus()
 {
     TQStringList list = update->multipleSelection();
     if (list.isEmpty())
@@ -969,7 +969,7 @@ void CervisiaPart::slotCommit()
             return;
 
         TQString msg = dlg.logMessage();
-        if( !recentCommits.contains( msg ) )
+        if( !recentCommits.tqcontains( msg ) )
         {
             recentCommits.prepend( msg );
             while (recentCommits.count() > 50)
@@ -1166,13 +1166,13 @@ void CervisiaPart::slotAnnotate()
 
 void CervisiaPart::slotDiffBase()
 {
-    showDiff(TQString::fromLatin1("BASE"));
+    showDiff(TQString::tqfromLatin1("BASE"));
 }
 
 
 void CervisiaPart::slotDiffHead()
 {
-    showDiff(TQString::fromLatin1("HEAD"));
+    showDiff(TQString::tqfromLatin1("HEAD"));
 }
 
 
@@ -1504,7 +1504,7 @@ void CervisiaPart::slotLastChange()
 
     int pos, lastnumber;
     bool ok;
-    if ( (pos = revA.findRev('.')) == -1
+    if ( (pos = revA.tqfindRev('.')) == -1
          || (lastnumber=revA.right(revA.length()-pos-1).toUInt(&ok), !ok) )
     {
         KMessageBox::sorry(widget(),
@@ -1635,8 +1635,8 @@ void CervisiaPart::slotConfigure()
     conf->setGroup("LookAndFeel");
     bool splitHorz = conf->readBoolEntry("SplitHorizontally",true);
     splitter->setOrientation( splitHorz ?
-                              TQSplitter::Vertical :
-                              TQSplitter::Horizontal);
+                              Qt::Vertical :
+                              Qt::Horizontal);
 }
 
 void CervisiaPart::slotHelp()
@@ -1673,7 +1673,7 @@ void CervisiaPart::showDiff(const TQString& revision)
 
     // Non-modal dialog
     DiffDialog *l = new DiffDialog(*config());
-    if (l->parseCvsDiff(cvsService, fileName, revision, TQString::null))
+    if (l->parseCvsDiff(cvsService, fileName, revision, TQString()))
         l->show();
     else
         delete l;
@@ -1692,9 +1692,9 @@ void CervisiaPart::slotJobFinished()
 
     if( m_jobType == Commit )
     {
-        KNotifyClient::event(widget()->parentWidget()->winId(), "cvs_commit_done",
+        KNotifyClient::event(widget()->tqparentWidget()->winId(), "cvs_commit_done",
                              i18n("A CVS commit to repository %1 is done")
-                             .arg(repository));
+                             .tqarg(repository));
         m_jobType = Unknown;
     }
 }
@@ -1757,14 +1757,14 @@ bool CervisiaPart::openSandbox(const TQString &dirname)
 
     KConfig *conf = config();
     conf->setGroup("General");
-    bool dostatus = conf->readBoolEntry(repository.contains(":")?
+    bool dostatus = conf->readBoolEntry(repository.tqcontains(":")?
                                         "StatusForRemoteRepos" :
                                         "StatusForLocalRepos",
                                         false);
     if (dostatus)
     {
         update->setSelected(update->firstChild(), true);
-        slotStatus();
+        slottqStatus();
     }
 
     //load the recentCommits for this app from the KConfig app
@@ -1931,7 +1931,7 @@ void CervisiaBrowserExtension::setPropertiesActionEnabled(bool enabled)
 
 void CervisiaBrowserExtension::properties()
 {
-    static_cast<CervisiaPart*>(parent())->slotFileProperties();
+    static_cast<CervisiaPart*>(tqparent())->slotFileProperties();
 }
 
 // Local Variables:

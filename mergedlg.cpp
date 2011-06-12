@@ -34,21 +34,21 @@
 
 
 MergeDialog::MergeDialog(CvsService_stub* service,
-                         TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, i18n("CVS Merge"),
+                         TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, i18n("CVS Merge"),
                   Ok | Cancel, Ok, true),
       cvsService(service)
 {
     int const iComboBoxMinWidth(30 * fontMetrics().width('0'));
-    int const iWidgetIndent(style().pixelMetric(TQStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
+    int const iWidgetIndent(tqstyle().tqpixelMetric(TQStyle::PM_ExclusiveIndicatorWidth, 0) + 6);
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     bybranch_button = new TQRadioButton(i18n("Merge from &branch:"), mainWidget);
     bybranch_button->setChecked(true);
-    layout->addWidget(bybranch_button);
+    tqlayout->addWidget(bybranch_button);
 
     branch_combo = new TQComboBox(true, mainWidget);
     branch_combo->setMinimumWidth(iComboBoxMinWidth);
@@ -57,13 +57,13 @@ MergeDialog::MergeDialog(CvsService_stub* service,
     connect( branch_button, TQT_SIGNAL(clicked()),
              this, TQT_SLOT(branchButtonClicked()) );
             
-    TQBoxLayout *branchedit_layout = new TQHBoxLayout(layout);
+    TQBoxLayout *branchedit_layout = new TQHBoxLayout(tqlayout);
     branchedit_layout->addSpacing(iWidgetIndent);
     branchedit_layout->addWidget(branch_combo, 2);
     branchedit_layout->addWidget(branch_button, 0);
     
     bytags_button = new TQRadioButton(i18n("Merge &modifications:"), mainWidget);
-    layout->addWidget(bytags_button);
+    tqlayout->addWidget(bytags_button);
 
     TQLabel *tag1_label = new TQLabel(i18n("between tag: "), mainWidget);
     tag1_combo = new TQComboBox(true, mainWidget);
@@ -77,7 +77,7 @@ MergeDialog::MergeDialog(CvsService_stub* service,
     connect( tag_button, TQT_SIGNAL(clicked()),
              this, TQT_SLOT(tagButtonClicked()) );
 
-    TQGridLayout *tagsedit_layout = new TQGridLayout(layout);
+    TQGridLayout *tagsedit_layout = new TQGridLayout(tqlayout);
     tagsedit_layout->addColSpacing(0, iWidgetIndent);
     tagsedit_layout->setColStretch(0, 0);
     tagsedit_layout->setColStretch(1, 1);

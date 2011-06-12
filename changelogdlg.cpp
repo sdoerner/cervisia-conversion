@@ -33,15 +33,15 @@
 
 static inline TQString DateStringISO8601()
 {
-    return TQDate::currentDate().toString(Qt::ISODate);
+    return TQDate::tqcurrentDate().toString(Qt::ISODate);
 }
 
 
 ChangeLogDialog::Options *ChangeLogDialog::options = 0;
 
 
-ChangeLogDialog::ChangeLogDialog(KConfig& cfg, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, i18n("Edit ChangeLog"),
+ChangeLogDialog::ChangeLogDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, i18n("Edit ChangeLog"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
 {
@@ -167,7 +167,7 @@ TQString ChangeLogDialog::message()
                     for (j = 0; j < (int)str.length(); ++j)
                         if (!str[j].isSpace())
                             break;
-                    str.remove(0, QMIN(j, 8));
+                    str.remove(0, TQMIN(j, 8));
                 }
             res += str;
             res += '\n';

@@ -30,12 +30,13 @@ namespace Cervisia
 {
 
 
-class EditWithMenu : public QObject
+class EditWithMenu : public TQObject
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    EditWithMenu(const KURL& url, TQWidget* parent);
+    EditWithMenu(const KURL& url, TQWidget* tqparent);
     TQPopupMenu* menu();
 
 private slots:

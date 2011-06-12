@@ -34,9 +34,10 @@ struct LogInfo;
 class LogPlainView : public KTextBrowser
 {   
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    explicit LogPlainView(TQWidget* parent = 0, const char* name = 0);
+    explicit LogPlainView(TQWidget* tqparent = 0, const char* name = 0);
     ~LogPlainView();
 
     void addRevision(const Cervisia::LogInfo& logInfo);
@@ -55,7 +56,7 @@ protected:
     virtual void setSource(const TQString& name);
     
 private:
-    KFind* m_find;
+    KFind* m_tqfind;
     int    m_findPos;
 };
 

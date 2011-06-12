@@ -35,9 +35,10 @@ class CvsService_stub;
 class HistoryDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    explicit HistoryDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
+    explicit HistoryDialog( KConfig& cfg, TQWidget *tqparent=0, const char *name=0 );
     virtual ~HistoryDialog();
 
     bool parseHistory(CvsService_stub* cvsService);

@@ -43,7 +43,7 @@ namespace
 
 bool StringMatcher::match(const TQString& text) const
 {
-    if (m_exactPatterns.find(text) != m_exactPatterns.end())
+    if (m_exactPatterns.tqfind(text) != m_exactPatterns.end())
     {
         return true;
     }
@@ -133,7 +133,7 @@ unsigned int countMetaCharacters(const TQString& text)
 {
     unsigned int count(0);
 
-    const TQChar* pos(text.unicode());
+    const TQChar* pos(text.tqunicode());
     const TQChar* posEnd(pos + text.length());
     while (pos < posEnd)
     {

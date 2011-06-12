@@ -144,7 +144,7 @@ bool Repository::setWorkingCopy(const TQString& dirName)
         return false;
 
     d->workingCopy = path;
-    d->location    = TQString::null;
+    d->location    = TQString();
 
     // determine path to the repository
     TQFile rootFile(path + "/CVS/Root");
@@ -157,7 +157,7 @@ bool Repository::setWorkingCopy(const TQString& dirName)
 
     // add identities (ssh-add) to ssh-agent
     // TODO CL make sure this is called only once
-    if( d->location.contains(":ext:", false) > 0 )
+    if( d->location.tqcontains(":ext:", false) > 0 )
     {
         SshAgent ssh;
         ssh.addSshIdentities();
@@ -223,11 +223,11 @@ void Repository::Private::readConfig()
     //
     // In order to be able to read this group, we then have to manually add
     // the port number to it.
-    TQString repositoryGroup = TQString::fromLatin1("Repository-") + location;
+    TQString repositoryGroup = TQString::tqfromLatin1("Repository-") + location;
     if( !config->hasGroup(repositoryGroup) )
     {
         // find the position of the first path separator
-        const int insertPos = repositoryGroup.find('/');
+        const int insertPos = repositoryGroup.tqfind('/');
         if( insertPos > 0 )
         {
             // add port to location

@@ -26,8 +26,8 @@ using Cervisia::LogMessageEdit;
 #include <kaccel.h>
 
 
-LogMessageEdit::LogMessageEdit(TQWidget* parent)
-    : KTextEdit(parent)
+LogMessageEdit::LogMessageEdit(TQWidget* tqparent)
+    : KTextEdit(tqparent)
     , KCompletionBase()
     , m_completing(false)
     , m_completionStartPos(0)
@@ -69,14 +69,14 @@ void LogMessageEdit::setCompletedItems(const TQStringList&)
 
 void LogMessageEdit::keyPressEvent(TQKeyEvent* event)
 {
-    bool noModifier = (event->state() == NoButton ||
+    bool noModifier = (event->state() == Qt::NoButton ||
                        event->state() == ShiftButton ||
                        event->state() == Keypad);
 
     if( noModifier )
     {
         TQString keycode = event->text();
-        if( !keycode.isEmpty() && keycode.unicode()->isPrint() )
+        if( !keycode.isEmpty() && keycode.tqunicode()->isPrint() )
         {
             KTextEdit::keyPressEvent(event);
             tryCompletion();
@@ -132,8 +132,8 @@ void LogMessageEdit::keyPressEvent(TQKeyEvent* event)
     }
 
     // any other key (except modifiers) will end the text completion
-    if( event->key() != Qt::Key_Shift && event->key() != Qt::Key_Control &&
-        event->key() != Qt::Key_Alt   && event->key() != Qt::Key_Meta )
+    if( event->key() != TQt::Key_Shift && event->key() != TQt::Key_Control &&
+        event->key() != TQt::Key_Alt   && event->key() != TQt::Key_Meta )
     {
         m_completing = false;
         setCheckSpellingEnabled(true);
@@ -159,7 +159,7 @@ void LogMessageEdit::tryCompletion()
     if( paragraphText.at(index).isSpace() )
     {
         if( !m_completing )
-            m_completionStartPos = paragraphText.findRev(' ', index-1) + 1;
+            m_completionStartPos = paragraphText.tqfindRev(' ', index-1) + 1;
 
         int length = index - m_completionStartPos;
         TQString word = paragraphText.mid(m_completionStartPos, length);

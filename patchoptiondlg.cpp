@@ -28,8 +28,8 @@ using Cervisia::PatchOptionDialog;
 #include <klocale.h>
 
 
-PatchOptionDialog::PatchOptionDialog(TQWidget* parent, const char* name)
-    : KDialogBase(parent, name, true/*modal*/, TQString::null,
+PatchOptionDialog::PatchOptionDialog(TQWidget* tqparent, const char* name)
+    : KDialogBase(tqparent, name, true/*modal*/, TQString(),
                   Ok | Cancel | Help, Ok, true/*separator*/)
 {
     TQFrame* mainWidget = makeMainWidget();

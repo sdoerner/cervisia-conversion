@@ -30,8 +30,8 @@
 #include <klocale.h>
 
 
-AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* parent, const char* name)
-    : KDialogBase(parent, name, true, TQString::null,
+AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* tqparent, const char* name)
+    : KDialogBase(tqparent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true)
 {
     setCaption( (action==Add)?       i18n("CVS Add") :
@@ -40,18 +40,18 @@ AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* parent, const char
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    TQLabel *textlabel = new QLabel
+    TQLabel *textlabel = new TQLabel
         ( (action==Add)?       i18n("Add the following files to the repository:") :
           (action==AddBinary)? i18n("Add the following binary files to the repository:") :
                                i18n("Remove the following files from the repository:") ,
           mainWidget );
-    layout->addWidget(textlabel);
+    tqlayout->addWidget(textlabel);
 
     m_listBox = new TQListBox(mainWidget);
     m_listBox->setSelectionMode(TQListBox::NoSelection);
-    layout->addWidget(m_listBox, 5);
+    tqlayout->addWidget(m_listBox, 5);
 
     // Add warning message to dialog when user wants to remove a file
     if (action==Remove)
@@ -69,9 +69,9 @@ AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* parent, const char
                                               "your local working copy."), mainWidget);
         warningLayout->addWidget(warningText);
 
-        layout->addSpacing(5);
-        layout->addLayout(warningLayout);
-        layout->addSpacing(5);
+        tqlayout->addSpacing(5);
+        tqlayout->addLayout(warningLayout);
+        tqlayout->addSpacing(5);
     }
 
     if( action == Remove )
@@ -85,10 +85,10 @@ void AddRemoveDialog::setFileList(const TQStringList& files)
 {
     // the dot for the root directory is hard to see, so
     // we convert it to the absolut path
-    if( files.find(".") != files.end() )
+    if( files.tqfind(".") != files.end() )
     {
         TQStringList copy(files);
-        int idx = copy.findIndex(".");
+        int idx = copy.tqfindIndex(".");
         copy[idx] = TQFileInfo(".").absFilePath();
 
         m_listBox->insertStringList(copy);
@@ -98,4 +98,4 @@ void AddRemoveDialog::setFileList(const TQStringList& files)
 }
 
 
-// kate: space-indent on; indent-width 4; replace-tabs on;
+// kate: space-indent on; indent-width 4; tqreplace-tabs on;

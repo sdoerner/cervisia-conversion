@@ -40,7 +40,7 @@ static TQDateTime parseDate(const TQString& date, const TQString& _time, const T
 {
     // cvs history only prints hh:mm but parseDateISO8601 needs hh:mm:ss
     TQString time(_time);
-    if( time.contains(':') == 1 )
+    if( time.tqcontains(':') == 1 )
         time += ":00";
 
     TQDateTime dateTime;
@@ -50,14 +50,14 @@ static TQDateTime parseDate(const TQString& date, const TQString& _time, const T
 }
 
 
-class HistoryItem : public QListViewItem
+class HistoryItem : public TQListViewItem
 {
 public:
 
     enum { Date, Event, Author, Revision, File, Path };
 
-    HistoryItem(TQListView *parent, const TQDateTime& date)
-        : TQListViewItem(parent), m_date(date)
+    HistoryItem(TQListView *tqparent, const TQDateTime& date)
+        : TQListViewItem(tqparent), m_date(date)
     {}
 
     virtual int compare(TQListViewItem* i, int col, bool) const;
@@ -138,14 +138,14 @@ bool HistoryItem::isOther()
 }
 
 
-HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, TQString::null,
+HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, false, TQString(),
                   Close | Help, ButtonCode(0), true)
     , partConfig(cfg)
 {
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     listview = new KListView(mainWidget);
     listview->setSelectionMode(TQListView::NoSelection);
@@ -159,7 +159,7 @@ HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
     listview->addColumn(i18n("File"));
     listview->addColumn(i18n("Repo Path"));
     listview->setFocus();
-    layout->addWidget(listview, 1);
+    tqlayout->addWidget(listview, 1);
 
     commit_box = new TQCheckBox(i18n("Show c&ommit events"), mainWidget);
     commit_box->setChecked(true);
@@ -215,7 +215,7 @@ HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
     connect( dirname_edit, TQT_SIGNAL(returnPressed()),
              this, TQT_SLOT(choiceChanged()) );
 
-    TQGridLayout *grid = new TQGridLayout(layout);
+    TQGridLayout *grid = new TQGridLayout(tqlayout);
     grid->setColStretch(0, 1);
     grid->setColStretch(1, 0);
     grid->setColStretch(2, 4);
@@ -237,7 +237,7 @@ HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
     setHelp("browsinghistory");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "HistoryDialog");
     resize(size);
@@ -246,7 +246,7 @@ HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
     for (int i = 0; i < listview->columns(); ++i)
         listview->setColumnWidthMode(i, TQListView::Manual);
 
-    listview->restoreLayout(&partConfig, TQString::fromLatin1("HistoryListView"));
+    listview->restoreLayout(&partConfig, TQString::tqfromLatin1("HistoryListView"));
 }
 
 
@@ -254,7 +254,7 @@ HistoryDialog::~HistoryDialog()
 {
     saveDialogSize(partConfig, "HistoryDialog");
 
-    listview->saveLayout(&partConfig, TQString::fromLatin1("HistoryListView"));
+    listview->saveLayout(&partConfig, TQString::tqfromLatin1("HistoryListView"));
 }
 
 

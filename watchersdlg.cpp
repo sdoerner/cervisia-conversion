@@ -30,14 +30,14 @@
 #include "progressdlg.h"
 
 
-WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* parent, const char* name)
-    : KDialogBase(parent, name, false, TQString::null,
+WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* tqparent, const char* name)
+    : KDialogBase(tqparent, name, false, TQString(),
                   Close, ButtonCode(0), true)
     , partConfig(cfg)
 {
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     table = new TQTable(mainWidget, "watchersTable");
     table->setNumCols(5);
@@ -57,9 +57,9 @@ WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* parent, const char* name)
     header->setLabel(3, i18n("Unedit"));
     header->setLabel(4, i18n("Commit"));
     
-    layout->addWidget(table, 1);
+    tqlayout->addWidget(table, 1);
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "WatchersDialog");
     resize(size);
@@ -103,15 +103,15 @@ bool WatchersDialog::parseWatchers(CvsService_stub* cvsService,
         table->setText(numRows, 1, list[1]);
 
         TQCheckTableItem* item = new TQCheckTableItem(table, "");
-        item->setChecked(list.contains("edit"));
+        item->setChecked(list.tqcontains("edit"));
         table->setItem(numRows, 2, item);
 
         item = new TQCheckTableItem(table, "");
-        item->setChecked(list.contains("unedit"));
+        item->setChecked(list.tqcontains("unedit"));
         table->setItem(numRows, 3, item);
 
         item = new TQCheckTableItem(table, "");
-        item->setChecked(list.contains("commit"));
+        item->setChecked(list.tqcontains("commit"));
         table->setItem(numRows, 4, item);
 
         ++numRows;

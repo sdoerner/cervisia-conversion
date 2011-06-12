@@ -33,7 +33,7 @@ namespace Cervisia
 class ResolveEditorDialog : public KDialogBase
 {
 public:
-    explicit ResolveEditorDialog(KConfig& cfg, TQWidget* parent=0, const char* name=0);
+    explicit ResolveEditorDialog(KConfig& cfg, TQWidget* tqparent=0, const char* name=0);
     virtual ~ResolveEditorDialog();
 
     void setContent(const TQString& text);

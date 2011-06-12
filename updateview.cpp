@@ -35,11 +35,11 @@
 
 
 using Cervisia::Entry;
-using Cervisia::EntryStatus;
+using Cervisia::EntrytqStatus;
 
 
-UpdateView::UpdateView(KConfig& partConfig, TQWidget *parent, const char *name)
-    : KListView(parent, name),
+UpdateView::UpdateView(KConfig& partConfig, TQWidget *tqparent, const char *name)
+    : KListView(tqparent, name),
       m_partConfig(partConfig),
       m_unfoldingTree(false)
 {
@@ -49,7 +49,7 @@ UpdateView::UpdateView(KConfig& partConfig, TQWidget *parent, const char *name)
 
     addColumn(i18n("File Name"), 280);
     addColumn(i18n("File Type"), 180);
-    addColumn(i18n("Status"), 90);
+    addColumn(i18n("tqStatus"), 90);
     addColumn(i18n("Revision"), 70);
     addColumn(i18n("Tag/Date"), 90);
     addColumn(i18n("Timestamp"), 120);
@@ -65,13 +65,13 @@ UpdateView::UpdateView(KConfig& partConfig, TQWidget *parent, const char *name)
     for (int col = 0; col < columns(); ++col)
         setColumnWidthMode(col, TQListView::Manual);
 
-    restoreLayout(&m_partConfig, TQString::fromLatin1("UpdateView"));
+    restoreLayout(&m_partConfig, TQString::tqfromLatin1("UpdateView"));
 }
 
 
 UpdateView::~UpdateView()
 {
-    saveLayout(&m_partConfig, TQString::fromLatin1("UpdateView"));
+    saveLayout(&m_partConfig, TQString::tqfromLatin1("UpdateView"));
 }
 
 
@@ -191,9 +191,9 @@ bool UpdateView::isUnfoldingTree() const
 void UpdateView::replaceItem(TQListViewItem* oldItem,
                              TQListViewItem* newItem)
 {
-    const int index(relevantSelection.find(oldItem));
+    const int index(relevantSelection.tqfind(oldItem));
     if (index >= 0)
-        relevantSelection.replace(index, newItem);
+        relevantSelection.tqreplace(index, newItem);
 }
 
 
@@ -208,8 +208,8 @@ void UpdateView::unfoldSelectedFolders()
 
     // setup name of selected folder
     TQString selectedItem = selection.first();
-    if( selectedItem.contains('/') )
-        selectedItem.remove(0, selectedItem.findRev('/')+1);
+    if( selectedItem.tqcontains('/') )
+        selectedItem.remove(0, selectedItem.tqfindRev('/')+1);
 
     // avoid flicker
     const bool updatesEnabled = isUpdatesEnabled();
@@ -234,7 +234,7 @@ void UpdateView::unfoldSelectedFolders()
                     dirItem->maybeScanDir(recursive);
 
                     // scanning can take some time so keep the gui alive
-                    qApp->processEvents();
+                    tqApp->processEvents();
                 }
 
                 dirItem->setOpen(!isUnfolded);
@@ -254,7 +254,7 @@ void UpdateView::unfoldSelectedFolders()
                     dirItem->maybeScanDir(recursive);
 
                     // scanning can take some time so keep the gui alive
-                    qApp->processEvents();
+                    tqApp->processEvents();
                 }
 
                 dirItem->setOpen(!isUnfolded);
@@ -305,7 +305,7 @@ void UpdateView::unfoldTree()
                 dirItem->maybeScanDir(recursive);
 
                 // scanning can take some time so keep the gui alive
-                qApp->processEvents();
+                tqApp->processEvents();
             }
 
             dirItem->setOpen(true);
@@ -333,7 +333,7 @@ void UpdateView::foldTree()
     while (TQListViewItem* item = it.current())
     {
         // don't close the top level directory
-        if (isDirItem(item) && item->parent())
+        if (isDirItem(item) && item->tqparent())
             item->setOpen(false);
 
         ++it;
@@ -500,8 +500,8 @@ void UpdateView::syncSelection()
         UpdateDirItem* dirItem(0);
         if (isDirItem(item))
             dirItem = static_cast<UpdateDirItem*>(item);
-        else if (TQListViewItem* parentItem = item->parent())
-            dirItem = static_cast<UpdateDirItem*>(parentItem);
+        else if (TQListViewItem* tqparentItem = item->tqparent())
+            dirItem = static_cast<UpdateDirItem*>(tqparentItem);
 
         if (dirItem)
             setDirItems.insert(dirItem);
@@ -518,7 +518,7 @@ void UpdateView::syncSelection()
         dirItem->syncWithDirectory();
         dirItem->syncWithEntries();
 
-        qApp->processEvents();
+        tqApp->processEvents();
     }
 
     TQApplication::restoreOverrideCursor();
@@ -548,7 +548,7 @@ void UpdateView::updateColors()
 
 
 /**
- * Process one line from the output of 'cvs update'. If parseAsStatus
+ * Process one line from the output of 'cvs update'. If parseAstqStatus
  * is true, it is assumed that the output is from a command
  * 'cvs update -n', i.e. cvs actually changes no files.
  */
@@ -556,7 +556,7 @@ void UpdateView::processUpdateLine(TQString str)
 {
     if (str.length() > 2 && str[1] == ' ')
     {
-        EntryStatus status(Cervisia::Unknown);
+        EntrytqStatus status(Cervisia::Unknown);
         switch (str[0].latin1())
         {
         case 'C':
@@ -586,8 +586,8 @@ void UpdateView::processUpdateLine(TQString str)
         updateItem(str.mid(2), status, false);
     }
 
-    const TQString removedFileStart(TQString::fromLatin1("cvs server: "));
-    const TQString removedFileEnd(TQString::fromLatin1(" is no longer in the repository"));
+    const TQString removedFileStart(TQString::tqfromLatin1("cvs server: "));
+    const TQString removedFileEnd(TQString::tqfromLatin1(" is no longer in the repository"));
     if (str.startsWith(removedFileStart) && str.endsWith(removedFileEnd))
     {
     }
@@ -600,7 +600,7 @@ void UpdateView::processUpdateLine(TQString str)
 }
 
 
-void UpdateView::updateItem(const TQString& filePath, EntryStatus status, bool isdir)
+void UpdateView::updateItem(const TQString& filePath, EntrytqStatus status, bool isdir)
 {
     if (isdir && filePath == TQChar('.'))
         return;

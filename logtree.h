@@ -41,12 +41,13 @@ typedef TQPtrList<LogTreeItem> LogTreeItemList;
 typedef TQPtrList<LogTreeConnection> LogTreeConnectionList;
 
 
-class LogTreeView : public QTable
+class LogTreeView : public TQTable
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    explicit LogTreeView( TQWidget *parent=0, const char *name=0 );
+    explicit LogTreeView( TQWidget *tqparent=0, const char *name=0 );
 
     void addRevision(const Cervisia::LogInfo& logInfo);
     void setSelectedPair(TQString selectionA, TQString selectionB);
@@ -55,7 +56,7 @@ public:
     virtual void paintCell(TQPainter *p, int row, int col, const TQRect& cr,
                            bool selected, const TQColorGroup& cg);
 
-    virtual TQSize sizeHint() const;
+    virtual TQSize tqsizeHint() const;
     
     virtual TQString text(int row, int col) const;
 

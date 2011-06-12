@@ -54,8 +54,8 @@ const int DiffView::BORDER = 7;
 
 
 DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-                    TQWidget *parent, const char *name )
-    : QtTableView(parent, name, WRepaintNoErase)
+                    TQWidget *tqparent, const char *name )
+    : TQtTableView(tqparent, name, WRepaintNoErase)
     , partConfig(cfg)
 {
     setNumRows(0);
@@ -92,7 +92,7 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
 
 void DiffView::setFont(const TQFont &font)
 {
-    QtTableView::setFont(font);
+    TQtTableView::setFont(font);
     TQFontMetrics fm(font);
     setCellHeight(fm.lineSpacing());
 }
@@ -118,14 +118,14 @@ void DiffView::setPartner(DiffView *other)
 void DiffView::vertPositionChanged(int val)
 {
     if (partner)
-        partner->setYOffset(QMIN(val,partner->maxYOffset()));
+        partner->setYOffset(TQMIN(val,partner->maxYOffset()));
 }
 
 
 void DiffView::horzPositionChanged(int val)
 {
     if (partner)
-        partner->setXOffset(QMIN(val,partner->maxXOffset()));
+        partner->setXOffset(TQMIN(val,partner->maxXOffset()));
 }
 
 
@@ -154,7 +154,7 @@ void DiffView::setCenterOffset(int offset)
     if (!rowIsVisible(offset))
     {
         int visiblerows = viewHeight()/cellHeight(0);
-        setTopCell( QMAX(0, offset - visiblerows/2) );
+        setTopCell( TQMAX(0, offset - visiblerows/2) );
     }
 }
 
@@ -173,12 +173,12 @@ void DiffView::addLine(const TQString &line, DiffType type, int no)
     // For some fonts, e.g. "Clean", is fm.maxWidth() greater than
     // fmbold.maxWidth().
     TQString copy(line);
-    const int numTabs = copy.contains('\t', false);
-    copy.replace( TQRegExp("\t"), "");
+    const int numTabs = copy.tqcontains('\t', false);
+    copy.tqreplace( TQRegExp("\t"), "");
 
-    const int tabSize   = m_tabWidth * QMAX(fm.maxWidth(), fmbold.maxWidth());
-    const int copyWidth = QMAX(fm.width(copy), fmbold.width(copy));
-    textwidth = QMAX(textwidth, copyWidth + numTabs * tabSize);
+    const int tabSize   = m_tabWidth * TQMAX(fm.maxWidth(), fmbold.maxWidth());
+    const int copyWidth = TQMAX(fm.width(copy), fmbold.width(copy));
+    textwidth = TQMAX(textwidth, copyWidth + numTabs * tabSize);
 
     DiffViewItem *item = new DiffViewItem;
     item->line = line;
@@ -211,7 +211,7 @@ int DiffView::findLine(int lineno)
     int offset;
     DiffViewItem tmp;
     tmp.no = lineno;
-    if ( (offset = items.find(&tmp)) == -1)
+    if ( (offset = items.tqfind(&tmp)) == -1)
     {
         kdDebug(8050) << "Internal Error: Line " << lineno << " not found" << endl;
         return -1;
@@ -279,7 +279,7 @@ int DiffView::cellWidth(int col)
     else if (marker && (col == 0 || col == 1))
     {
         TQFontMetrics fm( fontMetrics() );
-        return QMAX(QMAX( fm.width(i18n("Delete")),
+        return TQMAX(TQMAX( fm.width(i18n("Delete")),
                           fm.width(i18n("Insert"))),
                     fm.width(i18n("Change")))+2*BORDER;
     }
@@ -288,12 +288,12 @@ int DiffView::cellWidth(int col)
         int rest = (linenos || marker)? cellWidth(0) : 0;
         if (linenos && marker)
             rest += cellWidth(1);
-        return QMAX(textwidth, viewWidth()-rest);
+        return TQMAX(textwidth, viewWidth()-rest);
     }
 }
 
 
-TQSize DiffView::sizeHint() const
+TQSize DiffView::tqsizeHint() const
 {
     TQFontMetrics fm(font());
     return TQSize( 4*fm.width("0123456789"), fm.lineSpacing()*8 );
@@ -351,7 +351,7 @@ void DiffView::paintCell(TQPainter *p, int row, int col)
         innerborder = BORDER;
         str = (item->type==Change)? i18n("Change")
             : (item->type==Insert)? i18n("Insert")
-            : (item->type==Delete)? i18n("Delete") : TQString::null;
+            : (item->type==Delete)? i18n("Delete") : TQString();
     }
     else
     {
@@ -388,10 +388,10 @@ void DiffView::wheelEvent(TQWheelEvent *e)
 }
 
 
-DiffZoomWidget::DiffZoomWidget(KConfig& cfg, TQWidget *parent, const char *name)
-    : TQFrame(parent, name)
+DiffZoomWidget::DiffZoomWidget(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : TQFrame(tqparent, name)
 {
-    setSizePolicy( TQSizePolicy( TQSizePolicy::Fixed, TQSizePolicy::Minimum ) );
+    tqsetSizePolicy( TQSizePolicy( TQSizePolicy::Fixed, TQSizePolicy::Minimum ) );
 
     cfg.setGroup("Colors");
     TQColor defaultColor=TQColor(237, 190, 190);
@@ -415,9 +415,9 @@ void DiffZoomWidget::setDiffView(DiffView *view)
 }
 
 
-TQSize DiffZoomWidget::sizeHint() const
+TQSize DiffZoomWidget::tqsizeHint() const
 {
-    return TQSize(25, style().pixelMetric(TQStyle::PM_ScrollBarExtent, this));
+    return TQSize(25, tqstyle().tqpixelMetric(TQStyle::PM_ScrollBarExtent, this));
 }
 
 
@@ -426,7 +426,7 @@ bool DiffZoomWidget::eventFilter(TQObject *o, TQEvent *e)
     if (e->type() == TQEvent::Show
         || e->type() == TQEvent::Hide
         || e->type() == TQEvent::Resize)
-        repaint();
+        tqrepaint();
 
     return TQFrame::eventFilter(o, e);
 }
@@ -440,7 +440,7 @@ void DiffZoomWidget::paintEvent(TQPaintEvent *)
 
     // only y and height are important
     const TQRect scrollBarGroove(scrollBar->isVisible()
-                                ? style().querySubControlMetrics(TQStyle::CC_ScrollBar,
+                                ? tqstyle().querySubControlMetrics(TQStyle::CC_ScrollBar,
                                                                  scrollBar,
                                                                  TQStyle::SC_ScrollBarGroove)
                                 : rect());
@@ -460,7 +460,7 @@ void DiffZoomWidget::paintEvent(TQPaintEvent *)
         {
             const char lineType(lineTypes[index]);
 
-            // don't use qRound() to avoid painting outside of the pixmap
+            // don't use tqRound() to avoid painting outside of the pixmap
             // (yPos1 must be lesser than scrollBarGroove.height())
             const int yPos1(static_cast<int>(index * scale));
 
@@ -488,7 +488,7 @@ void DiffZoomWidget::paintEvent(TQPaintEvent *)
 
             if (color.isValid())
             {
-                const int yPos2(qRound(index * scale));
+                const int yPos2(tqRound(index * scale));
                 const int areaHeight((yPos2 != yPos1) ? yPos2 - yPos1 : 1);
 
                 p.fillRect(0, yPos1, pixbuf.width(), areaHeight, TQBrush(color));

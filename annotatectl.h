@@ -33,7 +33,7 @@ public:
     AnnotateController(AnnotateDialog* dialog, CvsService_stub* cvsService);
     ~AnnotateController();
 
-    void showDialog(const TQString& fileName, const TQString& revision = TQString::null);
+    void showDialog(const TQString& fileName, const TQString& revision = TQString());
 
 private:
     struct Private;

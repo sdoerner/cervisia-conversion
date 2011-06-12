@@ -16,7 +16,7 @@ The cvs DCOP service consists of the following three parts:
 
 3. CvsJob     - This class represents a cvs job. You can execute and cancel it,
                 and you can retrieve the output of the cvs client by either
-                connecting to the proper DCOP signals or by using the output()
+                connecting to the proper DCOP Q_SIGNALS or by using the output()
                 method. There are two types of jobs. First the non-concurrent
                 job which has to run alone, like cvs update or import. Second
                 the jobs which can run concurrently like cvs log or annotate.
@@ -45,7 +45,7 @@ How-to use this service in C++ applications:
     // call "cvs log" for cervisiapart.h
     DCOPRef job = cvsService.log("cervisiapart.h");
 
-    // connect to signals to get output
+    // connect to Q_SIGNALS to get output
     connectDCOPSignal(job.app(), job.obj(), "jobExited(bool, int)", [MY SLOT]);
     connectDCOPSignal(job.app(), job.obj(), "receivedStdout(QString)",
                       [MY SLOT]);

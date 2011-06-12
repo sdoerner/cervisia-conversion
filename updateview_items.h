@@ -38,20 +38,20 @@ class Visitor;
 UpdateDirItem* findOrCreateDirItem(const TQString&, UpdateDirItem*);
 
 
-class UpdateItem : public QListViewItem
+class UpdateItem : public TQListViewItem
 {
 public:
 
-    UpdateItem(UpdateView* parent, const Cervisia::Entry& entry)
-        : TQListViewItem(parent), m_entry(entry) {}
-    UpdateItem(UpdateItem* parent, const Cervisia::Entry& entry)
-        : TQListViewItem(parent), m_entry(entry) {}
+    UpdateItem(UpdateView* tqparent, const Cervisia::Entry& entry)
+        : TQListViewItem(tqparent), m_entry(entry) {}
+    UpdateItem(UpdateItem* tqparent, const Cervisia::Entry& entry)
+        : TQListViewItem(tqparent), m_entry(entry) {}
 
     const Cervisia::Entry& entry() const { return m_entry; }
 
     // Returns the path (relative to the repository).
-    // TQString::null for the root item and its (direct) children.
-    // If it's not TQString::null it ends with '/'.
+    // TQString() for the root item and its (direct) tqchildren.
+    // If it's not TQString() it ends with '/'.
     TQString dirPath() const;
 
     // Returns the file name, including the path (relative to the repository)
@@ -73,12 +73,12 @@ public:
 
     enum { Name };
 
-    UpdateDirItem(UpdateView* parent, const Cervisia::Entry& entry);
-    UpdateDirItem(UpdateDirItem* parent, const Cervisia::Entry& entry);
+    UpdateDirItem(UpdateView* tqparent, const Cervisia::Entry& entry);
+    UpdateDirItem(UpdateDirItem* tqparent, const Cervisia::Entry& entry);
 
     void syncWithDirectory();
     void syncWithEntries();
-    void updateChildItem(const TQString& name, Cervisia::EntryStatus status, bool isdir);
+    void updateChildItem(const TQString& name, Cervisia::EntrytqStatus status, bool isdir);
     void updateEntriesItem(const Cervisia::Entry& entry, bool isBinary);
 
     bool wasScanned() const { return m_opened; }
@@ -119,9 +119,9 @@ class UpdateFileItem : public UpdateItem
 {
 public:
 
-    enum { Name, MimeType, Status, Revision, TagOrDate, Timestamp };
+    enum { Name, MimeType, tqStatus, Revision, TagOrDate, Timestamp };
 
-    UpdateFileItem(UpdateDirItem* parent, const Cervisia::Entry& entry);
+    UpdateFileItem(UpdateDirItem* tqparent, const Cervisia::Entry& entry);
 
     bool undefinedState() const
     { return m_undefined; }
@@ -132,7 +132,7 @@ public:
                            int col, int width, int align);
     virtual int rtti() const { return RTTI; }
 
-    void setStatus(Cervisia::EntryStatus status);
+    void settqStatus(Cervisia::EntrytqStatus status);
     void setRevTag(const TQString& rev, const TQString& tag);
     void setDate(const TQDateTime& date);
     void setUndefinedState(bool b)

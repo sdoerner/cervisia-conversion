@@ -35,12 +35,13 @@ class KURLRequester;
 class AdvancedPage;
 
 
-class FontButton : public QPushButton
+class FontButton : public TQPushButton
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    FontButton( const TQString &text, TQWidget *parent=0, const char *name=0 );
+    FontButton( const TQString &text, TQWidget *tqparent=0, const char *name=0 );
 
 private slots:
     void chooseFont();
@@ -50,9 +51,10 @@ private slots:
 class SettingsDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    SettingsDialog( KConfig *conf, TQWidget *parent=0, const char *name=0 );
+    SettingsDialog( KConfig *conf, TQWidget *tqparent=0, const char *name=0 );
     virtual ~SettingsDialog();
 
 protected slots:

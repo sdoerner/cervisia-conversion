@@ -58,7 +58,7 @@ struct TagInfo
         Tag      = 1 << 2
     };
 
-    explicit TagInfo(const TQString& name = TQString::null, Type type = Tag);
+    explicit TagInfo(const TQString& name = TQString(), Type type = Tag);
 
     /**
      * @param prefixWithType prefix the string with the type of the tag

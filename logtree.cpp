@@ -59,8 +59,8 @@ public:
 };
 
 
-LogTreeView::LogTreeView(TQWidget *parent, const char *name)
-    : TQTable(parent, name)
+LogTreeView::LogTreeView(TQWidget *tqparent, const char *name)
+    : TQTable(tqparent, name)
 {
     if (!static_initialized)
     {
@@ -82,7 +82,7 @@ LogTreeView::LogTreeView(TQWidget *parent, const char *name)
     setLeftMargin(0);
     setFrameStyle( TQFrame::WinPanel | TQFrame::Sunken );
     setBackgroundMode(PaletteBase);
-    setFocusPolicy(NoFocus);
+    setFocusPolicy(TQ_NoFocus);
 
     currentRow = -1;
     currentCol = -1;
@@ -105,8 +105,8 @@ void LogTreeView::addRevision(const Cervisia::LogInfo& logInfo)
 
     // find branch
     int pos1, pos2;
-    if ((pos2 = rev.findRev('.')) > 0 &&
-        (pos1 = rev.findRev('.', pos2-1)) > 0)
+    if ((pos2 = rev.tqfindRev('.')) > 0 &&
+        (pos1 = rev.tqfindRev('.', pos2-1)) > 0)
     {
         // e. g. for rev = 1.1.2.3 we have
         // branchrev = 1.1.2, branchpoint = 1.1
@@ -243,13 +243,13 @@ void LogTreeView::setSelectedPair(TQString selectionA, TQString selectionB)
         if (oldstate != newstate)
         {
             it.current()->selected = newstate;
-            repaint(false);
+            tqrepaint(false);
         }
     }
 }
 
 
-TQSize LogTreeView::sizeHint() const
+TQSize LogTreeView::tqsizeHint() const
 {
     return TQSize(2 * static_width, 3 * static_height);
 }
@@ -433,8 +433,8 @@ void LogTreeView::paintRevisionCell(TQPainter *p,
 
 void LogTreeView::contentsMousePressEvent(TQMouseEvent *e)
 {
-    if ( e->button() == MidButton ||
-         e->button() == LeftButton)
+    if ( e->button() == Qt::MidButton ||
+         e->button() == Qt::LeftButton)
     {
         int row = rowAt( e->pos().y() );
         int col = columnAt( e->pos().x() );
@@ -446,8 +446,8 @@ void LogTreeView::contentsMousePressEvent(TQMouseEvent *e)
             {
                 // Change selection for revision B if the middle mouse button or
                 // the left mouse button with the control key was pressed
-                bool changeRevB = (e->button() == MidButton) ||
-                                  (e->button() == LeftButton &&
+                bool changeRevB = (e->button() == Qt::MidButton) ||
+                                  (e->button() == Qt::LeftButton &&
                                    e->state() & ControlButton);
 
                 emit revisionClicked(it.current()->m_logInfo.m_revision, changeRevB);

@@ -33,9 +33,10 @@ namespace Cervisia
 class LogMessageEdit : public KTextEdit, public KCompletionBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    explicit LogMessageEdit(TQWidget* parent);
+    explicit LogMessageEdit(TQWidget* tqparent);
 
     virtual void setCompletedText(const TQString& match);
     virtual void setCompletedItems(const TQStringList& items);

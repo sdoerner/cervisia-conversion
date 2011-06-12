@@ -33,9 +33,10 @@ class KLineEdit;
 class AddRepositoryDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    AddRepositoryDialog(KConfig& cfg, const TQString& repo, TQWidget* parent = 0,
+    AddRepositoryDialog(KConfig& cfg, const TQString& repo, TQWidget* tqparent = 0,
                          const char* name = 0);
     virtual ~AddRepositoryDialog();
 

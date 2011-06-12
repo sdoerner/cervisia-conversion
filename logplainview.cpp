@@ -31,9 +31,9 @@
 using namespace Cervisia;
 
 
-LogPlainView::LogPlainView(TQWidget* parent, const char* name)
-    : KTextBrowser(parent, name)
-    , m_find(0)
+LogPlainView::LogPlainView(TQWidget* tqparent, const char* name)
+    : KTextBrowser(tqparent, name)
+    , m_tqfind(0)
     , m_findPos(0)
 {
     setNotifyClick(false);
@@ -42,7 +42,7 @@ LogPlainView::LogPlainView(TQWidget* parent, const char* name)
 
 LogPlainView::~LogPlainView()
 {
-    delete m_find; m_find = 0;
+    delete m_tqfind; m_tqfind = 0;
 }
 
 
@@ -53,7 +53,7 @@ void LogPlainView::addRevision(const LogInfo& logInfo)
     // assemble revision information lines
     TQString logEntry;
 
-    logEntry += "<b>" + i18n("revision %1").arg(TQStyleSheet::escape(logInfo.m_revision)) +
+    logEntry += "<b>" + i18n("revision %1").tqarg(TQStyleSheet::escape(logInfo.m_revision)) +
                 "</b>";
     logEntry += " &nbsp;[<a href=\"revA#" + TQStyleSheet::escape(logInfo.m_revision) + "\">" +
                 i18n("Select for revision A") +
@@ -62,8 +62,8 @@ void LogPlainView::addRevision(const LogInfo& logInfo)
                 i18n("Select for revision B") +
                 "</a>]<br>";
     logEntry += "<i>" +
-                i18n("date: %1; author: %2").arg(TQStyleSheet::escape(logInfo.dateTimeToString()))
-                                            .arg(TQStyleSheet::escape(logInfo.m_author)) +
+                i18n("date: %1; author: %2").tqarg(TQStyleSheet::escape(logInfo.dateTimeToString()))
+                                            .tqarg(TQStyleSheet::escape(logInfo.m_author)) +
                 "</i>";
 
     append(logEntry);
@@ -107,11 +107,11 @@ void LogPlainView::addRevision(const LogInfo& logInfo)
 
 void LogPlainView::searchText(int options, const TQString& pattern)
 {
-    m_find = new KFind(pattern, options, this);
+    m_tqfind = new KFind(pattern, options, this);
 
-    connect(m_find, TQT_SIGNAL(highlight(const TQString&, int, int)),
+    connect(m_tqfind, TQT_SIGNAL(highlight(const TQString&, int, int)),
             this, TQT_SLOT(searchHighlight(const TQString&, int, int)));
-    connect(m_find, TQT_SIGNAL(findNext()),
+    connect(m_tqfind, TQT_SIGNAL(findNext()),
            this, TQT_SLOT(findNext()));
 
     m_findPos = 0;
@@ -140,24 +140,24 @@ void LogPlainView::findNext()
 
     while( res == KFind::NoMatch && m_findPos < paragraphs() && m_findPos >= 0 )
     {
-        if( m_find->needData() )
+        if( m_tqfind->needData() )
         {
             TQString richText = text(m_findPos);
 
-            // replace <br/> with '\n'
-            richText.replace(breakLineTag, "\n");
+            // tqreplace <br/> with '\n'
+            richText.tqreplace(breakLineTag, "\n");
 
             // remove html tags from text
-            richText.replace(htmlTags, "");
+            richText.tqreplace(htmlTags, "");
 
-            m_find->setData(richText);
+            m_tqfind->setData(richText);
         }
 
-        res = m_find->find();
+        res = m_tqfind->find();
 
         if( res == KFind::NoMatch )
         {
-            if( m_find->options() & KFindDialog::FindBackwards )
+            if( m_tqfind->options() & KFindDialog::FindBackwards )
                 --m_findPos;
             else
                 ++m_findPos;
@@ -167,15 +167,15 @@ void LogPlainView::findNext()
     // reached the end?
     if( res == KFind::NoMatch )
     {
-        if( m_find->shouldRestart() )
+        if( m_tqfind->shouldRestart() )
         {
             m_findPos = 0;
             findNext();
         }
         else
         {
-            delete m_find;
-            m_find = 0;
+            delete m_tqfind;
+            m_tqfind = 0;
         }
     }
 }

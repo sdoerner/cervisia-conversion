@@ -32,9 +32,10 @@ class ProgressDialog : public KDialogBase, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
+//    TQ_OBJECT
 
 public:
-    ProgressDialog(TQWidget* parent, const TQString& heading, const DCOPRef& job,
+    ProgressDialog(TQWidget* tqparent, const TQString& heading, const DCOPRef& job,
                    const TQString& errorIndicator, const TQString& caption = "");
     ~ProgressDialog();
 

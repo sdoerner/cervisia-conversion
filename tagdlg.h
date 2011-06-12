@@ -36,12 +36,13 @@ namespace Cervisia
 class TagDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     enum ActionType { Create, Delete };
     
     TagDialog( ActionType action, CvsService_stub* service,
-               TQWidget *parent=0, const char *name=0 );
+               TQWidget *tqparent=0, const char *name=0 );
 
     bool branchTag() const;
     bool forceTag() const;

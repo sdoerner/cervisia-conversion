@@ -40,7 +40,7 @@
 class RepositoryListItem : public KListViewItem
 {
 public:
-    RepositoryListItem(KListView* parent, const TQString& repo, bool loggedin);
+    RepositoryListItem(KListView* tqparent, const TQString& repo, bool loggedin);
     
     void setRsh(const TQString& rsh);
     void setServer(const TQString& server) { m_server = server; }
@@ -56,7 +56,7 @@ public:
     {
         TQString str = text(1);
         return (str.startsWith("ext (") ? str.mid(5, str.length()-6) 
-                                        : TQString::null);
+                                        : TQString());
     }
     TQString server() const { return m_server; }
     int compression() const
@@ -85,9 +85,9 @@ static bool LoginNeeded(const TQString& repository)
 }
 
 
-RepositoryListItem::RepositoryListItem(KListView* parent, const TQString& repo, 
+RepositoryListItem::RepositoryListItem(KListView* tqparent, const TQString& repo, 
                                        bool loggedin)
-    : KListViewItem(parent)
+    : KListViewItem(tqparent)
     , m_isLoggedIn(loggedin)
 {
     setText(0, repo);
@@ -105,7 +105,7 @@ void RepositoryListItem::setRsh(const TQString& rsh)
         method = "pserver";
     else if( repo.startsWith(":sspi:") )
         method = "sspi";
-    else if( repo.contains(':') )
+    else if( repo.tqcontains(':') )
     {
         method = "ext";
         if( !rsh.isEmpty() )
@@ -141,20 +141,20 @@ void RepositoryListItem::setIsLoggedIn(bool isLoggedIn)
 
 void RepositoryListItem::changeLoginStatusColumn()
 {
-    TQString loginStatus;
+    TQString logintqStatus;
     
     if( LoginNeeded(repository()) )
-        loginStatus = m_isLoggedIn ? i18n("Logged in") : i18n("Not logged in");
+        logintqStatus = m_isLoggedIn ? i18n("Logged in") : i18n("Not logged in");
     else
-        loginStatus = i18n("No login required");
+        logintqStatus = i18n("No login required");
         
-    setText(3, loginStatus);
+    setText(3, logintqStatus);
 }
 
 
 RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                                   TQWidget* parent, const char* name)
-    : KDialogBase(parent, name, true, i18n("Configure Access to Repositories"),
+                                   TQWidget* tqparent, const char* name)
+    : KDialogBase(tqparent, name, true, i18n("Configure Access to Repositories"),
                   Ok | Cancel | Help, Ok, true)
     , m_partConfig(cfg)
     , m_cvsService(cvsService)
@@ -170,7 +170,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     m_repoList->addColumn(i18n("Repository"));
     m_repoList->addColumn(i18n("Method"));
     m_repoList->addColumn(i18n("Compression"));
-    m_repoList->addColumn(i18n("Status"));
+    m_repoList->addColumn(i18n("tqStatus"));
     m_repoList->setFocus();
 
     connect(m_repoList, TQT_SIGNAL(doubleClicked(TQListViewItem*)),
@@ -178,7 +178,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     connect(m_repoList, TQT_SIGNAL(selectionChanged()),
             this,       TQT_SLOT(slotSelectionChanged()));
 
-    KButtonBox* actionbox = new KButtonBox(mainWidget, KButtonBox::Vertical);
+    KButtonBox* actionbox = new KButtonBox(mainWidget, Qt::Vertical);
     TQPushButton* addbutton = actionbox->addButton(i18n("&Add..."));
     m_modifyButton = actionbox->addButton(i18n("&Modify..."));
     m_removeButton = actionbox->addButton(i18n("&Remove"));
@@ -186,7 +186,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     m_loginButton  = actionbox->addButton(i18n("Login..."));
     m_logoutButton = actionbox->addButton(i18n("Logout"));
     actionbox->addStretch();
-    actionbox->layout();
+    actionbox->tqlayout();
     hbox->addWidget(actionbox, 0);
 
     m_loginButton->setEnabled(false);
@@ -222,7 +222,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
 
     setHelp("accessing-repository");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(m_partConfig, "RepositoryDialog");
     resize(size);
@@ -231,7 +231,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     for (int i = 0; i < m_repoList->columns(); ++i)
         m_repoList->setColumnWidthMode(i, TQListView::Manual);
 
-    m_repoList->restoreLayout(&m_partConfig, TQString::fromLatin1("RepositoryListView"));
+    m_repoList->restoreLayout(&m_partConfig, TQString::tqfromLatin1("RepositoryListView"));
 }
 
 
@@ -239,7 +239,7 @@ RepositoryDialog::~RepositoryDialog()
 {
     saveDialogSize(m_partConfig, "RepositoryDialog");
 
-    m_repoList->saveLayout(&m_partConfig, TQString::fromLatin1("RepositoryListView"));
+    m_repoList->saveLayout(&m_partConfig, TQString::tqfromLatin1("RepositoryListView"));
 
     delete m_serviceConfig;
 }
@@ -274,7 +274,7 @@ void RepositoryDialog::readConfigFile()
         RepositoryListItem* ritem = static_cast<RepositoryListItem*>(item);
 
         // read entries from cvs DCOP service configuration
-        m_serviceConfig->setGroup(TQString::fromLatin1("Repository-") +
+        m_serviceConfig->setGroup(TQString::tqfromLatin1("Repository-") +
                                   ritem->repository());
 
         TQString rsh       = m_serviceConfig->readEntry("rsh", TQString());
@@ -319,7 +319,7 @@ void RepositoryDialog::slotOk()
 
 void RepositoryDialog::slotAddClicked()
 {
-    AddRepositoryDialog dlg(m_partConfig, TQString::null, this);
+    AddRepositoryDialog dlg(m_partConfig, TQString(), this);
     // default compression level
     dlg.setCompression(-1);
     if( dlg.exec() )
@@ -490,7 +490,7 @@ void RepositoryDialog::slotSelectionChanged()
 void RepositoryDialog::writeRepositoryData(RepositoryListItem* item)
 {
     // write entries to cvs DCOP service configuration
-    m_serviceConfig->setGroup(TQString::fromLatin1("Repository-") +
+    m_serviceConfig->setGroup(TQString::tqfromLatin1("Repository-") +
                               item->repository());
 
     m_serviceConfig->writeEntry("rsh", item->rsh());
@@ -501,4 +501,4 @@ void RepositoryDialog::writeRepositoryData(RepositoryListItem* item)
 
 #include "repositorydlg.moc"
 
-// kate: space-indent on; indent-width 4; replace-tabs on;
+// kate: space-indent on; indent-width 4; tqreplace-tabs on;

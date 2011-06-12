@@ -36,11 +36,11 @@
 #include "diffdlg.h"
 
 
-class CommitListItem : public QCheckListItem
+class CommitListItem : public TQCheckListItem
 {
 public:
-    CommitListItem(TQListView* parent, const TQString& text, const TQString fileName)
-        : TQCheckListItem(parent, text, TQCheckListItem::CheckBox)
+    CommitListItem(TQListView* tqparent, const TQString& text, const TQString fileName)
+        : TQCheckListItem(tqparent, text, TQCheckListItem::CheckBox)
         , m_fileName(fileName)
     {
     }
@@ -53,18 +53,18 @@ private:
 
 
 CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
-                           TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, true, i18n("CVS Commit"),
+                           TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, true, i18n("CVS Commit"),
                   Ok | Cancel | Help | User1, Ok, true)
     , partConfig(cfg)
     , cvsService(service)
 {
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     TQLabel *textlabel = new TQLabel( i18n("Commit the following &files:"), mainWidget );
-    layout->addWidget(textlabel);
+    tqlayout->addWidget(textlabel);
 
     m_fileList = new KListView(mainWidget);
     m_fileList->addColumn("");
@@ -75,30 +75,30 @@ CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
              this, TQT_SLOT(fileSelected(TQListViewItem*)));
     connect( m_fileList, TQT_SIGNAL(selectionChanged()),
              this, TQT_SLOT(fileHighlighted()) );
-    layout->addWidget(m_fileList, 5);
+    tqlayout->addWidget(m_fileList, 5);
 
     TQLabel *archivelabel = new TQLabel(i18n("Older &messages:"), mainWidget);
-    layout->addWidget(archivelabel);
+    tqlayout->addWidget(archivelabel);
 
     combo = new TQComboBox(mainWidget);
     archivelabel->setBuddy(combo);
     connect( combo, TQT_SIGNAL(activated(int)), this, TQT_SLOT(comboActivated(int)) );
     // make sure that combobox is smaller than the screen
-    combo->setSizePolicy(TQSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed));
-    layout->addWidget(combo);
+    combo->tqsetSizePolicy(TQSizePolicy(TQSizePolicy::Preferred, TQSizePolicy::Fixed));
+    tqlayout->addWidget(combo);
 
     TQLabel *messagelabel = new TQLabel(i18n("&Log message:"), mainWidget);
-    layout->addWidget(messagelabel);
+    tqlayout->addWidget(messagelabel);
 
     edit = new Cervisia::LogMessageEdit(mainWidget);
     messagelabel->setBuddy(edit);
     edit->setCheckSpellingEnabled(true);
     edit->setFocus();
     edit->setMinimumSize(400, 100);
-    layout->addWidget(edit, 10);
+    tqlayout->addWidget(edit, 10);
 
     m_useTemplateChk = new TQCheckBox(i18n("Use log message &template"), mainWidget);
-    layout->addWidget(m_useTemplateChk);
+    tqlayout->addWidget(m_useTemplateChk);
     connect( m_useTemplateChk, TQT_SIGNAL(clicked()), this, TQT_SLOT(useTemplateClicked()) );
 
     checkForTemplateFile();
@@ -185,7 +185,7 @@ void CommitDialog::setLogHistory(const TQStringList &list)
                 continue;
 
             TQString txt = *it;
-            int index = txt.find('\n', 0);
+            int index = txt.tqfind('\n', 0);
             if ( index != -1 ) // Fetch first line
             {
                 txt = txt.mid(0, index);

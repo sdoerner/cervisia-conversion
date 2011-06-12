@@ -31,7 +31,7 @@ namespace Cervisia
 /**
  * All stati a an entry could have.
  */
-enum EntryStatus
+enum EntrytqStatus
 {
     LocallyModified,
     LocallyAdded,
@@ -51,11 +51,11 @@ enum EntryStatus
 /**
  * The entry status as translated string.
  *
- * @param entryStatus The entry status to translate.
+ * @param entrytqStatus The entry status to translate.
  *
  * @return The translated string.
  */
-TQString toString(EntryStatus entryStatus);
+TQString toString(EntrytqStatus entrytqStatus);
 
 
 } // namespace Cervisia

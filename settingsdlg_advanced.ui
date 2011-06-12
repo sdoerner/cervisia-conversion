@@ -1,10 +1,10 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>AdvancedPage</class>
-<widget class="QWidget">
+<widget class="TQWidget">
     <property name="name">
         <cstring>advancedPage</cstring>
     </property>
-    <property name="geometry">
+    <property name="tqgeometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -26,14 +26,14 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
+            <property name="tqsizeHint">
                 <size>
                     <width>31</width>
                     <height>41</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="TQLabel" row="0" column="0">
             <property name="name">
                 <cstring>timeoutLbl</cstring>
             </property>
@@ -44,7 +44,7 @@
                 <cstring>kcfg_Timeout</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="TQLabel" row="1" column="0">
             <property name="name">
                 <cstring>compressionLbl</cstring>
             </property>
@@ -55,7 +55,7 @@
                 <cstring>kcfg_Compression</cstring>
             </property>
         </widget>
-        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+        <widget class="TQCheckBox" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>kcfg_UseSshAgent</cstring>
             </property>
@@ -87,7 +87,7 @@
         </widget>
     </grid>
 </widget>
-<layoutdefaults spacing="6" margin="0"/>
+<tqlayoutdefaults spacing="6" margin="0"/>
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

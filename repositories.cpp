@@ -59,7 +59,7 @@ static TQStringList readCvsPassFile()
 		{
 		    int pos;
 		    TQString line = stream.readLine();
-		    if ( (pos = line.find(' ')) != -1)
+		    if ( (pos = line.tqfind(' ')) != -1)
 		    {
 			if (line[0] != '/')	// old format
                             list.append(line.left(pos));
@@ -88,7 +88,7 @@ static TQStringList readCvsntPassFile()
         {
             const TQString line(stream.readLine());
 
-            const int pos(line.find("=A"));
+            const int pos(line.tqfind("=A"));
             if (pos >= 0)
                 list.append(line.left(pos));
         }
@@ -117,7 +117,7 @@ TQStringList Repositories::readConfigFile()
 
     // Some people actually use CVSROOT, so we add it here
     char *env;
-    if ( (env = ::getenv("CVSROOT")) != 0 && !list.contains(env))
+    if ( (env = ::getenv("CVSROOT")) != 0 && !list.tqcontains(env))
         list.append(env);
 
     return list;

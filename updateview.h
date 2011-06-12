@@ -35,6 +35,7 @@ class KConfig;
 class UpdateView : public KListView
 {
     Q_OBJECT
+  TQ_OBJECT
     
 public:
 
@@ -42,7 +43,7 @@ public:
                   NoRemoved=4, NoNotInCVS=8 , NoEmptyDirectories = 16 };
     enum Action { Add, Remove, Update, UpdateNoAct, Commit };
     
-    explicit UpdateView(KConfig& partConfig, TQWidget *parent=0, const char *name=0);
+    explicit UpdateView(KConfig& partConfig, TQWidget *tqparent=0, const char *name=0);
 
     virtual ~UpdateView();
 
@@ -85,7 +86,7 @@ private slots:
     void itemExecuted(TQListViewItem *item);
     
 private:
-    void updateItem(const TQString &filename, Cervisia::EntryStatus status, bool isdir);
+    void updateItem(const TQString &filename, Cervisia::EntrytqStatus status, bool isdir);
     void rememberSelection(bool recursive);
     void syncSelection();
     void markUpdated(bool laststage, bool success);

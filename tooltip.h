@@ -34,15 +34,16 @@ namespace Cervisia
  * - no more need to subclass just connect to the signal queryToolTip()
  * - truncate too large tooltip texts.
  */
-class ToolTip : public TQObject, public QToolTip
+class ToolTip : public TQObject, public TQToolTip
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
 
     /**
      * @param widget The widget you want to add tooltips to. It's also used as
-     * parent for the TQObject. So you don't have to free an instance of this
+     * tqparent for the TQObject. So you don't have to free an instance of this
      * class yourself.
      */
     explicit ToolTip(TQWidget* widget);
@@ -54,9 +55,9 @@ signals:
      * wants to display anythink it must set a valid tooltip rectangle and a
      * non empty text.
      *
-     * @param pos The position of the tooltip in the parent widget's coordinate system.
+     * @param pos The position of the tooltip in the tqparent widget's coordinate system.
      *
-     * @param rect The rectangle in the parent widget's coordinate system where the
+     * @param rect The rectangle in the tqparent widget's coordinate system where the
      * tooltip is valid.
      *
      * @param text The tooltip text.

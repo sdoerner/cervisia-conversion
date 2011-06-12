@@ -32,6 +32,7 @@ class KProcess;
 class KDE_EXPORT CvsJob : public TQObject, public DCOPObject
 {
     Q_OBJECT
+//    TQ_OBJECT
     K_DCOP
 
 public:

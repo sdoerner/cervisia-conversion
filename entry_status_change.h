@@ -44,7 +44,7 @@ struct EntryStatusChange
     /**
      * The new status of the entry.
      */
-    EntryStatus m_status;
+    EntrytqStatus m_status;
 };
 
 

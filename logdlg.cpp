@@ -57,12 +57,12 @@
 #include "patchoptiondlg.h"
 
 
-LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, TQString::null,
+LogDialog::LogDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, false, TQString(),
                   Ok | Apply | Close | Help | User1 | User2 | User3, Close, true,
                   KGuiItem(i18n("&Annotate")),
                   KGuiItem(i18n("&Diff"), "vcs_diff"),
-                  KGuiItem(i18n("&Find..."), "find"))
+                  KGuiItem(i18n("&Find..."), "tqfind"))
     , cvsService(0)
     , partConfig(cfg)
 {
@@ -110,7 +110,7 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
     tags.setAutoDelete(true);
 
     TQWidget *mainWidget = new TQWidget(splitter);
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     for (int i = 0; i < 2; ++i)
     {
@@ -118,10 +118,10 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
         {
             TQFrame *frame = new TQFrame(mainWidget);
             frame->setFrameStyle(TQFrame::HLine | TQFrame::Sunken);
-            layout->addWidget(frame);
+            tqlayout->addWidget(frame);
         }
 
-        TQGridLayout *grid = new TQGridLayout(layout);
+        TQGridLayout *grid = new TQGridLayout(tqlayout);
         grid->setRowStretch(0, 0);
         grid->setRowStretch(1, 0);
         grid->setRowStretch(2, 1);
@@ -137,7 +137,7 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
         revbox[i] = new TQLabel(mainWidget);
         revbox[i]->setFrameStyle(TQFrame::Panel | TQFrame::Sunken);
-        grid->addWidget(revbox[i], 0, 1, Qt::AlignVCenter);
+        grid->addWidget(revbox[i], 0, 1, TQt::AlignVCenter);
 
         TQLabel *selectlabel = new TQLabel(i18n("Select by tag:"), mainWidget);
         grid->addWidget(selectlabel, 0, 2);
@@ -166,7 +166,7 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
         commentbox[i] = new TQTextEdit(mainWidget);
         commentbox[i]->setReadOnly(true);
-        commentbox[i]->setTextFormat(Qt::PlainText);
+        commentbox[i]->setTextFormat(TQt::PlainText);
         fm = commentbox[i]->fontMetrics();
         commentbox[i]->setMinimumHeight(2*fm.lineSpacing()+10);
         grid->addMultiCellWidget(commentbox[i], 2, 2, 1, 3);
@@ -199,7 +199,7 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
     setButtonGuiItem(Apply, KGuiItem(i18n("Create Patch...")));
     setHelp("browsinglogs");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "LogDialog");
     resize(size);
@@ -233,7 +233,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
     cvsService = service;
     filename = fileName;
 
-    setCaption(i18n("CVS Log: %1").arg(filename));
+    setCaption(i18n("CVS Log: %1").tqarg(filename));
 
     DCOPRef job = cvsService->log(filename);
     if( !cvsService->ok() )
@@ -262,8 +262,8 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     const TQString tag(strlist[0].simplifyWhiteSpace());
                     TQString branchpoint;
                     int pos1, pos2;
-                    if( (pos2 = rev.findRev('.')) > 0 &&
-                        (pos1 = rev.findRev('.', pos2-1)) > 0 &&
+                    if( (pos2 = rev.tqfindRev('.')) > 0 &&
+                        (pos1 = rev.tqfindRev('.', pos2-1)) > 0 &&
                         rev.mid(pos1+1, pos2-pos1-1) == "0" )
                     {
                         // For a branch tag 2.10.0.6, we want:
@@ -303,7 +303,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     // convert date into ISO format (YYYY-MM-DDTHH:MM:SS)
                     int len = strList[0].length();
                     TQString dateTimeStr = strList[0].right(len-6); // remove 'date: '
-                    dateTimeStr.replace('/', '-');
+                    dateTimeStr.tqreplace('/', '-');
 
                     TQString date = dateTimeStr.section(' ', 0, 0);
                     TQString time = dateTimeStr.section(' ', 1, 1);
@@ -338,8 +338,8 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     TQString branchrev;
                     int pos1, pos2;
                     // 1.60.x.y => revision belongs to branch 1.60.0.x
-                    if( (pos2 = rev.findRev('.')) > 0 &&
-                        (pos1 = rev.findRev('.', pos2-1)) > 0 )
+                    if( (pos2 = rev.tqfindRev('.')) > 0 &&
+                        (pos1 = rev.tqfindRev('.', pos2-1)) > 0 )
                         branchrev = rev.left(pos2);
 
                     // Build Cervisia::TagInfo for logInfo
@@ -380,8 +380,8 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
         }
     }
 
-    tagcombo[0]->insertItem(TQString::null);
-    tagcombo[1]->insertItem(TQString::null);
+    tagcombo[0]->insertItem(TQString());
+    tagcombo[1]->insertItem(TQString());
     TQPtrListIterator<LogDialogTagInfo> it(tags);
     for( ; it.current(); ++it )
     {

@@ -24,15 +24,15 @@
 #include <tqdir.h>
 
 
-class CvsDir : public QDir
+class CvsDir : public TQDir
 {
 public:
     explicit CvsDir(const TQString &path);
 
-    const QFileInfoList *entryInfoList() const;
+    const TQFileInfoList *entryInfoList() const;
 
 private:
-    mutable QFileInfoList entrylist;
+    mutable TQFileInfoList entrylist;
 };
 
 #endif

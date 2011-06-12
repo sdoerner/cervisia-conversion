@@ -14,7 +14,7 @@ B<cervisia>
          S<[ B<--nocrashhandler> ]>
          S<[ B<--waitforwm> ]>
          S<[ B<--style> I<style> ]>
-         S<[ B<--geometry> I<geometry> ]>
+         S<[ B<--tqgeometry> I<tqgeometry> ]>
          S<[ B<--resolve> I<filename> ]>
          S<[ B<--log> I<filename> ]>
          S<[ B<--annotate> I<filename> ]>
@@ -80,9 +80,9 @@ Waits for a WM_NET compatible windowmanager
 
 Sets the application GUI style
 
-=item B<--geometry> I<geometry>
+=item B<--tqgeometry> I<tqgeometry>
 
-Sets the geometry of the main window
+Sets the tqgeometry of the main window
 
 =head1 FILES
 

@@ -97,15 +97,15 @@ bool CvsLoginJob::execute()
         kdDebug(8051) << "process output = " << line << endl;
 
         // retrieve repository from 'Logging in to'-line
-        if( line.contains(LOGIN_PHRASE) )
+        if( line.tqcontains(LOGIN_PHRASE) )
         {
-            repository = line.remove(0, line.find(":pserver:"));
+            repository = line.remove(0, line.tqfind(":pserver:"));
             continue;
         }
 
         // process asks for the password
         // search case insensitive as cvs and cvsnt use different capitalization
-        if( line.contains(PASS_PHRASE, false) )
+        if( line.tqcontains(PASS_PHRASE, false) )
         {
             kdDebug(8051) << "process waits for the password." << endl;
 
@@ -123,7 +123,7 @@ bool CvsLoginJob::execute()
                 m_Proc->writeLine(password);
 
                 // wait for the result
-                while( !line.contains(FAILURE_PHRASE) )
+                while( !line.tqcontains(FAILURE_PHRASE) )
                 {
                     line = m_Proc->readLine();
                     if( line.isNull() )

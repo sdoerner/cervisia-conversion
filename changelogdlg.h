@@ -31,7 +31,7 @@ class KConfig;
 class ChangeLogDialog : public KDialogBase
 {
 public:
-    explicit ChangeLogDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
+    explicit ChangeLogDialog( KConfig& cfg, TQWidget *tqparent=0, const char *name=0 );
 
     virtual ~ChangeLogDialog();
 

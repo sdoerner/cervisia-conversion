@@ -28,12 +28,13 @@
 class KProcess;
 
 
-class SshAgent : public QObject
+class SshAgent : public TQObject
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    SshAgent(TQObject* parent = 0, const char* name = 0);
+    SshAgent(TQObject* tqparent = 0, const char* name = 0);
     ~SshAgent();
 
     bool querySshAgent();

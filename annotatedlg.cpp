@@ -23,8 +23,8 @@
 #include "annotateview.h"
 
 
-AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, TQString::null,
+AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, false, TQString(),
                   Close | Help, Close, true)
     , partConfig(cfg)
 {
@@ -33,7 +33,7 @@ AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
     setHelp("annotate");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "AnnotateDialog");
     resize(size);

@@ -53,10 +53,11 @@ class CervisiaBrowserExtension;
 class CervisiaPart : public KParts::ReadOnlyPart
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    CervisiaPart( TQWidget *parentWidget, const char *widgetName,
-                  TQObject *parent, const char *name=0, const TQStringList& args = TQStringList());
+    CervisiaPart( TQWidget *tqparentWidget, const char *widgetName,
+                  TQObject *tqparent, const char *name=0, const TQStringList& args = TQStringList());
     virtual ~CervisiaPart();
 
     /**
@@ -82,7 +83,7 @@ public slots:
 
     void slotOpen();
     void slotResolve();
-    void slotStatus();
+    void slottqStatus();
     void slotUpdate();
     void slotChangeLog();
     void slotCommit();
@@ -157,7 +158,7 @@ private:
     void writeSettings();
 
     bool openSandbox(const TQString &dirname);
-    void updateSandbox(const TQString &extraopt = TQString::null);
+    void updateSandbox(const TQString &extraopt = TQString());
     void addOrRemove(AddRemoveDialog::ActionType action);
     void addOrRemoveWatch(WatchDialog::ActionType action);
     void createOrDeleteTag(Cervisia::TagDialog::ActionType action);
@@ -200,6 +201,7 @@ typedef KParts::GenericFactory<CervisiaPart> CervisiaFactory;
 class CervisiaBrowserExtension : public KParts::BrowserExtension
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     CervisiaBrowserExtension( CervisiaPart * );

@@ -39,15 +39,16 @@ protected:
 };
 
 
-class DiffView : public QtTableView
+class DiffView : public TQtTableView
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
     enum DiffType { Change, Insert, Delete, Neutral, Unchanged, Separator };
 
     DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-              TQWidget *parent=0, const char *name=0 );
+              TQWidget *tqparent=0, const char *name=0 );
 
     void setPartner(DiffView *other);
 
@@ -73,7 +74,7 @@ public:
 
     virtual void setFont(const TQFont &font);
     virtual int cellWidth(int col);
-    virtual TQSize sizeHint() const;
+    virtual TQSize tqsizeHint() const;
     virtual void paintCell(TQPainter *p, int row, int col);
     virtual void wheelEvent(TQWheelEvent *);
     const TQScrollBar *scrollBar() const
@@ -101,16 +102,17 @@ private:
 };
 
 
-class DiffZoomWidget : public QFrame
+class DiffZoomWidget : public TQFrame
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
-    DiffZoomWidget(KConfig& cfg, TQWidget *parent=0, const char *name=0);
+    DiffZoomWidget(KConfig& cfg, TQWidget *tqparent=0, const char *name=0);
     ~DiffZoomWidget();
 
     void setDiffView(DiffView *view);
-    TQSize sizeHint() const;
+    TQSize tqsizeHint() const;
 
 protected:
     void paintEvent(TQPaintEvent *);

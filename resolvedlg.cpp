@@ -68,11 +68,11 @@ public:
         // already reach end of text on previous call
         if( m_endPos < 0 )
         {
-            m_currentLine = TQString::null;
+            m_currentLine = TQString();
             return m_currentLine;
         }
         
-        m_endPos = m_text.find('\n', m_startPos);
+        m_endPos = m_text.tqfind('\n', m_startPos);
         
         int length    = m_endPos - m_startPos + 1;
         m_currentLine = m_text.mid(m_startPos, length);
@@ -95,8 +95,8 @@ private:
 }
 
 
-ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, TQString::null,
+ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KDialogBase(tqparent, name, false, TQString(),
                   Close | Help | User1 | User2, Close, true,
                   KStdGuiItem::saveAs(), KStdGuiItem::save())
     , markeditem(-1)
@@ -106,27 +106,27 @@ ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout *layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout *tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
-    TQSplitter *vertSplitter = new TQSplitter(TQSplitter::Vertical, mainWidget);
+    TQSplitter *vertSplitter = new TQSplitter(Qt::Vertical, mainWidget);
 
-    TQSplitter *splitter = new TQSplitter(TQSplitter::Horizontal, vertSplitter);
+    TQSplitter *splitter = new TQSplitter(Qt::Horizontal, vertSplitter);
 
     TQWidget *versionALayoutWidget = new TQWidget(splitter);
-    TQBoxLayout *versionAlayout = new TQVBoxLayout(versionALayoutWidget, 5);
+    TQBoxLayout *versionAtqlayout = new TQVBoxLayout(versionALayoutWidget, 5);
 
     TQLabel *revlabel1 = new TQLabel(i18n("Your version (A):"), versionALayoutWidget);
-    versionAlayout->addWidget(revlabel1);
+    versionAtqlayout->addWidget(revlabel1);
     diff1 = new DiffView(cfg, true, false, versionALayoutWidget);
-    versionAlayout->addWidget(diff1, 10);
+    versionAtqlayout->addWidget(diff1, 10);
 
     TQWidget* versionBLayoutWidget = new TQWidget(splitter);
-    TQBoxLayout *versionBlayout = new TQVBoxLayout(versionBLayoutWidget, 5);
+    TQBoxLayout *versionBtqlayout = new TQVBoxLayout(versionBLayoutWidget, 5);
 
     TQLabel *revlabel2 = new TQLabel(i18n("Other version (B):"), versionBLayoutWidget);
-    versionBlayout->addWidget(revlabel2);
+    versionBtqlayout->addWidget(revlabel2);
     diff2 = new DiffView(cfg, true, false, versionBLayoutWidget);
-    versionBlayout->addWidget(diff2, 10);
+    versionBtqlayout->addWidget(diff2, 10);
 
     diff1->setPartner(diff2);
     diff2->setPartner(diff1);
@@ -140,7 +140,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
     merge = new DiffView(cfg, false, false, mergeLayoutWidget);
     mergeLayout->addWidget(merge, 10);
 
-    layout->addWidget(vertSplitter);
+    tqlayout->addWidget(vertSplitter);
 
     abutton = new TQPushButton("&A", mainWidget);
     connect( abutton, TQT_SIGNAL(clicked()), TQT_SLOT(aClicked()) );
@@ -158,7 +158,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
     connect( editbutton, TQT_SIGNAL(clicked()), TQT_SLOT(editClicked()) );
 
     nofnlabel = new TQLabel(mainWidget);
-    nofnlabel->setAlignment(AlignCenter);
+    nofnlabel->tqsetAlignment(AlignCenter);
 
     backbutton = new TQPushButton("&<<", mainWidget);
     connect( backbutton, TQT_SIGNAL(clicked()), TQT_SLOT(backClicked()) );
@@ -166,17 +166,17 @@ ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
     forwbutton = new TQPushButton("&>>", mainWidget);
     connect( forwbutton, TQT_SIGNAL(clicked()), TQT_SLOT(forwClicked()) );
 
-    TQBoxLayout *buttonlayout = new TQHBoxLayout(layout);
-    buttonlayout->addWidget(abutton, 1);
-    buttonlayout->addWidget(bbutton, 1);
-    buttonlayout->addWidget(abbutton, 1);
-    buttonlayout->addWidget(babutton, 1);
-    buttonlayout->addWidget(editbutton, 1);
-    buttonlayout->addStretch(1);
-    buttonlayout->addWidget(nofnlabel, 2);
-    buttonlayout->addStretch(1);
-    buttonlayout->addWidget(backbutton, 1);
-    buttonlayout->addWidget(forwbutton, 1);
+    TQBoxLayout *buttontqlayout = new TQHBoxLayout(tqlayout);
+    buttontqlayout->addWidget(abutton, 1);
+    buttontqlayout->addWidget(bbutton, 1);
+    buttontqlayout->addWidget(abbutton, 1);
+    buttontqlayout->addWidget(babutton, 1);
+    buttontqlayout->addWidget(editbutton, 1);
+    buttontqlayout->addStretch(1);
+    buttontqlayout->addWidget(nofnlabel, 2);
+    buttontqlayout->addStretch(1);
+    buttontqlayout->addWidget(backbutton, 1);
+    buttontqlayout->addWidget(forwbutton, 1);
 
     connect( this, TQT_SIGNAL(user2Clicked()), TQT_SLOT(saveClicked()) );
     connect( this, TQT_SIGNAL(user1Clicked()), TQT_SLOT(saveAsClicked()) );
@@ -187,7 +187,7 @@ ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
 
     setHelp("resolvingconflicts");
 
-    setWFlags(Qt::WDestructiveClose | getWFlags());
+    setWFlags(TQt::WDestructiveClose | getWFlags());
 
     TQSize size = configDialogSize(partConfig, "ResolveDialog");
     resize(size);
@@ -222,7 +222,7 @@ bool ResolveDialog::parseFile(const TQString &name)
     int advanced1, advanced2;
     enum { Normal, VersionA, VersionB } state;
 
-    setCaption(i18n("CVS Resolve: %1").arg(name));
+    setCaption(i18n("CVS Resolve: %1").tqarg(name));
 
     fname = name;
   
@@ -369,7 +369,7 @@ TQString ResolveDialog::readFile()
 {
     TQFile f(fname);
     if( !f.open(IO_ReadOnly) )
-        return TQString::null;
+        return TQString();
 
     TQTextStream stream(&f);
     TQTextCodec* codec = DetectCodec(fname);
@@ -383,9 +383,9 @@ void ResolveDialog::updateNofN()
 {
     TQString str;
     if (markeditem >= 0)
-        str = i18n("%1 of %2").arg(markeditem+1).arg(items.count());
+        str = i18n("%1 of %2").tqarg(markeditem+1).tqarg(items.count());
     else
-        str = i18n("%1 conflicts").arg(items.count());
+        str = i18n("%1 conflicts").tqarg(items.count());
     nofnlabel->setText(str);
 
     backbutton->setEnabled(markeditem != -1);
@@ -424,9 +424,9 @@ void ResolveDialog::updateHighlight(int newitem)
         diff2->setCenterLine(item->linenoB);
         merge->setCenterOffset(item->offsetM);
     }
-    diff1->repaint();
-    diff2->repaint();
-    merge->repaint();
+    diff1->tqrepaint();
+    diff2->tqrepaint();
+    merge->tqrepaint();
     updateNofN();
 }
 
@@ -456,7 +456,7 @@ void ResolveDialog::updateMergedVersion(ResolveItem* item,
     while ( (item = items.next()) != 0 )
         item->offsetM += difference;
 
-    merge->repaint();
+    merge->tqrepaint();
 }
 
 
@@ -562,9 +562,9 @@ void ResolveDialog::editClicked()
     }
 
     delete dlg;
-    diff1->repaint();
-    diff2->repaint();
-    merge->repaint();
+    diff1->tqrepaint();
+    diff2->tqrepaint();
+    merge->tqrepaint();
 }
 
 

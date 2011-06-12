@@ -35,7 +35,7 @@ class AddRemoveDialog : public KDialogBase
 public:
     enum ActionType { Add, AddBinary, Remove };
 
-    explicit AddRemoveDialog(ActionType action, TQWidget* parent=0, const char* name=0);
+    explicit AddRemoveDialog(ActionType action, TQWidget* tqparent=0, const char* name=0);
 
     void setFileList(const TQStringList& files);
 
@@ -46,4 +46,4 @@ private:
 #endif
 
 
-// kate: space-indent on; indent-width 4; replace-tabs on;
+// kate: space-indent on; indent-width 4; tqreplace-tabs on;

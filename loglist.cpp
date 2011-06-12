@@ -69,7 +69,7 @@ LogListViewItem::LogListViewItem(TQListView* list, const Cervisia::LogInfo& logI
 
     setText(Tags, logInfo.tagsToString(Cervisia::TagInfo::Tag,
                                        Cervisia::LogInfo::NoTagType,
-                                       TQString::fromLatin1(", ")));
+                                       TQString::tqfromLatin1(", ")));
 }
 
 
@@ -78,7 +78,7 @@ TQString LogListViewItem::truncateLine(const TQString &s)
     int pos;
 
     TQString res = s.simplifyWhiteSpace();
-    if ( (pos = res.find('\n')) != -1 )
+    if ( (pos = res.tqfind('\n')) != -1 )
         res = res.left(pos) + "...";
 
     return res;
@@ -106,8 +106,8 @@ int LogListViewItem::compare(TQListViewItem* i, int col, bool ascending) const
 }
 
 
-LogListView::LogListView(KConfig& cfg, TQWidget *parent, const char *name)
-    : KListView(parent, name)
+LogListView::LogListView(KConfig& cfg, TQWidget *tqparent, const char *name)
+    : KListView(tqparent, name)
     , partConfig(cfg)
 {
     setAllColumnsShowFocus(true);
@@ -131,13 +131,13 @@ LogListView::LogListView(KConfig& cfg, TQWidget *parent, const char *name)
     for (int i = 0; i < columns(); ++i)
         setColumnWidthMode(i, Manual);
 
-    restoreLayout(&partConfig, TQString::fromLatin1("LogList view"));
+    restoreLayout(&partConfig, TQString::tqfromLatin1("LogList view"));
 }
 
 
 LogListView::~LogListView()
 {
-    saveLayout(&partConfig, TQString::fromLatin1("LogList view"));
+    saveLayout(&partConfig, TQString::tqfromLatin1("LogList view"));
 }
 
 
@@ -169,7 +169,7 @@ void LogListView::contentsMousePressEvent(TQMouseEvent *e)
     // Retrieve revision
     const TQString revision = selItem->text(LogListViewItem::Revision);   
     
-    if ( e->button() == LeftButton )
+    if ( e->button() == Qt::LeftButton )
     {
         // If the control key was pressed, then we change revision B not A
         if( e->state() & ControlButton )
@@ -177,7 +177,7 @@ void LogListView::contentsMousePressEvent(TQMouseEvent *e)
         else
             emit revisionClicked(revision, false);
     }
-    else if ( e->button() == MidButton )
+    else if ( e->button() == Qt::MidButton )
         emit revisionClicked(revision, true);
 }
 
@@ -220,7 +220,7 @@ void LogListView::slotQueryToolTip(const TQPoint& viewportPos,
 {
     if (const LogListViewItem* item = static_cast<LogListViewItem*>(itemAt(viewportPos)))
     {
-        viewportRect = itemRect(item);
+        viewportRect = tqitemRect(item);
         text = item->m_logInfo.createToolTipText();
     }
 }

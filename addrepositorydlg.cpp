@@ -33,17 +33,17 @@
 
 
 AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const TQString& repo, 
-                                         TQWidget* parent, const char* name)
-    : KDialogBase(parent, name, true, i18n("Add Repository"),
+                                         TQWidget* tqparent, const char* name)
+    : KDialogBase(tqparent, name, true, i18n("Add Repository"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
 {
     TQFrame* mainWidget = makeMainWidget();
 
-    TQBoxLayout* layout = new TQVBoxLayout(mainWidget, 0, spacingHint());
+    TQBoxLayout* tqlayout = new TQVBoxLayout(mainWidget, 0, spacingHint());
 
     TQLabel* repo_label = new TQLabel(i18n("&Repository:"), mainWidget);
-    layout->addWidget(repo_label);
+    tqlayout->addWidget(repo_label);
     
     repo_edit = new KLineEdit(mainWidget);
     repo_edit->setFocus();
@@ -53,33 +53,33 @@ AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const TQString& repo,
         repo_edit->setText(repo);
         repo_edit->setEnabled(false);
     }
-    layout->addWidget(repo_edit);
+    tqlayout->addWidget(repo_edit);
     
     TQLabel* rsh_label = new TQLabel(i18n("Use remote &shell (only for :ext: repositories):"), mainWidget);
-    layout->addWidget(rsh_label);
+    tqlayout->addWidget(rsh_label);
     
     rsh_edit = new KLineEdit(mainWidget);
     rsh_label->setBuddy(rsh_edit);
-    layout->addWidget(rsh_edit);
+    tqlayout->addWidget(rsh_edit);
     
     TQLabel* server_label = new TQLabel(i18n("Invoke this program on the server side:"),
                                       mainWidget);
-    layout->addWidget(server_label);
+    tqlayout->addWidget(server_label);
     
     server_edit = new KLineEdit(mainWidget);
     server_label->setBuddy(server_edit);
-    layout->addWidget(server_edit);
+    tqlayout->addWidget(server_edit);
 
     TQHBox* compressionBox = new TQHBox(mainWidget);
     m_useDifferentCompression = new TQCheckBox(i18n("Use different &compression level:"), compressionBox);
     
     m_compressionLevel = new KIntNumInput(compressionBox);
     m_compressionLevel->setRange(0, 9, 1, false);
-    layout->addWidget(compressionBox);
+    tqlayout->addWidget(compressionBox);
     
     m_retrieveCvsignoreFile = new TQCheckBox(i18n("Download cvsignore file from "
                                             "server"), mainWidget);
-    layout->addWidget(m_retrieveCvsignoreFile);
+    tqlayout->addWidget(m_retrieveCvsignoreFile);
 
     connect( repo_edit, TQT_SIGNAL(textChanged(const TQString&)),
              this, TQT_SLOT(repoChanged()) );
@@ -180,9 +180,9 @@ void AddRepositoryDialog::repoChanged()
 {
     TQString repo = repository();
     rsh_edit->setEnabled((!repo.startsWith(":pserver:"))
-                         && repo.contains(":"));
-    m_useDifferentCompression->setEnabled(repo.contains(":"));
-    if( !repo.contains(":") )
+                         && repo.tqcontains(":"));
+    m_useDifferentCompression->setEnabled(repo.tqcontains(":"));
+    if( !repo.tqcontains(":") )
         m_compressionLevel->setEnabled(false);
     else
         compressionToggled(m_useDifferentCompression->isChecked());

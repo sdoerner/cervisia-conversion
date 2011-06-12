@@ -37,10 +37,11 @@ class CvsService_stub;
 class DiffDialog : public KDialogBase
 {
     Q_OBJECT
+  TQ_OBJECT
 
 public:
 
-    explicit DiffDialog( KConfig& config, TQWidget *parent=0, const char *name=0, 
+    explicit DiffDialog( KConfig& config, TQWidget *tqparent=0, const char *name=0, 
                          bool modal=false );
 
     virtual ~DiffDialog();
