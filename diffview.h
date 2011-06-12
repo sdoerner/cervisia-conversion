@@ -39,7 +39,7 @@ protected:
 };
 
 
-class DiffView : public TQtTableView
+class DiffView : public QtTableView
 {
     Q_OBJECT
   TQ_OBJECT

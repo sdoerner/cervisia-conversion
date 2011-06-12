@@ -1,7 +1,7 @@
 /**********************************************************************
 ** $Id$
 **
-** Definition of TQtTableView class
+** Definition of QtTableView class
 **
 ** Created : 941115
 **
@@ -25,7 +25,7 @@ class TQScrollBar;
 class TQCornerSquare;
 
 
-class TQtTableView : public TQFrame
+class QtTableView : public TQFrame
 {
     Q_OBJECT
   TQ_OBJECT
@@ -39,8 +39,8 @@ public:
     void	tqrepaint( const TQRect &, bool erase=TRUE );
 
 protected:
-    TQtTableView( TQWidget *tqparent=0, const char *name=0, WFlags f=0 );
-   ~TQtTableView();
+    QtTableView( TQWidget *tqparent=0, const char *name=0, WFlags f=0 );
+   ~QtTableView();
 
     int		numRows()	const;
     virtual void setNumRows( int );
@@ -172,8 +172,8 @@ private:
 
 private:	// Disabled copy constructor and operator=
 #if defined(TQ_DISABLE_COPY)
-    TQtTableView( const TQtTableView & );
-    TQtTableView &operator=( const TQtTableView & );
+    QtTableView( const QtTableView & );
+    QtTableView &operator=( const QtTableView & );
 #endif
 };
 
@@ -202,49 +202,49 @@ const uint Tbl_snapToVGrid	= 0x00010000;
 const uint Tbl_snapToGrid	= 0x00018000;
 
 
-inline int TQtTableView::numRows() const
+inline int QtTableView::numRows() const
 { return nRows; }
 
-inline int TQtTableView::numCols() const
+inline int QtTableView::numCols() const
 { return nCols; }
 
-inline int TQtTableView::topCell() const
+inline int QtTableView::topCell() const
 { return yCellOffs; }
 
-inline int TQtTableView::leftCell() const
+inline int QtTableView::leftCell() const
 { return xCellOffs; }
 
-inline int TQtTableView::xOffset() const
+inline int QtTableView::xOffset() const
 { return xOffs; }
 
-inline int TQtTableView::yOffset() const
+inline int QtTableView::yOffset() const
 { return yOffs; }
 
-inline int TQtTableView::cellHeight() const
+inline int QtTableView::cellHeight() const
 { return cellH; }
 
-inline int TQtTableView::cellWidth() const
+inline int QtTableView::cellWidth() const
 { return cellW; }
 
-inline uint TQtTableView::tableFlags() const
+inline uint QtTableView::tableFlags() const
 { return tFlags; }
 
-inline bool TQtTableView::testTableFlags( uint f ) const
+inline bool QtTableView::testTableFlags( uint f ) const
 { return (tFlags & f) != 0; }
 
-inline TQRect TQtTableView::cellUpdateRect() const
+inline TQRect QtTableView::cellUpdateRect() const
 { return cellUpdateR; }
 
-inline bool TQtTableView::autoUpdate() const
+inline bool QtTableView::autoUpdate() const
 { return isUpdatesEnabled(); }
 
-inline void TQtTableView::tqrepaint( bool erase )
+inline void QtTableView::tqrepaint( bool erase )
 { tqrepaint( 0, 0, width(), height(), erase ); }
 
-inline void TQtTableView::tqrepaint( const TQRect &r, bool erase )
+inline void QtTableView::tqrepaint( const TQRect &r, bool erase )
 { tqrepaint( r.x(), r.y(), r.width(), r.height(), erase ); }
 
-inline void TQtTableView::updateScrollBars()
+inline void QtTableView::updateScrollBars()
 { updateScrollBars( 0 ); }
 
 

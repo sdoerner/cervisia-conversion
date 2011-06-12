@@ -55,7 +55,7 @@ const int DiffView::BORDER = 7;
 
 DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
                     TQWidget *tqparent, const char *name )
-    : TQtTableView(tqparent, name, WRepaintNoErase)
+    : QtTableView(tqparent, name, WRepaintNoErase)
     , partConfig(cfg)
 {
     setNumRows(0);
@@ -92,7 +92,7 @@ DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
 
 void DiffView::setFont(const TQFont &font)
 {
-    TQtTableView::setFont(font);
+    QtTableView::setFont(font);
     TQFontMetrics fm(font);
     setCellHeight(fm.lineSpacing());
 }
