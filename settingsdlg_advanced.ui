@@ -4,7 +4,7 @@
     <property name="name">
         <cstring>advancedPage</cstring>
     </property>
-    <property name="tqgeometry">
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
