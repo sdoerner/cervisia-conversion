@@ -226,7 +226,7 @@ void QtTableView::show()
 
   At present, QtTableView is the only widget that reimplements \link
   TQWidget::tqrepaint() tqrepaint()\endlink.	 It does this because by
-  clearing and then tqrepainting one cell at at time, it can make the
+  clearing and then repainting one cell at at time, it can make the
   screen flicker less than it would otherwise.  */
 
 void QtTableView::tqrepaint( int x, int y, int w, int h, bool erase )
@@ -264,7 +264,7 @@ void QtTableView::tqrepaint( int x, int y, int w, int h, bool erase )
   Sets the number of rows of the table to \a rows (must be non-negative).
   Does not change topCell().
 
-  The table tqrepaints itself automatically if autoUpdate() is set.
+  The table repaints itself automatically if autoUpdate() is set.
 
   \sa numCols(), setNumCols(), numRows()
 */
@@ -306,7 +306,7 @@ void QtTableView::setNumRows( int rows )
   Sets the number of columns of the table to \a cols (must be non-negative).
   Does not change leftCell().
 
-  The table tqrepaints itself automatically if autoUpdate() is set.
+  The table repaints itself automatically if autoUpdate() is set.
 
   \sa numCols(), numRows(), setNumRows()
 */
@@ -716,7 +716,7 @@ int QtTableView::totalHeight()
   Sets the table flags to \a f.
 
   If a flag setting changes the appearance of the table, the table is
-  tqrepainted if - and only if - autoUpdate() is TRUE.
+  repainted if - and only if - autoUpdate() is TRUE.
 
   The table flags are mostly single bits, though there are some multibit
   flags for convenience. Here is a complete list:
@@ -785,7 +785,7 @@ void QtTableView::setTableFlags( uint f )
     bool updateOn = autoUpdate();
     setAutoUpdate( FALSE );
 
-    uint tqrepaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
+    uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
 
     if ( f & Tbl_vScrollBar ) {
 	setVerScrollBar( TRUE );
@@ -816,14 +816,14 @@ void QtTableView::setTableFlags( uint f )
 	     (f & Tbl_snapToVGrid) != 0 && yCellDelta != 0 ) {
 	    snapToGrid( (f & Tbl_snapToHGrid) != 0,	// do snapping
 			(f & Tbl_snapToVGrid) != 0 );
-	    tqrepaintMask |= Tbl_snapToGrid;	// tqrepaint table
+	    repaintMask |= Tbl_snapToGrid;	// tqrepaint table
 	}
     }
 
     if ( updateOn ) {
 	setAutoUpdate( TRUE );
 	updateScrollBars();
-	if ( isVisible() && (f & tqrepaintMask) )
+	if ( isVisible() && (f & repaintMask) )
 	    tqrepaint();
     }
 
@@ -851,7 +851,7 @@ void QtTableView::clearTableFlags( uint f )
     bool updateOn = autoUpdate();
     setAutoUpdate( FALSE );
 
-    uint tqrepaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
+    uint repaintMask = Tbl_cutCellsV | Tbl_cutCellsH;
 
     if ( f & Tbl_vScrollBar ) {
 	setVerScrollBar( FALSE );
@@ -863,7 +863,7 @@ void QtTableView::clearTableFlags( uint f )
 	int maxX = maxXOffset();
 	if ( xOffs > maxX ) {
 	    setOffset( maxX, yOffs );
-	    tqrepaintMask |= Tbl_scrollLastHCell;
+	    repaintMask |= Tbl_scrollLastHCell;
 	}
 	updateScrollBars( horRange );
     }
@@ -871,7 +871,7 @@ void QtTableView::clearTableFlags( uint f )
 	int maxY = maxYOffset();
 	if ( yOffs > maxY ) {
 	    setOffset( xOffs, maxY );
-	    tqrepaintMask |= Tbl_scrollLastVCell;
+	    repaintMask |= Tbl_scrollLastVCell;
 	}
 	updateScrollBars( verRange );
     }
@@ -880,7 +880,7 @@ void QtTableView::clearTableFlags( uint f )
 	    (f & Tbl_smoothVScrolling) != 0 && yCellDelta != 0 ) {
 	    snapToGrid( (f & Tbl_smoothHScrolling) != 0,      // do snapping
 			(f & Tbl_smoothVScrolling) != 0 );
-	    tqrepaintMask |= Tbl_smoothScrolling;		     // tqrepaint table
+	    repaintMask |= Tbl_smoothScrolling;		     // tqrepaint table
 	}
     }
     if ( f & Tbl_snapToHGrid ) {
@@ -892,7 +892,7 @@ void QtTableView::clearTableFlags( uint f )
     if ( updateOn ) {
 	setAutoUpdate( TRUE );
 	updateScrollBars();	     // returns immediately if nothing to do
-	if ( isVisible() && (f & tqrepaintMask) )
+	if ( isVisible() && (f & repaintMask) )
 	    tqrepaint();
     }
 
@@ -947,7 +947,7 @@ void QtTableView::setAutoUpdate( bool enable )
   Repaints the cell at row \a row, column \a col if it is inside the view.
 
   If \a erase is TRUE, the relevant part of the view is cleared to the
-  background color/pixmap before the contents are tqrepainted.
+  background color/pixmap before the contents are repainted.
 
   \sa isVisible()
 */
@@ -1265,7 +1265,7 @@ void QtTableView::setupPainter( TQPainter * )
 /*!
   Handles paint events, \a e, for the table view.
 
-  Calls paintCell() for the cells that needs to be tqrepainted.
+  Calls paintCell() for the cells that needs to be repainted.
 */
 
 void QtTableView::paintEvent( TQPaintEvent *e )
