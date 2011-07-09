@@ -49,8 +49,8 @@ void ToolTip::maybeTip(const TQPoint& pos)
     {
         text = truncateLines(text,
                              font(),
-                             tqparentWidget()->mapToGlobal(pos),
-                             KGlobalSettings::desktopGeometry(tqparentWidget()));
+                             parentWidget()->mapToGlobal(pos),
+                             KGlobalSettings::desktopGeometry(parentWidget()));
         tip(rect, text);
     }
 }
@@ -94,12 +94,12 @@ TQString truncateLines(const TQString& text,
                        - desktopGeometry.top() - 10);
 
     // calculate the tooltip's size
-    const TQSimpleRichText tqlayoutedText(text, font);
+    const TQSimpleRichText layoutedText(text, font);
 
     // only if the tooltip's size is bigger in x- and y-direction the text must
     // be truncated otherwise the tip is moved to a position where it fits
-    return  ((tqlayoutedText.widthUsed() > maxWidth)
-             && (tqlayoutedText.height() > maxHeight))
+    return  ((layoutedText.widthUsed() > maxWidth)
+             && (layoutedText.height() > maxHeight))
         ? truncateLines(text, TQFontMetrics(font), TQSize(maxWidth, maxHeight))
         : text;
 }

@@ -500,8 +500,8 @@ void UpdateView::syncSelection()
         UpdateDirItem* dirItem(0);
         if (isDirItem(item))
             dirItem = static_cast<UpdateDirItem*>(item);
-        else if (TQListViewItem* tqparentItem = item->tqparent())
-            dirItem = static_cast<UpdateDirItem*>(tqparentItem);
+        else if (TQListViewItem* parentItem = item->tqparent())
+            dirItem = static_cast<UpdateDirItem*>(parentItem);
 
         if (dirItem)
             setDirItems.insert(dirItem);

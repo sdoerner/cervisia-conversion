@@ -87,7 +87,7 @@
         </widget>
     </grid>
 </widget>
-<tqlayoutdefaults spacing="6" margin="0"/>
+<layoutdefaults spacing="6" margin="0"/>
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

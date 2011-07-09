@@ -80,7 +80,7 @@ using Cervisia::TagDialog;
 
 K_EXPORT_COMPONENT_FACTORY( libcervisiapart, CervisiaFactory )
 
-CervisiaPart::CervisiaPart( TQWidget *tqparentWidget, const char *widgetName,
+CervisiaPart::CervisiaPart( TQWidget *parentWidget, const char *widgetName,
                             TQObject *tqparent, const char *name, const TQStringList& /*args*/ )
     : KParts::ReadOnlyPart( tqparent, name )
     , hasRunningJob( false )
@@ -131,7 +131,7 @@ CervisiaPart::CervisiaPart( TQWidget *tqparentWidget, const char *widgetName,
     {
         Qt::Orientation o = splitHorz ? Qt::Vertical
                                   : Qt::Horizontal;
-        splitter = new TQSplitter(o, tqparentWidget, widgetName);
+        splitter = new TQSplitter(o, parentWidget, widgetName);
         // avoid PartManager's warning that Part's window can't handle focus
         splitter->setFocusPolicy( TQ_StrongFocus );
 
@@ -151,7 +151,7 @@ CervisiaPart::CervisiaPart( TQWidget *tqparentWidget, const char *widgetName,
     else
         setWidget(new TQLabel(i18n("This KPart is non-functional, because the "
                                   "cvs DCOP service could not be started."),
-                             tqparentWidget));
+                             parentWidget));
 
     if( cvsService )
     {
@@ -1692,7 +1692,7 @@ void CervisiaPart::slotJobFinished()
 
     if( m_jobType == Commit )
     {
-        KNotifyClient::event(widget()->tqparentWidget()->winId(), "cvs_commit_done",
+        KNotifyClient::event(widget()->parentWidget()->winId(), "cvs_commit_done",
                              i18n("A CVS commit to repository %1 is done")
                              .tqarg(repository));
         m_jobType = Unknown;

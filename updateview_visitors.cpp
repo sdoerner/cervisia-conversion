@@ -90,7 +90,7 @@ void ApplyFilterVisitor::markAllParentsAsVisible(UpdateItem* item)
         }
         else
         {
-            // if this item isn't in the map anymore all tqparents
+            // if this item isn't in the map anymore all parents
             // are already removed too
             break;
         }

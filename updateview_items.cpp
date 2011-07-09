@@ -54,13 +54,13 @@ TQString UpdateItem::dirPath() const
     const UpdateItem* item = static_cast<UpdateItem*>(tqparent());
     while (item)
     {
-        const UpdateItem* tqparentItem = static_cast<UpdateItem*>(item->tqparent());
-        if (tqparentItem)
+        const UpdateItem* parentItem = static_cast<UpdateItem*>(item->tqparent());
+        if (parentItem)
         {
             path.prepend(item->m_entry.m_name + TQDir::separator());
         }
 
-        item = tqparentItem;
+        item = parentItem;
     }
 
     return path;
