@@ -1279,7 +1279,7 @@ void QtTableView::paintEvent( TQPaintEvent *e )
 
     TQPainter paint( this );
 
-    if ( !contentsRect().tqcontains( updateR, TRUE  ) ) {// update frame ?
+    if ( !contentsRect().contains( updateR, TRUE  ) ) {// update frame ?
 	drawFrame( &paint );
 	if ( updateR.left() < frameWidth() ) 		//###
 	    updateR.setLeft( frameWidth() );
@@ -1342,7 +1342,7 @@ void QtTableView::paintEvent( TQPaintEvent *e )
 		matrix.translate( xPos, yPos );
 		paint.setWorldMatrix( matrix );
 		if ( testTableFlags(Tbl_clipCellPainting) ||
-		     frameWidth() > 0 && !winR.tqcontains( cellR ) ) { //##arnt
+		     frameWidth() > 0 && !winR.contains( cellR ) ) { //##arnt
 		    paint.setClipRect( cellUR );
 		    paintCell( &paint, row, col );
 		    paint.setClipping( FALSE );
@@ -1354,7 +1354,7 @@ void QtTableView::paintEvent( TQPaintEvent *e )
 #else
 		paint.translate( xPos, yPos );
 		if ( testTableFlags(Tbl_clipCellPainting) ||
-		     frameWidth() > 0 && !winR.tqcontains( cellR ) ) { //##arnt
+		     frameWidth() > 0 && !winR.contains( cellR ) ) { //##arnt
 		    paint.setClipRect( cellUR );
 		    paintCell( &paint, row, col );
 		    paint.setClipping( FALSE );

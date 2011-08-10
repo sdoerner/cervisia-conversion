@@ -157,7 +157,7 @@ bool Repository::setWorkingCopy(const TQString& dirName)
 
     // add identities (ssh-add) to ssh-agent
     // TODO CL make sure this is called only once
-    if( d->location.tqcontains(":ext:", false) > 0 )
+    if( d->location.contains(":ext:", false) > 0 )
     {
         SshAgent ssh;
         ssh.addSshIdentities();
@@ -227,7 +227,7 @@ void Repository::Private::readConfig()
     if( !config->hasGroup(repositoryGroup) )
     {
         // find the position of the first path separator
-        const int insertPos = repositoryGroup.tqfind('/');
+        const int insertPos = repositoryGroup.find('/');
         if( insertPos > 0 )
         {
             // add port to location

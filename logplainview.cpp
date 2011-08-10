@@ -33,7 +33,7 @@ using namespace Cervisia;
 
 LogPlainView::LogPlainView(TQWidget* tqparent, const char* name)
     : KTextBrowser(tqparent, name)
-    , m_tqfind(0)
+    , m_find(0)
     , m_findPos(0)
 {
     setNotifyClick(false);
@@ -42,7 +42,7 @@ LogPlainView::LogPlainView(TQWidget* tqparent, const char* name)
 
 LogPlainView::~LogPlainView()
 {
-    delete m_tqfind; m_tqfind = 0;
+    delete m_find; m_find = 0;
 }
 
 
@@ -107,11 +107,11 @@ void LogPlainView::addRevision(const LogInfo& logInfo)
 
 void LogPlainView::searchText(int options, const TQString& pattern)
 {
-    m_tqfind = new KFind(pattern, options, this);
+    m_find = new KFind(pattern, options, this);
 
-    connect(m_tqfind, TQT_SIGNAL(highlight(const TQString&, int, int)),
+    connect(m_find, TQT_SIGNAL(highlight(const TQString&, int, int)),
             this, TQT_SLOT(searchHighlight(const TQString&, int, int)));
-    connect(m_tqfind, TQT_SIGNAL(findNext()),
+    connect(m_find, TQT_SIGNAL(findNext()),
            this, TQT_SLOT(findNext()));
 
     m_findPos = 0;
@@ -140,24 +140,24 @@ void LogPlainView::findNext()
 
     while( res == KFind::NoMatch && m_findPos < paragraphs() && m_findPos >= 0 )
     {
-        if( m_tqfind->needData() )
+        if( m_find->needData() )
         {
             TQString richText = text(m_findPos);
 
-            // tqreplace <br/> with '\n'
-            richText.tqreplace(breakLineTag, "\n");
+            // replace <br/> with '\n'
+            richText.replace(breakLineTag, "\n");
 
             // remove html tags from text
-            richText.tqreplace(htmlTags, "");
+            richText.replace(htmlTags, "");
 
-            m_tqfind->setData(richText);
+            m_find->setData(richText);
         }
 
-        res = m_tqfind->find();
+        res = m_find->find();
 
         if( res == KFind::NoMatch )
         {
-            if( m_tqfind->options() & KFindDialog::FindBackwards )
+            if( m_find->options() & KFindDialog::FindBackwards )
                 --m_findPos;
             else
                 ++m_findPos;
@@ -167,15 +167,15 @@ void LogPlainView::findNext()
     // reached the end?
     if( res == KFind::NoMatch )
     {
-        if( m_tqfind->shouldRestart() )
+        if( m_find->shouldRestart() )
         {
             m_findPos = 0;
             findNext();
         }
         else
         {
-            delete m_tqfind;
-            m_tqfind = 0;
+            delete m_find;
+            m_find = 0;
         }
     }
 }

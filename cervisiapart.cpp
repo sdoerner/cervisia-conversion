@@ -649,7 +649,7 @@ void CervisiaPart::popupRequested(KListView*, TQListViewItem* item, const TQPoin
         if( isFileItem(item) )
         {
             // remove old 'Edit with...' menu
-            if( m_editWithId && popup->tqfindItem(m_editWithId) != 0 )
+            if( m_editWithId && popup->findItem(m_editWithId) != 0 )
             {
                 popup->removeItem(m_editWithId);
                 delete m_currentEditMenu; 
@@ -969,7 +969,7 @@ void CervisiaPart::slotCommit()
             return;
 
         TQString msg = dlg.logMessage();
-        if( !recentCommits.tqcontains( msg ) )
+        if( !recentCommits.contains( msg ) )
         {
             recentCommits.prepend( msg );
             while (recentCommits.count() > 50)
@@ -1504,7 +1504,7 @@ void CervisiaPart::slotLastChange()
 
     int pos, lastnumber;
     bool ok;
-    if ( (pos = revA.tqfindRev('.')) == -1
+    if ( (pos = revA.findRev('.')) == -1
          || (lastnumber=revA.right(revA.length()-pos-1).toUInt(&ok), !ok) )
     {
         KMessageBox::sorry(widget(),
@@ -1757,7 +1757,7 @@ bool CervisiaPart::openSandbox(const TQString &dirname)
 
     KConfig *conf = config();
     conf->setGroup("General");
-    bool dostatus = conf->readBoolEntry(repository.tqcontains(":")?
+    bool dostatus = conf->readBoolEntry(repository.contains(":")?
                                         "StatusForRemoteRepos" :
                                         "StatusForLocalRepos",
                                         false);

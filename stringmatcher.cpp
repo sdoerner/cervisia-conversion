@@ -43,7 +43,7 @@ namespace
 
 bool StringMatcher::match(const TQString& text) const
 {
-    if (m_exactPatterns.tqfind(text) != m_exactPatterns.end())
+    if (m_exactPatterns.find(text) != m_exactPatterns.end())
     {
         return true;
     }

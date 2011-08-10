@@ -198,7 +198,7 @@ CheckoutDialog::CheckoutDialog(KConfig& cfg, CvsService_stub* service,
     TQStringList list2 = Repositories::readConfigFile();
     TQStringList::ConstIterator it2;
     for (it2 = list2.begin(); it2 != list2.end(); ++it2)
-        if (!list1.tqcontains(*it2))
+        if (!list1.contains(*it2))
             repo_combo->insertItem(*it2);
 
     setHelp((act == Import) ? "importing" : "checkingout");
@@ -353,9 +353,9 @@ void CheckoutDialog::moduleButtonClicked()
         if (str.left(12) == "Unknown host")
             continue;
 
-        int pos = str.tqfind(' ');
+        int pos = str.find(' ');
         if (pos == -1)
-            pos = str.tqfind('\t');
+            pos = str.find('\t');
         if (pos == -1)
             pos = str.length();
         TQString module( str.left(pos).stripWhiteSpace() );
@@ -398,11 +398,11 @@ void CheckoutDialog::branchButtonClicked()
 
         if( line.isEmpty() || line[0] != '\t' )
             continue;
-        if( (colonPos = line.tqfind(':', 1)) < 0 )
+        if( (colonPos = line.find(':', 1)) < 0 )
            continue;
 
         const TQString tag  = line.mid(1, colonPos - 1);
-        if( !branchTagList.tqcontains(tag) )
+        if( !branchTagList.contains(tag) )
             branchTagList.push_back(tag);
     }
 

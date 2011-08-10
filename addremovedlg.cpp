@@ -85,10 +85,10 @@ void AddRemoveDialog::setFileList(const TQStringList& files)
 {
     // the dot for the root directory is hard to see, so
     // we convert it to the absolut path
-    if( files.tqfind(".") != files.end() )
+    if( files.find(".") != files.end() )
     {
         TQStringList copy(files);
-        int idx = copy.tqfindIndex(".");
+        int idx = copy.findIndex(".");
         copy[idx] = TQFileInfo(".").absFilePath();
 
         m_listBox->insertStringList(copy);
@@ -98,4 +98,4 @@ void AddRemoveDialog::setFileList(const TQStringList& files)
 }
 
 
-// kate: space-indent on; indent-width 4; tqreplace-tabs on;
+// kate: space-indent on; indent-width 4; replace-tabs on;

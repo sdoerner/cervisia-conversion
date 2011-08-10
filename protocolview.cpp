@@ -142,7 +142,7 @@ void ProtocolView::slotJobExited(bool normalExit, int exitStatus)
 void ProtocolView::processOutput()
 {
     int pos;
-    while ( (pos = buf.tqfind('\n')) != -1)
+    while ( (pos = buf.find('\n')) != -1)
 	{
 	    TQString line = buf.left(pos);
 	    if (!line.isEmpty())

@@ -95,14 +95,14 @@ static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
                 continue;
             if( (wsPos = FindWhiteSpace(line, 2)) < 0 )
                 continue;
-            if( (bracketPos = line.tqfind('(', wsPos + 1)) < 0 )
+            if( (bracketPos = line.find('(', wsPos + 1)) < 0 )
                 continue;
-            if( (colonPos = line.tqfind(':', bracketPos + 1)) < 0 )
+            if( (colonPos = line.find(':', bracketPos + 1)) < 0 )
                 continue;
 
             const TQString tag  = line.mid(1, wsPos - 1);
             const TQString type = line.mid(bracketPos + 1, colonPos - bracketPos - 1);
-            if( type == searchedType && !branchOrTagList.tqcontains(tag) )
+            if( type == searchedType && !branchOrTagList.contains(tag) )
                 branchOrTagList.push_back(tag);
         }
 
@@ -122,7 +122,7 @@ bool Cervisia::IsValidTag(const TQString& tag)
 
     for( uint i = 1; i < tag.length(); ++i )
     {
-        if( !isgraph(tag[i].latin1()) || prohibitedChars.tqcontains(tag[i]) )
+        if( !isgraph(tag[i].latin1()) || prohibitedChars.contains(tag[i]) )
                 return false;
     }
 
@@ -248,7 +248,7 @@ TQStringList splitLine(TQString line, char delim)
     TQStringList list;
 
     line = line.simplifyWhiteSpace();
-    while ((pos = line.tqfind(delim)) != -1)
+    while ((pos = line.find(delim)) != -1)
     {
         list.append(line.left(pos));
         line = line.mid(pos+1, line.length()-pos-1);
@@ -309,12 +309,12 @@ int compareRevisions(const TQString& rev1, const TQString& rev2)
     int startPos2(0);
     while (startPos1 < length1 && startPos2 < length2)
     {
-        int pos1(rev1.tqfind('.', startPos1));
+        int pos1(rev1.find('.', startPos1));
         if (pos1 < 0)
             pos1 = length1;
         const int partLength1(pos1 - startPos1);
 
-        int pos2(rev2.tqfind('.', startPos2));
+        int pos2(rev2.find('.', startPos2));
         if (pos2 < 0)
             pos2 = length2;
         const int partLength2(pos2 - startPos2);

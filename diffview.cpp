@@ -173,8 +173,8 @@ void DiffView::addLine(const TQString &line, DiffType type, int no)
     // For some fonts, e.g. "Clean", is fm.maxWidth() greater than
     // fmbold.maxWidth().
     TQString copy(line);
-    const int numTabs = copy.tqcontains('\t', false);
-    copy.tqreplace( TQRegExp("\t"), "");
+    const int numTabs = copy.contains('\t', false);
+    copy.replace( TQRegExp("\t"), "");
 
     const int tabSize   = m_tabWidth * TQMAX(fm.maxWidth(), fmbold.maxWidth());
     const int copyWidth = TQMAX(fm.width(copy), fmbold.width(copy));
@@ -211,7 +211,7 @@ int DiffView::findLine(int lineno)
     int offset;
     DiffViewItem tmp;
     tmp.no = lineno;
-    if ( (offset = items.tqfind(&tmp)) == -1)
+    if ( (offset = items.find(&tmp)) == -1)
     {
         kdDebug(8050) << "Internal Error: Line " << lineno << " not found" << endl;
         return -1;

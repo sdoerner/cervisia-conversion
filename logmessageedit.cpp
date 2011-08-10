@@ -159,7 +159,7 @@ void LogMessageEdit::tryCompletion()
     if( paragraphText.at(index).isSpace() )
     {
         if( !m_completing )
-            m_completionStartPos = paragraphText.tqfindRev(' ', index-1) + 1;
+            m_completionStartPos = paragraphText.findRev(' ', index-1) + 1;
 
         int length = index - m_completionStartPos;
         TQString word = paragraphText.mid(m_completionStartPos, length);

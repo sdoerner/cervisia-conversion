@@ -180,9 +180,9 @@ void AddRepositoryDialog::repoChanged()
 {
     TQString repo = repository();
     rsh_edit->setEnabled((!repo.startsWith(":pserver:"))
-                         && repo.tqcontains(":"));
-    m_useDifferentCompression->setEnabled(repo.tqcontains(":"));
-    if( !repo.tqcontains(":") )
+                         && repo.contains(":"));
+    m_useDifferentCompression->setEnabled(repo.contains(":"));
+    if( !repo.contains(":") )
         m_compressionLevel->setEnabled(false);
     else
         compressionToggled(m_useDifferentCompression->isChecked());

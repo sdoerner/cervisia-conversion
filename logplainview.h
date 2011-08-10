@@ -56,7 +56,7 @@ protected:
     virtual void setSource(const TQString& name);
     
 private:
-    KFind* m_tqfind;
+    KFind* m_find;
     int    m_findPos;
 };
 

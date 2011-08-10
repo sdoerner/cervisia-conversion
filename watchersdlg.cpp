@@ -103,15 +103,15 @@ bool WatchersDialog::parseWatchers(CvsService_stub* cvsService,
         table->setText(numRows, 1, list[1]);
 
         TQCheckTableItem* item = new TQCheckTableItem(table, "");
-        item->setChecked(list.tqcontains("edit"));
+        item->setChecked(list.contains("edit"));
         table->setItem(numRows, 2, item);
 
         item = new TQCheckTableItem(table, "");
-        item->setChecked(list.tqcontains("unedit"));
+        item->setChecked(list.contains("unedit"));
         table->setItem(numRows, 3, item);
 
         item = new TQCheckTableItem(table, "");
-        item->setChecked(list.tqcontains("commit"));
+        item->setChecked(list.contains("commit"));
         table->setItem(numRows, 4, item);
 
         ++numRows;

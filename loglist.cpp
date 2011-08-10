@@ -78,7 +78,7 @@ TQString LogListViewItem::truncateLine(const TQString &s)
     int pos;
 
     TQString res = s.simplifyWhiteSpace();
-    if ( (pos = res.tqfind('\n')) != -1 )
+    if ( (pos = res.find('\n')) != -1 )
         res = res.left(pos) + "...";
 
     return res;

@@ -245,7 +245,7 @@ UpdateItem* UpdateDirItem::insertItem(UpdateItem* item)
 
 UpdateItem* UpdateDirItem::findItem(const TQString& name) const
 {
-    const TMapItemsByName::const_iterator it = m_itemsByName.tqfind(name);
+    const TMapItemsByName::const_iterator it = m_itemsByName.find(name);
 
     return (it != m_itemsByName.end()) ? *it : 0;
 }
@@ -288,7 +288,7 @@ TQDateTime parseDateTime(const TQString &s)
 	TQDate date( year, month, day );
 	TQTime time;
 	int hour, minute, second;
-	int pivot = s.tqfind( TQRegExp(TQString::tqfromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
+	int pivot = s.find( TQRegExp(TQString::tqfromLatin1("[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")) );
 	if ( pivot != -1 ) {
 	    hour = s.mid( pivot, 2 ).toInt();
 	    minute = s.mid( pivot+3, 2 ).toInt();
@@ -337,7 +337,7 @@ void UpdateDirItem::syncWithEntries()
                 const TQString options(line.section('/', 4, 4));
                 entry.m_tag = line.section('/', 5, 5);
 
-                const bool isBinary(options.tqfind("-kb") >= 0);
+                const bool isBinary(options.find("-kb") >= 0);
 
                 // file date in local time
                 entry.m_dateTime = TQFileInfo(path + entry.m_name).lastModified();
@@ -349,7 +349,7 @@ void UpdateDirItem::syncWithEntries()
                     entry.m_status = Cervisia::LocallyRemoved;
                     rev.remove(0, 1);
                 }
-                else if (timestamp.tqfind('+') >= 0)
+                else if (timestamp.find('+') >= 0)
                 {
                     entry.m_status = Cervisia::Conflict;
                 }

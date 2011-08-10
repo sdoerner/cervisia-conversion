@@ -105,7 +105,7 @@ void RepositoryListItem::setRsh(const TQString& rsh)
         method = "pserver";
     else if( repo.startsWith(":sspi:") )
         method = "sspi";
-    else if( repo.tqcontains(':') )
+    else if( repo.contains(':') )
     {
         method = "ext";
         if( !rsh.isEmpty() )
@@ -501,4 +501,4 @@ void RepositoryDialog::writeRepositoryData(RepositoryListItem* item)
 
 #include "repositorydlg.moc"
 
-// kate: space-indent on; indent-width 4; tqreplace-tabs on;
+// kate: space-indent on; indent-width 4; replace-tabs on;

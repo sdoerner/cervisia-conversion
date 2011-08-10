@@ -40,7 +40,7 @@ static TQDateTime parseDate(const TQString& date, const TQString& _time, const T
 {
     // cvs history only prints hh:mm but parseDateISO8601 needs hh:mm:ss
     TQString time(_time);
-    if( time.tqcontains(':') == 1 )
+    if( time.contains(':') == 1 )
         time += ":00";
 
     TQDateTime dateTime;

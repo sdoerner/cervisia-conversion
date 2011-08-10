@@ -185,7 +185,7 @@ void CommitDialog::setLogHistory(const TQStringList &list)
                 continue;
 
             TQString txt = *it;
-            int index = txt.tqfind('\n', 0);
+            int index = txt.find('\n', 0);
             if ( index != -1 ) // Fetch first line
             {
                 txt = txt.mid(0, index);

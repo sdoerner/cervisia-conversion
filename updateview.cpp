@@ -191,9 +191,9 @@ bool UpdateView::isUnfoldingTree() const
 void UpdateView::replaceItem(TQListViewItem* oldItem,
                              TQListViewItem* newItem)
 {
-    const int index(relevantSelection.tqfind(oldItem));
+    const int index(relevantSelection.find(oldItem));
     if (index >= 0)
-        relevantSelection.tqreplace(index, newItem);
+        relevantSelection.replace(index, newItem);
 }
 
 
@@ -208,8 +208,8 @@ void UpdateView::unfoldSelectedFolders()
 
     // setup name of selected folder
     TQString selectedItem = selection.first();
-    if( selectedItem.tqcontains('/') )
-        selectedItem.remove(0, selectedItem.tqfindRev('/')+1);
+    if( selectedItem.contains('/') )
+        selectedItem.remove(0, selectedItem.findRev('/')+1);
 
     // avoid flicker
     const bool updatesEnabled = isUpdatesEnabled();

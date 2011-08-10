@@ -66,7 +66,7 @@ TQString truncateLines(const TQString&      text,
     const TQChar newLine('\n');
 
     const int lineSpacing(fm.lineSpacing());
-    const int numberOfLines(text.tqcontains(newLine) + 1);
+    const int numberOfLines(text.contains(newLine) + 1);
     const int maxNumberOfLines(size.height() / lineSpacing);
 
     if (numberOfLines <= maxNumberOfLines)

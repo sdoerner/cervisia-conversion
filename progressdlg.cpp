@@ -252,7 +252,7 @@ void ProgressDialog::startGuiPart()
 void ProgressDialog::processOutput()
 {
     int pos;
-    while( (pos = d->buffer.tqfind('\n')) != -1 )
+    while( (pos = d->buffer.find('\n')) != -1 )
     {
         TQString item = d->buffer.left(pos);
         if( item.startsWith(d->errorId1) ||

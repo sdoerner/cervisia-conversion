@@ -62,7 +62,7 @@ LogDialog::LogDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
                   Ok | Apply | Close | Help | User1 | User2 | User3, Close, true,
                   KGuiItem(i18n("&Annotate")),
                   KGuiItem(i18n("&Diff"), "vcs_diff"),
-                  KGuiItem(i18n("&Find..."), "tqfind"))
+                  KGuiItem(i18n("&Find..."), "find"))
     , cvsService(0)
     , partConfig(cfg)
 {
@@ -262,8 +262,8 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     const TQString tag(strlist[0].simplifyWhiteSpace());
                     TQString branchpoint;
                     int pos1, pos2;
-                    if( (pos2 = rev.tqfindRev('.')) > 0 &&
-                        (pos1 = rev.tqfindRev('.', pos2-1)) > 0 &&
+                    if( (pos2 = rev.findRev('.')) > 0 &&
+                        (pos1 = rev.findRev('.', pos2-1)) > 0 &&
                         rev.mid(pos1+1, pos2-pos1-1) == "0" )
                     {
                         // For a branch tag 2.10.0.6, we want:
@@ -303,7 +303,7 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     // convert date into ISO format (YYYY-MM-DDTHH:MM:SS)
                     int len = strList[0].length();
                     TQString dateTimeStr = strList[0].right(len-6); // remove 'date: '
-                    dateTimeStr.tqreplace('/', '-');
+                    dateTimeStr.replace('/', '-');
 
                     TQString date = dateTimeStr.section(' ', 0, 0);
                     TQString time = dateTimeStr.section(' ', 1, 1);
@@ -338,8 +338,8 @@ bool LogDialog::parseCvsLog(CvsService_stub* service, const TQString& fileName)
                     TQString branchrev;
                     int pos1, pos2;
                     // 1.60.x.y => revision belongs to branch 1.60.0.x
-                    if( (pos2 = rev.tqfindRev('.')) > 0 &&
-                        (pos1 = rev.tqfindRev('.', pos2-1)) > 0 )
+                    if( (pos2 = rev.findRev('.')) > 0 &&
+                        (pos1 = rev.findRev('.', pos2-1)) > 0 )
                         branchrev = rev.left(pos2);
 
                     // Build Cervisia::TagInfo for logInfo
