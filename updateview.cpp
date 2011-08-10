@@ -38,8 +38,8 @@ using Cervisia::Entry;
 using Cervisia::EntrytqStatus;
 
 
-UpdateView::UpdateView(KConfig& partConfig, TQWidget *tqparent, const char *name)
-    : KListView(tqparent, name),
+UpdateView::UpdateView(KConfig& partConfig, TQWidget *parent, const char *name)
+    : KListView(parent, name),
       m_partConfig(partConfig),
       m_unfoldingTree(false)
 {
@@ -333,7 +333,7 @@ void UpdateView::foldTree()
     while (TQListViewItem* item = it.current())
     {
         // don't close the top level directory
-        if (isDirItem(item) && item->tqparent())
+        if (isDirItem(item) && item->parent())
             item->setOpen(false);
 
         ++it;
@@ -500,7 +500,7 @@ void UpdateView::syncSelection()
         UpdateDirItem* dirItem(0);
         if (isDirItem(item))
             dirItem = static_cast<UpdateDirItem*>(item);
-        else if (TQListViewItem* parentItem = item->tqparent())
+        else if (TQListViewItem* parentItem = item->parent())
             dirItem = static_cast<UpdateDirItem*>(parentItem);
 
         if (dirItem)

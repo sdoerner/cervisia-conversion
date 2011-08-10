@@ -28,8 +28,8 @@
 #include <klocale.h>
 
 
-WatchDialog::WatchDialog(ActionType action, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, TQString(),
+WatchDialog::WatchDialog(ActionType action, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true)
 {
     setCaption( (action==Add)? i18n("CVS Watch Add") : i18n("CVS Watch Remove") );

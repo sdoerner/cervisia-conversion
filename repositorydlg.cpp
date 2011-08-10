@@ -40,7 +40,7 @@
 class RepositoryListItem : public KListViewItem
 {
 public:
-    RepositoryListItem(KListView* tqparent, const TQString& repo, bool loggedin);
+    RepositoryListItem(KListView* parent, const TQString& repo, bool loggedin);
     
     void setRsh(const TQString& rsh);
     void setServer(const TQString& server) { m_server = server; }
@@ -85,9 +85,9 @@ static bool LoginNeeded(const TQString& repository)
 }
 
 
-RepositoryListItem::RepositoryListItem(KListView* tqparent, const TQString& repo, 
+RepositoryListItem::RepositoryListItem(KListView* parent, const TQString& repo, 
                                        bool loggedin)
-    : KListViewItem(tqparent)
+    : KListViewItem(parent)
     , m_isLoggedIn(loggedin)
 {
     setText(0, repo);
@@ -153,8 +153,8 @@ void RepositoryListItem::changeLoginStatusColumn()
 
 
 RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                                   TQWidget* tqparent, const char* name)
-    : KDialogBase(tqparent, name, true, i18n("Configure Access to Repositories"),
+                                   TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, true, i18n("Configure Access to Repositories"),
                   Ok | Cancel | Help, Ok, true)
     , m_partConfig(cfg)
     , m_cvsService(cvsService)

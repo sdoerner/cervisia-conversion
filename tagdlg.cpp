@@ -35,8 +35,8 @@
 using Cervisia::TagDialog;
 
 TagDialog::TagDialog(ActionType action, CvsService_stub* service,
-                     TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, TQString(),
+                     TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true),
       act(action),
       cvsService(service),

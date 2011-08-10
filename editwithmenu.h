@@ -36,7 +36,7 @@ class EditWithMenu : public TQObject
   TQ_OBJECT
 
 public:
-    EditWithMenu(const KURL& url, TQWidget* tqparent);
+    EditWithMenu(const KURL& url, TQWidget* parent);
     TQPopupMenu* menu();
 
 private slots:

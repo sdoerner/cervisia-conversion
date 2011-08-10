@@ -36,7 +36,7 @@ class LogMessageEdit : public KTextEdit, public KCompletionBase
   TQ_OBJECT
 
 public:
-    explicit LogMessageEdit(TQWidget* tqparent);
+    explicit LogMessageEdit(TQWidget* parent);
 
     virtual void setCompletedText(const TQString& match);
     virtual void setCompletedItems(const TQStringList& items);

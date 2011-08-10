@@ -57,8 +57,8 @@
 #include "patchoptiondlg.h"
 
 
-LogDialog::LogDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, false, TQString(),
+LogDialog::LogDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString(),
                   Ok | Apply | Close | Help | User1 | User2 | User3, Close, true,
                   KGuiItem(i18n("&Annotate")),
                   KGuiItem(i18n("&Diff"), "vcs_diff"),

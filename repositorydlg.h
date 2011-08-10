@@ -40,7 +40,7 @@ class RepositoryDialog : public KDialogBase
 
 public:
     RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
-                     TQWidget* tqparent = 0, const char* name = 0);
+                     TQWidget* parent = 0, const char* name = 0);
     virtual ~RepositoryDialog();
 
     void readConfigFile();

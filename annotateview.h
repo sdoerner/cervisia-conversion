@@ -41,7 +41,7 @@ class AnnotateView : public TQListView
 
 public:
 
-    explicit AnnotateView( KConfig &cfg, TQWidget *tqparent=0, const char *name=0 );
+    explicit AnnotateView( KConfig &cfg, TQWidget *parent=0, const char *name=0 );
 
     void addLine(const Cervisia::LogInfo& logInfo, const TQString& content,
                  bool odd);

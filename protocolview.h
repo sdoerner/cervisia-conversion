@@ -37,7 +37,7 @@ class ProtocolView : public TQTextEdit, public DCOPObject
 //    TQ_OBJECT
 
 public:
-    explicit ProtocolView(const TQCString& appId, TQWidget *tqparent=0, const char *name=0);
+    explicit ProtocolView(const TQCString& appId, TQWidget *parent=0, const char *name=0);
     ~ProtocolView();
 
     bool startJob(bool isUpdateJob = false);

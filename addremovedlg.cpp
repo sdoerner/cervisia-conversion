@@ -30,8 +30,8 @@
 #include <klocale.h>
 
 
-AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* tqparent, const char* name)
-    : KDialogBase(tqparent, name, true, TQString(),
+AddRemoveDialog::AddRemoveDialog(ActionType action, TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, true, TQString(),
                   Ok | Cancel | Help, Ok, true)
 {
     setCaption( (action==Add)?       i18n("CVS Add") :

@@ -58,8 +58,8 @@ namespace
 }
 
 
-FontButton::FontButton( const TQString &text, TQWidget *tqparent, const char *name )
-    : TQPushButton(text, tqparent, name)
+FontButton::FontButton( const TQString &text, TQWidget *parent, const char *name )
+    : TQPushButton(text, parent, name)
 {
     connect( this, TQT_SIGNAL(clicked()), this, TQT_SLOT(chooseFont()) );
 }
@@ -77,11 +77,11 @@ void FontButton::chooseFont()
 }
 
 
-SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *tqparent, const char *name )
+SettingsDialog::SettingsDialog( KConfig *conf, TQWidget *parent, const char *name )
     : KDialogBase(KDialogBase::IconList, i18n("Configure Cervisia"),
       KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Help,
       KDialogBase::Ok,
-      tqparent, name, true)
+      parent, name, true)
 {
     config = conf;
 

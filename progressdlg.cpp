@@ -52,10 +52,10 @@ struct ProgressDialog::Private
 };
 
 
-ProgressDialog::ProgressDialog(TQWidget* tqparent, const TQString& heading,
+ProgressDialog::ProgressDialog(TQWidget* parent, const TQString& heading,
                                const DCOPRef& job, const TQString& errorIndicator,
                                const TQString& caption)
-    : KDialogBase(tqparent, 0, true, caption, Cancel, Cancel, true)
+    : KDialogBase(parent, 0, true, caption, Cancel, Cancel, true)
     , DCOPObject()
     , d(new Private)
 {

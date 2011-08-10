@@ -33,8 +33,8 @@
 
 
 AddRepositoryDialog::AddRepositoryDialog(KConfig& cfg, const TQString& repo, 
-                                         TQWidget* tqparent, const char* name)
-    : KDialogBase(tqparent, name, true, i18n("Add Repository"),
+                                         TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, true, i18n("Add Repository"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
 {

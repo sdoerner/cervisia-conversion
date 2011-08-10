@@ -59,8 +59,8 @@ public:
 };
 
 
-LogTreeView::LogTreeView(TQWidget *tqparent, const char *name)
-    : TQTable(tqparent, name)
+LogTreeView::LogTreeView(TQWidget *parent, const char *name)
+    : TQTable(parent, name)
 {
     if (!static_initialized)
     {

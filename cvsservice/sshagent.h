@@ -34,7 +34,7 @@ class SshAgent : public TQObject
   TQ_OBJECT
 
 public:
-    SshAgent(TQObject* tqparent = 0, const char* name = 0);
+    SshAgent(TQObject* parent = 0, const char* name = 0);
     ~SshAgent();
 
     bool querySshAgent();

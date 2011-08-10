@@ -95,8 +95,8 @@ private:
 }
 
 
-ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, false, TQString(),
+ResolveDialog::ResolveDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString(),
                   Close | Help | User1 | User2, Close, true,
                   KStdGuiItem::saveAs(), KStdGuiItem::save())
     , markeditem(-1)

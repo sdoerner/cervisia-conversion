@@ -39,7 +39,7 @@ class UpdateDialog : public KDialogBase
 
 public:
     UpdateDialog( CvsService_stub* service,
-                  TQWidget *tqparent=0, const char *name=0 );
+                  TQWidget *parent=0, const char *name=0 );
 
     bool byTag() const;
     TQString tag() const;

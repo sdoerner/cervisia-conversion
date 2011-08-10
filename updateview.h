@@ -43,7 +43,7 @@ public:
                   NoRemoved=4, NoNotInCVS=8 , NoEmptyDirectories = 16 };
     enum Action { Add, Remove, Update, UpdateNoAct, Commit };
     
-    explicit UpdateView(KConfig& partConfig, TQWidget *tqparent=0, const char *name=0);
+    explicit UpdateView(KConfig& partConfig, TQWidget *parent=0, const char *name=0);
 
     virtual ~UpdateView();
 

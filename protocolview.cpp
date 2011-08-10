@@ -32,8 +32,8 @@
 #include "cvsjob_stub.h"
 
 
-ProtocolView::ProtocolView(const TQCString& appId, TQWidget *tqparent, const char *name)
-    : TQTextEdit(tqparent, name)
+ProtocolView::ProtocolView(const TQCString& appId, TQWidget *parent, const char *name)
+    : TQTextEdit(parent, name)
     , job(0)
     , m_isUpdateJob(false)
 {

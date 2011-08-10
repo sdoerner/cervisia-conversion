@@ -42,10 +42,10 @@ class UpdateItem : public TQListViewItem
 {
 public:
 
-    UpdateItem(UpdateView* tqparent, const Cervisia::Entry& entry)
-        : TQListViewItem(tqparent), m_entry(entry) {}
-    UpdateItem(UpdateItem* tqparent, const Cervisia::Entry& entry)
-        : TQListViewItem(tqparent), m_entry(entry) {}
+    UpdateItem(UpdateView* parent, const Cervisia::Entry& entry)
+        : TQListViewItem(parent), m_entry(entry) {}
+    UpdateItem(UpdateItem* parent, const Cervisia::Entry& entry)
+        : TQListViewItem(parent), m_entry(entry) {}
 
     const Cervisia::Entry& entry() const { return m_entry; }
 
@@ -73,8 +73,8 @@ public:
 
     enum { Name };
 
-    UpdateDirItem(UpdateView* tqparent, const Cervisia::Entry& entry);
-    UpdateDirItem(UpdateDirItem* tqparent, const Cervisia::Entry& entry);
+    UpdateDirItem(UpdateView* parent, const Cervisia::Entry& entry);
+    UpdateDirItem(UpdateDirItem* parent, const Cervisia::Entry& entry);
 
     void syncWithDirectory();
     void syncWithEntries();
@@ -121,7 +121,7 @@ public:
 
     enum { Name, MimeType, tqStatus, Revision, TagOrDate, Timestamp };
 
-    UpdateFileItem(UpdateDirItem* tqparent, const Cervisia::Entry& entry);
+    UpdateFileItem(UpdateDirItem* parent, const Cervisia::Entry& entry);
 
     bool undefinedState() const
     { return m_undefined; }

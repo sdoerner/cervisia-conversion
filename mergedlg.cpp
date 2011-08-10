@@ -34,8 +34,8 @@
 
 
 MergeDialog::MergeDialog(CvsService_stub* service,
-                         TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, i18n("CVS Merge"),
+                         TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, i18n("CVS Merge"),
                   Ok | Cancel, Ok, true),
       cvsService(service)
 {

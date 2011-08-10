@@ -81,8 +81,8 @@ using Cervisia::TagDialog;
 K_EXPORT_COMPONENT_FACTORY( libcervisiapart, CervisiaFactory )
 
 CervisiaPart::CervisiaPart( TQWidget *parentWidget, const char *widgetName,
-                            TQObject *tqparent, const char *name, const TQStringList& /*args*/ )
-    : KParts::ReadOnlyPart( tqparent, name )
+                            TQObject *parent, const char *name, const TQStringList& /*args*/ )
+    : KParts::ReadOnlyPart( parent, name )
     , hasRunningJob( false )
     , opt_hideFiles( false )
     , opt_hideUpToDate( false )
@@ -1931,7 +1931,7 @@ void CervisiaBrowserExtension::setPropertiesActionEnabled(bool enabled)
 
 void CervisiaBrowserExtension::properties()
 {
-    static_cast<CervisiaPart*>(tqparent())->slotFileProperties();
+    static_cast<CervisiaPart*>(parent())->slotFileProperties();
 }
 
 // Local Variables:

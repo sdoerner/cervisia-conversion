@@ -106,8 +106,8 @@ int LogListViewItem::compare(TQListViewItem* i, int col, bool ascending) const
 }
 
 
-LogListView::LogListView(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KListView(tqparent, name)
+LogListView::LogListView(KConfig& cfg, TQWidget *parent, const char *name)
+    : KListView(parent, name)
     , partConfig(cfg)
 {
     setAllColumnsShowFocus(true);

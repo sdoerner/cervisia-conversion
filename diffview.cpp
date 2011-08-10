@@ -54,8 +54,8 @@ const int DiffView::BORDER = 7;
 
 
 DiffView::DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-                    TQWidget *tqparent, const char *name )
-    : QtTableView(tqparent, name, WRepaintNoErase)
+                    TQWidget *parent, const char *name )
+    : QtTableView(parent, name, WRepaintNoErase)
     , partConfig(cfg)
 {
     setNumRows(0);
@@ -388,8 +388,8 @@ void DiffView::wheelEvent(TQWheelEvent *e)
 }
 
 
-DiffZoomWidget::DiffZoomWidget(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : TQFrame(tqparent, name)
+DiffZoomWidget::DiffZoomWidget(KConfig& cfg, TQWidget *parent, const char *name)
+    : TQFrame(parent, name)
 {
     tqsetSizePolicy( TQSizePolicy( TQSizePolicy::Fixed, TQSizePolicy::Minimum ) );
 

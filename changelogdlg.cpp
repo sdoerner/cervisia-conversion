@@ -40,8 +40,8 @@ static inline TQString DateStringISO8601()
 ChangeLogDialog::Options *ChangeLogDialog::options = 0;
 
 
-ChangeLogDialog::ChangeLogDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, i18n("Edit ChangeLog"),
+ChangeLogDialog::ChangeLogDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, i18n("Edit ChangeLog"),
                   Ok | Cancel, Ok, true)
     , partConfig(cfg)
 {

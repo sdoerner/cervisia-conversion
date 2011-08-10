@@ -48,7 +48,7 @@ public:
     enum DiffType { Change, Insert, Delete, Neutral, Unchanged, Separator };
 
     DiffView( KConfig& cfg, bool withlinenos, bool withmarker,
-              TQWidget *tqparent=0, const char *name=0 );
+              TQWidget *parent=0, const char *name=0 );
 
     void setPartner(DiffView *other);
 
@@ -108,7 +108,7 @@ class DiffZoomWidget : public TQFrame
   TQ_OBJECT
 
 public:
-    DiffZoomWidget(KConfig& cfg, TQWidget *tqparent=0, const char *name=0);
+    DiffZoomWidget(KConfig& cfg, TQWidget *parent=0, const char *name=0);
     ~DiffZoomWidget();
 
     void setDiffView(DiffView *view);

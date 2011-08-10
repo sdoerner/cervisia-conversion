@@ -42,7 +42,7 @@ public:
     enum ActionType { Create, Delete };
     
     TagDialog( ActionType action, CvsService_stub* service,
-               TQWidget *tqparent=0, const char *name=0 );
+               TQWidget *parent=0, const char *name=0 );
 
     bool branchTag() const;
     bool forceTag() const;

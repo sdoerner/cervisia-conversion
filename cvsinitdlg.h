@@ -35,7 +35,7 @@ class CvsInitDialog : public KDialogBase
   TQ_OBJECT
 
 public:
-    CvsInitDialog(TQWidget* tqparent = 0, const char* name = 0);
+    CvsInitDialog(TQWidget* parent = 0, const char* name = 0);
 
     TQString directory() const;
    

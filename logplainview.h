@@ -37,7 +37,7 @@ class LogPlainView : public KTextBrowser
   TQ_OBJECT
 
 public:
-    explicit LogPlainView(TQWidget* tqparent = 0, const char* name = 0);
+    explicit LogPlainView(TQWidget* parent = 0, const char* name = 0);
     ~LogPlainView();
 
     void addRevision(const Cervisia::LogInfo& logInfo);

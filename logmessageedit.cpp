@@ -26,8 +26,8 @@ using Cervisia::LogMessageEdit;
 #include <kaccel.h>
 
 
-LogMessageEdit::LogMessageEdit(TQWidget* tqparent)
-    : KTextEdit(tqparent)
+LogMessageEdit::LogMessageEdit(TQWidget* parent)
+    : KTextEdit(parent)
     , KCompletionBase()
     , m_completing(false)
     , m_completionStartPos(0)

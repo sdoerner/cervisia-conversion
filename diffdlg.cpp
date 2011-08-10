@@ -41,8 +41,8 @@
 #include "diffview.h"
 
 
-DiffDialog::DiffDialog(KConfig& cfg, TQWidget *tqparent, const char *name, bool modal)
-    : KDialogBase(tqparent, name, modal, TQString(),
+DiffDialog::DiffDialog(KConfig& cfg, TQWidget *parent, const char *name, bool modal)
+    : KDialogBase(parent, name, modal, TQString(),
                   Close | Help | User1, Close, true, KStdGuiItem::saveAs())
     , partConfig(cfg)
 {
@@ -236,7 +236,7 @@ bool DiffDialog::parseCvsDiff(CvsService_stub* service, const TQString& fileName
     // front end, it is executed from here. Of course, in that
     // case this dialog wouldn't have to be created in the first
     // place, but this design at least makes the handling trans-
-    // tqparent for the calling routines
+    // parent for the calling routines
 
     TQString extdiff = partConfig.readPathEntry("ExternalDiff");
     if (!extdiff.isEmpty())

@@ -36,8 +36,8 @@ TQString SshAgent::m_authSock   = TQString();
 TQString SshAgent::m_pid        = TQString();
 
 
-SshAgent::SshAgent(TQObject* tqparent, const char* name)
-    : TQObject(tqparent, name)
+SshAgent::SshAgent(TQObject* parent, const char* name)
+    : TQObject(parent, name)
 {
 }
 

@@ -41,7 +41,7 @@ public:
     enum ActionType { Checkout, Import };
     
     CheckoutDialog( KConfig& cfg, CvsService_stub* service, ActionType action,
-                    TQWidget *tqparent=0, const char *name=0 );
+                    TQWidget *parent=0, const char *name=0 );
 
     TQString workingDirectory() const;
     TQString repository() const;

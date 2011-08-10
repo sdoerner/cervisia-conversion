@@ -23,8 +23,8 @@
 #include "annotateview.h"
 
 
-AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, false, TQString(),
+AnnotateDialog::AnnotateDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString(),
                   Close | Help, Close, true)
     , partConfig(cfg)
 {

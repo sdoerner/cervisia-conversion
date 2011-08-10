@@ -40,7 +40,7 @@ class CommitDialog : public KDialogBase
   TQ_OBJECT
 
 public:
-    CommitDialog( KConfig& cfg, CvsService_stub* service, TQWidget *tqparent=0, 
+    CommitDialog( KConfig& cfg, CvsService_stub* service, TQWidget *parent=0, 
                   const char *name=0 );
 
     virtual ~CommitDialog();

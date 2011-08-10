@@ -34,8 +34,8 @@
 
 
 UpdateDialog::UpdateDialog(CvsService_stub* service,
-                           TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, i18n("CVS Update"),
+                           TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, i18n("CVS Update"),
                   Ok | Cancel, Ok, true),
       cvsService(service)
 {

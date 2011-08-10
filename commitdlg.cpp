@@ -39,8 +39,8 @@
 class CommitListItem : public TQCheckListItem
 {
 public:
-    CommitListItem(TQListView* tqparent, const TQString& text, const TQString fileName)
-        : TQCheckListItem(tqparent, text, TQCheckListItem::CheckBox)
+    CommitListItem(TQListView* parent, const TQString& text, const TQString fileName)
+        : TQCheckListItem(parent, text, TQCheckListItem::CheckBox)
         , m_fileName(fileName)
     {
     }
@@ -53,8 +53,8 @@ private:
 
 
 CommitDialog::CommitDialog(KConfig& cfg, CvsService_stub* service,
-                           TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, i18n("CVS Commit"),
+                           TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, i18n("CVS Commit"),
                   Ok | Cancel | Help | User1, Ok, true)
     , partConfig(cfg)
     , cvsService(service)

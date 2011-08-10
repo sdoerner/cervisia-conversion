@@ -47,7 +47,7 @@ class LogTreeView : public TQTable
   TQ_OBJECT
 
 public:
-    explicit LogTreeView( TQWidget *tqparent=0, const char *name=0 );
+    explicit LogTreeView( TQWidget *parent=0, const char *name=0 );
 
     void addRevision(const Cervisia::LogInfo& logInfo);
     void setSelectedPair(TQString selectionA, TQString selectionB);

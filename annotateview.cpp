@@ -36,7 +36,7 @@ class AnnotateViewItem : public TQListViewItem
 public:
     enum { LineNumberColumn, AuthorColumn, ContentColumn };
 
-    AnnotateViewItem(AnnotateView *tqparent, const LogInfo& logInfo,
+    AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
                      const TQString &content, bool odd, int linenumber);
 
     virtual int compare(TQListViewItem *item, int col, bool ascending) const;
@@ -58,9 +58,9 @@ private:
 const int AnnotateViewItem::BORDER = 4;
 
 
-AnnotateViewItem::AnnotateViewItem(AnnotateView *tqparent, const LogInfo& logInfo,
+AnnotateViewItem::AnnotateViewItem(AnnotateView *parent, const LogInfo& logInfo,
                                    const TQString &content, bool odd, int linenumber)
-    : TQListViewItem(tqparent)
+    : TQListViewItem(parent)
     , m_logInfo(logInfo)
     , m_content(content)
     , m_odd(odd)
@@ -140,8 +140,8 @@ int AnnotateViewItem::width(const TQFontMetrics &fm, const TQListView *, int col
   caused by a bug in TQHeader::adjustHeaderSize() in TQt <= 3.0.4.
 */
 
-AnnotateView::AnnotateView(KConfig &cfg, TQWidget *tqparent, const char *name)
-    : TQListView(tqparent, name, WRepaintNoErase | WResizeNoErase)
+AnnotateView::AnnotateView(KConfig &cfg, TQWidget *parent, const char *name)
+    : TQListView(parent, name, WRepaintNoErase | WResizeNoErase)
 {
     setFrameStyle(TQFrame::WinPanel | TQFrame::Sunken);
     setAllColumnsShowFocus(true);

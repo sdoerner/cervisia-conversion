@@ -55,7 +55,7 @@ class LogDialog : public KDialogBase
   TQ_OBJECT
 
 public:
-    explicit LogDialog( KConfig& cfg, TQWidget *tqparent=0, const char *name=0 );
+    explicit LogDialog( KConfig& cfg, TQWidget *parent=0, const char *name=0 );
 
     virtual ~LogDialog();
 

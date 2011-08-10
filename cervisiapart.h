@@ -57,7 +57,7 @@ class CervisiaPart : public KParts::ReadOnlyPart
 
 public:
     CervisiaPart( TQWidget *parentWidget, const char *widgetName,
-                  TQObject *tqparent, const char *name=0, const TQStringList& args = TQStringList());
+                  TQObject *parent, const char *name=0, const TQStringList& args = TQStringList());
     virtual ~CervisiaPart();
 
     /**

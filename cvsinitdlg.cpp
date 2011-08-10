@@ -32,8 +32,8 @@
 using Cervisia::CvsInitDialog;
 
 
-CvsInitDialog::CvsInitDialog(TQWidget* tqparent, const char* name)
-    : KDialogBase(tqparent, name, true, i18n("Create New Repository (cvs init)"),
+CvsInitDialog::CvsInitDialog(TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, true, i18n("Create New Repository (cvs init)"),
                   Ok | Cancel, Ok, true)
 {
     TQFrame* mainWidget = makeMainWidget();

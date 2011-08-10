@@ -31,8 +31,8 @@
 using namespace Cervisia;
 
 
-LogPlainView::LogPlainView(TQWidget* tqparent, const char* name)
-    : KTextBrowser(tqparent, name)
+LogPlainView::LogPlainView(TQWidget* parent, const char* name)
+    : KTextBrowser(parent, name)
     , m_find(0)
     , m_findPos(0)
 {

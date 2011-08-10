@@ -56,8 +56,8 @@ public:
 
     enum { Date, Event, Author, Revision, File, Path };
 
-    HistoryItem(TQListView *tqparent, const TQDateTime& date)
-        : TQListViewItem(tqparent), m_date(date)
+    HistoryItem(TQListView *parent, const TQDateTime& date)
+        : TQListViewItem(parent), m_date(date)
     {}
 
     virtual int compare(TQListViewItem* i, int col, bool) const;
@@ -138,8 +138,8 @@ bool HistoryItem::isOther()
 }
 
 
-HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, false, TQString(),
+HistoryDialog::HistoryDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, TQString(),
                   Close | Help, ButtonCode(0), true)
     , partConfig(cfg)
 {

@@ -74,7 +74,7 @@ static int FindWhiteSpace(const TQString& str, int index)
 
 static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
                                               CvsService_stub* cvsService,
-                                              TQWidget* tqparent)
+                                              TQWidget* parent)
 {
     TQStringList branchOrTagList;
 
@@ -82,7 +82,7 @@ static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
     if( !cvsService->ok() )
         return branchOrTagList;
 
-    ProgressDialog dlg(tqparent, "tqStatus", job, TQString(), i18n("CVS tqStatus"));
+    ProgressDialog dlg(parent, "tqStatus", job, TQString(), i18n("CVS tqStatus"));
 
     if( dlg.execute() )
     {
@@ -205,7 +205,7 @@ TQString Cervisia::NormalizeRepository(const TQString& repository)
 }
 
 
-bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* tqparent)
+bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* parent)
 {
     bool result = true;
 
@@ -214,7 +214,7 @@ bool Cervisia::CheckOverwrite(const TQString& fileName, TQWidget* tqparent)
     // does the file already exist?
     if( fi.exists() )
     {
-        result = (KMessageBox::warningContinueCancel(tqparent,
+        result = (KMessageBox::warningContinueCancel(parent,
                   i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?").tqarg(fileName),
                   i18n("Overwrite File?"),
                   KGuiItem(i18n("&Overwrite"), "filesave", i18n("Overwrite the file"))) == KMessageBox::Continue);
@@ -259,17 +259,17 @@ TQStringList splitLine(TQString line, char delim)
 }
 
 
-const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* tqparent)
+const TQStringList fetchBranches(CvsService_stub* cvsService, TQWidget* parent)
 {
     return FetchBranchesAndTags(TQString::tqfromLatin1("branch"), cvsService,
-                                tqparent);
+                                parent);
 }
 
 
-const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* tqparent)
+const TQStringList fetchTags(CvsService_stub* cvsService, TQWidget* parent)
 {
     return FetchBranchesAndTags(TQString::tqfromLatin1("revision"), cvsService,
-                                tqparent);
+                                parent);
 }
 
 

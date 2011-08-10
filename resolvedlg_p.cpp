@@ -22,8 +22,8 @@ using namespace Cervisia;
 #include <ktextedit.h>
 
 
-ResolveEditorDialog::ResolveEditorDialog(KConfig& cfg, TQWidget *tqparent, const char *name)
-    : KDialogBase(tqparent, name, true, TQString(),
+ResolveEditorDialog::ResolveEditorDialog(KConfig& cfg, TQWidget *parent, const char *name)
+    : KDialogBase(parent, name, true, TQString(),
                   Ok | Cancel, Ok, true)
     , m_partConfig(cfg)
 {

@@ -41,7 +41,7 @@ class DiffDialog : public KDialogBase
 
 public:
 
-    explicit DiffDialog( KConfig& config, TQWidget *tqparent=0, const char *name=0, 
+    explicit DiffDialog( KConfig& config, TQWidget *parent=0, const char *name=0, 
                          bool modal=false );
 
     virtual ~DiffDialog();

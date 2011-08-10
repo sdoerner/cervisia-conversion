@@ -30,8 +30,8 @@
 #include "progressdlg.h"
 
 
-WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* tqparent, const char* name)
-    : KDialogBase(tqparent, name, false, TQString(),
+WatchersDialog::WatchersDialog(KConfig& cfg, TQWidget* parent, const char* name)
+    : KDialogBase(parent, name, false, TQString(),
                   Close, ButtonCode(0), true)
     , partConfig(cfg)
 {

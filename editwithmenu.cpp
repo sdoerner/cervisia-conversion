@@ -27,8 +27,8 @@ using namespace Cervisia;
 #include <kurl.h>
 
 
-EditWithMenu::EditWithMenu(const KURL& url, TQWidget* tqparent)
-    : TQObject(tqparent)
+EditWithMenu::EditWithMenu(const KURL& url, TQWidget* parent)
+    : TQObject(parent)
     , m_menu(0)
     , m_url(url)
 {

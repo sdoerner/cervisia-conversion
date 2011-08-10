@@ -38,7 +38,7 @@ class MergeDialog : public KDialogBase
 
 public:
     MergeDialog( CvsService_stub* service,
-                 TQWidget *tqparent=0, const char *name=0 );
+                 TQWidget *parent=0, const char *name=0 );
 
     bool byBranch() const;
     TQString branch() const;

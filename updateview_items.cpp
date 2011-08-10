@@ -51,10 +51,10 @@ TQString UpdateItem::dirPath() const
 {
     TQString path;
 
-    const UpdateItem* item = static_cast<UpdateItem*>(tqparent());
+    const UpdateItem* item = static_cast<UpdateItem*>(parent());
     while (item)
     {
-        const UpdateItem* parentItem = static_cast<UpdateItem*>(item->tqparent());
+        const UpdateItem* parentItem = static_cast<UpdateItem*>(item->parent());
         if (parentItem)
         {
             path.prepend(item->m_entry.m_name + TQDir::separator());
@@ -70,7 +70,7 @@ TQString UpdateItem::dirPath() const
 TQString UpdateItem::filePath() const
 {
     // the filePath of the root item is '.'
-    return tqparent() ? dirPath() + m_entry.m_name : TQChar('.');
+    return parent() ? dirPath() + m_entry.m_name : TQChar('.');
 }
 
 
@@ -79,9 +79,9 @@ TQString UpdateItem::filePath() const
 // ------------------------------------------------------------------------------
 
 
-UpdateDirItem::UpdateDirItem(UpdateDirItem* tqparent,
+UpdateDirItem::UpdateDirItem(UpdateDirItem* parent,
                              const Entry& entry)
-    : UpdateItem(tqparent, entry),
+    : UpdateItem(parent, entry),
       m_opened(false)
 {
     setExpandable(true);
@@ -89,9 +89,9 @@ UpdateDirItem::UpdateDirItem(UpdateDirItem* tqparent,
 }
 
 
-UpdateDirItem::UpdateDirItem(UpdateView* tqparent,
+UpdateDirItem::UpdateDirItem(UpdateView* parent,
                              const Entry& entry)
-    : UpdateItem(tqparent, entry),
+    : UpdateItem(parent, entry),
       m_opened(false)
 {
     setExpandable(true);
@@ -494,8 +494,8 @@ TQString UpdateDirItem::text(int column) const
 // ------------------------------------------------------------------------------
 
 
-UpdateFileItem::UpdateFileItem(UpdateDirItem* tqparent, const Entry& entry)
-    : UpdateItem(tqparent, entry),
+UpdateFileItem::UpdateFileItem(UpdateDirItem* parent, const Entry& entry)
+    : UpdateItem(parent, entry),
       m_undefined(false)
 {
 }

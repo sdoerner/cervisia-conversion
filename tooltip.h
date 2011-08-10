@@ -43,7 +43,7 @@ public:
 
     /**
      * @param widget The widget you want to add tooltips to. It's also used as
-     * tqparent for the TQObject. So you don't have to free an instance of this
+     * parent for the TQObject. So you don't have to free an instance of this
      * class yourself.
      */
     explicit ToolTip(TQWidget* widget);
@@ -55,9 +55,9 @@ signals:
      * wants to display anythink it must set a valid tooltip rectangle and a
      * non empty text.
      *
-     * @param pos The position of the tooltip in the tqparent widget's coordinate system.
+     * @param pos The position of the tooltip in the parent widget's coordinate system.
      *
-     * @param rect The rectangle in the tqparent widget's coordinate system where the
+     * @param rect The rectangle in the parent widget's coordinate system where the
      * tooltip is valid.
      *
      * @param text The tooltip text.
