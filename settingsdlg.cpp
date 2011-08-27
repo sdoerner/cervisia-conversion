@@ -293,7 +293,7 @@ void SettingsDialog::addDiffPage()
  */
 void SettingsDialog::addStatusPage()
 {
-    TQVBox* statusPage = addVBoxPage(i18n("tqStatus"), TQString(),
+    TQVBox* statusPage = addVBoxPage(i18n("Status"), TQString(),
                                     LoadIcon("fork"));
 
     remotestatusbox = new TQCheckBox(i18n("When opening a sandbox from a &remote repository,\n"

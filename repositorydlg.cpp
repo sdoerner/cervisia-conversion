@@ -170,7 +170,7 @@ RepositoryDialog::RepositoryDialog(KConfig& cfg, CvsService_stub* cvsService,
     m_repoList->addColumn(i18n("Repository"));
     m_repoList->addColumn(i18n("Method"));
     m_repoList->addColumn(i18n("Compression"));
-    m_repoList->addColumn(i18n("tqStatus"));
+    m_repoList->addColumn(i18n("Status"));
     m_repoList->setFocus();
 
     connect(m_repoList, TQT_SIGNAL(doubleClicked(TQListViewItem*)),
