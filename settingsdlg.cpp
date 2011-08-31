@@ -297,9 +297,9 @@ void SettingsDialog::addStatusPage()
                                     LoadIcon("fork"));
 
     remotestatusbox = new TQCheckBox(i18n("When opening a sandbox from a &remote repository,\n"
-                                         "start a File->tqStatus command automatically"), statusPage);
+                                         "start a File->Status command automatically"), statusPage);
     localstatusbox = new TQCheckBox(i18n("When opening a sandbox from a &local repository,\n"
-                                        "start a File->tqStatus command automatically"), statusPage);
+                                        "start a File->Status command automatically"), statusPage);
 
     // dummy widget to take up the vertical space
     new TQWidget(statusPage);

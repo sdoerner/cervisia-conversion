@@ -82,7 +82,7 @@ static const TQStringList FetchBranchesAndTags(const TQString& searchedType,
     if( !cvsService->ok() )
         return branchOrTagList;
 
-    ProgressDialog dlg(parent, "Status", job, TQString(), i18n("CVS tqStatus"));
+    ProgressDialog dlg(parent, "Status", job, TQString(), i18n("CVS Status"));
 
     if( dlg.execute() )
     {

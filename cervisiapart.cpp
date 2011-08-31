@@ -257,7 +257,7 @@ void CervisiaPart::setupActions()
     action->setToolTip( hint );
     action->setWhatsThis( hint );
 
-    action = new KAction( i18n("&tqStatus"), "vcs_status", Key_F5,
+    action = new KAction( i18n("&Status"), "vcs_status", Key_F5,
                           this, TQT_SLOT( slottqStatus() ),
                           actionCollection(), "file_status" );
     hint = i18n("Updates the status (cvs -n update) of the selected files and folders");
