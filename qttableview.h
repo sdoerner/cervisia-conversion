@@ -15,9 +15,7 @@
 #ifndef TQTTABLEVIEW_H
 #define TQTTABLEVIEW_H
 
-#ifndef TQT_H
 #include "tqframe.h"
-#endif // TQT_H
 
 #ifndef TQT_NO_TQTTABLEVIEW
 
